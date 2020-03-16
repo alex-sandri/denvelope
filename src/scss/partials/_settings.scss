@@ -1,0 +1,85 @@
+.settings-section
+{
+    width: calc(100% - (#{$standard-spacing} * 2));
+    margin: $standard-spacing;
+    display: none;
+
+    & > h1
+    {
+        font-size: 35px;
+        margin: $standard-spacing 0;
+    }
+
+    .setting
+    {
+        h2
+        {
+            margin: 0;
+            font-weight: $light;
+        }
+
+        @include flex($justify-content: space-between);
+        
+        padding: $standard-spacing;
+        border: $border-width solid $primary-color;
+        border-radius: $border-radius;
+        transition: $transition-time;
+        cursor: pointer;
+    
+        & > div
+        {
+            @include flex;
+                
+            p
+            {
+                margin: 0;
+                margin-right: $standard-spacing;
+            }
+        
+            button:not(.delete-account-button),
+            a
+            {
+                @include button($has-padding: false, $has-border: false, $hover-effect: no-text-decoration);
+    
+                text-decoration: underline;
+            }
+        }
+    
+        #language-select
+        {
+            display: none;
+        }
+    
+        &:hover
+        {
+            border-color: $secondary-color;
+        }
+    
+        &:not(:last-child)
+        {
+            margin-bottom: $standard-spacing;
+        }
+    }
+
+    @at-root .delete-account-button
+    {
+        @include button($bg-color: #fa4b4b, $color: white, $border-color: #fa4b4b, $hover-effect: underline);
+    
+        text-decoration: none;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    @at-root #language-select
+    {
+        @include select($border-color: $primary-color);
+
+        width: 100%;
+        margin-bottom: $standard-spacing;
+    }
+
+    &.selected
+    {
+        display: block;
+    }
+}

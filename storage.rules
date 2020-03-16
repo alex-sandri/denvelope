@@ -1,0 +1,22 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{userId}/{fileId} {
+      allow read: if (isOwner() && isVaultUnlocked()) ||
+        (resource.metadata.shared == "true" &&
+        resource.metadata.inVault != "true");
+
+      allow write: if isOwner() && isVaultUnlocked();
+
+      function isOwner() {
+        return request.auth != null &&
+          request.auth.uid == userId;
+      }
+
+      function isVaultUnlocked() {
+        return ("vaultLocked" in request.auth.token &&
+        	!request.auth.token.vaultLocked) ||
+          !("vaultLocked" in request.auth.token);
+      }
+    }
+  }
+}

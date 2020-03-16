@@ -1,0 +1,190 @@
+@mixin flex ($align-items: center, $justify-content: center, $flex-direction: row, $flex-wrap: unset)
+{
+    display: flex;
+    align-items: $align-items;
+    justify-content: $justify-content;
+    flex-direction: $flex-direction;
+    flex-wrap: $flex-wrap;
+}
+
+@mixin button (
+        $bg-color: $primary-color,
+        $color: $secondary-color,
+        $border-color: $secondary-color,
+        $hover-effect: invert-colors,
+        $focus-effect: same-hover,
+        $has-border: true,
+        $has-padding: true,
+        $has-border-radius: true)
+{
+    font-family: $font-family;
+    
+    @if $has-border
+    {
+        border: $border-width solid $border-color;
+    }
+    @else
+    {
+        border: 0;
+    }
+
+    background-color: $bg-color;
+    color: $color;
+    
+    @if $has-border-radius
+    {
+        border-radius: $border-radius;
+    }
+    
+    @if $has-padding
+    {
+        padding: 10px;
+    }
+    @else
+    {
+        padding: 0;
+    }
+
+    font-size: 20px;
+    cursor: pointer;
+    transition: $transition-time;
+
+    &:not(.blocked):not(:disabled)
+    {
+        &:focus,
+        &:hover
+        {
+            @if $hover-effect == invert-colors
+            {
+                background-color: $color;
+                color: $bg-color;
+            }
+            @else if $hover-effect == underline
+            {
+                text-decoration: underline;
+            }
+            @else if $hover-effect == no-text-decoration
+            {
+                text-decoration: none;
+            }
+        }
+
+        @if $focus-effect != same-hover
+        {
+            &:focus
+            {
+                @if $focus-effect == box-shadow
+                {
+                    box-shadow: 0 0 $box-shadow-blur-radius $border-color;
+                }
+            }
+        }
+    }
+
+    &.blocked,
+    &:disabled
+    {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}
+
+@mixin input-container ($bg-color: $primary-color, $color: $secondary-color, $has-icon: true)
+{
+    border-radius: $border-radius;
+
+    &:focus-within
+    {
+        box-shadow: 0 0 $box-shadow-blur-radius $color;
+    }
+        
+    input
+    {
+        font-family: $font-family;
+        border: $border-width solid $color;
+        background-color: $bg-color;
+        color: $color;
+        border-radius: $border-radius;
+        padding: 10px;
+        font-size: 20px;
+
+        @if $has-icon
+        {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+
+            & + .input-icon
+            {
+                @include flex;
+
+                background-color: $color;
+                color: $bg-color;
+                font-size: 20px;
+                border-top-right-radius: $border-radius;
+                border-bottom-right-radius: $border-radius;
+                padding: 10px;
+                border: 0;
+                cursor: pointer;
+            }
+        }
+
+        &.error
+        {
+            background-color: $color;
+            color: $bg-color;
+
+            &::placeholder
+            {
+                color: $bg-color;
+                font-weight: $regular;
+            }
+        }
+
+        &::placeholder
+        {
+            color: $color;
+            font-weight: $regular;
+        }
+    }
+}
+
+@mixin animation (
+        $name,
+        $duration: 100ms,
+        $timing-function: linear,
+        $iteration-count: unset,
+        $fill-mode: forwards
+    ) {
+    animation: $name;
+    animation-duration: $duration;
+    animation-timing-function: $timing-function;
+    animation-iteration-count: $iteration-count;
+    animation-fill-mode: $fill-mode;
+}
+
+@mixin text-ellipsis-on-overflow
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin select ($bg-color: $primary-color, $color: $secondary-color, $border-color: $secondary-color)
+{
+    font-family: $font-family;
+    background-color: $bg-color;
+    color: $color;
+    font-size: 20px;
+    cursor: pointer;
+    transition: $transition-time;
+    padding: $standard-spacing;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+
+    &:focus,
+    &:hover
+    {
+        background-color: $color;
+        color: $bg-color;
+    }
+}

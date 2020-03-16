@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    {{> defaulttags version=cssversion}}
+    <title data-update-field="folder-name">Denvelope</title>
+</head>
+<body class="preload no-overflow">
+    {{> header logoRedirectPath=logoRedirectPath}}
+    <main class="account-main">
+        <section class="top-section">
+            <div class="search-add-content">
+                <div class="search-bar input">
+                    <input type="search" name="search" id="search" autocomplete="off" data-placeholder-translation="generic->search" data-keyboard-shortcut="s">
+                </div>
+                <button class="logged-in" id="add-content"><i class="fas fa-plus fa-fw"></i></button>
+            </div>
+            <nav class="folder-nav">
+                <button class="back-button" data-translation="generic->back"><i class="fas fa-arrow-left"></i></button>
+                <button class="empty-trash-button" data-translation="account->empty_trash"><i class="fas fa-recycle"></i></button>
+                <button class="lock-vault-button"><i class="fas fa-lock fa-fw"></i></button>
+                <p class="folder-name" data-update-field="folder-name"></p>
+            </nav>
+        </section>
+        <div class="add-content-options">
+            <div class="buttons-container">
+                <button id="add-files" data-translation="account->add_files" data-keyboard-shortcut="o"><i class="fas fa-file fa-fw"></i></button>
+                <button id="add-folder" data-translation="account->add_folder" data-keyboard-shortcut="shift + o"><i class="fas fa-folder fa-fw"></i></button>
+                <button id="create-file" data-translation="account->create_file" data-keyboard-shortcut="n"><i class="fas fa-file-code fa-fw"></i></button>
+                <button id="create-folder" data-translation="account->create_folder" data-keyboard-shortcut="shift + n"><i class="fas fa-folder-plus fa-fw"></i></button>
+            </div>
+            <div class="input-container">
+                <input type="file" id="files" name="files" multiple>
+                <input type="file" id="folder" name="folder" webkitdirectory mozdirectory msdirectory odirectory directory>
+            </div>
+        </div>
+        <section class="user-content">
+            {{> spinner}}
+            <div class="empty-folder">
+                <h2></h2>
+                <img src="" alt="" aria-hidden="true">
+            </div>
+            <div class="vault"><div class="icon"><i></i></div><div class="name"><p data-only-translation="generic->vault"></p></div></div>
+            <section class="folders-container"></section>
+            <section class="files-container"></section>
+            {{> contextmenu}}
+        </section>
+    </main>
+    <aside class="logged-in">
+        <button id="my-account" data-translation="generic->file" data-keyboard-shortcut="f"><i class="fas fa-hdd fa-fw"></i></button>
+        <button id="shared" data-translation="account->shared" data-keyboard-shortcut="c"><i class="fas fa-share-alt fa-fw"></i></button>
+        <button id="starred" data-translation="account->starred" data-keyboard-shortcut="p"><i class="fas fa-star fa-fw"></i></button>
+        <button id="trash" data-translation="account->trash" data-keyboard-shortcut="t"><i class="fas fa-trash fa-fw"></i></button>
+    </aside>
+    <div class="hide-vault-content"><i class="fas fa-eye-slash"></i></div>
+    {{> firebase auth=true firestore=true storage=true functions=true}}
+    {{> editor}}
+    <input type="hidden" name="folder-id" value="">
+    <script type="module" src="assets/js/{{jsversion}}"></script>
+</body>
+</html>

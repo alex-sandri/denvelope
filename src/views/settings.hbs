@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    {{> defaulttags version=cssversion}}
+    <title data-only-translation="generic->settings"></title>
+</head>
+<body class="preload">
+    {{> header logoRedirectPath=logoRedirectPath}}
+    <div class="settings-menu">
+        <button data-sect="general" data-translation="settings->general->title">
+            <i class="fas fa-cog"></i>
+        </button>
+        <button data-sect="security" data-translation="settings->security->title">
+            <i class="fas fa-shield-alt"></i>
+        </button>
+        <button data-sect="advanced" data-translation="settings->advanced->title">
+            <i class="fas fa-sliders-h"></i>
+        </button>
+        <button data-sect="info" data-translation="settings->info->title">
+            <i class="fas fa-info-circle"></i>
+        </button>
+    </div>
+    {{> general}}
+    {{> security}}
+    {{> advanced}}
+    {{> info}}
+    {{> firebase auth=true firestore=true functions=true}}
+    <script type="module" src="assets/js/{{jsversion}}"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    {{> defaulttags version=cssversion}}
+    <title data-only-translation="page_not_found->title"></title>
+</head>
+<body class="preload">
+    {{> header logoRedirectPath=logoRedirectPath}}
+    <main class="error">
+        <h2>404</h2>
+        <h1 data-translation="page_not_found->title"></h1>
+        <p data-translation="page_not_found->description"></p>
+    </main>
+    {{> footer year=year}}
+    {{> firebase auth=true firestore=true}}
+    <script type="module" src="assets/js/{{jsversion}}"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "compileOnSave": true,
+  "files": [
+    "src/ts/account.ts",
+    "src/ts/home.ts",
+    "src/ts/settings.ts"
+  ],
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "esnext",
+    "sourceMap": true,
+    "removeComments": true,
+    "watch": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "alwaysStrict": true,
+  }
+}

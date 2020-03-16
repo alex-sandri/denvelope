@@ -1,0 +1,42 @@
+.home-hero
+{
+    @include flex($align-items: unset, $justify-content: center, $flex-direction: column);
+
+    margin: $standard-spacing;
+    min-height: calc(100vh - #{$standard-spacing + $header-height-lg});
+    margin-top: #{$header-height-lg};
+
+    .text
+    {
+        width: 50%;
+        margin: auto;
+
+        h1,
+        h2
+        {
+            margin: 0;
+        }
+
+        h1
+        {
+            font-size: 65px;
+            font-weight: $black;
+        }
+
+        h2
+        {
+            font-size: 35px;
+            font-weight: $extra-light;
+        }
+    }
+
+    & > img
+    {
+        position: absolute;
+        width: calc(100% - (#{$standard-spacing * 2}));
+        height: calc(100% - #{$standard-spacing + $header-height-lg});
+        z-index: -1;
+        opacity: 0.3;
+        margin: 0 auto;
+    }
+}

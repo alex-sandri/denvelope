@@ -1,0 +1,119 @@
+html
+{
+    height: 100%;
+
+    .logged-in,
+    .logged-out
+    {
+        visibility: hidden;
+    }
+
+    &.logged-out .logged-in,
+    &.logged-in .logged-out
+    {
+        display: none;
+    }
+
+    &.logged-in .logged-in,
+    &.logged-out .logged-out
+    {
+        visibility: visible;
+    }
+
+    &.wait
+    {
+        cursor: wait;
+    }
+
+    &.grabbing
+    {
+        &,
+        *
+        {
+            cursor: grabbing !important;
+        }
+    }
+}
+
+@import "partials/variables";
+@import "partials/mixins";
+@import "partials/animations";
+
+@import "partials/header";
+@import "partials/home-hero";
+@import "partials/home-features";
+@import "partials/footer";
+
+@import "partials/account-side-menu";
+@import "partials/account-main";
+
+@import "partials/settings-menu";
+@import "partials/settings";
+
+@import "partials/privacy";
+
+@import "partials/miscellaneous";
+
+@import "partials/media-queries";
+
+body
+{
+    margin: 0;
+    font-family: $font-family;
+    background-color: $primary-color;
+    color: $secondary-color;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: contain;
+    height: calc(100% - #{$header-height-lg});
+
+    &.preload *
+    {
+        transition: none !important;
+    }
+
+    &.no-overflow
+    {
+        overflow: hidden;
+    }
+
+    &.home-page
+    {
+        *.no-home-page
+        {
+            display: none;
+        }
+    }
+}
+
+*
+{
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar
+{
+    width: auto;
+    height: auto;
+}
+  
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner
+{
+    background-color: $primary-color;
+}
+  
+::-webkit-scrollbar-thumb
+{
+    background-color: $secondary-color;
+}
+
+*:focus
+{
+    outline: none;
+}
+
+::-moz-focus-inner
+{
+    border: 0;
+}

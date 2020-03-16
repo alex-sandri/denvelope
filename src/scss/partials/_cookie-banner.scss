@@ -1,0 +1,33 @@
+.cookie-banner
+{
+    @include flex($justify-content: space-between);
+
+    background-color: $secondary-color;
+    color: $primary-color;
+    padding: $standard-spacing;
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    display: none;
+    width: 100%;
+
+    p
+    {
+        margin: 0 $standard-spacing;
+    }
+
+    a
+    {
+        color: $primary-color;
+
+        &:hover
+        {
+            text-decoration: none;
+        }
+    }
+
+    i:last-child
+    {
+        cursor: pointer;
+    }
+}

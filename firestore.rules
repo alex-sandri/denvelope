@@ -1,0 +1,124 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if isOwner();
+
+      // The user document can only be updated using the admin SDK from Cloud Functions
+      allow write: if false;
+
+      match /vault/config {
+        allow read, write: if false;
+      }
+
+      match /vault/status {
+        allow read: if isOwner();
+
+        allow write: if false;
+      }
+
+      match /folders/{folderId} {
+        allow get: if allowContentRead();
+
+        // A user cannot access another user's root (only one folder is allowed to access if the parentId is the root)
+        allow list: if allowContentRead() ||
+          (existingData().shared && existingData().trashed == false && existingData().parentId != "root" && existingData().inVault == false);
+
+        allow create: if allowContentCreate();
+
+        allow update: if allowContentUpdate() &&
+          incomingData().parentId != folderId;
+
+        allow delete: if allowContentDelete();
+      }
+
+      match /files/{fileId} {
+        allow read: if allowContentRead();
+
+        allow create: if allowContentCreate();
+
+        allow update: if allowContentUpdate() &&
+          incomingData().size == existingData().size;
+
+        allow delete: if allowContentDelete();
+      }
+
+      function existingData() {
+        return resource.data;
+      }
+
+      function incomingData() {
+        return request.resource.data;
+      }
+
+      function folderExists(folderId) {
+        return exists(/databases/$(database)/documents/users/$(userId)/folders/$(folderId)) ||
+          folderId == "root" ||
+          folderId == "vault";
+      }
+
+      function allowContentRead() {
+        return (isVaultUnlocked() || existingData().inVault == false) &&
+          (isOwner() ||
+          (existingData().shared && existingData().trashed == false) && existingData().inVault == false)
+      }
+
+      function allowContentCreate() {
+        return isOwner() &&
+          incomingData().size() == 9 &&
+          isValidName(incomingData().name) &&
+          folderExists(incomingData().parentId) &&
+          incomingData().shared is bool &&
+          incomingData().starred is bool &&
+          incomingData().trashed is bool &&
+          incomingData().inVault is bool &&
+          incomingData().inVault == (incomingData().parentId == "vault") &&
+          incomingData().created is timestamp &&
+          incomingData().created == request.time &&
+          incomingData().updated is timestamp &&
+          incomingData().updated == request.time &&
+          incomingData().lastClientUpdateTime is timestamp;
+      }
+
+      function allowContentUpdate() {
+        return isOwner() &&
+          incomingData().size() == existingData().size() &&
+          isValidName(incomingData().name) &&
+          incomingData().shared is bool &&
+          incomingData().starred is bool &&
+          incomingData().trashed is bool &&
+          incomingData().inVault is bool &&
+          incomingData().inVault == (incomingData().parentId == "vault") &&
+          ((incomingData().inVault == true && incomingData().trashed == false) ||
+          (incomingData().inVault == false)) &&
+          (folderExists(incomingData().parentId) || (existingData().trashed == true && incomingData().trashed == false)) &&
+          incomingData().created == existingData().created &&
+          incomingData().updated is timestamp &&
+          incomingData().updated == request.time &&
+          incomingData().lastClientUpdateTime is timestamp &&
+          incomingData().lastClientUpdateTime > existingData().lastClientUpdateTime;
+      }
+
+      function allowContentDelete() {
+        return isOwner() &&
+          (existingData().trashed == true ||
+          existingData().inVault == true); // Items in the vault are immediately deleted
+      }
+
+      function isValidName(name) {
+        return name is string &&
+          name != null &&
+          name.size() > 0;
+      }
+
+      function isOwner() {
+        return request.auth != null &&
+          request.auth.uid == userId;
+      }
+
+      function isVaultUnlocked() {
+        return !get(/databases/$(database)/documents/users/$(userId)/vault/status).data.locked;
+      }
+    }
+  }
+}

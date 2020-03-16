@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    {{> defaulttags version=cssversion}}
+    <title data-only-translation="generic->accessibility"></title>
+</head>
+<body class="preload">
+    {{> header logoRedirectPath=logoRedirectPath}}
+    <main class="accessibility">
+        <h1 data-translation="generic->accessibility"></h1>
+        <h3 data-translation="accessibility->keyboard_shortcuts"></h3>
+        <ul>
+            <li>Home: <span class="shortcut">H</span></li>
+            <li data-start-translation="generic->account">: <span class="shortcut">A</span></li>
+            <li data-start-translation="generic->settings">: <span class="shortcut">Shift + S</span></li>
+            <li data-start-translation="generic->sign_out">: <span class="shortcut">E</span></li>
+            <li data-start-translation="account->add_files">: <span class="shortcut">O</span></li>
+            <li data-start-translation="account->add_folder">: <span class="shortcut">Shift + O</span></li>
+            <li data-start-translation="account->create_file">: <span class="shortcut">N</span></li>
+            <li data-start-translation="account->create_folder">: <span class="shortcut">Shift + N</span></li>
+            <li data-start-translation="generic->search">: <span class="shortcut">S</span></li>
+            <li data-start-translation="generic->save">: <span class="shortcut">Ctrl + S</span></li>
+            <li data-start-translation="accessibility->view_account_content">: <span class="shortcut">F</span></li>
+            <li data-start-translation="accessibility->view_shared_content">: <span class="shortcut">C</span></li>
+            <li data-start-translation="accessibility->view_starred_content">: <span class="shortcut">P</span></li>
+            <li data-start-translation="accessibility->view_trash">: <span class="shortcut">T</span></li>
+            <li data-start-translation="accessibility->close_modal">: <span class="shortcut">ESC</span></li>
+            <li data-start-translation="accessibility->delete_selected_content">: <span class="shortcut">Backspace / Delete</span></li>
+            <li data-start-translation="accessibility->open_close_account_menu">: <span class="shortcut">M</span></li>
+            <li data-start-translation="accessibility->download_current_folder">: <span class="shortcut">D</span></li>
+        </ul>
+    </main>
+    {{> footer year=year}}
+    {{> firebase auth=true firestore=true}}
+    <script type="module" src="assets/js/{{jsversion}}"></script>
+</body>
+</html>

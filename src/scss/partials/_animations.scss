@@ -1,0 +1,35 @@
+@keyframes rotate
+{
+    from
+    {
+        transform: rotate(0deg);
+    }
+    to
+    {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes account-modal-show
+{
+    from
+    {
+        transform: translateY(100% + #{$standard-spacing});
+    }
+    to
+    {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes account-modal-hide
+{
+    from
+    {
+        transform: translateY(0%);
+    }
+    to
+    {
+        transform: translateY(100% + #{$standard-spacing});
+    }
+}

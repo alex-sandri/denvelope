@@ -1,0 +1,28 @@
+@import "./font";
+
+$font-family: $font-family, monospace;
+
+$primary-color: #160c28;
+$secondary-color: #efcb68;
+
+$thin: 100;
+$extra-light: 200;
+$light: 300;
+$regular: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$extra-bold: 800;
+$black: 900;
+
+$border-width: 2px;
+$border-radius: 5px;
+
+$transition-time: 300ms;
+
+$standard-spacing: 15px;
+
+$box-shadow-blur-radius: 10px;
+
+$header-height-lg: 62px; // > 600px
+$header-height-md: 55px; // <= 600px

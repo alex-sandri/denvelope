@@ -1,0 +1,68 @@
+.home-features
+{
+    margin: 0 $standard-spacing;
+
+    .home-feature-container
+    {
+        @include flex($justify-content: space-around);
+        
+        padding: $standard-spacing;
+        border-radius: $border-radius;
+        margin: $standard-spacing 0;
+        background-color: $secondary-color;
+        color: $primary-color;
+
+        img
+        {
+            max-width: 90%;
+            height: 30vh;
+        }
+
+        div
+        {
+            width: 30%;
+
+            h1,
+            p
+            {
+                margin: 0;
+                
+                &:not(:last-child)
+                {
+                    margin-bottom: $standard-spacing;
+                }
+            }
+
+            .github-link
+            {
+                display: inline-block;
+                margin-bottom: $standard-spacing;
+                color: $primary-color;
+
+                &:hover
+                {
+                    text-decoration: none;
+                }
+            }
+
+            .bmc-button
+            {
+                width: 100%;
+                box-shadow: 0 0 0 $border-width $primary-color;
+
+                &:hover,
+                &:focus
+                {
+                    box-shadow: 0 0 0 $border-radius $primary-color;
+                }
+            }
+        }
+
+        &:nth-child(2n)
+        {
+            flex-direction: row-reverse;
+            background-color: $primary-color;
+            color: $secondary-color;
+        }
+    }
+}

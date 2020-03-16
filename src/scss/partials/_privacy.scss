@@ -1,0 +1,46 @@
+main.terms,
+main.privacy,
+main.cookies,
+main.error,
+main.accessibility
+{
+    margin: $standard-spacing;
+    margin-top: #{$header-height-lg};
+    min-height: calc(100vh - #{$header-height-lg + $standard-spacing});
+
+    a
+    {
+        color: $secondary-color;
+
+        &:hover
+        {
+            text-decoration: none;
+        }
+    }
+}
+
+main.error
+{
+    @include flex($flex-direction: column);
+
+    text-align: center;
+
+    h1,
+    h2
+    {
+        margin-top: 0;
+    }
+}
+
+main.accessibility
+{
+    li
+    {
+        font-weight: $light;
+
+        .shortcut
+        {
+            font-weight: $black;
+        }
+    }
+}

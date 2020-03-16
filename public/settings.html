@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-title" content="Denvelope">
+    <meta name="application-name" content="Denvelope">
+    <meta name="theme-color" content="#160c28">
+    <meta name="msapplication-TileImage" content="mstile-144x144.png">
+    <meta name="msapplication-TileColor" content="#160c28">
+    <meta name="msapplication-navbutton-color" content="#160c28">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="manifest" href="manifest.json?v=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="194x194" href="favicon-194x194.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#160c28">
+    <link rel="stylesheet" href="assets/css/bundle.6c6d3eb5d84643efc47bc63395ca4eff.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <link rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css">    <title data-only-translation="generic->settings"></title>
+</head>
+<body class="preload">
+    <div class="cookie-banner">
+        <i class="fas fa-exclamation-circle"></i>
+        <p data-start-translation="cookie_banner->text">
+            <br>
+            <a href="cookies" data-translation="cookie_banner->learn_more"></a>
+        </p>
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="generic-message">
+        <p></p>
+        <button class="action"></button>
+        <button class="dismiss"><i class="fas fa-times"></i></button>
+        <span class="spinner"><i class="fas fa-circle-notch fa-fw"></i></span></div>
+    <div class="modal">
+        <div name="content" class="content allow-context-menu"><div class="heading"></div></div>
+        <span class="spinner"><i class="fas fa-circle-notch fa-fw"></i></span>    <button class="confirm-button confirm" data-translation="generic->confirm" data-keyboard-shortcut="enter"><i class="fas fa-check"></i></button>
+        <button class="update-button update" data-translation="generic->update" data-keyboard-shortcut="enter"><i class="fas fa-edit"></i></button>
+        <button class="close-button close" data-translation="generic->close" data-keyboard-shortcut="esc"><i class="fas fa-times"></i></button>
+    </div><header>
+        <div class="logo">
+            <a href="/account">
+                <img src="assets/brand/logos/denvelope.svg?v=hcedZCVqhy" alt="Denvelope">
+            </a>
+        </div>
+        <div class="waiting-user"><span class="spinner"><i class="fas fa-circle-notch fa-fw"></i></span></div>
+        <button class="sign-in logged-out no-home-page"><i class="fas fa-sign-in-alt"></i></button>
+        <nav class="logged-in">
+            <div class="menu">
+                <div class="user">
+                    <img src="" data-update-field="photo">
+                    <p data-update-field="name"></p>
+                    <p data-update-field="email"></p>
+                </div>
+                <a href="account" class="account" data-translation="generic->account" data-keyboard-shortcut="a"><i class="fas fa-user"></i></a>
+                <a href="settings" class="settings" data-translation="generic->settings" data-keyboard-shortcut="shift + s"><i class="fas fa-cog"></i></a>
+                <button class="sign-out" data-translation="generic->sign_out" data-keyboard-shortcut="e"><i class="fas fa-sign-out-alt"></i></button>
+                <hr>
+                <div class="storage logged-in">
+                    <p>
+                        <span data-update-field="used-storage" data-bytes=""><span class="spinner"><i class="fas fa-circle-notch fa-fw"></i></span></span>
+                        <span data-translation="header->storage->of"></span>
+                        <span data-update-field="max-storage" data-bytes=""><span class="spinner"><i class="fas fa-circle-notch fa-fw"></i></span></span>
+                        <span data-translation="header->storage->used"></span>
+                        <span data-update-field="used-storage-percent"></span>
+                    </p>
+                    <div class="used-container"><div class="used"></div></div>
+                </div>
+                <hr>
+                <style>.bmc-button img{height: 34px !important;width: 35px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}.bmc-button{padding: 7px 10px 7px 10px !important;line-height: 35px !important;height:51px !important;min-width:217px !important;text-decoration: none !important;display:inline-flex !important;color:#000000 !important;background-color:#FFDD00 !important;border-radius: 5px !important;border: 1px solid transparent !important;padding: 7px 10px 7px 10px !important;font-size: 28px !important;letter-spacing:0.6px !important;margin: 0 auto !important;font-family:'Cookie', cursive !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {text-decoration: none !important;opacity: 0.85 !important;color:#000000 !important;}</style><link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/alexsandri"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>            <hr>
+                <button class="install-pwa" data-translation="generic->install"></button>
+                <hr>
+                <div class="links">
+                    <div class="legal">
+                        <a href="privacy" target="_blank" class="privacy" data-translation="generic->privacy_policy"></a>
+                        <span>&bull;</span>
+                        <a href="terms" target="_blank" class="terms" data-translation="generic->terms_of_service"></a>
+                    </div>
+                    <a href="accessibility" target="_blank" class="accessibility" data-translation="generic->accessibility"></a>
+                </div>
+            </div>
+        </nav>
+        <div class="menu-toggle logged-in">
+            <button>
+                <img src="" data-update-field="photo">
+            </button>
+        </div>
+    </header>    <div class="settings-menu">
+        <button data-sect="general" data-translation="settings->general->title">
+            <i class="fas fa-cog"></i>
+        </button>
+        <button data-sect="security" data-translation="settings->security->title">
+            <i class="fas fa-shield-alt"></i>
+        </button>
+        <button data-sect="advanced" data-translation="settings->advanced->title">
+            <i class="fas fa-sliders-h"></i>
+        </button>
+        <button data-sect="info" data-translation="settings->info->title">
+            <i class="fas fa-info-circle"></i>
+        </button>
+    </div>
+    <section class="settings-section " id="general">
+        <div class="setting" id="language-setting">
+            <h2 data-translation="generic->language"></h2>
+            <div>
+                <p></p>
+                <button data-translation="generic->edit"></button>
+            </div>
+            <select name="language" id="language-select">
+                <option value="0" data-language="en-US">English (US)</option>
+                <option value="1" data-language="it-IT">Italiano</option>
+            </select>
+        </div>
+    </section>    <section class="settings-section " id="security">
+        <div class="setting" id="sign-out-from-all-setting">
+            <h2 data-translation="settings->security->sign_out_from_all_devices"></h2>
+            <div><button data-translation="generic->sign_out"></button></div>
+        </div>
+    </section>    <section class="settings-section " id="advanced">
+        <div class="setting" id="delete-account-setting">
+            <h2 data-translation="settings->advanced->delete_account"></h2>
+            <div><button class="delete delete-account-button" data-translation="generic->delete"></button></div>
+        </div>
+    </section>    <section class="settings-section " id="info">
+        <div class="setting" id="tos-setting">
+            <h2 data-translation="generic->terms_of_service"></h2>
+            <div><a href="terms" target="_blank" data-translation="generic->view"></a></div>
+        </div>
+        <div class="setting" id="pp-setting">
+            <h2 data-translation="generic->privacy_policy"></h2>
+            <div><a href="privacy" target="_blank" data-translation="generic->view"></a></div>
+        </div>
+        <div class="setting" id="cp-setting">
+            <h2 data-translation="generic->cookie_policy"></h2>
+            <div><a href="cookie" target="_blank" data-translation="generic->view"></a></div>
+        </div>
+    </section>    <script src="/__/firebase/7.11.0/firebase-app.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-firestore.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-functions.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-analytics.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-performance.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <script>
+        const analytics = firebase.analytics();
+        const perf = firebase.performance();
+    
+        analytics.setAnalyticsCollectionEnabled(!navigator.doNotTrack);
+    </script>    <script type="module" src="assets/js/settings.77251bc5ff1abadbecdf.js"></script>
+</body>
+</html>

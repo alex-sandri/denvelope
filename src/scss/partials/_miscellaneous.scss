@@ -1,0 +1,464 @@
+.modal
+{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border: $border-width solid $secondary-color;
+    width: 100%;
+    padding: $standard-spacing;
+    border-top-left-radius: $standard-spacing;
+    border-top-right-radius: $standard-spacing;
+    background-color: $secondary-color;
+    z-index: 11;
+    transform: translateY(calc(100% + #{$standard-spacing}));
+    color: $primary-color;
+    max-height: calc(100vh - #{$header-height-lg});
+    overflow: auto;
+
+    .content
+    {
+        user-select: text;
+
+        .transfer-info
+        {
+            @include flex($justify-content: space-between);
+
+            margin-bottom: $standard-spacing;
+
+            .progress-bar-container
+            {
+                width: 100%;
+                margin-right: $standard-spacing;
+
+                .progress-bar
+                {
+                    height: 5px;
+                    background-color: $primary-color;
+                    display: block;
+                    border-radius: $border-radius;
+                    width: 0%;
+                    transition: $transition-time;
+                }
+            }
+
+            .status
+            {
+                margin: 0;
+                white-space: nowrap;
+            }
+        }
+
+        .upload-controls
+        {
+            @include flex($justify-content: flex-end);
+
+            .upload-control
+            {
+                @include button($bg-color: transparent, $color: $primary-color, $has-border: false, $has-padding: false, $hover-effect: none);
+
+                &.resume
+                {
+                    display: none;
+                }
+
+                &:last-child
+                {
+                    margin-left: $standard-spacing;
+                }
+            }
+        }
+    }
+
+    .title,
+    .subtitle
+    {
+        @include text-ellipsis-on-overflow;
+
+        margin-top: 0;
+        margin-bottom: $standard-spacing;
+        user-select: none;
+    }
+
+    p:not(.input-error):not(.firebaseui-tos):not(.status)
+    {
+        @include text-ellipsis-on-overflow;
+
+        margin: 0;
+        margin-bottom: $standard-spacing;
+
+        & > span:first-child
+        {
+            font-weight: $bold;
+            display: block;
+        }
+    }
+
+    .input
+    {
+        @include input-container($bg-color: $secondary-color, $color: $primary-color, $has-icon: false);
+    }
+
+    .input-with-icon
+    {
+        @include input-container($bg-color: $secondary-color, $color: $primary-color);
+
+        input
+        {
+            margin-bottom: 0;
+        }
+    }
+
+    button
+    {
+        &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.firebaseui-idp-button):not(.input-icon)
+        {
+            @include button($bg-color: $secondary-color, $color: $primary-color, $border-color: $primary-color);
+
+            width: 100%;
+        }
+
+        &:not(.close-button):not(.input-icon)
+        {
+            margin-bottom: $standard-spacing;
+        }
+
+        &.close-button,
+        &.update-button,
+        &.confirm-button
+        {
+            @include button($border-color: $primary-color);
+
+            display: none;
+            width: 100%;
+        }
+    }
+
+    .firebaseui-auth-container .firebaseui-container .firebaseui-tos
+    {
+        margin-top: 0;
+    }
+
+    &.show
+    {
+        animation: account-modal-show 100ms linear forwards;
+
+        &.no-animate
+        {
+            animation: account-modal-show 0ms linear forwards;
+        }
+    }
+
+    &.hide
+    {
+        animation: account-modal-hide 100ms linear forwards;
+
+        &.no-animate
+        {
+            animation: account-modal-hide 0ms linear forwards;
+        }
+    }
+
+    &.floating
+    {
+        bottom: $standard-spacing;
+        left: $standard-spacing;
+        width: calc(100% - (#{$standard-spacing} * 2));
+        border-radius: $standard-spacing;
+    }
+
+    &.aside
+    {
+        left: unset;
+        right: $standard-spacing;
+        width: 30%;
+    }
+}
+
+.spinner
+{
+    font-size: 40px;
+    margin: $standard-spacing;
+    display: block;
+    text-align: center;
+
+    i
+    {
+        @include animation($name: rotate, $duration: 1s, $timing-function: linear, $iteration-count: infinite);
+    }
+}
+
+.input,
+.input-with-icon
+{
+    @include flex($align-items: unset, $justify-content: unset);
+    @include input-container;
+
+    margin-bottom: $standard-spacing;
+
+    input
+    {
+        width: 100%;
+    }
+}
+
+.input
+{
+    @include input-container($has-icon: false);
+}
+
+.input-error
+{
+    margin: 0;
+    color: $primary-color;
+    margin-bottom: $standard-spacing;
+    border-radius: $border-radius;
+}
+
+.context-menu
+{
+    border: $border-width solid $secondary-color;
+    position: fixed;
+    border-radius: $border-radius;
+    z-index: 999;
+    background-color: $primary-color;
+    display: none;
+    max-height: 100vh;
+    overflow: auto;
+
+    button
+    {
+        @include button($has-border: false, $has-border-radius: false);
+
+        display: block;
+        width: 100%;
+        text-align: start;
+    }
+
+    #move-selector p
+    {
+        margin: $standard-spacing;
+    }
+}
+
+.generic-message
+{
+    @include flex;
+
+    display: none;
+    max-width: calc(100% - #{$standard-spacing * 2});
+    position: fixed;
+    bottom: $standard-spacing;
+    left: $standard-spacing;
+    padding: $standard-spacing;
+    background-color: $secondary-color;
+    color: $primary-color;
+    z-index: 999;
+    border-radius: $border-radius;
+
+    p
+    {
+        margin: 0;
+        font-weight: $bold;
+        word-break: break-word;
+    }
+
+    button
+    {
+        @include button($border-color: $primary-color);
+
+        margin-left: $standard-spacing;
+        padding: 5px;
+        font-size: 15px;
+
+        &.dismiss
+        {
+            background-color: $secondary-color;
+            color: $primary-color;
+            border-color: $secondary-color;
+        }
+    }
+
+    .spinner
+    {
+        display: none;
+        margin: 0;
+        font-size: 20px;
+    }
+}
+
+.show-file
+{
+    display: none;
+    position: absolute;
+    top: $header-height-lg;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    height: calc(100vh - #{$header-height-lg});
+    overflow: hidden;
+
+    .editor-head
+    {
+        @include flex($justify-content: space-between);
+
+        background-color: $primary-color;
+        padding: $standard-spacing;
+        padding-top: 0;
+
+        .name
+        {
+            @include text-ellipsis-on-overflow;
+
+            margin: 0;
+
+            .spinner
+            {
+                font-size: unset;
+                margin: 0;
+            }
+        }
+
+        .buttons
+        {
+            @include flex;
+
+            .menu,
+            .close
+            {
+                @include button;
+
+                margin-left: $standard-spacing;
+            }
+        }
+    }
+
+    .editor
+    {
+        @include flex;
+
+        width: 100%;
+        height: 100%;
+        background-color: $primary-color;
+
+        .spinner
+        {
+            margin: 0;
+        }
+
+        .force-download
+        {
+            @include button;
+        }
+    }
+}
+
+.hide-vault-content
+{
+    @include flex;
+
+    width: 100vw;
+    height: 100vh;
+    background-color: $primary-color;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    font-size: 50px;
+}
+
+.firebaseui-auth-container
+{
+    .firebaseui-container
+    {
+        max-width: unset !important;
+
+        .firebaseui-card-content
+        {
+            @include flex;
+            
+            padding: unset !important;
+
+            form
+            {
+                overflow: auto;
+                overflow-y: hidden;
+
+                .firebaseui-idp-list
+                {
+                    @include flex;
+
+                    margin: 0;
+                    margin-top: $standard-spacing;
+                    width: max-content;
+
+                    .firebaseui-list-item
+                    {
+                        margin-bottom: 0;
+
+                        .firebaseui-idp-button
+                        {
+                            @include flex;
+                            
+                            border-radius: $border-radius;
+                        }
+
+                        &:not(:first-child)
+                        {
+                            padding-left: $standard-spacing;
+                        }
+                    }
+
+                    @at-root
+                    {
+                        .modal &
+                        {
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .firebaseui-tos
+        {
+            margin: 0;
+            margin-top: $standard-spacing;
+
+            @at-root
+            {
+                .modal &
+                {
+                    margin-bottom: $standard-spacing;
+                }
+            }
+        }
+
+        &.firebaseui-id-page-callback
+        {
+            // Hide the white box after sign-in
+            display: none;
+        }
+    }
+}
+
+.bmc-button
+{
+    box-shadow: none;
+    justify-content: center;
+    transition: $transition-time;
+
+    &:hover,
+    &:focus
+    {
+        box-shadow: 0 0 $box-shadow-blur-radius $secondary-color;
+    }
+}
+
+.multiple-content-selector
+{
+    position: absolute;
+    border: 1px solid rgba($color: $secondary-color, $alpha: 0.5);
+    border-radius: $border-radius;
+    backdrop-filter: opacity(0.8);
+    display: none;
+}

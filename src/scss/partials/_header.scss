@@ -1,0 +1,260 @@
+@import 'cookie-banner';
+
+header
+{
+    @include flex($justify-content: space-between);
+
+    background-color: rgba($color: $primary-color, $alpha: 0.8);
+    padding: $standard-spacing;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    height: $header-height-lg;
+    backdrop-filter: blur(20px);
+
+    .logo
+    {
+        a
+        {
+            @include flex;
+
+            img
+            {
+                height: #{$header-height-lg - $standard-spacing * 2};
+            }
+        }
+    }
+
+    .sign-in
+    {
+        @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: none);
+        @include flex;
+    }
+
+    nav
+    {
+        @include flex;
+
+        .menu
+        {
+            display: none;
+            border: $border-width solid $secondary-color;
+            border-radius: $border-radius;
+            position: absolute;
+            top: $header-height-lg;
+            right: $standard-spacing;
+            z-index: 999;
+            background-color: $primary-color;
+            padding: $standard-spacing;
+            max-width: calc(100vw - #{$standard-spacing * 2});
+            max-height: calc(100vh - #{$header-height-lg + $standard-spacing});
+            overflow: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+
+            a,
+            button
+            {
+                @include button($focus-effect: box-shadow);
+
+                text-decoration: none;
+                text-align: center;
+                width: 100%;
+                display: block;
+
+                &.account
+                {
+                    border-radius: 25px;
+                }
+
+                &.settings
+                {
+                    width: calc(100% + #{$standard-spacing * 2});
+                    border-left: 0;
+                    border-right: 0;
+                    border-width: $border-width / 2;
+                    border-radius: 0;
+                    margin-left: -$standard-spacing;
+                }
+
+                &:focus,
+                &:hover
+                {
+                    background-color: $secondary-color;
+                    color: $primary-color;
+                    text-decoration: none;
+                }
+            }
+
+            a
+            {
+                margin-bottom: $standard-spacing;
+            }
+
+            button
+            {
+                @include button($bg-color: $primary-color, $color: $secondary-color);
+            }
+
+            hr
+            {
+                margin: $standard-spacing 0;
+                border: #{$border-width / 4} solid $secondary-color;
+                width: calc(100% + #{$standard-spacing * 2});
+                margin-left: -$standard-spacing;
+            }
+
+            .user
+            {
+                img
+                {
+                    display: block;
+                    height: 100px;
+                    border-radius: 50%;
+                    margin: auto;
+                    margin-bottom: $standard-spacing;
+                }
+
+                p
+                {
+                    @include text-ellipsis-on-overflow;
+
+                    margin: 0;
+                    font-weight: $black;
+                    text-align: center;
+                    font-size: 25px;
+
+                    &:last-child
+                    {
+                        font-weight: $light;
+                        font-size: 20px;
+                        margin-bottom: $standard-spacing;
+                    }
+                }
+            }
+
+            .storage
+            {
+                margin: $standard-spacing 0;
+
+                p
+                {
+                    @include text-ellipsis-on-overflow;
+                    
+                    margin: 0;
+                    text-align: center;
+                }
+
+                .used-container
+                {
+                    background-color: rgba($color: $secondary-color, $alpha: 0.1);
+                    border-radius: $border-radius;
+
+                    .used
+                    {
+                        height: 5px;
+                        background-color: $secondary-color;
+                        border-radius: $border-radius;
+                        margin-top: 5px;
+                        width: 0%;
+                        transition: $transition-time;
+                    }
+                }
+
+                .spinner
+                {
+                    display: inline;
+                    margin: 0;
+                    font-size: 16px;
+                }
+            }
+
+            .install-pwa
+            {
+                @include button;
+
+                border-radius: 25px;
+
+                &,
+                & + hr
+                {
+                    display: none;
+                }
+            }
+
+            .links
+            {
+                a,
+                span
+                {
+                    font-size: 12px;
+                }
+
+                a
+                {
+                    border: none;
+                    padding: 4px 8px;
+                    margin: 0;
+    
+                    &.privacy
+                    {
+                        margin-right: #{$standard-spacing / 2};
+                    }
+    
+                    &.terms
+                    {
+                        margin-left: #{$standard-spacing / 2};
+                    }
+                }
+
+                .legal
+                {
+                    @include flex;
+
+                    margin-bottom: $standard-spacing;
+                }
+            }
+        }
+    }
+
+    .waiting-user .spinner
+    {
+        @include flex;
+
+        font-size: #{$header-height-lg - $standard-spacing * 2};
+        margin: 0;
+        position: fixed;
+        top: $standard-spacing;
+        right: $standard-spacing;
+
+        i
+        {
+            width: unset;
+        }
+    }
+
+    .menu-toggle
+    {
+        button
+        {
+            @include flex;
+            @include button($bg-color: transparent, $color: unset, $has-border: false, $has-padding: false, $hover-effect: none);
+
+            border-radius: 50%;
+
+            img
+            {
+                height: #{$header-height-lg - $standard-spacing * 2};
+                width: #{$header-height-lg - $standard-spacing * 2};
+                border-radius: 50%;
+            }
+
+            &:focus
+            {
+                box-shadow: 0 0 0 $border-width $secondary-color;
+            }
+        }
+    }
+}

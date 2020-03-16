@@ -1,0 +1,28 @@
+{
+  "name": "denvelope",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "start": "firebase serve --only hosting --host 0.0.0.0",
+    "build": "cd public/assets && del css /s /q && del js /s /q && cd ../../ && webpack && cd src/scripts && node compile-html.js && cd ../../ && cd public/assets/css && del style-bundle.js"
+  },
+  "author": "Alex Sandri <me@alexsandri.com> (https://alexsandri.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^3.4.0",
+    "extract-loader": "^3.1.0",
+    "file-loader": "^5.0.2",
+    "glob": "^7.1.6",
+    "handlebars": "^4.5.3",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {}
+}

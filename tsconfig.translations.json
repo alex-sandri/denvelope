@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig",
+    "files": [
+        "src/ts/translations/en-US.ts",
+        "src/ts/translations/it-IT.ts",
+    ],
+    "compilerOptions": {
+        "sourceMap": false
+    }
+}

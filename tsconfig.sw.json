@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig",
+    "files": [
+        "src/ts/service_workers/sw.ts",
+    ],
+    "compilerOptions": {
+        "outDir": "public/",
+        "rootDir": "src/ts/service_workers/",
+        "sourceMap": false
+    }
+}
