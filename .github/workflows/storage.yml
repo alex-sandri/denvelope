@@ -1,19 +1,19 @@
 name: Firebase Cloud Storage Rules Deployment
 
 on:
-    push:
-        paths:
-            - storage.rules
-        branches: 
-            - master
+  push:
+    paths:
+      - storage.rules
+    branches:
+      - master
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@master
-            - uses: w9jds/firebase-action@master
-              with:
-                args: deploy --only storage:rules
-                env:
-                    FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only storage:rules
+          env:
+            FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
