@@ -1,0 +1,19 @@
+name: Firebase Cloud Firestore Rules Deployment
+
+on:
+    push:
+        paths:
+            - firestore.rules
+        branches: 
+            - master
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@master
+            - uses: w9jds/firebase-action@master
+              with:
+                args: deploy --only firestore:rules
+                env:
+                    FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
