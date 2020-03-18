@@ -5,9 +5,7 @@ service firebase.storage {
         (resource.metadata.shared == "true" &&
         !inVaultResource());
 
-      allow create: if isOwner() && (isVaultUnlocked() || !inVaultRequest());
-
-      allow update, delete: if isOwner() && (isVaultUnlocked() || !inVaultResource());
+      allow write: if isOwner() && (isVaultUnlocked() || !inVaultRequest());
 
       function isOwner() {
         return request.auth != null &&

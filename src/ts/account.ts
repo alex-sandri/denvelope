@@ -1034,13 +1034,17 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
     preventWindowUnload.fileUpload = true;
 
-    if (Utilities.IsSet(id) && typeof file === "string") ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).putString(file), name, size, id)
-        .then(() => resolveUpload())
-        .catch(error => rejectUpload(error));
+    const shared = Utilities.GetCurrentFolderId() === "root" ? false : folderShared;
+    const inVault = await vaultOnly();
+
+    const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
+
+    if (Utilities.IsSet(id) && typeof file === "string")
+        ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
+            .then(() => resolveUpload())
+            .catch(error => rejectUpload(error));
     else
     {
-        const shared = Utilities.GetCurrentFolderId() === "root" ? false : folderShared;
-
         if (parentId === "starred" || parentId === "trash") parentId = "root";
 
         if (await vaultOnly()) parentId = "vault";
@@ -1071,8 +1075,6 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
             name = tempName;
         }
-
-        const inVault = await vaultOnly();
 
         db.collection(`users/${Auth.UserId}/files`).add({
             name,
