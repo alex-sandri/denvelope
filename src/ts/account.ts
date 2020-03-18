@@ -553,7 +553,7 @@ window.addEventListener("userready", () =>
 
         const inVault = await vaultOnly();
 
-        for (const item of [...contextMenuItems, contextMenuItem].filter(Boolean))
+        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
         {
             const id = item.id;
             const type = item.classList[0];
@@ -583,7 +583,7 @@ window.addEventListener("userready", () =>
                     content_id: id
                 });
             }
-        }
+        });
 
         batch.commit();
 
