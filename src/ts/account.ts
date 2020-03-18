@@ -312,7 +312,7 @@ window.addEventListener("userready", () =>
     contextMenuMove.addEventListener("click", async () =>
     {
         const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
-        
+
         Utilities.HideElements([
             contextMenuContent,
             contextMenuGeneric
@@ -1056,7 +1056,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
         if (inVault) parentId = "vault";
 
-        const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
+        const nameWithNoExt = name.indexOf(".") > -1 ? name.substr(0, name.lastIndexOf(".")) : name;
 
         const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
@@ -1758,7 +1758,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
             let name = (await docRef.get()).data().name;
 
-            const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
+            const nameWithNoExt = name.indexOf(".") > -1 && contentType === "file" ? name.substr(0, name.lastIndexOf(".")) : name;
 
             const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
@@ -2033,15 +2033,13 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
 {
     if (depth === 0) // Duplicate checks are only useful with the uploaded folder
     {
-        const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
-
-        const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
+        const end = name.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
         const tempSnapshot = await db
             .collection(`users/${Auth.UserId}/folders`)
             .where("inVault", "==", await vaultOnly())
             .where("parentId", "==", parentId)
-            .where("name", ">=", nameWithNoExt)
+            .where("name", ">=", name)
             .where("name", "<", end)
             .get();
 
