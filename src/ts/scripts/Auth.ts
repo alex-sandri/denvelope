@@ -54,6 +54,8 @@ export class Auth
 
         Auth.auth.onAuthStateChanged((user : any) => Auth.AuthStateChanged(user));
     }
+
+    public static RefreshToken = () : void => Auth.auth.currentUser.getIdToken(true);
     
     public static get UserId () : string {return Auth.sharedContentUserId || Auth.auth.currentUser.uid;}
 

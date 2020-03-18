@@ -100,7 +100,7 @@ let folderShared : boolean = false;
 
 let preventWindowUnload : any = {};
 
-window.addEventListener("userready", () =>
+window.addEventListener("userready", async () =>
 {
     [addFiles, contextMenuAddFiles].forEach(element => element.addEventListener("click", () => fileInput.click()));
 
@@ -461,7 +461,7 @@ window.addEventListener("userready", () =>
 
         const unsubscribe = db.collection(`users/${Auth.UserId}/${type}s`).doc(id).onSnapshot(async (doc : any) =>
         {
-            if (doc.data().trashed)
+            if (!doc.exists || doc.data().trashed)
             {
                 modal.HideAndRemove();
 
@@ -652,7 +652,7 @@ window.addEventListener("userready", () =>
 
     lockVaultButton.addEventListener("click", async () =>
     {
-        functions.httpsCallable("lockVault")({});
+        functions.httpsCallable("lockVault")({}).then(() => Auth.RefreshToken());
 
         navigationBackButton.click();
     });
@@ -796,6 +796,8 @@ window.addEventListener("userready", () =>
                 Utilities.SetCurrentFolderId("vault");
 
                 GetUserContent();
+
+                Auth.RefreshToken();
             }
 
             if (snapshot.exists && !snapshot.data().locked)
@@ -907,6 +909,8 @@ window.addEventListener("userready", () =>
 
         if (!Auth.IsAuthenticated && location.pathname.indexOf("/shared/") > -1) Utilities.HideElement(editorClose);
     }
+
+    if (await vaultOnly()) Auth.RefreshToken();
 
     GetUserContent();
 });
@@ -1165,6 +1169,8 @@ const GetUserContent = async (searchTerm ?: string) =>
         {
             if (snapshot.exists)
                 vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${snapshot.data().locked ? "" : "-open"}"></i>`;
+
+            Auth.RefreshToken();
         });
     }
     else Utilities.HideElement(vault);
