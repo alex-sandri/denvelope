@@ -13,7 +13,7 @@ service firebase.storage {
       }
 
       function inVault() {
-        return resource.metadata.inVault == "true";
+        return request.resource.metadata.inVault == "true";
       }
 
       function isVaultUnlocked() {
