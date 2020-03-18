@@ -345,7 +345,7 @@ window.addEventListener("userready", async () =>
                         const batch = db.batch();
 
                         tempArray.forEach(item =>
-                            db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id).update({
+                            batch.update(db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id), {
                                 parentId: element.id,
                                 ...Utilities.GetFirestoreUpdateTimestamp()
                             }));
