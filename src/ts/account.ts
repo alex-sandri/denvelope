@@ -311,8 +311,6 @@ window.addEventListener("userready", () =>
 
     contextMenuMove.addEventListener("click", async () =>
     {
-        const type = contextMenuItem.classList[0];
-
         Utilities.HideElements([
             contextMenuContent,
             contextMenuGeneric
@@ -331,21 +329,26 @@ window.addEventListener("userready", () =>
 
             docs.forEach((doc : any) =>
             {
-                let element : HTMLButtonElement;
-
                 if (doc.id != contextMenuItem.id)
                 {
-                    contextMenuMoveSelectorOptions.appendChild(element = <HTMLButtonElement>new Component("button", {
+                    const element = <HTMLButtonElement>new Component("button", {
                         innerHTML: `<i class="fas fa-folder"></i> ${doc.data().name}`,
                         id: doc.id
-                    }).element);
+                    }).element;
+
+                    contextMenuMoveSelectorOptions.appendChild(element);
     
                     element.addEventListener("click", () =>
                     {
-                        db.collection(`users/${Auth.UserId}/${type}s`).doc(contextMenuItem.id).update({
-                            parentId: element.id,
-                            ...Utilities.GetFirestoreUpdateTimestamp()
-                        });
+                        const batch = db.batch();
+
+                        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
+                            db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id).update({
+                                parentId: element.id,
+                                ...Utilities.GetFirestoreUpdateTimestamp()
+                            }));
+
+                        batch.commit();
                     });
                 }
             });
@@ -1507,6 +1510,8 @@ const showContextMenu = (e : MouseEvent) : void =>
             {
                 if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "false").length > 0) Utilities.ShowElement(contextMenuAddToFavourites);
                 else if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "true").length > 0) Utilities.ShowElement(contextMenuRemoveFromFavourites);
+
+                Utilities.ShowElements([ contextMenuMove ]);
             }
 
             Utilities.ShowElements([ contextMenuDownload ]);
