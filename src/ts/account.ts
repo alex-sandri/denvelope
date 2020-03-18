@@ -1045,13 +1045,15 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
         if (await vaultOnly()) parentId = "vault";
 
-        const end = name.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
+        const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
+
+        const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
         const tempSnapshot = await db
             .collection(`users/${Auth.UserId}/files`)
             .where("inVault", "==", await vaultOnly())
             .where("parentId", "==", parentId)
-            .where("name", ">=", name)
+            .where("name", ">=", nameWithNoExt)
             .where("name", "<", end)
             .get();
 
@@ -1745,13 +1747,15 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
             let name = (await docRef.get()).data().name;
 
-            const end = name.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
+            const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
+
+            const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
             const tempSnapshot = await db
                 .collection(`users/${Auth.UserId}/${contentType}s`)
                 .where("inVault", "==", parentId === "vault")
                 .where("parentId", "==", parentId)
-                .where("name", ">=", name)
+                .where("name", ">=", nameWithNoExt)
                 .where("name", "<", end)
                 .get();
     
@@ -2018,13 +2022,15 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
 {
     if (depth === 0) // Duplicate checks are only useful with the uploaded folder
     {
-        const end = name.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
+        const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
+
+        const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
         const tempSnapshot = await db
             .collection(`users/${Auth.UserId}/folders`)
             .where("inVault", "==", await vaultOnly())
             .where("parentId", "==", parentId)
-            .where("name", ">=", name)
+            .where("name", ">=", nameWithNoExt)
             .where("name", "<", end)
             .get();
 
