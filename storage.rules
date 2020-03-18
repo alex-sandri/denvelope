@@ -17,7 +17,7 @@ service firebase.storage {
       }
 
       function inVaultResource() {
-        return resource.metadata.inVault == "true";
+        return "inVault" in resource.metadata && resource.metadata.inVault == "true";
       }
 
       function isVaultUnlocked() {
