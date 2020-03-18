@@ -311,6 +311,8 @@ window.addEventListener("userready", () =>
 
     contextMenuMove.addEventListener("click", async () =>
     {
+        const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
+        
         Utilities.HideElements([
             contextMenuContent,
             contextMenuGeneric
@@ -329,7 +331,7 @@ window.addEventListener("userready", () =>
 
             docs.forEach((doc : any) =>
             {
-                if (doc.id != contextMenuItem.id)
+                if (tempArray.filter(element => element.id === doc.id).length === 0)
                 {
                     const element = <HTMLButtonElement>new Component("button", {
                         innerHTML: `<i class="fas fa-folder"></i> ${doc.data().name}`,
@@ -342,7 +344,7 @@ window.addEventListener("userready", () =>
                     {
                         const batch = db.batch();
 
-                        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
+                        tempArray.forEach(item =>
                             db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id).update({
                                 parentId: element.id,
                                 ...Utilities.GetFirestoreUpdateTimestamp()
@@ -552,13 +554,13 @@ window.addEventListener("userready", () =>
 
     [contextMenuDelete, contextMenuRestore].forEach(element => element.addEventListener("click", async () =>
     {
-        const tempArray = [...contextMenuItems, contextMenuItem]; // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
+        const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean); // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
 
         const batch = db.batch();
 
         const inVault = await vaultOnly();
 
-        tempArray.filter(Boolean).forEach(item =>
+        tempArray.forEach(item =>
         {
             const id = item.id;
             const type = item.classList[0];
