@@ -1,15 +1,19 @@
 service firebase.storage {
   match /b/{bucket}/o {
     match /{userId}/{fileId} {
-      allow read: if (isOwner() && isVaultUnlocked()) ||
+      allow read: if (isOwner() && ((inVault() && isVaultUnlocked()) || !inVault())) ||
         (resource.metadata.shared == "true" &&
-        resource.metadata.inVault != "true");
+        !inVault());
 
-      allow write: if isOwner() && isVaultUnlocked();
+      allow write: if isOwner() && ((inVault() && isVaultUnlocked()) || !inVault());
 
       function isOwner() {
         return request.auth != null &&
           request.auth.uid == userId;
+      }
+
+      function inVault() {
+        return resource.metadata.inVault == "true";
       }
 
       function isVaultUnlocked() {
