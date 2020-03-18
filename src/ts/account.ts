@@ -1070,13 +1070,15 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
             name = tempName;
         }
 
+        const inVault = await vaultOnly();
+
         db.collection(`users/${Auth.UserId}/files`).add({
             name,
             parentId,
             shared,
             starred: false,
             trashed: false,
-            inVault: await vaultOnly(),
+            inVault,
             created: Utilities.GetFirestoreServerTimestamp(),
             ...Utilities.GetFirestoreUpdateTimestamp()
         }).then((ref : any) =>
@@ -1088,7 +1090,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
                 content_id: id
             });
 
-            const metadata = { customMetadata: { shared: `${shared}` } };
+            const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
     
             if (typeof file !== "string") ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).put(file, metadata), name, size, id)
                 .then(() => resolveUpload()).catch(error => rejectUpload(error));
