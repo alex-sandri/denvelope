@@ -1047,7 +1047,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
     {
         if (parentId === "starred" || parentId === "trash") parentId = "root";
 
-        if (await vaultOnly()) parentId = "vault";
+        if (inVault) parentId = "vault";
 
         const nameWithNoExt = name.substr(0, name.lastIndexOf("."));
 
@@ -1055,7 +1055,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
         const tempSnapshot = await db
             .collection(`users/${Auth.UserId}/files`)
-            .where("inVault", "==", await vaultOnly())
+            .where("inVault", "==", inVault)
             .where("parentId", "==", parentId)
             .where("name", ">=", nameWithNoExt)
             .where("name", "<", end)
@@ -1172,7 +1172,7 @@ const GetUserContent = async (searchTerm ?: string) =>
 
     if ((searchTerm ?? "").length === 0)
     {
-        if (parentId !== "root" && Utilities.GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && !await vaultOnly())
+        if (parentId !== "root" && Utilities.GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && !await vaultOnly() && location.pathname.indexOf("/file/") === -1)
         {
             folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
             folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
