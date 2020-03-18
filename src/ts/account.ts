@@ -549,11 +549,13 @@ window.addEventListener("userready", () =>
 
     [contextMenuDelete, contextMenuRestore].forEach(element => element.addEventListener("click", async () =>
     {
+        const tempArray = [...contextMenuItems, contextMenuItem]; // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
+
         const batch = db.batch();
 
         const inVault = await vaultOnly();
 
-        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
+        tempArray.filter(Boolean).forEach(item =>
         {
             const id = item.id;
             const type = item.classList[0];
