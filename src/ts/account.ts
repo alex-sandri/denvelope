@@ -345,18 +345,7 @@ window.addEventListener("userready", async () =>
 
                     contextMenuMoveSelectorOptions.appendChild(element);
     
-                    element.addEventListener("click", () =>
-                    {
-                        const batch = db.batch();
-
-                        tempArray.forEach(item =>
-                            batch.update(db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id), {
-                                parentId: element.id,
-                                ...Utilities.GetFirestoreUpdateTimestamp()
-                            }));
-
-                        batch.commit();
-                    });
+                    element.addEventListener("click", async () => MoveElements(tempArray, element.id));
                 }
             });
 
@@ -1069,32 +1058,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
         if (inVault) parentId = "vault";
 
-        const nameWithNoExt = name.indexOf(".") > -1 ? name.substr(0, name.lastIndexOf(".")) : name;
-
-        const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
-
-        const tempSnapshot = await db
-            .collection(`users/${Auth.UserId}/files`)
-            .where("inVault", "==", inVault)
-            .where("parentId", "==", parentId)
-            .where("name", ">=", nameWithNoExt)
-            .where("name", "<", end)
-            .get();
-
-        if (tempSnapshot.size > 0)
-        {
-            let i = 1;
-            let tempName : string;
-
-            do
-                tempName = (name.substring(0, name.lastIndexOf(".") > -1 ? name.lastIndexOf(".") : undefined) +
-                    ` (${i++})` +
-                    (name.indexOf(".") > -1 ? "." : "") +
-                    (name.indexOf(".") > -1 ? name.split(".").pop() : "")).trim();
-            while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
-
-            name = tempName;
-        }
+        name = await CheckElementNameValidity(name, "file", parentId);
 
         db.collection(`users/${Auth.UserId}/files`).add({
             name,
@@ -1690,6 +1654,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     let moved : boolean = false;
 
+    const tempArray = <HTMLElement[]>[ ...(contextMenuItems || []), element ].filter(Boolean);
+
     const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
     {
         if (!Utilities.IsSet(element)) return;
@@ -1753,15 +1719,13 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
             (<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
             {
                 Utilities.RemoveClass(element, "no-hover");
+
                 if (Utilities.HasClass(element, "file")) Utilities.RemoveClass(element, "disabled");
             }));
 
         Utilities.RemoveClass(placeholderElement, "placeholder");
 
         Utilities.RemoveClass(document.documentElement, "grabbing");
-
-        const contentType = element.classList[0];
-        const contentId = element.id;
 
         element.remove();
         element = null;
@@ -1787,45 +1751,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
         if (!moved) HandlePageChangeAndLoadUserContent(ev);
         else if (Utilities.IsSet(parentId) && Auth.IsAuthenticated)
-        {
-            const docRef = db.collection(`users/${Auth.UserId}/${contentType}s`).doc(contentId);
-
-            let name = (await docRef.get()).data().name;
-
-            const nameWithNoExt = name.indexOf(".") > -1 && contentType === "file" ? name.substr(0, name.lastIndexOf(".")) : name;
-
-            const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
-
-            const tempSnapshot = await db
-                .collection(`users/${Auth.UserId}/${contentType}s`)
-                .where("inVault", "==", parentId === "vault")
-                .where("parentId", "==", parentId)
-                .where("name", ">=", nameWithNoExt)
-                .where("name", "<", end)
-                .get();
-    
-            if (tempSnapshot.size > 0)
-            {
-                let i = 1;
-                let tempName : string;
-    
-                do
-                    tempName = (name.substring(0, name.lastIndexOf(".") > -1 ? name.lastIndexOf(".") : undefined) +
-                        ` (${i++})` +
-                        (name.indexOf(".") > -1 ? "." : "") +
-                        (name.indexOf(".") > -1 ? name.split(".").pop() : "")).trim();
-                while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
-    
-                name = tempName;
-            }
-
-            docRef.update({
-                name,
-                parentId,
-                inVault: parentId === "vault",
-                ...Utilities.GetFirestoreUpdateTimestamp()
-            });
-        }
+            MoveElements(tempArray, parentId);
 
         document.removeEventListener("mousemove", MoveElement);
         document.removeEventListener("touchmove", MoveElement);
@@ -2066,28 +1992,7 @@ const GetFolderUrl = (id : string, isShared : boolean) : string => (id !== "root
 const UploadFolder = async (files : File[], name : string, path : string, parentId : string, depth : number) : Promise<void> =>
 {
     if (depth === 0) // Duplicate checks are only useful with the uploaded folder
-    {
-        const end = name.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
-
-        const tempSnapshot = await db
-            .collection(`users/${Auth.UserId}/folders`)
-            .where("inVault", "==", await vaultOnly())
-            .where("parentId", "==", parentId)
-            .where("name", ">=", name)
-            .where("name", "<", end)
-            .get();
-
-        if (tempSnapshot.size > 0)
-        {
-            let i = 1;
-            let tempName : string;
-
-            do tempName = name + ` (${i++})`;
-            while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
-
-            name = tempName;
-        }
-    }
+        name = await CheckElementNameValidity(name, "folder", parentId);
 
     if (await vaultOnly()) parentId = "vault";
 
@@ -2274,6 +2179,69 @@ const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
     ((!Utilities.IsSet(checkCurrentFolder) || checkCurrentFolder) &&
     Utilities.GetCurrentFolderId() !== "root" &&
     (await db.collection(`users/${Auth.UserId}/folders`).doc(Utilities.GetCurrentFolderId()).get()).data().inVault));
+
+/**
+ * @returns string The new name for the element
+ */
+const CheckElementNameValidity = async (name : string, type : string, parentId : string) : Promise<string> =>
+{
+    const nameWithNoExt = name.indexOf(".") > -1 && type === "file" ? name.substr(0, name.lastIndexOf(".")) : name;
+
+    const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
+
+    const tempSnapshot = await db
+        .collection(`users/${Auth.UserId}/${type}s`)
+        .where("inVault", "==", parentId === "vault")
+        .where("parentId", "==", parentId)
+        .where("name", ">=", nameWithNoExt)
+        .where("name", "<", end)
+        .get();
+                    
+    if (tempSnapshot.size > 0)
+    {
+        let i = 1;
+        let tempName : string;
+
+        do
+            if (type === "file")
+                tempName = (name.substring(0, name.lastIndexOf(".") > -1 ? name.lastIndexOf(".") : undefined) +
+                    ` (${i++})` +
+                    (name.indexOf(".") > -1 ? "." : "") +
+                    (name.indexOf(".") > -1 ? name.split(".").pop() : "")).trim();
+            else tempName = name + ` (${i++})`;
+        while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
+                    
+        name = tempName;
+    }
+
+    return name;
+}
+
+const MoveElements = async (elements: HTMLElement[], parentId : string) : Promise<void> =>
+{
+    const batch = db.batch();
+
+    for (const item of elements)
+    {
+        const type = item.classList[0];
+        const id = item.id;
+
+        const docRef = db.collection(`users/${Auth.UserId}/${type}s`).doc(id);
+
+        let name = (await docRef.get()).data().name;
+
+        name = await CheckElementNameValidity(name, type, parentId);
+
+        batch.update(docRef, {
+            name,
+            parentId,
+            inVault: parentId === "vault",
+            ...Utilities.GetFirestoreUpdateTimestamp()
+        });
+    }
+
+    batch.commit();
+}
 
 if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/folder/") > -1 || location.pathname.indexOf("/file/") > -1)
 {
