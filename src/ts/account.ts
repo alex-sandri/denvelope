@@ -85,6 +85,11 @@ const contextMenuAddFolder : HTMLButtonElement = contextMenuGeneric.querySelecto
 const contextMenuCreateFile : HTMLButtonElement = contextMenuGeneric.querySelector("#cm-create-file");
 const contextMenuCreateFolder : HTMLButtonElement = contextMenuGeneric.querySelector("#cm-create-folder");
 
+const contextMenuVault : HTMLDivElement = contextMenu.querySelector("#cm-vault");
+const contextMenuCreateVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-create-vault");
+const contextMenuLockVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-lock");
+const contextMenuUnlockVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-unlock");
+
 let contextMenuItem : HTMLElement;
 let contextMenuItems : HTMLElement[];
 
@@ -605,6 +610,10 @@ window.addEventListener("userready", async () =>
         
         if (getComputedStyle(showFile).getPropertyValue("display") !== "none") editorClose.click();
     }));
+
+    [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
+
+    contextMenuLockVault.addEventListener("click", () => lockVaultButton.click());
 
     navigationBackButton.addEventListener("click", async () =>
     {
@@ -1167,8 +1176,14 @@ const GetUserContent = async (searchTerm ?: string) =>
 
         db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
         {
+            const locked : boolean = snapshot.data().locked;
+
             if (snapshot.exists)
-                vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${snapshot.data().locked ? "" : "-open"}"></i>`;
+            {
+                vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${locked ? "" : "-open"}"></i>`;
+
+                vault.setAttribute("data-locked", `${locked}`);
+            }
 
             Auth.RefreshToken();
         });
@@ -1435,6 +1450,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 
         Utilities.HideElements(<HTMLElement[]>[
             contextMenuGeneric,
+            contextMenuVault,
             contextMenuView,
             contextMenuSave,
             contextMenuSaveToMyAccount,
@@ -1500,12 +1516,24 @@ const showContextMenu = (e : MouseEvent) : void =>
     }
     else if (Auth.IsAuthenticated && contextMenuItems.length === 0)
     {
-        Utilities.HideElement(contextMenuContent);
-        Utilities.ShowElements(<HTMLElement[]>[contextMenuGeneric, ...contextMenuGeneric.children]);
+        Utilities.HideElements([ contextMenuContent, contextMenuGeneric, contextMenuVault ]);
+
+        if (!vault.contains(<HTMLElement>e.target)) Utilities.ShowElements(<HTMLElement[]>[contextMenuGeneric, ...contextMenuGeneric.children]);
+        else
+        {
+            const vaultLocked = vault.getAttribute("data-locked");
+
+            Utilities.HideElements(<HTMLElement[]>[ ...contextMenuVault.children ]);
+
+            Utilities.ShowElements([
+                contextMenuVault,
+                vaultLocked === "true" ? contextMenuUnlockVault : (vaultLocked === "false" ? contextMenuLockVault : contextMenuCreateVault)
+            ]);
+        }
     }
     else if (contextMenuItems.length > 1)
     {
-        Utilities.HideElements(<HTMLElement[]>[...contextMenuContent.children, contextMenuGeneric]);
+        Utilities.HideElements(<HTMLElement[]>[...contextMenuContent.children, contextMenuGeneric, contextMenuVault]);
 
         Utilities.ShowElement(contextMenuContent);
 

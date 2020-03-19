@@ -21,6 +21,7 @@ export const en_US = {
         starred: "Starred",
         trash: "Trash",
         empty_trash: "Empty trash",
+        create_vault: "Create vault",
         context_menu: {
             move: {
                 impossible: "Impossible to move this item, there are no folders to move this into",
@@ -144,6 +145,8 @@ export const en_US = {
         accessibility: "Accessibility",
         are_you_sure: "Are you sure?",
         vault: "Vault",
+        lock: "Lock",
+        unlock: "Unlock",
     },
     header: {
         storage: {

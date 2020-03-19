@@ -21,6 +21,7 @@ export const it_IT = {
         starred: "Preferiti",
         trash: "Cestino",
         empty_trash: "Svuota cestino",
+        create_vault: "Crea cassaforte",
         context_menu: {
             move: {
                 impossible: "Impossibile spostare questo elemento, non ci sono cartelle in cui spostarlo",
@@ -144,6 +145,8 @@ export const it_IT = {
         accessibility: "Accessibilità",
         are_you_sure: "Sei sicuro?",
         vault: "Cassaforte",
+        lock: "Blocca",
+        unlock: "Sblocca",
     },
     header: {
         storage: {
