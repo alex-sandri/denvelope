@@ -683,7 +683,7 @@ window.addEventListener("userready", async () =>
 
     document.addEventListener("click", e =>
     {
-        if((<HTMLElement>e.target).closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button`) === null &&
+        if((<HTMLElement>e.target).closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button, .vault .menu-button`) === null &&
             (<HTMLElement>e.target).closest(editorMenuSelector) === null && (<HTMLElement>e.target).closest("#cm-move") === null) HideContextMenu();
 
         if ((<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => Utilities.HasClass(element, "selected")).length === 0)
@@ -783,8 +783,10 @@ window.addEventListener("userready", async () =>
         });
     });
 
-    vault.addEventListener("click", () =>
+    vault.addEventListener("click", e =>
     {
+        if (vault.querySelector(".menu-button button").contains(<HTMLElement>e.target)) return;
+
         db.collection(`users/${Auth.UserId}/vault`).doc("status").get().then((snapshot : any) =>
         {
             const LoadVault = () =>
@@ -1553,7 +1555,7 @@ const addUserContentEvents = () : void =>
     const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(folderSelector + " .menu-button button," + fileSelector + " .menu-button button"));
     const userContentElements = (<NodeListOf<HTMLDivElement>>document.querySelectorAll(`${folderSelector}, ${fileSelector}`));
 
-    userContentMenuButtons.forEach(element => element.addEventListener("click", showContextMenu));
+    [ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", showContextMenu));
 
     editorMenu.addEventListener("click", showContextMenu);
 
