@@ -91,16 +91,12 @@ export const fileUpdated = functions.region(region).firestore.document("users/{u
     const afterData = <FirebaseFirestore.DocumentData>change.after.data();
     const beforeData = <FirebaseFirestore.DocumentData>change.before.data();
 
-    if (afterData.shared !== beforeData.shared)
+    if (afterData.shared !== beforeData.shared || afterData.inVault !== beforeData.inVault)
         void storage.bucket().file(`${userId}/${fileId}`).setMetadata({
             metadata: {
-                shared: `${afterData.shared}`
+                shared: `${afterData.shared}`,
+                inVault: `${afterData.inVault}`
             }
-        });
-
-    if (afterData.inVault !== beforeData.inVault)
-        void storage.bucket().file(`${userId}/${fileId}`).setMetadata({
-            metadata: { inVault: `${afterData.inVault}` }
         });
 
     if (afterData.trashed !== beforeData.trashed && afterData.trashed === false)
@@ -329,6 +325,21 @@ export const lockVault = functions.region(region).https.onCall(async (data, cont
     await db.collection(`users/${userId}/vault`).doc("status").update("locked", true);
 
     await auth.setCustomUserClaims(userId, { vaultLocked: true });
+});
+
+export const addFileMetadataInVault = functions.region(region).runWith({ memory: "2GB", timeoutSeconds: 540 }).https.onCall(async () =>
+{
+    const users = await db.collection("users").get();
+
+    for (const user of users.docs)
+        await db.collection(`users/${user.id}/files`).get().then(async filesSnapshot =>
+        {
+            for (const file of filesSnapshot.docs)
+                await storage.bucket().file(`${user.id}/${file.id}`).setMetadata({ metadata: {
+                    shared: `${file.data().shared}`,
+                    inVault: `${file.data().inVault}`
+                } });
+        });
 });
 
 export const unlockVault = functions.region(region).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
