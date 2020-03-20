@@ -327,21 +327,6 @@ export const lockVault = functions.region(region).https.onCall(async (data, cont
     await auth.setCustomUserClaims(userId, { vaultLocked: true });
 });
 
-export const addFileInVaultMetadata = functions.region(region).runWith({ memory: "2GB", timeoutSeconds: 540 }).https.onCall(async () =>
-{
-    const users = await db.collection("users").get();
-
-    for (const user of users.docs)
-        await db.collection(`users/${user.id}/files`).get().then(async filesSnapshot =>
-        {
-            for (const file of filesSnapshot.docs)
-                await storage.bucket().file(`${user.id}/${file.id}`).setMetadata({ metadata: {
-                    shared: `${file.data().shared}`,
-                    inVault: `${file.data().inVault}`
-                } });
-        });
-});
-
 export const unlockVault = functions.region(region).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.pin) return;
