@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          version: 12
+      - run: npm ci
       - uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions
