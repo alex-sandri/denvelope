@@ -327,7 +327,7 @@ export const lockVault = functions.region(region).https.onCall(async (data, cont
     await auth.setCustomUserClaims(userId, { vaultLocked: true });
 });
 
-export const addFileMetadataInVault = functions.region(region).runWith({ memory: "2GB", timeoutSeconds: 540 }).https.onCall(async () =>
+export const addFileInVault = functions.region(region).runWith({ memory: "2GB", timeoutSeconds: 540 }).https.onCall(async () =>
 {
     const users = await db.collection("users").get();
 
