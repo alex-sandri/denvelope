@@ -5,8 +5,13 @@ main.error,
 main.accessibility
 {
     margin: $standard-spacing;
-    margin-top: #{$header-height-lg};
+    margin-top: 0;
     min-height: calc(100vh - #{$header-height-lg + $standard-spacing});
+
+    h1
+    {
+        margin-top: 0;
+    }
 
     a
     {
@@ -25,7 +30,6 @@ main.error
 
     text-align: center;
 
-    h1,
     h2
     {
         margin-top: 0;

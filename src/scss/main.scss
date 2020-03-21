@@ -79,6 +79,13 @@ body
 
     &.home-page
     {
+        header
+        {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
         *.no-home-page
         {
             display: none;

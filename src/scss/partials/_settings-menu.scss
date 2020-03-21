@@ -4,7 +4,7 @@
 
     width: calc(100% - #{$standard-spacing * 2});
     margin: $standard-spacing;
-    margin-top: $header-height-lg;
+    margin-top: 0;
     overflow: auto;
 
     button

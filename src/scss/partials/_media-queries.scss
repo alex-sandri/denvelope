@@ -254,7 +254,6 @@
     main.cookies,
     main.error
     {
-        margin-top: #{$header-height-md};
         min-height: calc(100vh - #{$header-height-md + $standard-spacing});
     }
 }
