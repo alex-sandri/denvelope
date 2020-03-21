@@ -6,11 +6,7 @@ header
 
     background-color: rgba($color: $primary-color, $alpha: 0.8);
     padding: $standard-spacing;
-    position: fixed;
     width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 999;
     height: $header-height-lg;
     backdrop-filter: blur(20px);
 

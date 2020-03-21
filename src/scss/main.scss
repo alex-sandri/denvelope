@@ -1,3 +1,24 @@
+@import "partials/variables";
+@import "partials/mixins";
+@import "partials/animations";
+
+@import "partials/header";
+@import "partials/home-hero";
+@import "partials/home-features";
+@import "partials/footer";
+
+@import "partials/account-side-menu";
+@import "partials/account-main";
+
+@import "partials/settings-menu";
+@import "partials/settings";
+
+@import "partials/privacy";
+
+@import "partials/miscellaneous";
+
+@import "partials/media-queries";
+
 html
 {
     height: 100%;
@@ -35,27 +56,6 @@ html
     }
 }
 
-@import "partials/variables";
-@import "partials/mixins";
-@import "partials/animations";
-
-@import "partials/header";
-@import "partials/home-hero";
-@import "partials/home-features";
-@import "partials/footer";
-
-@import "partials/account-side-menu";
-@import "partials/account-main";
-
-@import "partials/settings-menu";
-@import "partials/settings";
-
-@import "partials/privacy";
-
-@import "partials/miscellaneous";
-
-@import "partials/media-queries";
-
 body
 {
     margin: 0;
@@ -65,7 +65,7 @@ body
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: contain;
-    height: calc(100% - #{$header-height-lg});
+    height: 100vh;
 
     &.preload *
     {

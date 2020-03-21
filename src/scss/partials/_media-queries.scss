@@ -125,11 +125,6 @@
 
 @media only all and (max-width: 600px)
 {
-    body
-    {
-        height: calc(100% - #{$header-height-md});
-    }
-
     header
     {
         height: $header-height-md;
@@ -177,6 +172,8 @@
 
     .account-main
     {
+        height: calc(100% - #{$header-height-md + 54px});
+
         .empty-folder
         {
             img
