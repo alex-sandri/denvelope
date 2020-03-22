@@ -570,7 +570,7 @@ window.addEventListener("userready", async () =>
                     ...Utilities.GetFirestoreUpdateTimestamp()
                 });
 
-                analytics.logEvent(!trashed ? "move_to_trash" : "restored_from_trash", {
+                analytics.logEvent(!trashed ? "trash" : "restore", {
                     content_type: type,
                     content_id: id,
                 });

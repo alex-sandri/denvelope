@@ -92,7 +92,7 @@ export class ServiceWorkerController
         });
 
     UpdateReady = (sw : ServiceWorker) : void =>
-        void genericMessage.Show(Translation.Get("pwa->update_available"), Translation.Get("generic->update"), 10000).then(() =>
+        void genericMessage.Show(Translation.Get("pwa->update_available"), Translation.Get("generic->update"), -1).then(() =>
         {
             genericMessage.ShowSpinner();
 
