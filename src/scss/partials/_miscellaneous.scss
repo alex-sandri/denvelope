@@ -117,7 +117,7 @@
             width: 100%;
         }
 
-        &:not(.close-button):not(.input-icon)
+        &:not(.close-button):not(.input-icon):not(.upload-control)
         {
             margin-bottom: $standard-spacing;
         }
@@ -160,7 +160,7 @@
 
     &.floating
     {
-        bottom: $standard-spacing;
+        bottom: $standard-spacing + $account-bottom-bar-height;
         left: $standard-spacing;
         width: calc(100% - (#{$standard-spacing} * 2));
         border-radius: $standard-spacing;

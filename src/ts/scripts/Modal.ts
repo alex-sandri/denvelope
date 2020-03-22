@@ -36,7 +36,7 @@ export class Modal
 
             if (options.hasOwnProperty("animate") && !(<any>options).animate) Utilities.AddClass(this.element, "no-animate");
 
-            if (options.hasOwnProperty("aside") && (<any>options).animate) Utilities.AddClass(this.element, "aside");
+            if (options.hasOwnProperty("aside") && (<any>options).aside) Utilities.AddClass(this.element, "aside");
 
             if (options.hasOwnProperty("loading") && !(<any>options).loading) Utilities.HideElement(this.spinner);
         }
@@ -166,9 +166,10 @@ export class UploadModal extends Modal
     constructor (name : string, size : number)
     {
         super({
-            "subtitle": name,
-            "floating": true,
-            "animate": false
+            subtitle: name,
+            floating: true,
+            animate: false,
+            aside: true
         });
 
         this.AppendContent([
@@ -266,9 +267,10 @@ export class DownloadModal extends Modal
     constructor (name : string, size : number)
     {
         super({
-            "subtitle": `${Translation.Get("api->messages->file->downloading")}: ${name}`,
-            "floating": true,
-            "animate": false
+            subtitle: `${Translation.Get("api->messages->file->downloading")}: ${name}`,
+            floating: true,
+            animate: false,
+            aside: true
         });
 
         this.AppendContent([
