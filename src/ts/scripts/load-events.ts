@@ -7,7 +7,6 @@ import { Translation } from "./Translation";
 export const Init = () : void =>
 {
     const db = (<any>window).firebase.firestore();
-    const analytics = (<any>window).firebase.analytics();
 
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({
@@ -60,7 +59,7 @@ export const Init = () : void =>
         else if (key === "a") location.href = "/account";
         else if (key === "e") signOutButton.click();
         else if (key === "h") location.href = "/";
-        else if (key === "s" && e.shiftKey) location.href = "/settings";
+        else if (key === "s" && !e.ctrlKey) location.href = "/settings";
         else if (key === "r") location.reload();
     });
 

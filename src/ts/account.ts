@@ -955,14 +955,13 @@ window.addEventListener("keydown", e =>
 
     if (["input", "textarea"].includes(document.activeElement.tagName.toLowerCase()) && !(getComputedStyle(showFile).getPropertyValue("display") !== "none" && e.ctrlKey && key === "s")) return;
 
-    if ([ "s", "n" ].includes(key)) e.preventDefault();
+    if ([ "s", "n", "f" ].includes(key)) e.preventDefault();
 
     if (key === "o") { if (e.shiftKey) addFolder.click(); else addFiles.click(); }
     else if (key === "n") { if (e.shiftKey) createFolder.click(); else createFile.click(); }
     else if (key === "s")
     {
-        if (!e.shiftKey && getComputedStyle(showFile).getPropertyValue("display") === "none") searchBar.focus();
-        else if (e.ctrlKey)
+        if (e.ctrlKey && getComputedStyle(showFile).getPropertyValue("display") !== "none")
         {
             if (Auth.IsAuthenticated) contextMenuSave.click();
             else if (Auth.IsSignedIn) contextMenuSaveToMyAccount.click();
@@ -971,6 +970,7 @@ window.addEventListener("keydown", e =>
     else if (key === "f")
     {
         if (!e.ctrlKey) viewMyAccount.click();
+        else if (getComputedStyle(showFile).getPropertyValue("display") === "none") searchBar.focus();
     }
     else if (key === "c")
     {
