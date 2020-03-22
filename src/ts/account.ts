@@ -1568,7 +1568,6 @@ const addUserContentEvents = () : void =>
             const targetFromPoint = (<TouchEvent>e).touches && <HTMLElement>document.elementFromPoint((<TouchEvent>e).touches[0].clientX, (<TouchEvent>e).touches[0].clientY);
 
             if (((e.type === "touchmove" &&
-                (isUserContentElement(targetFromPoint) || navigationBackButton.contains(targetFromPoint) || vault.contains(targetFromPoint)) &&
                 (Utilities.IsSet(targetFromPoint.closest(folderSelector)) || navigationBackButton.contains(targetFromPoint) || vault.contains(targetFromPoint))) ||
                 e.type === "mouseenter") &&
                 Utilities.IsSet(document.querySelector(".dragging")) &&
@@ -1576,6 +1575,8 @@ const addUserContentEvents = () : void =>
                 !Utilities.HasClass(targetFromPoint?.closest(folderSelector) || element, "placeholder"))
                 Utilities.AddClass(targetFromPoint?.closest(folderSelector) || element, "target");
             else Utilities.RemoveClass(element, "target");
+
+            console.log(targetFromPoint);
         }
 
         if (Utilities.HasClass(element, "folder") || Utilities.HasClass(element, "back-button") || Utilities.HasClass(element, "vault"))

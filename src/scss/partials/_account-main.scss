@@ -64,6 +64,11 @@
                     content: " ";
                     white-space: pre;
                 }
+
+                &.target
+                {
+                    box-shadow: 0 0 10px $secondary-color;
+                }
             }
 
             .empty-trash-button
