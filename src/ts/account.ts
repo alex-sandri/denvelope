@@ -1568,6 +1568,7 @@ const addUserContentEvents = () : void =>
             const targetFromPoint = (<TouchEvent>e).touches && <HTMLElement>document.elementFromPoint((<TouchEvent>e).touches[0].clientX, (<TouchEvent>e).touches[0].clientY);
 
             if (((e.type === "touchmove" &&
+                element.contains(targetFromPoint) && // Avoid making all the folders a target if the element is dragged over the back button or the vault
                 (Utilities.IsSet(targetFromPoint?.closest(folderSelector)) || navigationBackButton.contains(targetFromPoint) || vault.contains(targetFromPoint))) ||
                 e.type === "mouseenter") &&
                 Utilities.IsSet(document.querySelector(".dragging")) &&
