@@ -722,6 +722,8 @@ window.addEventListener("userready", async () =>
         
         (<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element => Utilities.RemoveClass(element, "selected"));
 
+        HideHeaderMenu();
+
         if (e.button === 2) return;
 
         const multipleContentSelector = new Component("div", {
