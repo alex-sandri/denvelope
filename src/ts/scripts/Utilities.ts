@@ -154,6 +154,11 @@ export class Utilities
         return folderId;
     }
 
+    public static GetCurrentFolderIdAsync = async (allowFakeFolderIds ?: boolean) : Promise<string> => new Promise<string>(resolve =>
+    {
+        window.addEventListener("userready", () => resolve(Utilities.GetCurrentFolderId(allowFakeFolderIds)));
+    });
+
     public static SetCurrentFolderId = (id : string) : void => {(<HTMLInputElement>document.querySelector("input[name=folder-id]")).value = id;}
 
     public static GetFirestoreServerTimestamp = () : any => (<any>window).firebase.firestore.FieldValue.serverTimestamp();

@@ -295,7 +295,7 @@
     left: 0;
     z-index: 10;
     width: 100vw;
-    height: calc(100vh - #{$header-height-lg});
+    height: 100%;
     overflow: hidden;
 
     .editor-head

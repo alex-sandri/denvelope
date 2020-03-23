@@ -2183,7 +2183,7 @@ const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
     ((location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
     ((!Utilities.IsSet(checkCurrentFolder) || checkCurrentFolder) &&
     Utilities.GetCurrentFolderId() !== "root" &&
-    (await db.collection(`users/${Auth.UserId}/folders`).doc(Utilities.GetCurrentFolderId()).get()).data().inVault));
+    (await db.collection(`users/${Auth.UserId}/folders`).doc(await Utilities.GetCurrentFolderIdAsync()).get()).data().inVault));
 
 /**
  * @returns string The new name for the element

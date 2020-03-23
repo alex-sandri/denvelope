@@ -183,6 +183,11 @@
         }
     }
 
+    .show-file
+    {
+        top: $header-height-md;
+    }
+
     .modal
     {
         max-height: calc(100vh - #{$header-height-md});
