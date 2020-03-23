@@ -156,6 +156,8 @@ export class Utilities
 
     public static GetCurrentFolderIdAsync = async (allowFakeFolderIds ?: boolean) : Promise<string> => new Promise<string>(resolve =>
     {
+        if (Utilities.GetCurrentFolderId(allowFakeFolderIds).trim() !== "") resolve(Utilities.GetCurrentFolderId(allowFakeFolderIds));
+
         window.addEventListener("userready", () => resolve(Utilities.GetCurrentFolderId(allowFakeFolderIds)));
     });
 
