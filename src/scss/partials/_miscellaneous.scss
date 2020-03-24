@@ -12,7 +12,7 @@
     z-index: 11;
     transform: translateY(calc(100% + #{$standard-spacing}));
     color: $primary-color;
-    max-height: calc(100vh - #{$header-height-lg});
+    max-height: calc(100vh - #{$header-height});
     overflow: auto;
 
     .content
@@ -291,7 +291,7 @@
 {
     display: none;
     position: absolute;
-    top: $header-height-lg;
+    top: $header-height;
     left: 0;
     z-index: 10;
     width: 100vw;

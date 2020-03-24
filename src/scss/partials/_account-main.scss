@@ -1,7 +1,7 @@
 .account-main
 {
     width: calc(100% - #{$standard-spacing * 2});
-    height: calc(100% - #{$header-height-lg + $account-bottom-bar-height});
+    height: calc(100% - #{$header-height + $account-bottom-bar-height});
     margin: 0 $standard-spacing;
 
     .top-section

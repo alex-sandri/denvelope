@@ -3,8 +3,8 @@
     @include flex($align-items: unset, $justify-content: center, $flex-direction: column);
 
     margin: $standard-spacing;
-    min-height: calc(100vh - #{$standard-spacing + $header-height-lg});
-    margin-top: #{$header-height-lg};
+    min-height: calc(100vh - #{$standard-spacing + $header-height});
+    margin-top: #{$header-height};
 
     .text
     {
@@ -34,7 +34,7 @@
     {
         position: absolute;
         width: calc(100% - (#{$standard-spacing * 2}));
-        height: calc(100% - #{$standard-spacing + $header-height-lg});
+        height: calc(100% - #{$standard-spacing + $header-height});
         z-index: -1;
         opacity: 0.3;
         margin: 0 auto;

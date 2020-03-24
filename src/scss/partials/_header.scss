@@ -7,7 +7,7 @@ header
     background-color: rgba($color: $primary-color, $alpha: 0.8);
     padding: $standard-spacing;
     width: 100%;
-    height: $header-height-lg;
+    height: $header-height;
     backdrop-filter: blur(20px);
 
     .logo
@@ -18,7 +18,12 @@ header
 
             img
             {
-                height: #{$header-height-lg - $standard-spacing * 2};
+                height: #{$header-height - $standard-spacing * 2};
+
+                &.sm
+                {
+                    display: none;
+                }
             }
         }
     }
@@ -39,13 +44,13 @@ header
             border: $border-width solid $secondary-color;
             border-radius: $border-radius;
             position: absolute;
-            top: $header-height-lg;
+            top: $header-height;
             right: $standard-spacing;
             z-index: 999;
             background-color: $primary-color;
             padding: $standard-spacing;
             max-width: calc(100vw - #{$standard-spacing * 2});
-            max-height: calc(100vh - #{$header-height-lg + $standard-spacing});
+            max-height: calc(100vh - #{$header-height + $standard-spacing});
             overflow: auto;
             overflow-x: hidden;
             overscroll-behavior: contain;
@@ -219,7 +224,7 @@ header
     {
         @include flex;
 
-        font-size: #{$header-height-lg - $standard-spacing * 2};
+        font-size: #{$header-height - $standard-spacing * 2};
         margin: 0;
         position: fixed;
         top: $standard-spacing;
@@ -242,8 +247,8 @@ header
 
             img
             {
-                height: #{$header-height-lg - $standard-spacing * 2};
-                width: #{$header-height-lg - $standard-spacing * 2};
+                height: #{$header-height - $standard-spacing * 2};
+                width: #{$header-height - $standard-spacing * 2};
                 border-radius: 50%;
             }
 

@@ -127,33 +127,28 @@
 {
     header
     {
-        height: $header-height-md;
-
         .logo
         {
             a
             {
                 img
                 {
-                    height: #{$header-height-md - $standard-spacing * 2};
-                }
-            }
-        }
+                    &.lg
+                    {
+                        display: none;
+                    }
 
-        nav
-        {
-            .menu
-            {
-                top: $header-height-md;
-                max-height: calc(100vh - #{$header-height-md + $standard-spacing});
+                    &.sm
+                    {
+                        display: block;
+                    }
+                }
             }
         }
     }
 
     .home-hero
     {
-        min-height: calc(100vh - #{($standard-spacing * 2) + $header-height-md});
-        margin-top: #{$standard-spacing + $header-height-md};
         justify-content: space-evenly;
         
         .text
@@ -172,8 +167,6 @@
 
     .account-main
     {
-        height: calc(100% - #{$header-height-md + 54px});
-
         .empty-folder
         {
             img
@@ -183,15 +176,8 @@
         }
     }
 
-    .show-file
-    {
-        top: $header-height-md;
-    }
-
     .modal
     {
-        max-height: calc(100vh - #{$header-height-md});
-
         .firebaseui-auth-container .firebaseui-container
         {
             .firebaseui-card-content form .firebaseui-idp-list
@@ -247,14 +233,6 @@
                 }
             }
         }
-    }
-
-    main.terms,
-    main.privacy,
-    main.cookies,
-    main.error
-    {
-        min-height: calc(100vh - #{$header-height-md + $standard-spacing});
     }
 }
 
