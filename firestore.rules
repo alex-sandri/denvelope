@@ -103,7 +103,7 @@ service cloud.firestore {
 
       function allowContentDelete() {
         return isOwner() &&
-          ((incomingData().inVault && isVaultUnlocked()) || incomingData().inVault == false) &&
+          ((existingData().inVault && isVaultUnlocked()) || existingData().inVault == false) &&
           (existingData().trashed == true ||
           existingData().inVault == true); // Items in the vault are immediately deleted
       }
