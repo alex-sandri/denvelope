@@ -408,7 +408,12 @@ window.addEventListener("userready", async () =>
 
             const parentId = (await db.collection(`users/${Auth.UserId}/${type}s`).doc(id).get()).data().parentId;
 
-            const tempSnapshot = await db.collection(`users/${Auth.UserId}/${type}s`).where("parentId", "==", parentId).where("name", "==", name).get();
+            const tempSnapshot = await db
+                .collection(`users/${Auth.UserId}/${type}s`)
+                .where("inVault", "==", await vaultOnly())
+                .where("parentId", "==", parentId)
+                .where("name", "==", name)
+                .get();
 
             if (name.length > 0 && (tempSnapshot.size === 0 || tempSnapshot.docs[0].id === id))
             {
