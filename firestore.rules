@@ -73,6 +73,7 @@ service cloud.firestore {
           incomingData().trashed is bool &&
           incomingData().inVault is bool &&
           incomingData().inVault == (incomingData().parentId == "vault") &&
+          ((incomingData().inVault && isVaultUnlocked()) || !incomingData().inVault) &&
           incomingData().created is timestamp &&
           incomingData().created == request.time &&
           incomingData().updated is timestamp &&
@@ -82,6 +83,7 @@ service cloud.firestore {
 
       function allowContentUpdate() {
         return isOwner() &&
+          isVaultUnlocked() &&
           incomingData().size() == existingData().size() &&
           isValidName(incomingData().name) &&
           incomingData().shared is bool &&
@@ -101,6 +103,7 @@ service cloud.firestore {
 
       function allowContentDelete() {
         return isOwner() &&
+          isVaultUnlocked() &&
           (existingData().trashed == true ||
           existingData().inVault == true); // Items in the vault are immediately deleted
       }
@@ -117,7 +120,8 @@ service cloud.firestore {
       }
 
       function isVaultUnlocked() {
-        return !get(/databases/$(database)/documents/users/$(userId)/vault/status).data.locked;
+        return !exists(/databases/$(database)/documents/users/$(userId)/vault/status) ||
+          !get(/databases/$(database)/documents/users/$(userId)/vault/status).data.locked;
       }
     }
   }
