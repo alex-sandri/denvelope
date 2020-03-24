@@ -125,28 +125,6 @@
 
 @media only all and (max-width: 600px)
 {
-    header
-    {
-        .logo
-        {
-            a
-            {
-                img
-                {
-                    &.lg
-                    {
-                        display: none;
-                    }
-
-                    &.sm
-                    {
-                        display: block;
-                    }
-                }
-            }
-        }
-    }
-
     .home-hero
     {
         justify-content: space-evenly;

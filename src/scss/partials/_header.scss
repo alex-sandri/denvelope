@@ -19,11 +19,6 @@ header
             img
             {
                 height: #{$header-height - $standard-spacing * 2};
-
-                &.sm
-                {
-                    display: none;
-                }
             }
         }
     }
