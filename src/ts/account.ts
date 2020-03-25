@@ -1758,7 +1758,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         }
         else if (Utilities.HasClass(vault, "target"))
         {
-            if (vault.getAttribute("data-locked") === "true") parentId = "vault";
+            if (vault.getAttribute("data-locked") === "false") parentId = "vault";
 
             Utilities.RemoveClass(vault, "target");
         }
