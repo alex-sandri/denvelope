@@ -657,7 +657,7 @@ window.addEventListener("userready", async () =>
     {
         functions.httpsCallable("lockVault")({}).then(() => Auth.RefreshToken());
 
-        navigationBackButton.click();
+        viewMyAccount.click();
     });
 
     editorClose.addEventListener("click", () =>
