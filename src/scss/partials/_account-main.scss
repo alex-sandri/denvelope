@@ -203,6 +203,17 @@
             {
                 box-shadow: 0 0 10px $secondary-color;
             }
+
+            &.disabled.target:hover
+            {
+                box-shadow: unset;
+
+                &,
+                *
+                {
+                    cursor: not-allowed !important;
+                }
+            }
         }
 
         .folders-container,

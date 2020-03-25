@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v1263";
+const cacheName = "static-v1271";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -8,10 +8,10 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/privacy",
     "/cookies",
     "/accessibility",
-    "/assets/css/bundle.35dc29ab4286363e0f4ee21c50844c2a.css",
-    "/assets/js/home.378f42c6db39750cfdba.js",
-    "/assets/js/account.36bb8f95c9b0925f74f8.js",
-    "/assets/js/settings.942e677ee3afc75f46a8.js",
+    "/assets/css/bundle.d2412627102beb1cc1aa93481b9f838d.css",
+    "/assets/js/home.66295f1f4baee4475f63.js",
+    "/assets/js/account.4ded06b12d8bb769e728.js",
+    "/assets/js/settings.c4719d82853a4a682751.js",
     "/__/firebase/7.12.0/firebase-app.js",
     "/__/firebase/7.12.0/firebase-auth.js",
     "/__/firebase/7.12.0/firebase-firestore.js",
@@ -164,10 +164,9 @@ self.addEventListener("message", e => {
 });
 const nextMessageResolveMap = new Map();
 const NextMessage = (dataVal) => new Promise((resolve) => {
-    var _a;
     if (!nextMessageResolveMap.has(dataVal))
         nextMessageResolveMap.set(dataVal, []);
-    (_a = nextMessageResolveMap.get(dataVal)) === null || _a === void 0 ? void 0 : _a.push(resolve);
+    nextMessageResolveMap.get(dataVal)?.push(resolve);
 });
 self.addEventListener("message", (event) => {
     const resolvers = nextMessageResolveMap.get(event.data);

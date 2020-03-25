@@ -83,7 +83,7 @@ service cloud.firestore {
 
       function allowContentUpdate() {
         return isOwner() &&
-          ((incomingData().inVault && (isVaultUnlocked() || (incomingData().parentId == "vault" && existingData().parentId != "vault"))) ||
+          ((incomingData().inVault && isVaultUnlocked()) ||
           incomingData().inVault == false) &&
           incomingData().size() == existingData().size() &&
           isValidName(incomingData().name) &&

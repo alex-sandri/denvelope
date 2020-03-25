@@ -1156,6 +1156,8 @@ const GetUserContent = async (searchTerm ?: string) =>
                 vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${locked ? "" : "-open"}"></i>`;
 
                 vault.setAttribute("data-locked", `${locked}`);
+
+                locked ? Utilities.AddClass(vault, "disabled") : Utilities.RemoveClass(vault, "disabled");
             }
 
             Auth.RefreshToken();
@@ -1756,7 +1758,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         }
         else if (Utilities.HasClass(vault, "target"))
         {
-            parentId = "vault";
+            if (vault.getAttribute("data-locked") === "true") parentId = "vault";
 
             Utilities.RemoveClass(vault, "target");
         }
