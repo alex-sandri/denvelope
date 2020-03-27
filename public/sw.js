@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v1281";
+const cacheName = "static-v1282";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -54,7 +54,6 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/assets/img/icons/languages/folder.svg?v=2",
     "/assets/img/icons/languages/lock.svg",
     "/assets/img/icons/user.svg",
-    "/android-chrome-36x36.png",
     "/android-chrome-48x48.png",
     "/android-chrome-72x72.png",
     "/android-chrome-96x96.png",
@@ -74,7 +73,6 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/apple-touch-icon-76x76.png",
     "/apple-touch-icon-76x76-precomposed.png",
     "/apple-touch-icon-114x114.png",
-    "/apple-touch-icon-114x114-precomposed.png",
     "/apple-touch-icon-120x120.png",
     "/apple-touch-icon-120x120-precomposed.png",
     "/apple-touch-icon-144x144.png",
