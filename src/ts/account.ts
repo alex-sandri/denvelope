@@ -1291,7 +1291,7 @@ const GetUserContent = async (searchTerm ?: string) =>
                             )
                         )
                     )
-            }.svg${await vaultOnly() ? "?v=2" : ""}`;
+            }.svg${await vaultOnly() ? "?v=3" : ""}`;
 
             Utilities.ShowElement(emptyFolder, "flex");
         }

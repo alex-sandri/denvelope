@@ -1,4 +1,4 @@
-const cacheName : string = "static-v1273";
+const cacheName : string = "static-v1278";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -9,9 +9,9 @@ self.addEventListener("install", (e : any) =>
         "/privacy",
         "/cookies",
         "/accessibility",
-        "/assets/css/bundle.d2412627102beb1cc1aa93481b9f838d.css",
+        "/assets/css/bundle.289bc06e48929236fe23270665ed375f.css",
         "/assets/js/home.66295f1f4baee4475f63.js",
-        "/assets/js/account.0cd5d7e83a862cf74ecc.js",
+        "/assets/js/account.0e12a644d54b39cf84c3.js",
         "/assets/js/settings.c4719d82853a4a682751.js",
         "/__/firebase/7.12.0/firebase-app.js",
         "/__/firebase/7.12.0/firebase-auth.js",
@@ -57,8 +57,8 @@ self.addEventListener("install", (e : any) =>
         "/assets/img/miscellaneous/web-developer.svg",
         "/assets/img/icons/languages/file.svg?v=2",
         "/assets/img/icons/languages/folder.svg?v=2",
+        "/assets/img/icons/languages/lock.svg",
         "/assets/img/icons/user.svg",
-        "/assets/img/icons/vault.svg",
         "/android-chrome-36x36.png",
         "/android-chrome-48x48.png",
         "/android-chrome-72x72.png",
