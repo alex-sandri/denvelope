@@ -45,6 +45,7 @@ const lockVaultButton : HTMLButtonElement = folderNavigation.querySelector(".loc
 const userContentLoadingSpinner : HTMLSpanElement = document.querySelector(".user-content > span");
 
 const vault : HTMLDivElement = document.querySelector(".vault");
+const vaultInfo : HTMLDivElement = document.querySelector(".vault-info");
 
 const foldersContainer : HTMLDivElement = document.querySelector(".folders-container");
 const folderSelector : string = "div.folder";
@@ -1165,6 +1166,8 @@ const GetUserContent = async (searchTerm ?: string) =>
     }
     else Utilities.HideElement(vault);
 
+    Utilities.HideElement(vaultInfo);
+
     // The user is probably loading a file, this function will be called later when the file parentId is received by the client
     if (parentId === "") return;
 
@@ -1175,43 +1178,63 @@ const GetUserContent = async (searchTerm ?: string) =>
 
     if ((searchTerm ?? "").length === 0)
     {
-        if (parentId !== "root" && Utilities.GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && !await vaultOnly() && location.pathname.indexOf("/file/") === -1)
+        if (parentId !== "root" && Utilities.GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && location.pathname.indexOf("/file/") === -1)
         {
-            folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
-            folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
-
-            await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then((doc : any) =>
+            if (!await vaultOnly(false)) // If this isn't the vault root directory
             {
-                const data = doc.data();
+                folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
+                folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
 
-                document.querySelectorAll("[data-update-field=folder-name]").forEach(element => (<HTMLElement>element).innerHTML = Utilities.EscapeHtml(data.name));
-
-                folderShared = data.shared;
-
-                Utilities.ShowElement(folderNavigation, "flex");
-
-                Utilities.ShowElement(folderNavigation.querySelector("[data-update-field=folder-name]"));
-
-                Utilities.HideElements([
-                    emptyTrashButton,
-                    lockVaultButton
-                ]);
-
-                if (Auth.IsAuthenticated) Utilities.ShowElement(navigationBackButton, "flex");
-                else
+                await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then((doc : any) =>
                 {
-                    const parentId : string = data.parentId;
+                    const data = doc.data();
 
-                    // A user cannot access another user's root (even if only shared content is shown), only one folder (get operation) is allowed just to get the name
-                    if (parentId === "root") Utilities.HideElement(navigationBackButton);
+                    document.querySelectorAll("[data-update-field=folder-name]").forEach(element => (<HTMLElement>element).innerHTML = Utilities.EscapeHtml(data.name));
+
+                    folderShared = data.shared;
+
+                    Utilities.ShowElement(folderNavigation, "flex");
+
+                    Utilities.ShowElement(folderNavigation.querySelector("[data-update-field=folder-name]"));
+
+                    Utilities.HideElements([
+                        emptyTrashButton,
+                        lockVaultButton
+                    ]);
+
+                    if (Auth.IsAuthenticated) Utilities.ShowElement(navigationBackButton, "flex");
                     else
                     {
-                        db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get()
-                            .then(() => Utilities.ShowElement(navigationBackButton, "flex")) // If the query succeeds the folder is shared
-                            .catch(() => Utilities.HideElement(navigationBackButton)); // Otherwise hide the navigation
+                        const parentId : string = data.parentId;
+
+                        // A user cannot access another user's root (even if only shared content is shown), only one folder (get operation) is allowed just to get the name
+                        if (parentId === "root") Utilities.HideElement(navigationBackButton);
+                        else
+                        {
+                            db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get()
+                                .then(() => Utilities.ShowElement(navigationBackButton, "flex")) // If the query succeeds the folder is shared
+                                .catch(() => Utilities.HideElement(navigationBackButton)); // Otherwise hide the navigation
+                        }
                     }
-                }
-            });
+                });
+            }
+            else
+            {
+                document.querySelectorAll("[data-update-field=folder-name]").forEach(element => element.innerHTML = Translation.Get("generic->vault"));
+            }
+
+            if (await vaultOnly())
+            {
+                Utilities.ShowElements([
+                    folderNavigation,
+                    navigationBackButton,
+                    vaultInfo
+                ], "flex");
+
+                Utilities.ShowElement(lockVaultButton);
+
+                Utilities.HideElement(emptyTrashButton);
+            }
         }
         else
         {
@@ -1223,20 +1246,6 @@ const GetUserContent = async (searchTerm ?: string) =>
                 Utilities.HideElements([
                     navigationBackButton,
                     lockVaultButton,
-                    folderNavigation.querySelector("[data-update-field=folder-name]")
-                ]);
-            }
-            else if (await vaultOnly())
-            {
-                Utilities.ShowElements([
-                    folderNavigation,
-                    navigationBackButton
-                ], "flex");
-
-                Utilities.ShowElement(lockVaultButton);
-
-                Utilities.HideElements([
-                    emptyTrashButton,
                     folderNavigation.querySelector("[data-update-field=folder-name]")
                 ]);
             }

@@ -207,4 +207,7 @@ export const it_IT = {
         check_out: "Guarda",
         on_denvelope: "su Denvelope",
     },
+    vault: {
+        info: "Se elimini un elemento all'interno della cassaforte questo sarà eliminato immediatamente, e non potrà più essere recuperato.",
+    },
 }

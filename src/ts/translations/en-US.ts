@@ -207,4 +207,7 @@ export const en_US = {
         check_out: "Check out",
         on_denvelope: "on Denvelope",
     },
+    vault: {
+        info: "If you delete an element inside the vault it will be deleted immediately, you won't be able to restore it.",
+    },
 }
