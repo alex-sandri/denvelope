@@ -10,6 +10,8 @@
 @mixin button (
         $bg-color: $primary-color,
         $color: $secondary-color,
+        $hover-bg-color: $color,
+        $hover-color: $bg-color,
         $border-color: $secondary-color,
         $hover-effect: invert-colors,
         $focus-effect: same-hover,
@@ -56,8 +58,8 @@
         {
             @if $hover-effect == invert-colors
             {
-                background-color: $color;
-                color: $bg-color;
+                background-color: $hover-bg-color;
+                color: $hover-color;
             }
             @else if $hover-effect == underline
             {

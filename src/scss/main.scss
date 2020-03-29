@@ -87,10 +87,22 @@ body
             z-index: 1;
         }
 
-        *.no-home-page
+        .no-home-page
         {
             display: none;
         }
+    }
+
+    &.account
+    {
+        header
+        {
+            backdrop-filter: unset;
+        }
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 }
 

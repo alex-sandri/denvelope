@@ -2,6 +2,7 @@
 {
     height: calc(100% - #{$header-height + $account-bottom-bar-height});
     padding: 0 $standard-spacing;
+    background-color: rgba($primary-color, 0.8);
 
     .top-section
     {
@@ -11,7 +12,7 @@
 
             .search-bar
             {
-                @include input-container($has-icon: false);
+                @include input-container($bg-color: transparent, $has-icon: false);
 
                 margin-bottom: 0;
                 width: 100%;
@@ -26,7 +27,7 @@
 
             #add-content
             {
-                @include button;
+                @include button($bg-color: transparent, $hover-color: $primary-color);
 
                 margin-left: $standard-spacing;
             }
