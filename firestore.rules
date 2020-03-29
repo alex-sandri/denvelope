@@ -72,7 +72,9 @@ service cloud.firestore {
           incomingData().starred is bool &&
           incomingData().trashed is bool &&
           incomingData().inVault is bool &&
-          incomingData().inVault == (incomingData().parentId == "vault") &&
+          (incomingData().inVault == (incomingData().parentId == "vault") ||
+          (incomingData().parentId != "root" &&
+          get(/databases/$(database)/documents/users/$(userId)/folders/$(incomingData().parentId)).data.inVault == incomingData().inVault)) &&
           ((incomingData().inVault && isVaultUnlocked()) || incomingData().inVault == false) &&
           incomingData().created is timestamp &&
           incomingData().created == request.time &&
@@ -91,7 +93,9 @@ service cloud.firestore {
           incomingData().starred is bool &&
           incomingData().trashed is bool &&
           incomingData().inVault is bool &&
-          incomingData().inVault == (incomingData().parentId == "vault") &&
+          (incomingData().inVault == (incomingData().parentId == "vault") ||
+          (incomingData().parentId != "root" &&
+          get(/databases/$(database)/documents/users/$(userId)/folders/$(incomingData().parentId)).data.inVault == incomingData().inVault)) &&
           ((incomingData().inVault == true && incomingData().trashed == false) ||
           (incomingData().inVault == false)) &&
           (folderExists(incomingData().parentId) || (existingData().trashed == true && incomingData().trashed == false)) &&

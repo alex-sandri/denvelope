@@ -887,7 +887,7 @@ window.addEventListener("userready", async () =>
         {
             const file : File = e.data.file;
 
-            UploadFile(file, file.name, file.size, Utilities.GetCurrentFolderId());
+            UploadFile(file, file.name, file.size, "root");
         }
         else if ("add" in e.data)
         {
@@ -1066,7 +1066,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
     {
         if (parentId === "starred" || parentId === "trash") parentId = "root";
 
-        if (inVault) parentId = "vault";
+        if (await vaultOnly(false)) parentId = "vault";
 
         name = await CheckElementNameValidity(name, "file", parentId);
 
@@ -2017,7 +2017,7 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
     if (depth === 0) // Duplicate checks are only useful with the uploaded folder
         name = await CheckElementNameValidity(name, "folder", parentId);
 
-    if (await vaultOnly()) parentId = "vault";
+    if (await vaultOnly(false)) parentId = "vault";
 
     db.collection(`users/${Auth.UserId}/folders`).add({
         name,
