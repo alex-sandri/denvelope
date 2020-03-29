@@ -3,7 +3,7 @@ aside
     @include flex($align-items: unset);
 
     width: 100%;
-    background-color: rgba($color: $primary-color, $alpha: 0.8);
+    background-color: $primary-color;
 
     button
     {
