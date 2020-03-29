@@ -265,12 +265,16 @@ window.addEventListener("userready", async () =>
     });
 
     contextMenuSaveToMyAccount.addEventListener("click", () =>
+    {
         [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
             functions.httpsCallable("saveToMyAccount")({
                 userId: Auth.UserId,
                 id: item.id,
                 type: item.classList[0]
-            })));
+            }));
+
+        preventWindowUnload.editor = false;
+    });
 
     contextMenuShare.addEventListener("click", () =>
     {
@@ -603,7 +607,12 @@ window.addEventListener("userready", async () =>
                         : "moved_to_trash"
             }`));
         
-        if (getComputedStyle(showFile).getPropertyValue("display") !== "none") editorClose.click();
+        if (getComputedStyle(showFile).getPropertyValue("display") !== "none")
+        {
+            preventWindowUnload.editor = false;
+
+            editorClose.click();
+        }
     }));
 
     [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
@@ -1873,6 +1882,8 @@ const CreateEditor = (value : string, language : string) : void =>
 
     editorElement.innerHTML = "";
 
+    preventWindowUnload.editor = false;
+
     editor = (<any>window).monaco.editor.create(editorElement, {
         value: value,
         language: language,
@@ -1907,7 +1918,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
     const unsubscribe = db.collection(`users/${Auth.UserId}/files`).doc(id).onSnapshot((doc : any) =>
     {
-        if (doc.data().trashed)
+        if (!doc.exists || doc.data().trashed)
         {
             unsubscribe();
 

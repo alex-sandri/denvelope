@@ -126,7 +126,8 @@
 
         h2
         {
-            margin: $standard-spacing 0 $standard-spacing * 2 0;
+            margin: 0;
+            margin-bottom: $standard-spacing * 2;
             text-align: center;
         }
 
