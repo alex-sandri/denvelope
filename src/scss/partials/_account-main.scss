@@ -6,12 +6,6 @@
 
     .top-section
     {
-        width: inherit;
-        background-color: $primary-color;
-        border-bottom-left-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
-        width: 100%;
-
         .search-add-content
         {
             @include flex;
