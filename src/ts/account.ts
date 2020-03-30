@@ -620,27 +620,30 @@ window.addEventListener("userready", async () =>
     {
         const img = new Component("img", { src: await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL() }).element;
 
-        const imgContainer = new Component("div", {
-            children: [ img ],
-            style: {
-                width: "100vw",
-                height: "100vh",
-                position: "absolute",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: "999",
-                top: "0",
-                backdropFilter: "opacity(0.1)",
-            }
-        }).element;
+        const imgContainer = new Component("div", { class: "img-preview-container", children: [ img ] }).element;
+
+        let scale = 1;
+
+        const ScaleImage = (e : WheelEvent) =>
+        {
+            scale += e.deltaY < 0 ? /* UP (zoom in) */ 0.1 : -0.1 ;
+
+            if (scale < 0.1) return;
+
+            img.style.transform = `scale(${scale})`;
+        }
 
         imgContainer.addEventListener("click", e =>
         {
-            if (!img.contains(<HTMLElement>e.target)) imgContainer.remove();
+            if (!img.contains(<HTMLElement>e.target))
+            {
+                imgContainer.remove();
+            }
         });
 
         document.body.appendChild(imgContainer);
+
+        document.addEventListener("wheel", ScaleImage);
     });
 
     [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));

@@ -353,6 +353,24 @@
     }
 }
 
+.img-preview-container
+{
+    @include flex;
+
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    backdrop-filter: opacity(0.1);
+
+    img
+    {
+        max-width: calc(100vw - #{$standard-spacing * 2});
+        max-height: calc(100vh - #{$standard-spacing * 2});
+    }
+}
+
 .hide-vault-content
 {
     @include flex;
