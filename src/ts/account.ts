@@ -1153,7 +1153,7 @@ const GetUserContent = async (searchTerm ?: string) =>
 
     EmptyUserContentContainers();
 
-    if (parentId === "root" && navigator.onLine && !searchTerm && location.hostname === "localhost") // REMOVE ONCE READY
+    if (parentId === "root" && navigator.onLine && !searchTerm)
     {
         Utilities.ShowElement(vault, "flex");
 
