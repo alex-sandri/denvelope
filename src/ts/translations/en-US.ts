@@ -178,6 +178,10 @@ export const en_US = {
                 title: "Need to share a piece of code or an entire project?",
                 description: "With Denvelope you can just click a button and the link to that file or project is copied and ready to be shared. You can even hide files or folders inside a project if you don't want to share them but still want to share it.",
             },
+            vault: {
+                title: "Vault",
+                description: "Denvelope has a vault where you can store extremely important files.",
+            },
         },
     },
     page_not_found: {
