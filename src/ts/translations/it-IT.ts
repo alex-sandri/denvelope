@@ -22,6 +22,7 @@ export const it_IT = {
         trash: "Cestino",
         empty_trash: "Svuota cestino",
         create_vault: "Crea cassaforte",
+        display_image: "Mostra immagine",
         context_menu: {
             move: {
                 impossible: "Impossibile spostare questo elemento, non ci sono cartelle in cui spostarlo",

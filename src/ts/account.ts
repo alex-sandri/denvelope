@@ -79,6 +79,7 @@ const contextMenuInfo : HTMLButtonElement = contextMenuContent.querySelector("#c
 const contextMenuDownload : HTMLButtonElement = contextMenuContent.querySelector("#cm-download");
 const contextMenuRestore : HTMLButtonElement = contextMenuContent.querySelector("#cm-restore");
 const contextMenuDelete : HTMLButtonElement = contextMenuContent.querySelector("#cm-delete");
+const contextMenuDisplayImage : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-image");
 
 const contextMenuGeneric : HTMLDivElement = contextMenu.querySelector("#cm-generic");
 const contextMenuAddFiles : HTMLButtonElement = contextMenuGeneric.querySelector("#cm-add-files");
@@ -607,13 +608,40 @@ window.addEventListener("userready", async () =>
                         : "moved_to_trash"
             }`));
         
-        if (getComputedStyle(showFile).getPropertyValue("display") !== "none")
+        if (IsShowFileVisible())
         {
             preventWindowUnload.editor = false;
 
             editorClose.click();
         }
     }));
+
+    contextMenuDisplayImage.addEventListener("click", async () =>
+    {
+        const img = new Component("img", { src: await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL() }).element;
+
+        const imgContainer = new Component("div", {
+            children: [ img ],
+            style: {
+                width: "100vw",
+                height: "100vh",
+                position: "absolute",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: "999",
+                top: "0",
+                backdropFilter: "opacity(0.1)",
+            }
+        }).element;
+
+        imgContainer.addEventListener("click", e =>
+        {
+            if (!img.contains(<HTMLElement>e.target)) imgContainer.remove();
+        });
+
+        document.body.appendChild(imgContainer);
+    });
 
     [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
 
@@ -970,7 +998,7 @@ window.addEventListener("keydown", e =>
 {
     const key = e.key.toLowerCase();
 
-    if (["input", "textarea"].includes(document.activeElement.tagName.toLowerCase()) && !(getComputedStyle(showFile).getPropertyValue("display") !== "none" && e.ctrlKey && key === "s")) return;
+    if (["input", "textarea"].includes(document.activeElement.tagName.toLowerCase()) && !(IsShowFileVisible() && e.ctrlKey && key === "s")) return;
 
     if ([ "s", "n", "f" ].includes(key)) e.preventDefault();
 
@@ -978,7 +1006,7 @@ window.addEventListener("keydown", e =>
     else if (key === "n") { if (e.shiftKey) createFolder.click(); else createFile.click(); }
     else if (key === "s")
     {
-        if (e.ctrlKey && getComputedStyle(showFile).getPropertyValue("display") !== "none")
+        if (e.ctrlKey && IsShowFileVisible())
         {
             if (Auth.IsAuthenticated) contextMenuSave.click();
             else if (Auth.IsSignedIn) contextMenuSaveToMyAccount.click();
@@ -987,7 +1015,7 @@ window.addEventListener("keydown", e =>
     else if (key === "f")
     {
         if (!e.ctrlKey) viewMyAccount.click();
-        else if (getComputedStyle(showFile).getPropertyValue("display") === "none") searchBar.focus();
+        else if (!IsShowFileVisible()) searchBar.focus();
     }
     else if (key === "c")
     {
@@ -1183,7 +1211,7 @@ const GetUserContent = async (searchTerm ?: string) =>
     if (Utilities.IsSet(unsubscribeFoldersListener)) unsubscribeFoldersListener();
     if (Utilities.IsSet(unsubscribeFilesListener)) unsubscribeFilesListener();
 
-    if (getComputedStyle(showFile).getPropertyValue("display") !== "none" && location.pathname.indexOf("/file/") === -1) editorClose.click();
+    if (IsShowFileVisible() && location.pathname.indexOf("/file/") === -1) editorClose.click();
 
     if ((searchTerm ?? "").length === 0)
     {
@@ -1547,6 +1575,8 @@ const showContextMenu = (e : MouseEvent) : void =>
         }
         else Utilities.ShowElement(contextMenuRestore);
     }
+
+    if (!IsShowFileVisible()) Utilities.HideElement(contextMenuDisplayImage);
 
     Utilities.ShowElement(contextMenu);
 
@@ -1980,6 +2010,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 let value = "";
 
+                const isImage = response.headers.get("Content-Type").startsWith("image/");
+
                 if (size > 0)
                 {
                     const modal = new DownloadModal(name, downloadSize);
@@ -2017,6 +2049,9 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     
                     editor.setPosition(previousCursorPosition);
                 }
+
+                if (isImage) Utilities.ShowElement(contextMenuDisplayImage);
+                else Utilities.HideElement(contextMenuDisplayImage);
             })).catch((err : any) => err);
     });
 }
@@ -2278,6 +2313,8 @@ const MoveElements = async (elements: HTMLElement[], parentId : string) : Promis
 
     batch.commit();
 }
+
+const IsShowFileVisible = () : boolean => getComputedStyle(showFile).getPropertyValue("display") !== "none";
 
 if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/folder/") > -1 || location.pathname.indexOf("/file/") > -1)
 {
