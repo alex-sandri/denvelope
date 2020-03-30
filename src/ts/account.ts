@@ -1159,7 +1159,7 @@ const GetUserContent = async (searchTerm ?: string) =>
 
         db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
         {
-            const locked : boolean = snapshot.data().locked;
+            const locked : boolean = !snapshot.exists || snapshot.data().locked;
 
             if (snapshot.exists)
             {
