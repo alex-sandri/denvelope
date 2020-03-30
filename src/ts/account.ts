@@ -2012,6 +2012,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     let previousCursorPosition : any = editor.getPosition();
 
                     editor.setValue(value);
+
+                    preventWindowUnload.editor = false;
                     
                     editor.setPosition(previousCursorPosition);
                 }
