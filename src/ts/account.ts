@@ -1159,10 +1159,10 @@ const GetUserContent = async (searchTerm ?: string) =>
 
         db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
         {
-            const locked : boolean = !snapshot.exists || snapshot.data().locked;
-
             if (snapshot.exists)
             {
+                const locked : boolean = snapshot.data().locked;
+
                 vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${locked ? "" : "-open"}"></i>`;
 
                 vault.setAttribute("data-locked", `${locked}`);
