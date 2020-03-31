@@ -2047,8 +2047,6 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 const contentType = response.headers.get("Content-Type");
 
-                const isImage = contentType.startsWith("image/");
-
                 showFile.setAttribute("content-type", contentType);
 
                 if (size > 0)
@@ -2089,7 +2087,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     editor.setPosition(previousCursorPosition);
                 }
 
-                if (isImage) Utilities.ShowElement(contextMenuDisplayImage);
+                if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
             })).catch((err : any) => err);
     });
 }
