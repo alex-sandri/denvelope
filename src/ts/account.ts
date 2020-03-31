@@ -638,6 +638,8 @@ window.addEventListener("userready", async () =>
             if (!img.contains(<HTMLElement>e.target))
             {
                 imgContainer.remove();
+
+                document.removeEventListener("wheel", ScaleImage);
             }
         });
 
