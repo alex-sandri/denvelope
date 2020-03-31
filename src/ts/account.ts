@@ -644,9 +644,9 @@ window.addEventListener("userready", async () =>
 
         const RotateImage = (e : KeyboardEvent) =>
         {
-            if (e.key !== "r" || e.ctrlKey) return;
+            if (e.key.toLowerCase() !== "r" || e.ctrlKey) return;
 
-            rotateAngle += 90;
+            rotateAngle += e.shiftKey ? -90 : 90;
 
             const rotateString = `rotate(${rotateAngle}deg)`;
 
