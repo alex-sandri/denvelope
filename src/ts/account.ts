@@ -1608,7 +1608,7 @@ const showContextMenu = (e : MouseEvent) : void =>
         else Utilities.ShowElement(contextMenuRestore);
     }
 
-    if (!IsShowFileVisible()) Utilities.HideElement(contextMenuDisplayImage);
+    if (!IsShowFileVisible() || !showFile.getAttribute("content-type").startsWith("image/")) Utilities.HideElement(contextMenuDisplayImage);
 
     Utilities.ShowElement(contextMenu);
 
@@ -2042,7 +2042,11 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 let value = "";
 
-                const isImage = response.headers.get("Content-Type").startsWith("image/");
+                const contentType = response.headers.get("Content-Type");
+
+                const isImage = contentType.startsWith("image/");
+
+                showFile.setAttribute("content-type", contentType);
 
                 if (size > 0)
                 {
@@ -2083,7 +2087,6 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                 }
 
                 if (isImage) Utilities.ShowElement(contextMenuDisplayImage);
-                else Utilities.HideElement(contextMenuDisplayImage);
             })).catch((err : any) => err);
     });
 }
