@@ -630,7 +630,32 @@ window.addEventListener("userready", async () =>
 
             if (scale < 0.1) return;
 
-            img.style.transform = `scale(${scale})`;
+            const scaleString = `scale(${scale})`;
+
+            img.style.transform = img.style.transform.split(" ").map(value =>
+                {
+                    return value.indexOf("scale") > -1 ? scaleString : value;
+                }).join(" ");
+        
+            if (img.style.transform.indexOf("scale") === -1) img.style.transform += scaleString;
+        }
+
+        let rotateAngle = 0;
+
+        const RotateImage = (e : KeyboardEvent) =>
+        {
+            if (e.key !== "r" || e.ctrlKey) return;
+
+            rotateAngle += 90;
+
+            const rotateString = `rotate(${rotateAngle}deg)`;
+
+            img.style.transform = img.style.transform.split(" ").map(value =>
+            {
+                return value.indexOf("rotate") > -1 ? rotateString : value;
+            }).join(" ");
+
+            if (img.style.transform.indexOf("rotate") === -1) img.style.transform += rotateString;
         }
 
         imgContainer.addEventListener("click", e =>
@@ -640,12 +665,14 @@ window.addEventListener("userready", async () =>
                 imgContainer.remove();
 
                 document.removeEventListener("wheel", ScaleImage);
+                document.removeEventListener("keydown", RotateImage);
             }
         });
 
         document.body.appendChild(imgContainer);
 
         document.addEventListener("wheel", ScaleImage);
+        document.addEventListener("keydown", RotateImage);
     });
 
     [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));

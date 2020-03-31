@@ -53,14 +53,13 @@ export const Init = () : void =>
 
         const key = e.key.toLowerCase();
 
-        if (["m", "a", "e", "h", "s", "r"].includes(key)) e.preventDefault();
+        if (["m", "a", "e", "h", "s"].includes(key)) e.preventDefault();
 
         if (key === "m") loggedInMenuToggle.click();
         else if (key === "a") location.href = "/account";
         else if (key === "e") signOutButton.click();
         else if (key === "h") location.href = "/";
         else if (key === "s" && !e.ctrlKey) location.href = "/settings";
-        else if (key === "r") location.reload();
     });
 
     window.addEventListener("userready", () =>
