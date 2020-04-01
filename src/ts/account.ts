@@ -618,9 +618,20 @@ window.addEventListener("userready", async () =>
 
     contextMenuDisplayImage.addEventListener("click", async () =>
     {
-        const img = new Component("img", { src: await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL() }).element;
+        const imgContainer = new Component("div", { class: "img-preview-container", children: [ new Spinner().element ] }).element;
 
-        const imgContainer = new Component("div", { class: "img-preview-container", children: [ img ] }).element;
+        document.body.appendChild(imgContainer);
+
+        const img = new Image();
+
+        img.onload = () =>
+        {
+            imgContainer.querySelector(".spinner").remove();
+
+            imgContainer.appendChild(img);
+        };
+
+        img.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
 
         let scale = 1;
 
@@ -668,8 +679,6 @@ window.addEventListener("userready", async () =>
                 document.removeEventListener("keydown", RotateImage);
             }
         });
-
-        document.body.appendChild(imgContainer);
 
         document.addEventListener("wheel", ScaleImage);
         document.addEventListener("keydown", RotateImage);
