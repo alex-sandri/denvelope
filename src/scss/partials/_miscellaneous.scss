@@ -364,6 +364,16 @@
     top: 0;
     background-color: rgba(0, 0, 0, 0.9);
 
+    .close
+    {
+        @include button;
+
+        position: absolute;
+        top: $standard-spacing;
+        right: $standard-spacing;
+        z-index: inherit;
+    }
+
     img
     {
         max-width: calc(100vw - #{$standard-spacing * 2});

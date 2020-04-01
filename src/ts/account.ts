@@ -618,7 +618,13 @@ window.addEventListener("userready", async () =>
 
     contextMenuDisplayImage.addEventListener("click", async () =>
     {
-        const imgContainer = new Component("div", { class: "img-preview-container", children: [ new Spinner().element ] }).element;
+        const imgContainer = new Component("div", {
+            class: "img-preview-container",
+            children: [
+                new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element,
+                new Spinner().element
+            ]
+        }).element;
 
         document.body.appendChild(imgContainer);
 
