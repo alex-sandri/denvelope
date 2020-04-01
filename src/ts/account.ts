@@ -1624,6 +1624,8 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (top < 0) top = 0;
 
+    if (left < 0) left = 0;
+
     Object.assign(
         contextMenu.style,
         {
