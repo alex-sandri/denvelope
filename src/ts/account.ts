@@ -702,10 +702,54 @@ window.addEventListener("userready", async () =>
     {
         const modal = new Modal({ title: Translation.Get("account->change_background"), allow: [ "close", "confirm" ] });
 
+        const backgroundImageUrlInput = new InputWithIcon({
+            attributes: {
+                id: "background-image-url",
+                placeholder: "URL (https://example.com/example.png)",
+                type: "url"
+            },
+            iconClassName: "fas fa-link fa-fw"
+        }).element;
+
+        modal.AppendContent([ backgroundImageUrlInput ]);
+
+        const input = backgroundImageUrlInput.querySelector("input");
+
         modal.OnConfirm = () =>
         {
-            console.log("TODO");
+            let error : string;
+            let url : URL;
+
+            if (Utilities.HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
+
+            Utilities.RemoveClass(input, "error");
+
+            try
+            {
+                url = new URL(input.value);
+
+                if (url.protocol !== "https:") error = Translation.Get("errors->url_must_be_https");
+            }
+            catch (err)
+            {
+                error = Translation.Get("errors->invalid_url");
+            }
+
+            if (error)
+            {
+                Utilities.AddClass(input, "error");
+
+                backgroundImageUrlInput.insertAdjacentElement("beforebegin", new Component("p", { class: "input-error", innerText: error }).element);
+
+                return;
+            }
+
+            modal.HideAndRemove();
+
+            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: url.href }, { merge: true });
         }
+
+        input.focus();
 
         modal.Show(true);
     });
@@ -1026,6 +1070,13 @@ window.addEventListener("userready", async () =>
     if (await vaultOnly()) Auth.RefreshToken();
 
     GetUserContent();
+
+    db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((user : any) =>
+    {
+        const backgroundImageUrl = user.data().backgroundImageUrl;
+
+        if (backgroundImageUrl) document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
+    });
 });
 
 window.addEventListener("resize", () => HideContextMenu());

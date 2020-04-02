@@ -91,6 +91,8 @@ export const en_US = {
             already_exists: "An element with this name already exists",
         },
         vault_pin_too_short: "The vault PIN must be at least 4 characters long",
+        invalid_url: "The entered URL is invalid",
+        url_must_be_https: "The URL must use HTTPS",
     },
     generic: {
         contact_us: "Contact Us",

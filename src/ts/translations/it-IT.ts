@@ -91,6 +91,8 @@ export const it_IT = {
             already_exists: "Un elemento con questo nome esiste già",
         },
         vault_pin_too_short: "Il PIN della cassaforte deve avere almeno 4 caratteri",
+        invalid_url: "L'URL inserito non è valido",
+        url_must_be_https: "L'URL deve usare HTTPS",
     },
     generic: {
         contact_us: "Contattaci",
