@@ -8,7 +8,7 @@ import { Auth } from './scripts/Auth';
 import { Linguist } from './scripts/Linguist';
 import { Component, Input, Spinner, InputWithIcon } from './scripts/Component';
 import { Translation } from './scripts/Translation';
-import { loggedInNavMenu, HideHeaderMenu } from "./scripts/header";
+import { loggedInNavMenu, HideHeaderMenu, header } from "./scripts/header";
 
 loadEvents.Init();
 
@@ -817,6 +817,8 @@ window.addEventListener("userready", async () =>
 
         showFile.id = "";
 
+        header.style.backgroundColor = "";
+
         editor = null;
 
         preventWindowUnload.editor = false;
@@ -1057,7 +1059,7 @@ window.addEventListener("userready", async () =>
 
         ShowFile(id);
 
-        db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
+        await db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
         {
             Utilities.SetCurrentFolderId(doc.data().parentId);
 
@@ -2066,6 +2068,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
     Utilities.ShowElement(showFile);
 
+    header.style.backgroundColor = getComputedStyle(showFile).getPropertyValue("background-color");
+
     // If the user is on a file URL but the Auth.UserId is not yet ready
     if (skipFileLoading) return;
 
@@ -2371,10 +2375,9 @@ const sharedOnly = () : boolean => (location.pathname === "/account/shared" && U
 const starredOnly = () : boolean => location.pathname === "/account/starred" && Utilities.GetCurrentFolderId(true) === "starred";
 const trashedOnly = () : boolean => location.pathname === "/account/trash" && Utilities.GetCurrentFolderId(true) === "trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
-    Utilities.GetCurrentFolderId(true) === "vault" ||
-    ((location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
-    ((!Utilities.IsSet(checkCurrentFolder) || checkCurrentFolder) &&
-    Utilities.GetCurrentFolderId() !== "root" &&
+    (location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
+    (((!Utilities.IsSet(checkCurrentFolder) || checkCurrentFolder) &&
+    await Utilities.GetCurrentFolderIdAsync() !== "root" &&
     (await db.collection(`users/${Auth.UserId}/folders`).doc(await Utilities.GetCurrentFolderIdAsync()).get()).data().inVault));
 
 /**

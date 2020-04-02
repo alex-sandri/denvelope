@@ -158,7 +158,10 @@ export class Utilities
     {
         if (Utilities.GetCurrentFolderId(allowFakeFolderIds).trim() !== "") resolve(Utilities.GetCurrentFolderId(allowFakeFolderIds));
 
-        window.addEventListener("userready", () => resolve(Utilities.GetCurrentFolderId(allowFakeFolderIds)));
+        (<HTMLInputElement>document.querySelector("input[name=folder-id]")).addEventListener(
+            "change",
+            () => resolve(Utilities.GetCurrentFolderId(allowFakeFolderIds)),
+            { once: true });
     });
 
     public static SetCurrentFolderId = (id : string) : void => {(<HTMLInputElement>document.querySelector("input[name=folder-id]")).value = id;}
