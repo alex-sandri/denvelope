@@ -637,6 +637,8 @@ window.addEventListener("userready", async () =>
             imgContainer.appendChild(img);
         };
 
+        img.onerror = () => imgContainer.remove();
+
         img.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
 
         let scale = 1;
