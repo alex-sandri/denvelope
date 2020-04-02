@@ -9,11 +9,12 @@
     {{> header logoRedirectPath=logoRedirectPath}}
     <main class="account-main">
         <section class="top-section">
-            <div class="search-add-content">
+            <div class="toolbar">
                 <div class="search-bar input">
-                    <input type="search" name="search" id="search" autocomplete="off" data-placeholder-translation="generic->search" data-keyboard-shortcut="ctrl + f">
+                    <input type="search" class="allow-context-menu" name="search" id="search" autocomplete="off" data-placeholder-translation="generic->search" data-keyboard-shortcut="ctrl + f">
                 </div>
                 <button class="logged-in" id="add-content"><i class="fas fa-plus fa-fw"></i></button>
+                <button class="logged-in more-options"><i class="fas fa-ellipsis-v fa-fw"></i></button>
             </div>
             <nav class="folder-nav">
                 <button class="back-button" data-translation="generic->back"><i class="fas fa-arrow-left"></i></button>

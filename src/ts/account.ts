@@ -36,6 +36,7 @@ const viewTrashedContent : HTMLButtonElement = bottomMenu.querySelector("#trash"
 
 const searchBar : HTMLInputElement = document.querySelector("#search");
 const addContent : HTMLButtonElement = document.querySelector("#add-content");
+const moreOptions : HTMLButtonElement = document.querySelector(".more-options");
 
 const folderNavigation : HTMLElement = document.querySelector(".folder-nav");
 const navigationBackButton : HTMLButtonElement = folderNavigation.querySelector(".back-button");
@@ -91,6 +92,9 @@ const contextMenuVault : HTMLDivElement = contextMenu.querySelector("#cm-vault")
 const contextMenuCreateVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-create-vault");
 const contextMenuLockVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-lock");
 const contextMenuUnlockVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-unlock");
+
+const contextMenuTools : HTMLDivElement = contextMenu.querySelector("#cm-tools");
+const contextMenuChangeBackground : HTMLButtonElement = contextMenuTools.querySelector("#cm-change-background");
 
 let contextMenuItem : HTMLElement;
 let contextMenuItems : HTMLElement[];
@@ -215,11 +219,7 @@ window.addEventListener("userready", async () =>
 
     addContent.addEventListener("click", () =>
     {
-        const modal = new Modal({
-            allow: [
-                "close"
-            ]
-        });
+        const modal = new Modal({ allow: [ "close" ] });
 
         modal.AppendContent([addContentOptions]);
 
@@ -231,6 +231,8 @@ window.addEventListener("userready", async () =>
 
         modal.Show(true);
     });
+
+    moreOptions.addEventListener("click", showContextMenu);
 
     fileInput.addEventListener("change", (e) =>
     {
@@ -696,6 +698,18 @@ window.addEventListener("userready", async () =>
 
     contextMenuLockVault.addEventListener("click", () => lockVaultButton.click());
 
+    contextMenuChangeBackground.addEventListener("click", () =>
+    {
+        const modal = new Modal({ title: Translation.Get("account->change_background"), allow: [ "close", "confirm" ] });
+
+        modal.OnConfirm = () =>
+        {
+            console.log("TODO");
+        }
+
+        modal.Show(true);
+    });
+
     navigationBackButton.addEventListener("click", async () =>
     {
         Utilities.HideElement(emptyFolder);
@@ -775,8 +789,10 @@ window.addEventListener("userready", async () =>
 
     document.addEventListener("click", e =>
     {
-        if((<HTMLElement>e.target).closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button, .vault .menu-button`) === null &&
-            (<HTMLElement>e.target).closest(editorMenuSelector) === null && (<HTMLElement>e.target).closest("#cm-move") === null) HideContextMenu();
+        const target = <HTMLElement>e.target;
+
+        if(target.closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button, .vault .menu-button`) === null &&
+            target.closest(editorMenuSelector) === null && target.closest("#cm-move") === null && !moreOptions.contains(target)) HideContextMenu();
 
         if ((<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => Utilities.HasClass(element, "selected")).length === 0)
             contextMenuItems = [];
@@ -1504,6 +1520,7 @@ const GetUserContent = async (searchTerm ?: string) =>
 
 const showContextMenu = (e : MouseEvent) : void =>
 {
+    const target = <HTMLElement>e.target;
     const contentTarget = GetUserContentElement(<HTMLElement>e.target);
 
     contextMenuItem = null;
@@ -1512,9 +1529,9 @@ const showContextMenu = (e : MouseEvent) : void =>
     // Every event would have been fired twice because with length === 1 as contextMenuItem would have been the same element
     if (contextMenuItems?.length === 1) contextMenuItems = [];
 
-    Utilities.HideElement(contextMenuMoveSelector);
+    Utilities.HideElements([ contextMenuMoveSelector, contextMenuTools ]);
 
-    if ((isUserContentElement(contentTarget) || (<HTMLElement>e.target).closest(editorMenuSelector) !== null) && contextMenuItems.length <= 1)
+    if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null) && contextMenuItems.length <= 1)
     {
         Utilities.ShowElements(<HTMLElement[]>[contextMenuContent, ...contextMenuContent.children]);
 
@@ -1564,7 +1581,7 @@ const showContextMenu = (e : MouseEvent) : void =>
             if (contextMenuItem.getAttribute("data-starred") === "true" && Auth.IsAuthenticated) Utilities.ShowElement(contextMenuRemoveFromFavourites);
             else if (Auth.IsAuthenticated) Utilities.ShowElement(contextMenuAddToFavourites);
 
-            if ((<HTMLElement>e.target).closest(editorMenuSelector) === null) Utilities.ShowElement(contextMenuView);
+            if (target.closest(editorMenuSelector) === null) Utilities.ShowElement(contextMenuView);
             else if (Auth.IsAuthenticated && Utilities.IsSet(editor)) Utilities.ShowElement(contextMenuSave);
 
             if (Auth.IsAuthenticated) Utilities.ShowElement(contextMenuDelete);
@@ -1587,11 +1604,17 @@ const showContextMenu = (e : MouseEvent) : void =>
             ]);
         }
     }
+    else if (moreOptions.contains(target))
+    {
+        Utilities.HideElements([ contextMenuContent, contextMenuGeneric, contextMenuVault ]);
+
+        Utilities.ShowElement(contextMenuTools);
+    }
     else if (Auth.IsAuthenticated && contextMenuItems.length === 0)
     {
         Utilities.HideElements([ contextMenuContent, contextMenuGeneric, contextMenuVault ]);
 
-        if (!vault.contains(<HTMLElement>e.target)) Utilities.ShowElements(<HTMLElement[]>[contextMenuGeneric, ...contextMenuGeneric.children]);
+        if (!vault.contains(target)) Utilities.ShowElements(<HTMLElement[]>[contextMenuGeneric, ...contextMenuGeneric.children]);
         else
         {
             const vaultLocked = vault.getAttribute("data-locked");
@@ -1643,13 +1666,10 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (left < 0) left = 0;
 
-    Object.assign(
-        contextMenu.style,
-        {
-            top: top + "px",
-            left: left + "px",
-        }
-    );
+    Object.assign(contextMenu.style, {
+        top: top + "px",
+        left: left + "px",
+    });
 }
 
 const HideContextMenu = () : void =>

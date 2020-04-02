@@ -6,7 +6,7 @@
 
     .top-section
     {
-        .search-add-content
+        .toolbar
         {
             @include flex;
 
@@ -25,7 +25,8 @@
                 }
             }
 
-            #add-content
+            #add-content,
+            .more-options
             {
                 @include button($bg-color: transparent, $hover-color: $primary-color);
 

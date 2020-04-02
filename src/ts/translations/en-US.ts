@@ -23,6 +23,7 @@ export const en_US = {
         empty_trash: "Empty trash",
         create_vault: "Create vault",
         display_image: "Display image",
+        change_background: "Change background",
         context_menu: {
             move: {
                 impossible: "Impossible to move this item, there are no folders to move this into",
