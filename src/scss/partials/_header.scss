@@ -4,7 +4,7 @@ header
 {
     @include flex($justify-content: space-between);
 
-    background-color: rgba($color: $primary-color, $alpha: 0.8);
+    background-color: rgba($color: $primary-color, $alpha: 0.6);
     padding: $standard-spacing;
     width: 100%;
     height: $header-height;

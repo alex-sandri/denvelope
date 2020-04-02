@@ -2,7 +2,7 @@
 {
     height: calc(100% - #{$header-height + $account-bottom-bar-height});
     padding: 0 $standard-spacing;
-    background-color: rgba($primary-color, 0.8);
+    background-color: rgba($primary-color, 0.6);
 
     .top-section
     {
@@ -214,7 +214,7 @@
             &:focus,
             &:focus-within
             {
-                box-shadow: 0 0 10px $secondary-color;
+                box-shadow: 0 0 0 5px $secondary-color;
             }
 
             &.disabled.target:hover
@@ -339,7 +339,7 @@
                     &.target,
                     &.selected
                     {
-                        box-shadow: 0 0 10px $secondary-color;
+                        box-shadow: 0 0 0 5px $secondary-color;
                     }
                 }
             }
