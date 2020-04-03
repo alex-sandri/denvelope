@@ -23,6 +23,7 @@ export const it_IT = {
         empty_trash: "Svuota cestino",
         create_vault: "Crea cassaforte",
         display_image: "Mostra immagine",
+        display_pdf: "Mostra PDF",
         change_background: "Cambia sfondo",
         context_menu: {
             move: {

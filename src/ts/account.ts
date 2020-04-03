@@ -81,6 +81,7 @@ const contextMenuDownload : HTMLButtonElement = contextMenuContent.querySelector
 const contextMenuRestore : HTMLButtonElement = contextMenuContent.querySelector("#cm-restore");
 const contextMenuDelete : HTMLButtonElement = contextMenuContent.querySelector("#cm-delete");
 const contextMenuDisplayImage : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-image");
+const contextMenuDisplayPdf : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-pdf");
 
 const contextMenuGeneric : HTMLDivElement = contextMenu.querySelector("#cm-generic");
 const contextMenuAddFiles : HTMLButtonElement = contextMenuGeneric.querySelector("#cm-add-files");
@@ -103,6 +104,9 @@ const contextMenuMoveSelector : HTMLDivElement = contextMenu.querySelector("#mov
 const contextMenuMoveSelectorOptions : HTMLDivElement = contextMenuMoveSelector.querySelector(".options");
 
 const emptyFolder : HTMLDivElement = document.querySelector(".empty-folder");
+
+const filePreviewContainer : HTMLDivElement = document.querySelector(".file-preview-container");
+const filePreviewSpinner : HTMLElement = filePreviewContainer.querySelector(".spinner");
 
 let unsubscribeFoldersListener : any = null;
 let unsubscribeFilesListener : any = null;
@@ -620,26 +624,18 @@ window.addEventListener("userready", async () =>
 
     contextMenuDisplayImage.addEventListener("click", async () =>
     {
-        const imgContainer = new Component("div", {
-            class: "img-preview-container",
-            children: [
-                new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element,
-                new Spinner().element
-            ]
-        }).element;
-
-        document.body.appendChild(imgContainer);
+        Utilities.ShowElement(filePreviewContainer, "flex");
 
         const img = new Image();
 
         img.onload = () =>
         {
-            imgContainer.querySelector(".spinner").remove();
+            Utilities.HideElement(filePreviewSpinner);
 
-            imgContainer.appendChild(img);
+            filePreviewContainer.appendChild(img);
         };
 
-        img.onerror = () => imgContainer.remove();
+        img.onerror = () => filePreviewContainer.click();
 
         img.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
 
@@ -679,19 +675,65 @@ window.addEventListener("userready", async () =>
             if (img.style.transform.indexOf("rotate") === -1) img.style.transform += rotateString;
         }
 
-        imgContainer.addEventListener("click", e =>
+        const RemoveContent = (e : MouseEvent) =>
         {
             if (!img.contains(<HTMLElement>e.target))
             {
-                imgContainer.remove();
+                Utilities.HideElement(filePreviewContainer);
+
+                filePreviewContainer.querySelector("img").remove();
 
                 document.removeEventListener("wheel", ScaleImage);
                 document.removeEventListener("keydown", RotateImage);
+
+                filePreviewContainer.removeEventListener("click", RemoveContent);
             }
-        });
+        }
+
+        filePreviewContainer.addEventListener("click", RemoveContent);
 
         document.addEventListener("wheel", ScaleImage);
         document.addEventListener("keydown", RotateImage);
+    });
+
+    contextMenuDisplayPdf.addEventListener("click", async () =>
+    {
+        Utilities.ShowElement(filePreviewContainer, "flex");
+
+        const buffer : ArrayBuffer = await (await fetch(await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL())).arrayBuffer();
+
+        const blob = new Blob([ buffer ], { type: "application/pdf" });
+
+        const iframe = document.createElement("iframe");
+
+        iframe.onload = () =>
+        {
+            Utilities.HideElement(filePreviewSpinner);
+
+            Utilities.ShowElement(iframe);
+        };
+
+        iframe.onerror = () => filePreviewContainer.click();
+
+        iframe.src = URL.createObjectURL(blob);
+
+        Utilities.HideElement(iframe);
+
+        filePreviewContainer.appendChild(iframe);
+
+        const RemoveContent = (e : MouseEvent) =>
+        {
+            if (!iframe.contains(<HTMLElement>e.target))
+            {
+                Utilities.HideElement(filePreviewContainer);
+
+                filePreviewContainer.querySelector("iframe").remove();
+
+                filePreviewContainer.removeEventListener("click", RemoveContent);
+            }
+        }
+
+        filePreviewContainer.addEventListener("click", RemoveContent);
     });
 
     [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
@@ -2182,6 +2224,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                 }
 
                 if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
+                else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
             })).catch((err : any) => err);
     });
 }

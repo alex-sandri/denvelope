@@ -62,6 +62,10 @@
         <button id="trash" data-translation="account->trash" data-keyboard-shortcut="t"><i class="fas fa-trash fa-fw"></i></button>
     </aside>
     <div class="hide-vault-content"><i class="fas fa-eye-slash"></i></div>
+    <div class="file-preview-container">
+        <button class="close"><i class="fas fa-times fa-fw"></i></button>
+        {{> spinner}}
+    </div>
     {{> firebase auth=true firestore=true storage=true functions=true}}
     {{> editor}}
     <input type="hidden" name="folder-id" value="">

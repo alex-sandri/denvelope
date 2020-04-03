@@ -23,6 +23,7 @@ export const en_US = {
         empty_trash: "Empty trash",
         create_vault: "Create vault",
         display_image: "Display image",
+        display_pdf: "Display PDF",
         change_background: "Change background",
         context_menu: {
             move: {
