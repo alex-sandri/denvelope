@@ -33,6 +33,14 @@ header
     {
         @include flex;
 
+        @supports not (backdrop-filter: (20px))
+        {
+            .menu
+            {
+                background-color: $primary-color;
+            }
+        }
+
         .menu
         {
             display: none;
@@ -54,7 +62,7 @@ header
             a,
             button
             {
-                @include button($bg-color: transparent, $focus-effect: box-shadow);
+                @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-color: $primary-color);
 
                 text-decoration: none;
                 text-align: center;
