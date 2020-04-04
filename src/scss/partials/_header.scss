@@ -42,7 +42,8 @@ header
             top: $header-height;
             right: $standard-spacing;
             z-index: 999;
-            background-color: $primary-color;
+            background-color: rgba($color: $primary-color, $alpha: 0.5);
+            backdrop-filter: blur(20px);
             padding: $standard-spacing;
             max-width: calc(100vw - #{$standard-spacing * 2});
             max-height: calc(100vh - #{$header-height + $standard-spacing});
@@ -53,7 +54,7 @@ header
             a,
             button
             {
-                @include button($focus-effect: box-shadow);
+                @include button($bg-color: transparent, $focus-effect: box-shadow);
 
                 text-decoration: none;
                 text-align: center;
@@ -87,11 +88,6 @@ header
             a
             {
                 margin-bottom: $standard-spacing;
-            }
-
-            button
-            {
-                @include button($bg-color: $primary-color, $color: $secondary-color);
             }
 
             hr
@@ -169,8 +165,6 @@ header
 
             .install-pwa
             {
-                @include button;
-
                 border-radius: 25px;
 
                 &,
