@@ -858,6 +858,7 @@ window.addEventListener("userready", async () =>
         Utilities.RemoveAllAttributes(editorElement, { "except": [ "class", "id" ] });
 
         showFile.id = "";
+        showFile.setAttribute("content-type", "");
 
         header.style.backgroundColor = "";
 
@@ -1746,7 +1747,9 @@ const showContextMenu = (e : MouseEvent) : void =>
         else Utilities.ShowElement(contextMenuRestore);
     }
 
-    if (!IsShowFileVisible() || !showFile.getAttribute("content-type").startsWith("image/")) Utilities.HideElement(contextMenuDisplayImage);
+    if (!showFile.getAttribute("content-type")?.startsWith("image/")) Utilities.HideElement(contextMenuDisplayImage);
+    
+    if (showFile.getAttribute("content-type") !== "application/pdf") Utilities.HideElement(contextMenuDisplayPdf);
 
     Utilities.ShowElement(contextMenu);
 
