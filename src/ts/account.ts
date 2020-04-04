@@ -700,11 +700,10 @@ window.addEventListener("userready", async () =>
     {
         Utilities.ShowElement(filePreviewContainer, "flex");
 
-        const buffer : ArrayBuffer = await (await fetch(await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL())).arrayBuffer();
-
-        const blob = new Blob([ buffer ], { type: "application/pdf" });
-
         const iframe = document.createElement("iframe");
+
+        iframe.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
+        iframe.frameBorder = "0";
 
         iframe.onload = () =>
         {
@@ -714,8 +713,6 @@ window.addEventListener("userready", async () =>
         };
 
         iframe.onerror = () => filePreviewContainer.click();
-
-        iframe.src = URL.createObjectURL(blob);
 
         Utilities.HideElement(iframe);
 
