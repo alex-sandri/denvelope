@@ -59,7 +59,8 @@ header
             overflow-x: hidden;
             overscroll-behavior: contain;
 
-            a,
+            .account,
+            .settings,
             button
             {
                 @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-color: $primary-color);
@@ -68,21 +69,6 @@ header
                 text-align: center;
                 width: 100%;
                 display: block;
-
-                &.account
-                {
-                    border-radius: 25px;
-                }
-
-                &.settings
-                {
-                    width: calc(100% + #{$standard-spacing * 2});
-                    border-left: 0;
-                    border-right: 0;
-                    border-width: $border-width / 2;
-                    border-radius: 0;
-                    margin-left: -$standard-spacing;
-                }
 
                 &:focus,
                 &:hover
@@ -93,9 +79,11 @@ header
                 }
             }
 
-            a
+            .account,
+            .settings
             {
                 margin-bottom: $standard-spacing;
+                border-radius: 25px;
             }
 
             hr
@@ -173,8 +161,6 @@ header
 
             .install-pwa
             {
-                border-radius: 25px;
-
                 &,
                 & + hr
                 {
@@ -187,14 +173,17 @@ header
                 a,
                 span
                 {
+                    color: $secondary-color;
                     font-size: 12px;
                 }
 
                 a
                 {
-                    border: none;
                     padding: 4px 8px;
-                    margin: 0;
+                    margin: auto;
+                    text-decoration: none;
+                    display: block;
+                    width: max-content;
     
                     &.privacy
                     {
@@ -204,6 +193,11 @@ header
                     &.terms
                     {
                         margin-left: #{$standard-spacing / 2};
+                    }
+
+                    &:hover
+                    {
+                        text-decoration: underline;
                     }
                 }
 

@@ -248,7 +248,7 @@
     display: none;
     max-width: calc(100% - #{$standard-spacing * 2});
     position: fixed;
-    bottom: $standard-spacing;
+    bottom: $standard-spacing + $account-bottom-bar-height;
     left: $standard-spacing;
     padding: $standard-spacing;
     background-color: $secondary-color;
@@ -484,6 +484,7 @@
     box-shadow: none;
     justify-content: center;
     transition: $transition-time;
+    width: 100%;
 
     &:hover,
     &:focus
