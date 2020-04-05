@@ -229,7 +229,7 @@
 
     button
     {
-        @include button($bg-color: transparent, $has-border: false, $has-border-radius: false);
+        @include button($bg-color: transparent, $has-border: false, $has-border-radius: false, $hover-color: $primary-color);
 
         display: block;
         width: 100%;
