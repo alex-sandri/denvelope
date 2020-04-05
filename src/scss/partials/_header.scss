@@ -1,5 +1,14 @@
 @import 'cookie-banner';
 
+@supports not (backdrop-filter: blur(20px))
+{
+    &,
+    & + .menu
+    {
+        background-color: $primary-color;
+    }
+}
+
 header
 {
     @include flex($justify-content: space-between);
@@ -32,14 +41,6 @@ header
         @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: none);
         @include flex;
     }
-
-    @supports not (backdrop-filter: blur(20px))
-        {
-            .menu
-            {
-                background-color: $primary-color;
-            }
-        }
 
     & + .menu
     {
