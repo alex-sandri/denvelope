@@ -21,45 +21,43 @@
     </div>
     <div class="waiting-user">{{> spinner}}</div>
     <button class="sign-in logged-out no-home-page"><i class="fas fa-sign-in-alt"></i></button>
-    <nav class="logged-in">
-        <div class="menu">
-            <div class="user">
-                <img src="" data-update-field="photo">
-                <p data-update-field="name"></p>
-                <p data-update-field="email"></p>
-            </div>
-            <a href="account" class="account" data-translation="generic->account" data-keyboard-shortcut="a"><i class="fas fa-user"></i></a>
-            <a href="settings" class="settings" data-translation="generic->settings" data-keyboard-shortcut="s"><i class="fas fa-cog"></i></a>
-            <button class="sign-out" data-translation="generic->sign_out" data-keyboard-shortcut="e"><i class="fas fa-sign-out-alt"></i></button>
-            <hr>
-            <div class="storage logged-in">
-                <p>
-                    <span data-update-field="used-storage" data-bytes="">{{> spinner}}</span>
-                    <span data-translation="header->storage->of"></span>
-                    <span data-update-field="max-storage" data-bytes="">{{> spinner}}</span>
-                    <span data-translation="header->storage->used"></span>
-                    <span data-update-field="used-storage-percent"></span>
-                </p>
-                <div class="used-container"><div class="used"></div></div>
-            </div>
-            <hr>
-            {{> buymeacoffee}}
-            <hr>
-            <button class="install-pwa" data-translation="generic->install"><i class="fas fa-arrow-alt-circle-down"></i></button>
-            <hr>
-            <div class="links">
-                <div class="legal">
-                    <a href="privacy" target="_blank" class="privacy" data-translation="generic->privacy_policy"></a>
-                    <span>&bull;</span>
-                    <a href="terms" target="_blank" class="terms" data-translation="generic->terms_of_service"></a>
-                </div>
-                <a href="accessibility" target="_blank" class="accessibility" data-translation="generic->accessibility"></a>
-            </div>
-        </div>
-    </nav>
     <div class="menu-toggle logged-in">
         <button>
             <img src="" data-update-field="photo">
         </button>
     </div>
 </header>
+<div class="menu logged-in">
+    <div class="user">
+        <img src="" data-update-field="photo">
+        <p data-update-field="name"></p>
+        <p data-update-field="email"></p>
+    </div>
+    <a href="account" class="account" data-translation="generic->account" data-keyboard-shortcut="a"><i class="fas fa-user"></i></a>
+    <a href="settings" class="settings" data-translation="generic->settings" data-keyboard-shortcut="s"><i class="fas fa-cog"></i></a>
+    <button class="sign-out" data-translation="generic->sign_out" data-keyboard-shortcut="e"><i class="fas fa-sign-out-alt"></i></button>
+    <hr>
+    <div class="storage logged-in">
+        <p>
+            <span data-update-field="used-storage" data-bytes="">{{> spinner}}</span>
+            <span data-translation="header->storage->of"></span>
+            <span data-update-field="max-storage" data-bytes="">{{> spinner}}</span>
+            <span data-translation="header->storage->used"></span>
+            <span data-update-field="used-storage-percent"></span>
+        </p>
+        <div class="used-container"><div class="used"></div></div>
+    </div>
+    <hr>
+    {{> buymeacoffee}}
+    <hr>
+    <button class="install-pwa" data-translation="generic->install"><i class="fas fa-arrow-alt-circle-down"></i></button>
+    <hr>
+    <div class="links">
+        <div class="legal">
+            <a href="privacy" target="_blank" class="privacy" data-translation="generic->privacy_policy"></a>
+            <span>&bull;</span>
+            <a href="terms" target="_blank" class="terms" data-translation="generic->terms_of_service"></a>
+        </div>
+        <a href="accessibility" target="_blank" class="accessibility" data-translation="generic->accessibility"></a>
+    </div>
+</div>

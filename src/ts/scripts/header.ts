@@ -3,16 +3,15 @@ import { Auth } from "./Auth";
 
 export const header : HTMLElement = document.querySelector("header");
 
-export const loggedInNav : HTMLButtonElement = header.querySelector("nav.logged-in");
-export const loggedInMenuToggle : HTMLButtonElement = document.querySelector("nav.logged-in + .menu-toggle button");
-export const loggedInNavMenu : HTMLDivElement = loggedInNav.querySelector(".menu");
+export const loggedInMenuToggle : HTMLButtonElement = header.querySelector(".menu-toggle button");
+export const loggedInNavMenu : HTMLDivElement = document.querySelector(".menu.logged-in");
 
 const signInButton : HTMLButtonElement = header.querySelector(".sign-in");
 export const signOutButton : HTMLButtonElement = loggedInNavMenu.querySelector(".sign-out");
 
-export const userPhoto : NodeListOf<HTMLImageElement> = header.querySelectorAll("[data-update-field=photo]");
-export const userName : HTMLParagraphElement = header.querySelector("[data-update-field=name]");
-export const userEmail : HTMLParagraphElement = header.querySelector("[data-update-field=email]");
+export const userPhoto : NodeListOf<HTMLImageElement> = document.querySelectorAll("[data-update-field=photo]");
+export const userName : HTMLParagraphElement = document.querySelector("[data-update-field=name]");
+export const userEmail : HTMLParagraphElement = document.querySelector("[data-update-field=email]");
 
 export const HideHeaderMenu = () : void => Utilities.HideElement(loggedInNavMenu);
 

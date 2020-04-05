@@ -4,6 +4,10 @@ header
 {
     @include flex($justify-content: space-between);
 
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
     background-color: rgba($color: $primary-color, $alpha: 0.5);
     padding: $standard-spacing;
     width: 100%;
@@ -29,11 +33,7 @@ header
         @include flex;
     }
 
-    nav
-    {
-        @include flex;
-
-        @supports not (backdrop-filter: blur(20px))
+    @supports not (backdrop-filter: blur(20px))
         {
             .menu
             {
@@ -41,172 +41,171 @@ header
             }
         }
 
-        .menu
+    & + .menu
+    {
+        display: none;
+        border: $border-width solid $secondary-color;
+        border-radius: $border-radius;
+        position: fixed;
+        top: $header-height;
+        right: $standard-spacing;
+        z-index: 999;
+        background-color: rgba($color: $primary-color, $alpha: 0.5);
+        backdrop-filter: blur(20px);
+        padding: $standard-spacing;
+        max-width: calc(100vw - #{$standard-spacing * 2});
+        max-height: calc(100vh - #{$header-height + $standard-spacing});
+        overflow: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+
+        .account,
+        .settings,
+        button
         {
-            display: none;
-            border: $border-width solid $secondary-color;
-            border-radius: $border-radius;
-            position: absolute;
-            top: $header-height;
-            right: $standard-spacing;
-            z-index: 999;
-            background-color: rgba($color: $primary-color, $alpha: 0.5);
-            backdrop-filter: blur(20px);
-            padding: $standard-spacing;
-            max-width: calc(100vw - #{$standard-spacing * 2});
-            max-height: calc(100vh - #{$header-height + $standard-spacing});
-            overflow: auto;
-            overflow-x: hidden;
-            overscroll-behavior: contain;
+            @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-color: $primary-color);
 
-            .account,
-            .settings,
-            button
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+            display: block;
+
+            &:focus,
+            &:hover
             {
-                @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-color: $primary-color);
-
+                background-color: $secondary-color;
+                color: $primary-color;
                 text-decoration: none;
-                text-align: center;
-                width: 100%;
-                display: block;
+            }
+        }
 
-                &:focus,
+        .account,
+        .settings
+        {
+            margin-bottom: $standard-spacing;
+            border-radius: 25px;
+        }
+
+        hr
+        {
+            margin: $standard-spacing 0;
+            border: #{$border-width / 4} solid $secondary-color;
+            width: calc(100% + #{$standard-spacing * 2});
+            margin-left: -$standard-spacing;
+        }
+
+        .user
+        {
+            img
+            {
+                display: block;
+                height: 100px;
+                border-radius: 50%;
+                margin: auto;
+                margin-bottom: $standard-spacing;
+            }
+
+            p
+            {
+                @include text-ellipsis-on-overflow;
+
+                margin: 0;
+                font-weight: $black;
+                text-align: center;
+                font-size: 25px;
+
+                &:last-child
+                {
+                    font-weight: $light;
+                    font-size: 20px;
+                    margin-bottom: $standard-spacing;
+                }
+            }
+        }
+
+        .storage
+        {
+            margin: $standard-spacing 0;
+
+            p
+            {
+                @include text-ellipsis-on-overflow;
+                    
+                margin: 0;
+                text-align: center;
+            }
+
+            .used-container
+            {
+                background-color: rgba($color: $secondary-color, $alpha: 0.1);
+                border-radius: $border-radius;
+
+                .used
+                {
+                    height: 5px;
+                    background-color: $secondary-color;
+                    border-radius: $border-radius;
+                    margin-top: 5px;
+                    width: 0%;
+                    transition: $transition-time;
+                }
+            }
+
+            .spinner
+            {
+                display: inline;
+                margin: 0;
+                font-size: 16px;
+            }
+        }
+
+        .install-pwa
+        {
+            &,
+            & + hr
+            {
+                display: none;
+            }
+        }
+
+        .links
+        {
+            a,
+            span
+            {
+                color: $secondary-color;
+                font-size: 12px;
+            }
+
+            a
+            {
+                padding: 4px 8px;
+                margin: auto;
+                text-decoration: none;
+                display: block;
+                width: max-content;
+    
+                &.privacy
+                {
+                    margin-right: #{$standard-spacing / 2};
+                }
+    
+                &.terms
+                {
+                    margin-left: #{$standard-spacing / 2};
+                }
+
                 &:hover
                 {
-                    background-color: $secondary-color;
-                    color: $primary-color;
-                    text-decoration: none;
+                    text-decoration: underline;
                 }
             }
 
-            .account,
-            .settings
+            .legal
             {
+                @include flex;
+
                 margin-bottom: $standard-spacing;
-                border-radius: 25px;
-            }
-
-            hr
-            {
-                margin: $standard-spacing 0;
-                border: #{$border-width / 4} solid $secondary-color;
-                width: calc(100% + #{$standard-spacing * 2});
-                margin-left: -$standard-spacing;
-            }
-
-            .user
-            {
-                img
-                {
-                    display: block;
-                    height: 100px;
-                    border-radius: 50%;
-                    margin: auto;
-                    margin-bottom: $standard-spacing;
-                }
-
-                p
-                {
-                    @include text-ellipsis-on-overflow;
-
-                    margin: 0;
-                    font-weight: $black;
-                    text-align: center;
-                    font-size: 25px;
-
-                    &:last-child
-                    {
-                        font-weight: $light;
-                        font-size: 20px;
-                        margin-bottom: $standard-spacing;
-                    }
-                }
-            }
-
-            .storage
-            {
-                margin: $standard-spacing 0;
-
-                p
-                {
-                    @include text-ellipsis-on-overflow;
-                    
-                    margin: 0;
-                    text-align: center;
-                }
-
-                .used-container
-                {
-                    background-color: rgba($color: $secondary-color, $alpha: 0.1);
-                    border-radius: $border-radius;
-
-                    .used
-                    {
-                        height: 5px;
-                        background-color: $secondary-color;
-                        border-radius: $border-radius;
-                        margin-top: 5px;
-                        width: 0%;
-                        transition: $transition-time;
-                    }
-                }
-
-                .spinner
-                {
-                    display: inline;
-                    margin: 0;
-                    font-size: 16px;
-                }
-            }
-
-            .install-pwa
-            {
-                &,
-                & + hr
-                {
-                    display: none;
-                }
-            }
-
-            .links
-            {
-                a,
-                span
-                {
-                    color: $secondary-color;
-                    font-size: 12px;
-                }
-
-                a
-                {
-                    padding: 4px 8px;
-                    margin: auto;
-                    text-decoration: none;
-                    display: block;
-                    width: max-content;
-    
-                    &.privacy
-                    {
-                        margin-right: #{$standard-spacing / 2};
-                    }
-    
-                    &.terms
-                    {
-                        margin-left: #{$standard-spacing / 2};
-                    }
-
-                    &:hover
-                    {
-                        text-decoration: underline;
-                    }
-                }
-
-                .legal
-                {
-                    @include flex;
-
-                    margin-bottom: $standard-spacing;
-                }
             }
         }
     }
