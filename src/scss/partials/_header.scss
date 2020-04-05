@@ -33,7 +33,7 @@ header
     {
         @include flex;
 
-        @supports not (backdrop-filter: (20px))
+        @supports not (backdrop-filter: blur(20px))
         {
             .menu
             {
