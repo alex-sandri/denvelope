@@ -1,6 +1,6 @@
 .settings-section
 {
-    width: calc(100% - (#{$standard-spacing} * 2));
+    width: calc(100% - #{$standard-spacing * 2});
     margin: $standard-spacing;
     display: none;
 
@@ -12,12 +12,6 @@
 
     .setting
     {
-        h2
-        {
-            margin: 0;
-            font-weight: $light;
-        }
-
         @include flex($justify-content: space-between);
         
         padding: $standard-spacing;
@@ -25,6 +19,12 @@
         border-radius: $border-radius;
         transition: $transition-time;
         cursor: pointer;
+
+        h2
+        {
+            margin: 0;
+            font-weight: $light;
+        }
     
         & > div
         {

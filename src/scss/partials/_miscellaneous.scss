@@ -248,7 +248,7 @@
     display: none;
     max-width: calc(100% - #{$standard-spacing * 2});
     position: fixed;
-    bottom: $standard-spacing + $account-bottom-bar-height;
+    bottom: $standard-spacing;
     left: $standard-spacing;
     padding: $standard-spacing;
     background-color: $secondary-color;

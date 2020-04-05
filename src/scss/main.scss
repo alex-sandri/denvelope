@@ -95,14 +95,19 @@ body
 
     &.account
     {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        
         header
         {
             backdrop-filter: unset;
         }
 
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
+        .generic-message
+        {
+            bottom: $standard-spacing + $account-bottom-bar-height
+        }
     }
 }
 
