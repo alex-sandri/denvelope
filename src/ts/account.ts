@@ -2419,8 +2419,9 @@ const CheckElementNameValidity = async (name : string, type : string, parentId :
         .where("name", ">=", nameWithNoExt)
         .where("name", "<", end)
         .get();
-                    
-    if (tempSnapshot.size > 0)
+    
+    // Same name, different extension
+    if (tempSnapshot.size > 0 && tempSnapshot.docs.filter((doc : any) => doc.data().name === name).length > 0)
     {
         let i = 1;
         let tempName : string;
