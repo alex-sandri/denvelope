@@ -1,14 +1,5 @@
 @import 'cookie-banner';
 
-@supports not (backdrop-filter: blur(20px))
-{
-    &,
-    & + .menu
-    {
-        background-color: $primary-color;
-    }
-}
-
 header
 {
     @include flex($justify-content: space-between);
@@ -248,5 +239,14 @@ header
                 box-shadow: 0 0 0 $border-width $secondary-color;
             }
         }
+    }
+}
+
+@supports not (backdrop-filter: blur(20px))
+{
+    header,
+    header + .menu
+    {
+        background-color: $primary-color;
     }
 }
