@@ -25,6 +25,7 @@ export const en_US = {
         display_image: "Display image",
         display_pdf: "Display PDF",
         change_background: "Change background",
+        image_address: "Image address",
         context_menu: {
             move: {
                 impossible: "Impossible to move this item, there are no folders to move this into",

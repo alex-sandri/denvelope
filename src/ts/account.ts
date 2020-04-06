@@ -744,7 +744,7 @@ window.addEventListener("userready", async () =>
         const backgroundImageUrlInput = new InputWithIcon({
             attributes: {
                 id: "background-image-url",
-                placeholder: "URL (https://example.com/example.png)",
+                placeholder: Translation.Get("account->image_address"),
                 type: "url"
             },
             iconClassName: "fas fa-link fa-fw"

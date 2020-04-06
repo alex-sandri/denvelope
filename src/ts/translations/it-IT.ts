@@ -25,6 +25,7 @@ export const it_IT = {
         display_image: "Mostra immagine",
         display_pdf: "Mostra PDF",
         change_background: "Cambia sfondo",
+        image_address: "Indirizzo dell'immagine",
         context_menu: {
             move: {
                 impossible: "Impossibile spostare questo elemento, non ci sono cartelle in cui spostarlo",
