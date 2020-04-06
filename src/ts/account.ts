@@ -2353,7 +2353,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
             let chunks : Uint8Array[] = [];
 
-            const downloadSize = <number><unknown>response.headers.get("Content-Length");
+            const downloadSize = parseInt(response.headers.get("Content-Length"));
             let downloadedBytes = 0;
 
             const modal = new DownloadModal(name, downloadSize);
