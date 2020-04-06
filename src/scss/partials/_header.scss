@@ -13,6 +13,7 @@ header
     width: 100%;
     height: $header-height;
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 
     .logo
     {
@@ -242,7 +243,7 @@ header
     }
 }
 
-@supports not (backdrop-filter: blur(20px))
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
 {
     header,
     header + .menu
