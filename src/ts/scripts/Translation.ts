@@ -58,9 +58,9 @@ export class Translation
         const keys = id.split("->");
         let array : any;
 
-        switch (Translation.Language)
+        switch (Translation.Language.toLowerCase()) // Safari returns it in lower-case
         {
-            case "it-IT":
+            case "it-it":
             case "it":
                 array = it_IT;
             break;
