@@ -63,6 +63,8 @@ body
     background-color: $primary-color;
     color: $secondary-color;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: contain;
     height: 100vh;
