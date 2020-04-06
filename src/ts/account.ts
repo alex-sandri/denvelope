@@ -2115,15 +2115,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
     Utilities.AddClass(document.documentElement, "file-loading");
 
-    const unsubscribe = db.collection(`users/${Auth.UserId}/files`).doc(id).onSnapshot((doc : any) =>
+    db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
     {
-        if (!doc.exists || doc.data().trashed)
-        {
-            unsubscribe();
-
-            return;
-        }
-
         const name = doc.data().name;
         const language = <string>Linguist.Detect(name, true);
         const size = doc.data().size;
@@ -2208,18 +2201,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])));
                 }
 
-                if (!editor) CreateEditor(value, language);
-                else
-                {
-                    // Move the cursor to the position it had before the update
-                    let previousCursorPosition : any = editor.getPosition();
-
-                    editor.setValue(value);
-
-                    preventWindowUnload.editor = false;
-                    
-                    editor.setPosition(previousCursorPosition);
-                }
+                CreateEditor(value, language);
 
                 if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
                 else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
