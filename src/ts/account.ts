@@ -1285,8 +1285,6 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
                 content_type: "file",
                 content_id: id
             });
-
-            const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
     
             if (typeof file !== "string") ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).put(file, metadata), name, size, id)
                 .then(() => resolveUpload()).catch(error => rejectUpload(error));
