@@ -1,5 +1,4 @@
 import { Utilities } from "./Utilities";
-import { Auth } from "./Auth";
 
 export const header : HTMLElement = document.querySelector("header");
 
@@ -24,8 +23,4 @@ document.addEventListener("click", e =>
 
 signInButton.addEventListener("click", () => location.href = "/");
 
-document.addEventListener("scroll", HideHeaderMenu);
-
 document.addEventListener("contextmenu", HideHeaderMenu);
-
-window.addEventListener("resize", HideHeaderMenu);
