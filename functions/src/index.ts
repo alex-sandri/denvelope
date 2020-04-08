@@ -38,13 +38,18 @@ export const userDeleted = functions.region(region).auth.user().onDelete(async u
 {
     const batch = db.batch();
 
-    await db.collection("users").doc(user.uid).delete();
-
     await db.collection(`users/${user.uid}/folders`).where("parent", "==", "root").get().then(docs => docs.forEach(doc => batch.delete(doc.ref)));
 
     await db.collection(`users/${user.uid}/files`).where("parent", "==", "root").get().then(docs => docs.forEach(doc => batch.delete(doc.ref)));
 
-    void batch.commit();
+    await batch.commit();
+
+    await db.collection(`users/${user.uid}/config`).doc("preferences").delete();
+
+    await db.collection(`users/${user.uid}/vault`).doc("config").delete();
+    await db.collection(`users/${user.uid}/vault`).doc("status").delete();
+
+    await db.collection("users").doc(user.uid).delete();
     
     return user;
 });
