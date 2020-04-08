@@ -24,6 +24,7 @@ export const it_IT = {
         create_vault: "Crea cassaforte",
         display_image: "Mostra immagine",
         display_pdf: "Mostra PDF",
+        validate_xml: "Valida XML",
         change_background: "Cambia sfondo",
         image_address: "Indirizzo dell'immagine",
         context_menu: {
@@ -153,6 +154,7 @@ export const it_IT = {
         vault: "Cassaforte",
         lock: "Blocca",
         unlock: "Sblocca",
+        no_errors_found: "Non sono stati trovati errori",
     },
     header: {
         storage: {

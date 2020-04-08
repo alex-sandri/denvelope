@@ -82,6 +82,7 @@ const contextMenuRestore : HTMLButtonElement = contextMenuContent.querySelector(
 const contextMenuDelete : HTMLButtonElement = contextMenuContent.querySelector("#cm-delete");
 const contextMenuDisplayImage : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-image");
 const contextMenuDisplayPdf : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-pdf");
+const contextMenuValidateXml : HTMLButtonElement = contextMenuContent.querySelector("#cm-validate-xml");
 
 const contextMenuGeneric : HTMLDivElement = contextMenu.querySelector("#cm-generic");
 const contextMenuAddFiles : HTMLButtonElement = contextMenuGeneric.querySelector("#cm-add-files");
@@ -733,6 +734,17 @@ window.addEventListener("userready", async () =>
         filePreviewContainer.addEventListener("click", RemoveContent);
     });
 
+    contextMenuValidateXml.addEventListener("click", () =>
+    {
+        const dom = new DOMParser().parseFromString(editor.getValue(), "text/xml");
+
+        const message : string = dom.getElementsByTagName("parsererror").length > 0
+            ? dom.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML
+            : Translation.Get("generic->no_errors_found");
+
+        genericMessage.Show(message);
+    });
+
     [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
 
     contextMenuLockVault.addEventListener("click", () => lockVaultButton.click());
@@ -856,6 +868,7 @@ window.addEventListener("userready", async () =>
 
         showFile.id = "";
         showFile.setAttribute("content-type", "");
+        showFile.querySelector(".name").innerHTML = "";
 
         header.style.backgroundColor = "";
 
@@ -1746,6 +1759,8 @@ const showContextMenu = (e : MouseEvent) : void =>
     
     if (showFile.getAttribute("content-type") !== "application/pdf") Utilities.HideElement(contextMenuDisplayPdf);
 
+    if (!(<HTMLHeadingElement>showFile.querySelector(".name")).innerText.endsWith(".xml")) Utilities.HideElement(contextMenuValidateXml);
+
     Utilities.ShowElement(contextMenu);
 
     let top : number = e.pageY - scrollY;
@@ -2117,7 +2132,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
     db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
     {
-        const name = doc.data().name;
+        const name : string = doc.data().name;
         const language = <string>Linguist.Detect(name, true);
         const size = doc.data().size;
 
@@ -2205,6 +2220,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
                 else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
+                else if (name.endsWith(".xml")) Utilities.ShowElement(contextMenuValidateXml);
             })).catch((err : any) => err);
     });
 }

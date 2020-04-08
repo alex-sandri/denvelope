@@ -24,6 +24,7 @@ export const en_US = {
         create_vault: "Create vault",
         display_image: "Display image",
         display_pdf: "Display PDF",
+        validate_xml: "Validate XML",
         change_background: "Change background",
         image_address: "Image address",
         context_menu: {
@@ -153,6 +154,7 @@ export const en_US = {
         vault: "Vault",
         lock: "Lock",
         unlock: "Unlock",
+        no_errors_found: "No errors found",
     },
     header: {
         storage: {
