@@ -25,6 +25,7 @@ export const it_IT = {
         display_image: "Mostra immagine",
         display_pdf: "Mostra PDF",
         validate_xml: "Valida XML",
+        validate_json: "Valida JSON",
         change_background: "Cambia sfondo",
         image_address: "Indirizzo dell'immagine",
         context_menu: {

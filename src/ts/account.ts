@@ -83,6 +83,7 @@ const contextMenuDelete : HTMLButtonElement = contextMenuContent.querySelector("
 const contextMenuDisplayImage : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-image");
 const contextMenuDisplayPdf : HTMLButtonElement = contextMenuContent.querySelector("#cm-display-pdf");
 const contextMenuValidateXml : HTMLButtonElement = contextMenuContent.querySelector("#cm-validate-xml");
+const contextMenuValidateJson : HTMLButtonElement = contextMenuContent.querySelector("#cm-validate-json");
 
 const contextMenuGeneric : HTMLDivElement = contextMenu.querySelector("#cm-generic");
 const contextMenuAddFiles : HTMLButtonElement = contextMenuGeneric.querySelector("#cm-add-files");
@@ -741,6 +742,24 @@ window.addEventListener("userready", async () =>
         const message : string = dom.getElementsByTagName("parsererror").length > 0
             ? dom.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML
             : Translation.Get("generic->no_errors_found");
+
+        genericMessage.Show(message);
+    });
+
+    contextMenuValidateJson.addEventListener("click", () =>
+    {
+        let message : string;
+
+        try
+        {
+            JSON.parse(editor.getValue());
+
+            message = Translation.Get("generic->no_errors_found");
+        }
+        catch (e)
+        {
+            message = e;
+        }
 
         genericMessage.Show(message);
     });
@@ -1761,6 +1780,8 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (!(<HTMLHeadingElement>showFile.querySelector(".name")).innerText.endsWith(".xml")) Utilities.HideElement(contextMenuValidateXml);
 
+    if (!(<HTMLHeadingElement>showFile.querySelector(".name")).innerText.endsWith(".json")) Utilities.HideElement(contextMenuValidateJson);
+
     Utilities.ShowElement(contextMenu);
 
     let top : number = e.pageY - scrollY;
@@ -2221,6 +2242,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                 if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
                 else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
                 else if (name.endsWith(".xml")) Utilities.ShowElement(contextMenuValidateXml);
+                else if (name.endsWith(".json")) Utilities.ShowElement(contextMenuValidateJson);
             })).catch((err : any) => err);
     });
 }
