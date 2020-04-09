@@ -98,6 +98,7 @@ const contextMenuUnlockVault : HTMLButtonElement = contextMenuVault.querySelecto
 
 const contextMenuTools : HTMLDivElement = contextMenu.querySelector("#cm-tools");
 const contextMenuChangeBackground : HTMLButtonElement = contextMenuTools.querySelector("#cm-change-background");
+const contextMenuResetBackground : HTMLButtonElement = contextMenuTools.querySelector("#cm-reset-background");
 
 let contextMenuItem : HTMLElement;
 let contextMenuItems : HTMLElement[];
@@ -824,6 +825,9 @@ window.addEventListener("userready", async () =>
         modal.Show(true);
     });
 
+    contextMenuResetBackground.addEventListener("click", () =>
+        db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: "" }, { merge: true }));
+
     navigationBackButton.addEventListener("click", async () =>
     {
         Utilities.HideElement(emptyFolder);
@@ -1149,7 +1153,17 @@ window.addEventListener("userready", async () =>
     {
         const backgroundImageUrl = user.data().backgroundImageUrl;
 
-        if (backgroundImageUrl) document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
+        if (backgroundImageUrl)
+        {
+            document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
+
+            Utilities.ShowElements([ contextMenuChangeBackground, contextMenuResetBackground ]);
+        }
+        else
+        {
+            Utilities.ShowElement(contextMenuChangeBackground);
+            Utilities.HideElement(contextMenuResetBackground);
+        }
     });
 });
 

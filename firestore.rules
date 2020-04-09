@@ -23,8 +23,9 @@ service cloud.firestore {
         allow write: if incomingData().size() == 1 &&
         incomingData().backgroundImageUrl is string &&
         incomingData().backgroundImageUrl != null &&
+        incomingData().backgroundImageUrl == incomingData().backgroundImageUrl.trim() &&
         incomingData().backgroundImageUrl.size() <= 1024 &&
-        incomingData().backgroundImageUrl.matches("https://.+[.].{2,}/.*");
+        (incomingData().backgroundImageUrl.matches("https://.+[.].{2,}/.*") || incomingData().backgroundImageUrl == "");
       }
 
       match /folders/{folderId} {

@@ -27,6 +27,7 @@ export const it_IT = {
         validate_xml: "Valida XML",
         validate_json: "Valida JSON",
         change_background: "Cambia sfondo",
+        reset_background: "Sfondo predefinito",
         image_address: "Indirizzo dell'immagine",
         context_menu: {
             move: {
