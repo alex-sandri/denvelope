@@ -1161,6 +1161,8 @@ window.addEventListener("userready", async () =>
         }
         else
         {
+            document.body.style.backgroundImage = "";
+
             Utilities.ShowElement(contextMenuChangeBackground);
             Utilities.HideElement(contextMenuResetBackground);
         }
