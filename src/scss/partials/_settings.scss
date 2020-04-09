@@ -22,8 +22,6 @@
             padding: $standard-spacing;
             border: $border-width solid $secondary-color;
             border-radius: $border-radius;
-            transition: $transition-time;
-            cursor: pointer;
 
             h2
             {
@@ -38,7 +36,6 @@
                 p
                 {
                     margin: 0;
-                    margin-right: $standard-spacing;
                 }
             
                 button:not(.delete-account-button),
@@ -48,16 +45,17 @@
         
                     text-decoration: underline;
                 }
+
+                & > :not(:first-child)
+                {
+                    margin-left: $standard-spacing;
+                }
             }
         
-            #language-select
+            #language-select,
+            &#change-background .reset
             {
                 display: none;
-            }
-        
-            &:hover
-            {
-                box-shadow: 0 0 0 5px $secondary-color;
             }
         
             &:not(:last-child)

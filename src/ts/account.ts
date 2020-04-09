@@ -97,8 +97,6 @@ const contextMenuLockVault : HTMLButtonElement = contextMenuVault.querySelector(
 const contextMenuUnlockVault : HTMLButtonElement = contextMenuVault.querySelector("#cm-unlock");
 
 const contextMenuTools : HTMLDivElement = contextMenu.querySelector("#cm-tools");
-const contextMenuChangeBackground : HTMLButtonElement = contextMenuTools.querySelector("#cm-change-background");
-const contextMenuResetBackground : HTMLButtonElement = contextMenuTools.querySelector("#cm-reset-background");
 
 let contextMenuItem : HTMLElement;
 let contextMenuItems : HTMLElement[];
@@ -769,65 +767,6 @@ window.addEventListener("userready", async () =>
 
     contextMenuLockVault.addEventListener("click", () => lockVaultButton.click());
 
-    contextMenuChangeBackground.addEventListener("click", () =>
-    {
-        const modal = new Modal({ title: Translation.Get("account->change_background"), allow: [ "close", "confirm" ] });
-
-        const backgroundImageUrlInput = new InputWithIcon({
-            attributes: {
-                id: "background-image-url",
-                placeholder: Translation.Get("account->image_address"),
-                type: "url"
-            },
-            iconClassName: "fas fa-link fa-fw"
-        }).element;
-
-        modal.AppendContent([ backgroundImageUrlInput ]);
-
-        const input = backgroundImageUrlInput.querySelector("input");
-
-        modal.OnConfirm = () =>
-        {
-            let error : string;
-            let url : URL;
-
-            if (Utilities.HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
-
-            Utilities.RemoveClass(input, "error");
-
-            try
-            {
-                url = new URL(input.value);
-
-                if (url.protocol !== "https:") error = Translation.Get("errors->url_must_be_https");
-            }
-            catch (err)
-            {
-                error = Translation.Get("errors->invalid_url");
-            }
-
-            if (error)
-            {
-                Utilities.AddClass(input, "error");
-
-                backgroundImageUrlInput.insertAdjacentElement("beforebegin", new Component("p", { class: "input-error", innerText: error }).element);
-
-                return;
-            }
-
-            modal.HideAndRemove();
-
-            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: url.href }, { merge: true });
-        }
-
-        input.focus();
-
-        modal.Show(true);
-    });
-
-    contextMenuResetBackground.addEventListener("click", () =>
-        db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: "" }, { merge: true }));
-
     navigationBackButton.addEventListener("click", async () =>
     {
         Utilities.HideElement(emptyFolder);
@@ -1153,20 +1092,8 @@ window.addEventListener("userready", async () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((user : any) =>
         {
             const backgroundImageUrl = user.data().backgroundImageUrl;
-
-            if (backgroundImageUrl)
-            {
-                document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
-
-                Utilities.ShowElements([ contextMenuChangeBackground, contextMenuResetBackground ]);
-            }
-            else
-            {
-                document.body.style.backgroundImage = "";
-
-                Utilities.ShowElement(contextMenuChangeBackground);
-                Utilities.HideElement(contextMenuResetBackground);
-            }
+            
+            document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
         });
 });
 

@@ -27,7 +27,6 @@ export const en_US = {
         validate_xml: "Validate XML",
         validate_json: "Validate JSON",
         change_background: "Change background",
-        reset_background: "Reset background",
         image_address: "Image address",
         context_menu: {
             move: {
@@ -157,6 +156,7 @@ export const en_US = {
         lock: "Lock",
         unlock: "Unlock",
         no_errors_found: "No errors found",
+        reset: "Reset",
     },
     header: {
         storage: {
