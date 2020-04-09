@@ -74,7 +74,7 @@ window.addEventListener("userready", () =>
     changeLanguage.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: changeLanguage.closest(".setting").querySelector("h2").innerText,
+            title: changeLanguage.closest(".setting").querySelector("h1").innerText,
             allow: [ "close", "confirm" ]
         });
 
@@ -92,7 +92,7 @@ window.addEventListener("userready", () =>
 
     changeBackground.addEventListener("click", () =>
     {
-        const modal = new Modal({ title: changeBackground.closest(".setting").querySelector("h2").innerText, allow: [ "close", "confirm" ] });
+        const modal = new Modal({ title: changeBackground.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
 
         const backgroundImageUrlInput = new InputWithIcon({
             attributes: {
@@ -152,7 +152,7 @@ window.addEventListener("userready", () =>
     signOutFromAllDevices.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: signOutFromAllDevices.closest(".setting").querySelector("h2").innerText,
+            title: signOutFromAllDevices.closest(".setting").querySelector("h1").innerText,
             allow: [ "close", "confirm" ],
             loading: false
         });
@@ -173,7 +173,7 @@ window.addEventListener("userready", () =>
     deleteAccount.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: deleteAccount.closest(".setting").querySelector("h2").innerText,
+            title: deleteAccount.closest(".setting").querySelector("h1").innerText,
             allow: [ "close", "confirm" ],
             loading: false
         });
