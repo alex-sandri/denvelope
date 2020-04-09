@@ -5,7 +5,7 @@ const content : HTMLDivElement = genericMessage.querySelector("p");
 const actionButton : HTMLButtonElement = genericMessage.querySelector(".action");
 const dismiss : HTMLButtonElement = genericMessage.querySelector(".dismiss");
 
-let timeout : number;
+let timeout : NodeJS.Timeout;
 
 export const Show = (message : string, actionButtonText ?: string, duration : number = 2000) : Promise<void> => new Promise((resolve, reject) =>
 {
