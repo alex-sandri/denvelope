@@ -9,12 +9,6 @@
         margin: $standard-spacing 0;
         display: none;
 
-        & > h1
-        {
-            font-size: 35px;
-            margin: $standard-spacing 0;
-        }
-
         .setting
         {
             @include flex($justify-content: space-between, $flex-wrap: wrap);
