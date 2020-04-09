@@ -11,38 +11,38 @@
 
         .setting
         {
-            @include flex($justify-content: space-between, $flex-wrap: wrap);
-            
-            padding: $standard-spacing;
-            border: $border-width solid $secondary-color;
-            border-radius: $border-radius;
-
-            h2
+            h1
             {
                 margin: 0;
-                font-weight: $light;
+                font-weight: $bold;
+                font-size: xx-large;
             }
         
             & > div
             {
-                @include flex;
-                    
                 p
                 {
-                    margin: 0;
+                    margin-bottom: 0;
                 }
             
                 button:not(.delete-account-button),
                 a
                 {
-                    @include button($bg-color: transparent, $has-padding: false, $has-border: false, $hover-effect: no-text-decoration);
-        
-                    text-decoration: underline;
+                    @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color);
+
+                    width: 100%;
                 }
 
-                & > :not(:first-child)
+                a
                 {
-                    margin-left: $standard-spacing;
+                    display: block;
+                    text-align: center;
+                    text-decoration: none;
+                }
+
+                & > *
+                {
+                    margin-top: $standard-spacing;
                 }
             }
         
@@ -60,11 +60,9 @@
 
         @at-root .delete-account-button
         {
-            @include button($bg-color: #fa4b4b, $color: white, $border-color: #fa4b4b, $hover-effect: underline);
-        
-            text-decoration: none;
-            padding-top: 0;
-            padding-bottom: 0;
+            @include button($bg-color: #fa4b4b, $color: white, $border-color: #fa4b4b);
+
+            width: 100%;
         }
 
         @at-root #language-select
