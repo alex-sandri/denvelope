@@ -17,7 +17,7 @@
 
         .setting
         {
-            @include flex($justify-content: space-between);
+            @include flex($justify-content: space-between, $flex-wrap: wrap);
             
             padding: $standard-spacing;
             border: $border-width solid $secondary-color;
