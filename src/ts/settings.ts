@@ -9,6 +9,7 @@ import { Translation } from './scripts/Translation';
 
 loadEvents.Init();
 
+const db = (<any>window).firebase.firestore();
 const functions = (<any>window).firebase.app().functions("europe-west1");
 
 const settingsMenu = document.querySelector(".settings-menu");
@@ -141,6 +142,17 @@ deleteAccountSetting.addEventListener("click", () =>
 
     if (!anchor.contains(<HTMLElement>e.target)) anchor.click();
 }));
+
+window.addEventListener("userready", () =>
+{
+    if (Auth.IsAuthenticated)
+        db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((user : any) =>
+        {
+            const backgroundImageUrl = user.data().backgroundImageUrl;
+            
+            document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
+        });
+});
 
 window.addEventListener("popstate", () =>
 {

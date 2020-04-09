@@ -1149,24 +1149,25 @@ window.addEventListener("userready", async () =>
 
     GetUserContent();
 
-    db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((user : any) =>
-    {
-        const backgroundImageUrl = user.data().backgroundImageUrl;
-
-        if (backgroundImageUrl)
+    if (Auth.IsAuthenticated)
+        db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((user : any) =>
         {
-            document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
+            const backgroundImageUrl = user.data().backgroundImageUrl;
 
-            Utilities.ShowElements([ contextMenuChangeBackground, contextMenuResetBackground ]);
-        }
-        else
-        {
-            document.body.style.backgroundImage = "";
+            if (backgroundImageUrl)
+            {
+                document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
 
-            Utilities.ShowElement(contextMenuChangeBackground);
-            Utilities.HideElement(contextMenuResetBackground);
-        }
-    });
+                Utilities.ShowElements([ contextMenuChangeBackground, contextMenuResetBackground ]);
+            }
+            else
+            {
+                document.body.style.backgroundImage = "";
+
+                Utilities.ShowElement(contextMenuChangeBackground);
+                Utilities.HideElement(contextMenuResetBackground);
+            }
+        });
 });
 
 window.addEventListener("resize", () => HideContextMenu());

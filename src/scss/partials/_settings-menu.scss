@@ -2,15 +2,12 @@
 {
     @include flex($justify-content: unset);
 
-    width: calc(100% - #{$standard-spacing * 2});
-    margin: $standard-spacing;
-    margin-top: 0;
     overflow: auto;
 
     button
     {
         @include flex;
-        @include button;
+        @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color);
 
         flex: 1 1 0;
 

@@ -87,23 +87,19 @@ body
     &.account,
     &.settings
     {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
         header
         {
             position: unset;
+            backdrop-filter: unset;
         }
     }
 
     &.account
     {
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        
-        header
-        {
-            backdrop-filter: unset;
-        }
-
         .generic-message
         {
             bottom: $standard-spacing + $account-bottom-bar-height

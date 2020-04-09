@@ -1,85 +1,91 @@
-.settings-section
+.settings main
 {
-    width: calc(100% - #{$standard-spacing * 2});
-    margin: $standard-spacing;
-    display: none;
+    height: calc(100% - #{$header-height});
+    padding: 0 $standard-spacing;
+    background-color: rgba($primary-color, 0.5);
 
-    & > h1
+    .settings-section
     {
-        font-size: 35px;
         margin: $standard-spacing 0;
-    }
+        display: none;
 
-    .setting
-    {
-        @include flex($justify-content: space-between);
-        
-        padding: $standard-spacing;
-        border: $border-width solid $primary-color;
-        border-radius: $border-radius;
-        transition: $transition-time;
-        cursor: pointer;
-
-        h2
+        & > h1
         {
-            margin: 0;
-            font-weight: $light;
+            font-size: 35px;
+            margin: $standard-spacing 0;
         }
-    
-        & > div
+
+        .setting
         {
-            @include flex;
-                
-            p
+            @include flex($justify-content: space-between);
+            
+            padding: $standard-spacing;
+            border: $border-width solid $secondary-color;
+            border-radius: $border-radius;
+            transition: $transition-time;
+            cursor: pointer;
+
+            h2
             {
                 margin: 0;
-                margin-right: $standard-spacing;
+                font-weight: $light;
             }
         
-            button:not(.delete-account-button),
-            a
+            & > div
             {
-                @include button($has-padding: false, $has-border: false, $hover-effect: no-text-decoration);
-    
-                text-decoration: underline;
+                @include flex;
+                    
+                p
+                {
+                    margin: 0;
+                    margin-right: $standard-spacing;
+                }
+            
+                button:not(.delete-account-button),
+                a
+                {
+                    @include button($bg-color: transparent, $has-padding: false, $has-border: false, $hover-effect: no-text-decoration);
+        
+                    text-decoration: underline;
+                }
+            }
+        
+            #language-select
+            {
+                display: none;
+            }
+        
+            &:hover
+            {
+                box-shadow: 0 0 0 5px $secondary-color;
+            }
+        
+            &:not(:last-child)
+            {
+                margin-bottom: $standard-spacing;
             }
         }
-    
-        #language-select
+
+        @at-root .delete-account-button
         {
-            display: none;
+            @include button($bg-color: #fa4b4b, $color: white, $border-color: #fa4b4b, $hover-effect: underline);
+        
+            text-decoration: none;
+            padding-top: 0;
+            padding-bottom: 0;
         }
-    
-        &:hover
+
+        @at-root #language-select
         {
-            border-color: $secondary-color;
-        }
-    
-        &:not(:last-child)
-        {
+            @include select($border-color: $primary-color);
+
+            width: 100%;
             margin-bottom: $standard-spacing;
         }
-    }
 
-    @at-root .delete-account-button
-    {
-        @include button($bg-color: #fa4b4b, $color: white, $border-color: #fa4b4b, $hover-effect: underline);
-    
-        text-decoration: none;
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-
-    @at-root #language-select
-    {
-        @include select($border-color: $primary-color);
-
-        width: 100%;
-        margin-bottom: $standard-spacing;
-    }
-
-    &.selected
-    {
-        display: block;
+        &.selected
+        {
+            display: block;
+        }
     }
 }

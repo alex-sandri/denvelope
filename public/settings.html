@@ -22,7 +22,7 @@
     <link rel="icon" type="image/png" sizes="194x194" href="favicon-194x194.png">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#160c28">
-    <link rel="stylesheet" href="assets/css/bundle.b73bedff677844f7293096ea72cd929c.css">
+    <link rel="stylesheet" href="assets/css/bundle.0aa4cb1cd815ee3d21ab7c08ef74cf87.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css">    <title data-only-translation="generic->settings"></title>
 </head>
@@ -91,56 +91,58 @@
             </div>
             <a href="accessibility" target="_blank" class="accessibility" data-translation="generic->accessibility"></a>
         </div>
-    </div>    <div class="settings-menu">
-        <button data-sect="general" data-translation="settings->general->title">
-            <i class="fas fa-cog"></i>
-        </button>
-        <button data-sect="security" data-translation="settings->security->title">
-            <i class="fas fa-shield-alt"></i>
-        </button>
-        <button data-sect="advanced" data-translation="settings->advanced->title">
-            <i class="fas fa-sliders-h"></i>
-        </button>
-        <button data-sect="info" data-translation="settings->info->title">
-            <i class="fas fa-info-circle"></i>
-        </button>
-    </div>
-    <section class="settings-section " id="general">
-        <div class="setting" id="language-setting">
-            <h2 data-translation="generic->language"></h2>
-            <div>
-                <p></p>
-                <button data-translation="generic->edit"></button>
+    </div>    <main>
+        <div class="settings-menu">
+            <button data-sect="general" data-translation="settings->general->title">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button data-sect="security" data-translation="settings->security->title">
+                <i class="fas fa-shield-alt"></i>
+            </button>
+            <button data-sect="advanced" data-translation="settings->advanced->title">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+            <button data-sect="info" data-translation="settings->info->title">
+                <i class="fas fa-info-circle"></i>
+            </button>
+        </div>
+        <section class="settings-section " id="general">
+            <div class="setting" id="language-setting">
+                <h2 data-translation="generic->language"></h2>
+                <div>
+                    <p></p>
+                    <button data-translation="generic->edit"></button>
+                </div>
+                <select name="language" id="language-select">
+                    <option value="0" data-language="en-US">English (United States)</option>
+                    <option value="1" data-language="it-IT">Italiano</option>
+                </select>
             </div>
-            <select name="language" id="language-select">
-                <option value="0" data-language="en-US">English (United States)</option>
-                <option value="1" data-language="it-IT">Italiano</option>
-            </select>
-        </div>
-    </section>    <section class="settings-section " id="security">
-        <div class="setting" id="sign-out-from-all-setting">
-            <h2 data-translation="settings->security->sign_out_from_all_devices"></h2>
-            <div><button data-translation="generic->sign_out"></button></div>
-        </div>
-    </section>    <section class="settings-section " id="advanced">
-        <div class="setting" id="delete-account-setting">
-            <h2 data-translation="settings->advanced->delete_account"></h2>
-            <div><button class="delete delete-account-button" data-translation="generic->delete"></button></div>
-        </div>
-    </section>    <section class="settings-section " id="info">
-        <div class="setting" id="tos-setting">
-            <h2 data-translation="generic->terms_of_service"></h2>
-            <div><a href="terms" target="_blank" data-translation="generic->view"></a></div>
-        </div>
-        <div class="setting" id="pp-setting">
-            <h2 data-translation="generic->privacy_policy"></h2>
-            <div><a href="privacy" target="_blank" data-translation="generic->view"></a></div>
-        </div>
-        <div class="setting" id="cp-setting">
-            <h2 data-translation="generic->cookie_policy"></h2>
-            <div><a href="cookie" target="_blank" data-translation="generic->view"></a></div>
-        </div>
-    </section>    <script src="/__/firebase/7.13.2/firebase-app.js"></script>
+        </section>        <section class="settings-section " id="security">
+            <div class="setting" id="sign-out-from-all-setting">
+                <h2 data-translation="settings->security->sign_out_from_all_devices"></h2>
+                <div><button data-translation="generic->sign_out"></button></div>
+            </div>
+        </section>        <section class="settings-section " id="advanced">
+            <div class="setting" id="delete-account-setting">
+                <h2 data-translation="settings->advanced->delete_account"></h2>
+                <div><button class="delete delete-account-button" data-translation="generic->delete"></button></div>
+            </div>
+        </section>        <section class="settings-section " id="info">
+            <div class="setting" id="tos-setting">
+                <h2 data-translation="generic->terms_of_service"></h2>
+                <div><a href="terms" target="_blank" data-translation="generic->view"></a></div>
+            </div>
+            <div class="setting" id="pp-setting">
+                <h2 data-translation="generic->privacy_policy"></h2>
+                <div><a href="privacy" target="_blank" data-translation="generic->view"></a></div>
+            </div>
+            <div class="setting" id="cp-setting">
+                <h2 data-translation="generic->cookie_policy"></h2>
+                <div><a href="cookie" target="_blank" data-translation="generic->view"></a></div>
+            </div>
+        </section>    </main>
+    <script src="/__/firebase/7.13.2/firebase-app.js"></script>
     <script src="/__/firebase/7.13.2/firebase-auth.js"></script>
     <script src="/__/firebase/7.13.2/firebase-firestore.js"></script>
     <script src="/__/firebase/7.13.2/firebase-functions.js"></script>
@@ -152,6 +154,6 @@
         const perf = firebase.performance();
     
         analytics.setAnalyticsCollectionEnabled(!navigator.doNotTrack);
-    </script>    <script type="module" src="assets/js/settings.3b5039d8805b6bfe9c0b.js"></script>
+    </script>    <script type="module" src="assets/js/settings.c276bdce2f293af8ce84.js"></script>
 </body>
 </html>
