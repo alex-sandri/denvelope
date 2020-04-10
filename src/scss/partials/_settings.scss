@@ -25,7 +25,7 @@
                     margin-bottom: 0;
                 }
             
-                button:not(.delete-account-button),
+                button,
                 a
                 {
                     @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color);
@@ -38,6 +38,17 @@
                     display: block;
                     text-align: center;
                     text-decoration: none;
+                }
+
+                .delete-account-button:not(.blocked):not(:disabled)
+                {
+                    &:focus,
+                    &:hover
+                    {
+                        color: white;
+                        background-color: red;
+                        border-color: red;
+                    }
                 }
 
                 & > *
@@ -56,13 +67,6 @@
             {
                 margin-bottom: $standard-spacing;
             }
-        }
-
-        @at-root .delete-account-button
-        {
-            @include button($bg-color: #fa4b4b, $color: white, $border-color: #fa4b4b);
-
-            width: 100%;
         }
 
         @at-root #language-select
