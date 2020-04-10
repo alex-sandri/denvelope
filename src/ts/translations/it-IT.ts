@@ -128,6 +128,7 @@ export const it_IT = {
         email: "Email",
         password: "Password",
         language: "Lingua",
+        current: "Attuale",
         confirm: "Conferma",
         update: "Aggiorna",
         terms_of_service: "Termini di Servizio",
