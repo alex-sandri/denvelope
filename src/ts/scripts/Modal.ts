@@ -106,22 +106,22 @@ export class Modal
 
     public set Title (title : string)
     {
-        const titleElement = document.createElement("h1");
+        const titleElement = this.element.querySelector(".title") || document.createElement("h1");
 
         titleElement.className = "title";
         titleElement.innerHTML = title;
 
-        this.Content.querySelector(".heading").insertAdjacentElement("afterbegin", titleElement);
+        this.element.querySelector(".heading").insertAdjacentElement("afterbegin", titleElement);
     }
 
     public set Subtitle (subtitle : string)
     {
-        const subtitleElement = document.createElement("h4");
+        const subtitleElement = this.element.querySelector(".subtitle") || document.createElement("h4");
 
         subtitleElement.className = "subtitle";
         subtitleElement.innerHTML = subtitle;
 
-        this.Content.querySelector(".heading").insertAdjacentElement("beforeend", subtitleElement);
+        this.element.querySelector(".heading").insertAdjacentElement("beforeend", subtitleElement);
     }
 
     public AppendContent = (data : any[]) : void =>
@@ -144,7 +144,7 @@ export class Modal
     {
         Utilities.ShowElement(this.spinner, "block");
 
-        this.Content.childNodes.forEach(child => !Utilities.HasClass(<HTMLElement>child, "heading") ? child.remove() : null);
+        this.Content.innerHTML = "";
     }
 
     private HideOnOuterClick = (e : Event) : void =>
