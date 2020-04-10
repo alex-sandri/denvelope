@@ -18,15 +18,15 @@ const settingsMenuButtons = settingsMenu.querySelectorAll("button");
 
 const settingsSections : NodeListOf<HTMLElement> = document.querySelectorAll(".settings-section");
 
-const changeLanguage : HTMLDivElement = document.querySelector("#change-language .edit");
+const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
 const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
 
-const changeBackground : HTMLDivElement = document.querySelector("#change-background .edit");
-const resetBackground : HTMLDivElement = document.querySelector("#change-background .reset");
+const changeBackground : HTMLButtonElement = document.querySelector("#change-background .edit");
+const resetBackground : HTMLButtonElement = document.querySelector("#change-background .reset");
 
-const signOutFromAllDevices : HTMLDivElement = document.querySelector("#sign-out-from-all-devices .sign-out");
+const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 
-const deleteAccount : HTMLDivElement = document.querySelector("#delete-account .delete");
+const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
 languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[data-language=${Utilities.GetCookie("lang") ?? navigator.language}]`)).value;
 
@@ -193,18 +193,9 @@ window.addEventListener("userready", () =>
         {
             const backgroundImageUrl = user.data().backgroundImageUrl;
 
-            if (backgroundImageUrl)
-            {
-                document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
+            document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
 
-                Utilities.ShowElement(resetBackground);
-            }
-            else
-            {
-                document.body.style.backgroundImage = "";
-
-                Utilities.HideElement(resetBackground);
-            }
+            resetBackground.disabled = backgroundImageUrl;
         });
 });
 
