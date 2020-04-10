@@ -26,7 +26,6 @@ export const en_US = {
         display_pdf: "Display PDF",
         validate_xml: "Validate XML",
         validate_json: "Validate JSON",
-        change_background: "Change background",
         image_address: "Image address",
         context_menu: {
             move: {
@@ -204,6 +203,7 @@ export const en_US = {
     settings: {
         general: {
             title: "General",
+            background: "Background",
         },
         security: {
             title: "Security",

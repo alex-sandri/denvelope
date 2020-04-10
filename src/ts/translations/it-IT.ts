@@ -26,7 +26,6 @@ export const it_IT = {
         display_pdf: "Mostra PDF",
         validate_xml: "Valida XML",
         validate_json: "Valida JSON",
-        change_background: "Cambia sfondo",
         image_address: "Indirizzo dell'immagine",
         context_menu: {
             move: {
@@ -204,6 +203,7 @@ export const it_IT = {
     settings: {
         general: {
             title: "Generali",
+            background: "Sfondo",
         },
         security: {
             title: "Sicurezza",
