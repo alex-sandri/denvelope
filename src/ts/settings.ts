@@ -195,7 +195,7 @@ window.addEventListener("userready", () =>
 
             document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
 
-            resetBackground.disabled = backgroundImageUrl;
+            resetBackground.disabled = !backgroundImageUrl;
         });
 });
 
