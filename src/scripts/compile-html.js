@@ -17,11 +17,6 @@ handlebars.registerPartial("modal", handlebars.compile(fs.readFileSync(path.join
 handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/security.hbs")).toString("utf-8")));
 handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/spinner.hbs")).toString("utf-8")));
 
-handlebars.registerHelper("ifStringEquals", function (a, b, options)
-{
-    return a === b ? options.fn(this) : options.inverse(this);
-});
-
 const CssFileName = glob.sync("../../public/assets/css/bundle.*.css")[0].split("/").pop();
 
 const homeJsFileName = glob.sync("../../public/assets/js/home.*.js")[0].split("/").pop();
