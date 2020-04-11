@@ -216,6 +216,8 @@ window.addEventListener("userready", async () =>
         GetUserContent();
 
         UpdateBottomSectionBar(viewTrashedContent);
+
+        emptyTrashButton.disabled = true;
     });
 
     searchBar.addEventListener("input", () => GetUserContent(searchBar.value));
