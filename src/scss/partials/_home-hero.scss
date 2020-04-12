@@ -3,7 +3,7 @@
     @include flex($align-items: unset, $justify-content: center, $flex-direction: column);
 
     margin: $standard-spacing;
-    min-height: calc(100vh - #{$standard-spacing + $header-height});
+    min-height: calc(100% - #{$standard-spacing + $header-height});
     margin-top: #{$header-height};
 
     .text

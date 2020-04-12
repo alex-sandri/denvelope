@@ -106,7 +106,7 @@ body
         }
     }
 
-    &:not(.account):not(.settings)
+    &:not(.home-page):not(.account):not(.settings)
     {
         height: unset;
     }
