@@ -67,7 +67,12 @@ body
     -moz-user-select: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: contain;
-    height: 100vh;
+    height: 100%;
+
+    .app
+    {
+        height: 100%;
+    }
 
     &.preload *
     {
@@ -77,11 +82,6 @@ body
     &.no-overflow
     {
         overflow: hidden;
-    }
-
-    &.home-page .no-home-page
-    {
-        display: none;
     }
 
     &.account,

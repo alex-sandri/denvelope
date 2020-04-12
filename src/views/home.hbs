@@ -9,57 +9,59 @@
     <title>Denvelope</title>
 </head>
 <body class="preload home-page">
-    {{> header logoRedirectPath=logoRedirectPath}}
-    <div class="home-hero">
-        <img src="assets/img/miscellaneous/web-developer.svg" alt="">
-        <div class="text">
-            <h1 data-translation="home->hero->heading"></h1>
-            <h2 data-translation="home->hero->subheading"></h2>
+    <div class="app">
+        {{> header logoRedirectPath=logoRedirectPath}}
+        <div class="home-hero">
+            <img src="assets/img/miscellaneous/web-developer.svg" alt="">
+            <div class="text">
+                <h1 data-translation="home->hero->heading"></h1>
+                <h2 data-translation="home->hero->subheading"></h2>
+            </div>
+            <button class="sign-in logged-out" data-translation="generic->sign_in"></button>
         </div>
-        <button class="sign-in logged-out" data-translation="generic->sign_in"></button>
+        <section class="home-features">
+            {{#if false}}
+            <div class="home-feature-container">
+                <img src="assets/img/miscellaneous/open-source.svg" alt="" loading="lazy">
+                <div>
+                    <h1 data-translation="home->feature_section->open_source->title"></h1>
+                    <p data-translation="home->feature_section->open_source->description"></p>
+                    <a class="github-link" href="https://github.com/alex-sandri/denvelope" target="_blank"><i class="fas fa-external-link-alt"></i> GitHub (coming soon)</a>
+                    {{> buymeacoffee}}
+                </div>
+            </div>
+            {{/if}}
+            <div class="home-feature-container">
+                <img src="assets/img/miscellaneous/file-sync.svg" alt="" loading="lazy">
+                <div>
+                    <h1 data-translation="home->feature_section->store->title"></h1>
+                    <p data-translation="home->feature_section->store->description"></p>
+                </div>
+            </div>
+            <div class="home-feature-container">
+                <img src="assets/img/miscellaneous/source-code.svg" alt="" loading="lazy">
+                <div>
+                    <h1 data-translation="home->feature_section->view_edit->title"></h1>
+                    <p data-translation="home->feature_section->view_edit->description"></p>
+                </div>
+            </div>
+            <div class="home-feature-container">
+                <img src="assets/img/miscellaneous/share.svg" alt="" loading="lazy">
+                <div>
+                    <h1 data-translation="home->feature_section->share->title"></h1>
+                    <p data-translation="home->feature_section->share->description"></p>
+                </div>
+            </div>
+            <div class="home-feature-container">
+                <img src="assets/img/miscellaneous/vault.svg?v=2" alt="" loading="lazy">
+                <div>
+                    <h1 data-translation="home->feature_section->vault->title"></h1>
+                    <p data-translation="home->feature_section->vault->description"></p>
+                </div>
+            </div>
+        </section>
+        {{> footer year=year}}
     </div>
-    <section class="home-features">
-        {{#if false}}
-        <div class="home-feature-container">
-            <img src="assets/img/miscellaneous/open-source.svg" alt="" loading="lazy">
-            <div>
-                <h1 data-translation="home->feature_section->open_source->title"></h1>
-                <p data-translation="home->feature_section->open_source->description"></p>
-                <a class="github-link" href="https://github.com/alex-sandri/denvelope" target="_blank"><i class="fas fa-external-link-alt"></i> GitHub (coming soon)</a>
-                {{> buymeacoffee}}
-            </div>
-        </div>
-        {{/if}}
-        <div class="home-feature-container">
-            <img src="assets/img/miscellaneous/file-sync.svg" alt="" loading="lazy">
-            <div>
-                <h1 data-translation="home->feature_section->store->title"></h1>
-                <p data-translation="home->feature_section->store->description"></p>
-            </div>
-        </div>
-        <div class="home-feature-container">
-            <img src="assets/img/miscellaneous/source-code.svg" alt="" loading="lazy">
-            <div>
-                <h1 data-translation="home->feature_section->view_edit->title"></h1>
-                <p data-translation="home->feature_section->view_edit->description"></p>
-            </div>
-        </div>
-        <div class="home-feature-container">
-            <img src="assets/img/miscellaneous/share.svg" alt="" loading="lazy">
-            <div>
-                <h1 data-translation="home->feature_section->share->title"></h1>
-                <p data-translation="home->feature_section->share->description"></p>
-            </div>
-        </div>
-        <div class="home-feature-container">
-            <img src="assets/img/miscellaneous/vault.svg?v=2" alt="" loading="lazy">
-            <div>
-                <h1 data-translation="home->feature_section->vault->title"></h1>
-                <p data-translation="home->feature_section->vault->description"></p>
-            </div>
-        </div>
-    </section>
-    {{> footer year=year}}
     {{> firebase auth=true firestore=true}}
     <script type="module" src="assets/js/{{jsversion}}"></script>
 </body>
