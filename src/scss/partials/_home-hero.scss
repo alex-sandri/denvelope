@@ -44,19 +44,4 @@
     {
         @include button($bg-color: $secondary-color, $color: $primary-color);
     }
-
-    .firebaseui-auth-container
-    {
-        @include flex($flex-direction: column);
-
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 999;
-        backdrop-filter: blur(20px);
-        padding: $standard-spacing;
-        display: none;
-    }
 }

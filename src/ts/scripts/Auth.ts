@@ -93,8 +93,9 @@ export class Auth
                 (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/settings") > -1)) location.href = "/";
             else
             {
-                if (!Utilities.IsSet(document.querySelector(".firebaseui-auth-container"))) Auth.ShowSignInModal();
-                else Auth.LoadFirebaseUi();
+                Auth.LoadFirebaseUi();
+
+                if (location.pathname !== "/") Utilities.ShowElement(document.querySelector(".firebaseui-auth-container"), "flex");
             }
         }
 
@@ -110,21 +111,6 @@ export class Auth
         }
 
         Utilities.DispatchEvent("userready");
-    }
-
-    private static ShowSignInModal = () =>
-    {
-        const modal = new Modal({ allow: [ "close" ] });
-
-        modal.AppendContent([
-            new Component("div", {
-                class: "firebaseui-auth-container"
-            }).element
-        ]);
-
-        Auth.LoadFirebaseUi();
-
-        modal.Show(true);
     }
 
     private static LoadFirebaseUi = () =>

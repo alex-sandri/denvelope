@@ -416,6 +416,18 @@
 
 .firebaseui-auth-container
 {
+    @include flex($flex-direction: column);
+
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    backdrop-filter: blur(20px);
+    padding: $standard-spacing;
+    display: none;
+
     .firebaseui-container
     {
         max-width: unset !important;
@@ -439,6 +451,8 @@
 
                     .firebaseui-list-item
                     {
+                        @include flex;
+
                         width: 100%;
                         margin-bottom: $standard-spacing;
 
@@ -448,7 +462,6 @@
                             //@include button($bg-color: unset, $color: unset, $hover-effect: none); maybe in the future
                             
                             border-radius: $border-radius;
-                            max-width: unset;
                         }
                     }
                 }
