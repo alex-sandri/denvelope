@@ -426,25 +426,14 @@
 
     .firebaseui-container
     {
-        max-width: unset !important;
-        background-color: unset;
-
         .firebaseui-card-content
         {
-            @include flex;
-            
-            padding: unset !important;
-
             form
             {
-                overflow: auto;
-                overflow-y: hidden;
-
                 .firebaseui-idp-list
                 {
-                    @include flex($flex-wrap: wrap);
-
                     margin: 0;
+                    padding: 0;
 
                     .firebaseui-list-item
                     {
