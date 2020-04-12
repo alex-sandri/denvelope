@@ -424,6 +424,7 @@
     top: 0;
     left: 0;
     z-index: 999;
+    background-color: rgba($primary-color, 0.8);
     backdrop-filter: blur(20px);
     padding: $standard-spacing;
     display: none;
@@ -431,6 +432,7 @@
     .firebaseui-container
     {
         max-width: unset !important;
+        background-color: unset;
 
         .firebaseui-card-content
         {
