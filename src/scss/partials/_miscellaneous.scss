@@ -79,7 +79,7 @@
         user-select: none;
     }
 
-    p:not(.input-error):not(.firebaseui-tos):not(.status)
+    p:not(.input-error):not(.status)
     {
         @include text-ellipsis-on-overflow;
 
@@ -110,7 +110,7 @@
 
     button
     {
-        &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.firebaseui-idp-button):not(.input-icon)
+        &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.input-icon)
         {
             @include button($bg-color: $secondary-color, $color: $primary-color, $border-color: $primary-color);
 
@@ -131,11 +131,6 @@
             display: none;
             width: 100%;
         }
-    }
-
-    .firebaseui-auth-container .firebaseui-container .firebaseui-tos
-    {
-        margin-top: 0;
     }
 
     &.show
