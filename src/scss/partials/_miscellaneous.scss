@@ -430,28 +430,29 @@
         {
             form
             {
+                @include flex($flex-direction: column);
+
                 .firebaseui-idp-list
                 {
                     margin: 0;
                     padding: 0;
+                    width: max-content;
 
                     .firebaseui-list-item
                     {
-                        @include flex;
-
+                        display: block;
                         width: 100%;
                         margin-bottom: $standard-spacing;
 
                         .firebaseui-idp-button
                         {
-                            @include flex;
+                            @include flex($justify-content: start);
                             @include button($bg-color: unset, $color: unset, $has-border: false, $hover-effect: none);
                             
                             border-radius: $border-radius;
                             color: #fff;
                             font-size: 15px;
                             width: 100%;
-                            max-width: 300px;
 
                             .firebaseui-idp-icon-wrapper
                             {
