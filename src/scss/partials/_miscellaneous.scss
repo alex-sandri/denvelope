@@ -456,9 +456,34 @@
                         .firebaseui-idp-button
                         {
                             @include flex;
-                            //@include button($bg-color: unset, $color: unset, $hover-effect: none); maybe in the future
+                            @include button($bg-color: unset, $color: unset, $has-border: false, $hover-effect: none);
                             
                             border-radius: $border-radius;
+                            color: #fff;
+                            font-size: 15px;
+                            width: 100%;
+                            max-width: 300px;
+
+                            .firebaseui-idp-icon-wrapper
+                            {
+                                @include flex;
+
+                                .firebaseui-idp-icon
+                                {
+                                    height: 18px;
+                                    margin-right: $standard-spacing;
+                                }
+                            }
+
+                            .firebaseui-idp-text-short
+                            {
+                                display: none;
+                            }
+
+                            &.firebaseui-idp-google > .firebaseui-idp-text
+                            {
+                                color: #757575;
+                            }
                         }
                     }
                 }
@@ -468,6 +493,20 @@
         .firebaseui-tos
         {
             margin: 0;
+            font-size: 12px;
+            color: #757575;
+            text-align: center;
+
+            a
+            {
+                color: #4285f4;
+                text-decoration: none;
+
+                &:hover
+                {
+                    text-decoration: underline;
+                }
+            }
         }
 
         &.firebaseui-id-page-callback
