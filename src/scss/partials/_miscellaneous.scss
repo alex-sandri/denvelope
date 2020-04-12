@@ -473,6 +473,11 @@
                             {
                                 color: #757575;
                             }
+
+                            &[data-provider-id="yahoo.com"] .firebaseui-idp-icon
+                            {
+                                transform: scale(1.5);
+                            }
                         }
                     }
                 }
