@@ -69,11 +69,6 @@ body
     overscroll-behavior: contain;
     height: 100%;
 
-    .app
-    {
-        height: 100%;
-    }
-
     &.preload *
     {
         transition: none !important;
@@ -108,7 +103,7 @@ body
 
     &:not(.home-page):not(.account):not(.settings)
     {
-        height: unset;
+        height: calc(100% - #{$header-height});
     }
 }
 

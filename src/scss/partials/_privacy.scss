@@ -6,7 +6,7 @@ main.accessibility
 {
     margin: $standard-spacing;
     margin-top: $header-height;
-    min-height: calc(100vh - #{$header-height + $standard-spacing});
+    min-height: calc(100% - #{$standard-spacing});
 
     h1
     {
