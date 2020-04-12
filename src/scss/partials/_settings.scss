@@ -6,7 +6,10 @@
 
     .settings-section
     {
-        margin: $standard-spacing 0;
+        height: calc(100% - 49px);
+        overflow: auto;
+        padding: $standard-spacing;
+        margin: 0 #{-$standard-spacing};
         display: none;
 
         .setting
