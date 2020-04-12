@@ -5,7 +5,6 @@ export const header : HTMLElement = document.querySelector("header");
 export const loggedInMenuToggle : HTMLButtonElement = header.querySelector(".menu-toggle button");
 export const loggedInNavMenu : HTMLDivElement = document.querySelector(".menu.logged-in");
 
-const signInButton : HTMLButtonElement = header.querySelector(".sign-in");
 export const signOutButton : HTMLButtonElement = loggedInNavMenu.querySelector(".sign-out");
 
 export const userPhoto : NodeListOf<HTMLImageElement> = document.querySelectorAll("[data-update-field=photo]");
@@ -20,7 +19,5 @@ document.addEventListener("click", e =>
 {
     if (!loggedInNavMenu.contains(<HTMLElement>e.target) && !loggedInMenuToggle.contains(<HTMLElement>e.target)) HideHeaderMenu();
 });
-
-signInButton.addEventListener("click", () => location.href = "/");
 
 document.addEventListener("contextmenu", HideHeaderMenu);

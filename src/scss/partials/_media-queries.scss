@@ -156,30 +156,6 @@
 
     .modal
     {
-        .firebaseui-auth-container .firebaseui-container
-        {
-            .firebaseui-card-content form .firebaseui-idp-list
-            {
-                width: unset;
-                flex-wrap: wrap;
-
-                .firebaseui-list-item
-                {
-                    width: 100%;
-
-                    .firebaseui-idp-button, .firebaseui-tenant-button
-                    {
-                        max-width: unset;
-                    }
-
-                    &:not(:first-child)
-                    {
-                        padding-left: 0;
-                    }
-                }
-            }
-        }
-
         &.aside
         {
             width: 65%;

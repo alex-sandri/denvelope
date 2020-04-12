@@ -157,6 +157,7 @@ export const en_US = {
         unlock: "Unlock",
         no_errors_found: "No errors found",
         reset: "Reset",
+        sign_in: "Sign In",
     },
     header: {
         storage: {

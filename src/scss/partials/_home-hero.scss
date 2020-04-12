@@ -39,4 +39,24 @@
         opacity: 0.3;
         margin: 0 auto;
     }
+
+    .sign-in
+    {
+        @include button($bg-color: $secondary-color, $color: $primary-color);
+    }
+
+    .firebaseui-auth-container
+    {
+        @include flex($flex-direction: column);
+
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        backdrop-filter: blur(20px);
+        padding: $standard-spacing;
+        display: none;
+    }
 }

@@ -433,34 +433,22 @@
 
                 .firebaseui-idp-list
                 {
-                    @include flex;
+                    @include flex($flex-wrap: wrap);
 
                     margin: 0;
-                    margin-top: $standard-spacing;
-                    width: max-content;
 
                     .firebaseui-list-item
                     {
-                        margin-bottom: 0;
+                        width: 100%;
+                        margin-bottom: $standard-spacing;
 
                         .firebaseui-idp-button
                         {
                             @include flex;
+                            //@include button($bg-color: unset, $color: unset, $hover-effect: none); maybe in the future
                             
                             border-radius: $border-radius;
-                        }
-
-                        &:not(:first-child)
-                        {
-                            padding-left: $standard-spacing;
-                        }
-                    }
-
-                    @at-root
-                    {
-                        .modal &
-                        {
-                            margin-top: 0;
+                            max-width: unset;
                         }
                     }
                 }
@@ -470,15 +458,6 @@
         .firebaseui-tos
         {
             margin: 0;
-            margin-top: $standard-spacing;
-
-            @at-root
-            {
-                .modal &
-                {
-                    margin-bottom: $standard-spacing;
-                }
-            }
         }
 
         &.firebaseui-id-page-callback

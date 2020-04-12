@@ -30,8 +30,9 @@ header
 
     .sign-in
     {
-        @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: none);
-        @include flex;
+        @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: underline);
+
+        font-size: 15px;
     }
 
     & + .menu

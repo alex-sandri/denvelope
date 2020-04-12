@@ -157,6 +157,7 @@ export const it_IT = {
         unlock: "Sblocca",
         no_errors_found: "Non sono stati trovati errori",
         reset: "Ripristina",
+        sign_in: "Accedi",
     },
     header: {
         storage: {
