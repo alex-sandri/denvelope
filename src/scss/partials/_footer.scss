@@ -1,7 +1,5 @@
 footer
 {
-    @include flex($justify-content: space-between);
-
     padding: $standard-spacing;
     background-color: $secondary-color;
 
@@ -9,20 +7,18 @@ footer
     {
         color: $primary-color;
         margin: 0;
-        margin-right: $standard-spacing;
-        white-space: nowrap;
     }
 
     .links
     {
-        @include flex($justify-content: space-evenly);
-
-        width: 100%;
+        @include flex($justify-content: space-evenly, $flex-wrap: wrap);
 
         a
         {
             text-decoration: none;
             color: $primary-color;
+            margin: $standard-spacing;
+            margin-bottom: 0;
 
             &:hover
             {

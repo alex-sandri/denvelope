@@ -72,22 +72,6 @@
             width: 45%;
         }
     }
-
-    footer
-    {
-        flex-direction: column;
-
-        .copyright
-        {
-            margin-right: 0;
-            margin-bottom: $standard-spacing;
-        }
-
-        .links
-        {
-            justify-content: space-between;
-        }
-    }
 }
 
 @media only all and (max-width: 800px)
@@ -161,33 +145,6 @@
             width: 65%;
         }
     }
-
-    footer
-    {
-        .links
-        {
-            flex-wrap: wrap;
-
-            a
-            {
-                width: 50%;
-                display: inline-block;
-
-                &:nth-child(2n)
-                {
-                    @include flex($flex-direction: row-reverse, $justify-content: unset);
-
-                    text-align: right;
-
-                    & > span::after
-                    {
-                        content: " ";
-                        white-space: pre;
-                    }
-                }
-            }
-        }
-    }
 }
 
 @media only all and (max-width: 500px)
@@ -236,14 +193,6 @@
             width: calc(100% - #{$standard-spacing * 2});
         }
     }
-
-    footer
-    {
-        .copyright
-        {
-            flex-wrap: wrap;
-        }
-    }
 }
 
 @media only all and (max-width: 300px)
@@ -260,27 +209,6 @@
             h2
             {
                 font-size: 20px;
-            }
-        }
-    }
-
-    footer
-    {
-        .links
-        {
-            a
-            {
-                width: calc(100% - #{$standard-spacing * 2});
-                text-align: center;
-                float: unset;
-                display: block;
-                margin: $standard-spacing;
-
-                &:nth-child(2n)
-                {
-                    display: block;
-                    text-align: center;
-                }
             }
         }
     }
