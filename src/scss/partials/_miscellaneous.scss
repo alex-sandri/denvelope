@@ -421,6 +421,7 @@
     z-index: 999;
     background-color: rgba($primary-color, 0.8);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: $standard-spacing;
     display: none;
 
@@ -509,6 +510,14 @@
             // Hide the white box after sign-in
             display: none;
         }
+    }
+}
+
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
+{
+    .firebaseui-auth-container
+    {
+        background-color: $primary-color;
     }
 }
 
