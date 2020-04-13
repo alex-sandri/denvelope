@@ -195,6 +195,17 @@
     }
 }
 
+@media only all and (max-width: 350px)
+{
+    header
+    {
+        .sign-in
+        {
+            display: none;
+        }
+    }
+}
+
 @media only all and (max-width: 300px)
 {
     .home-hero
