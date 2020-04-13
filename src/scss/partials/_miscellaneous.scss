@@ -425,6 +425,16 @@
     padding: $standard-spacing;
     display: none;
 
+    .close
+    {
+        @include flex;
+        @include button($has-border: false, $has-padding: false, $hover-effect: none);
+
+        position: absolute;
+        top: $standard-spacing;
+        right: $standard-spacing;
+    }
+
     .firebaseui-container
     {
         .firebaseui-card-content
