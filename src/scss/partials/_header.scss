@@ -47,8 +47,8 @@ header
         background-color: rgba($color: $primary-color, $alpha: 0.5);
         backdrop-filter: blur(20px);
         padding: $standard-spacing;
-        max-width: calc(100vw - #{$standard-spacing * 2});
-        max-height: calc(100vh - #{$header-height + $standard-spacing});
+        max-width: calc(100% - #{$standard-spacing * 2});
+        max-height: calc(100% - #{$header-height + $standard-spacing});
         overflow: auto;
         overflow-x: hidden;
         overscroll-behavior: contain;
