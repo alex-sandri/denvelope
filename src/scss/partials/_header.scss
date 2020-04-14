@@ -57,27 +57,20 @@ header
         .settings,
         button
         {
-            @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-color: $primary-color);
+            @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-bg-color: $secondary-color, $hover-color: $primary-color);
 
-            text-decoration: none;
-            text-align: center;
             width: 100%;
-            display: block;
-
-            &:focus,
-            &:hover
-            {
-                background-color: $secondary-color;
-                color: $primary-color;
-                text-decoration: none;
-            }
         }
 
         .account,
-        .settings
+        .settings,
+        .bmc-button
         {
             margin-bottom: $standard-spacing;
             border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            display: block;
         }
 
         hr
@@ -189,7 +182,8 @@ header
                     margin-left: #{$standard-spacing / 2};
                 }
 
-                &:hover
+                &:hover,
+                &:focus
                 {
                     text-decoration: underline;
                 }

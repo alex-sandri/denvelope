@@ -39,7 +39,8 @@
                 margin-bottom: $standard-spacing;
                 color: $primary-color;
 
-                &:hover
+                &:hover,
+                &:focus
                 {
                     text-decoration: none;
                 }
@@ -47,7 +48,7 @@
 
             .bmc-button
             {
-                width: 100%;
+                color: $primary-color;
                 box-shadow: 0 0 0 $border-width $primary-color;
 
                 &:hover,
