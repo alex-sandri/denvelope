@@ -44,7 +44,7 @@ header
         top: $header-height;
         right: $standard-spacing;
         z-index: 999;
-        background-color: rgba($color: $primary-color, $alpha: 0.5);
+        background-color: rgba($primary-color, 0.8);
         backdrop-filter: blur(20px);
         padding: $standard-spacing;
         max-width: calc(100% - #{$standard-spacing * 2});
