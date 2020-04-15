@@ -1,3 +1,15 @@
+.modal-container
+{
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    display: none;
+}
+
 .modal
 {
     position: fixed;

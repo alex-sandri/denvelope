@@ -4,9 +4,10 @@ import { Translation } from "./Translation";
 
 export class Modal
 {
-    public readonly element : HTMLDivElement = <HTMLDivElement>document.querySelector(".modal").cloneNode(true);
+    private readonly container : HTMLDivElement = <HTMLDivElement>document.querySelector(".modal-container").cloneNode(true);
+    public readonly element : HTMLDivElement = this.container.querySelector(".modal");
 
-    private spinner : HTMLSpanElement = this.element.querySelector(".spinner");
+    private readonly spinner : HTMLSpanElement = this.element.querySelector(".spinner");
 
     public readonly Content : HTMLDivElement = this.element.querySelector(".content");
 
@@ -43,7 +44,9 @@ export class Modal
 
         this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
 
-        document.body.appendChild(this.element);
+        document.body.appendChild(this.container);
+
+        Utilities.ShowElement(this.container);
     }
 
     /**
@@ -87,13 +90,15 @@ export class Modal
     {
         Utilities.RemoveClass(this.element, "show");
         Utilities.AddClass(this.element, "hide");
+
+        setTimeout(() => Utilities.HideElement(this.container), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
     }
 
     public Remove = () : void =>
     {
         this.OnClose();
         
-        setTimeout(() => this.element.remove(), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
+        setTimeout(() => this.container.remove(), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
 
         document.removeEventListener("click", this.HideOnOuterClick);
     }
