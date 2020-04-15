@@ -158,6 +158,7 @@ export const en_US = {
         no_errors_found: "No errors found",
         reset: "Reset",
         sign_in: "Sign In",
+        example: "Example",
     },
     header: {
         storage: {
@@ -206,6 +207,7 @@ export const en_US = {
         general: {
             title: "General",
             background: "Background",
+            date_format: "Date format",
         },
         security: {
             title: "Security",

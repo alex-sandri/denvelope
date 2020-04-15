@@ -158,6 +158,7 @@ export const it_IT = {
         no_errors_found: "Non sono stati trovati errori",
         reset: "Ripristina",
         sign_in: "Accedi",
+        example: "Esempio",
     },
     header: {
         storage: {
@@ -206,6 +207,7 @@ export const it_IT = {
         general: {
             title: "Generali",
             background: "Sfondo",
+            date_format: "Formato della data",
         },
         security: {
             title: "Sicurezza",

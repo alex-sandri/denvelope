@@ -24,6 +24,9 @@ const languageSelect : HTMLSelectElement = document.querySelector("#language-sel
 const changeBackground : HTMLButtonElement = document.querySelector("#change-background .edit");
 const resetBackground : HTMLButtonElement = document.querySelector("#change-background .reset");
 
+const changeDateFormat : HTMLButtonElement = document.querySelector("#date-format .edit");
+const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
+
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
@@ -148,6 +151,26 @@ window.addEventListener("userready", () =>
 
     resetBackground.addEventListener("click", () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: "" }, { merge: true }));
+
+    changeDateFormat.addEventListener("click", () =>
+    {
+        const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
+
+        modal.AppendContent([ new Component("p", { children: [
+            new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
+            new Component("span", { innerText: Utilities.FormatDate(0) }).element
+        ] }).element ]);
+
+        modal.OnConfirm = () =>
+        {
+            
+        }
+
+        modal.Show(true);
+    });
+
+    resetDateFormat.addEventListener("click", () =>
+        null);
 
     signOutFromAllDevices.addEventListener("click", () =>
     {
