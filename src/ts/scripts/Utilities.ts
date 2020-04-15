@@ -126,22 +126,16 @@ export class Utilities
     /**
      * @param milliseconds The number of milliseconds since the unix epoch
      */
-    public static FormatDate = (milliseconds : number) : string =>
-    {
-        const date : Date = new Date(milliseconds);
-        const options : Object = {
-            weekday: undefined,
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-            timeZoneName: "short",
-        };
-
-        return date.toLocaleDateString(document.documentElement.lang, options);
-    }
+    public static FormatDate = (milliseconds : number) : string => new Date(milliseconds).toLocaleDateString(document.documentElement.lang, {
+        weekday: undefined,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        timeZoneName: "short",
+    });
 
     public static GetCurrentFolderId = (allowFakeFolderIds ?: boolean) : string =>
     {
