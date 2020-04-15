@@ -23,6 +23,77 @@
             <button class="edit" data-translation="generic->edit"><i class="fas fa-edit"></i></button>
             <button class="reset" data-translation="generic->reset"><i class="fas fa-undo-alt"></i></button>
         </div>
-        <div class="date-params"></div>
+        <div class="date-format-options">
+            <div>
+                <p>weekday:</p>
+                <input type="checkbox" id="show-weekday">
+                <select id="weekday">
+                    <option value="long">long</option>
+                    <option value="short">short</option>
+                    <option value="narrow">narrow</option>
+                </select>
+            </div>
+            <div>
+                <p>era:</p>
+                <input type="checkbox" id="show-era">
+                <select id="era">
+                    <option value="long">long</option>
+                    <option value="short">short</option>
+                    <option value="narrow">narrow</option>
+                </select>
+            </div>
+            <div>
+                <p>year:</p>
+                <select id="year">
+                    <option value="numeric" selected>numeric</option>
+                    <option value="2-digit">2-digit</option>
+                </select>
+            </div>
+            <div>
+                <p>month:</p>
+                <select id="month">
+                    <option value="numeric">numeric</option>
+                    <option value="2-digit" selected>2-digit</option>
+                    <option value="long">long</option>
+                    <option value="short">short</option>
+                    <option value="narrow">narrow</option>
+                </select>
+            </div>
+            <div>
+                <p>day:</p>
+                <select id="day">
+                    <option value="numeric">numeric</option>
+                    <option value="2-digit" selected>2-digit</option>
+                </select>
+            </div>
+            <div>
+                <p>hour:</p>
+                <select id="hour">
+                    <option value="numeric" selected>numeric</option>
+                    <option value="2-digit">2-digit</option>
+                </select>
+            </div>
+            <div>
+                <p>minute:</p>
+                <select id="minute">
+                    <option value="numeric" selected>numeric</option>
+                    <option value="2-digit">2-digit</option>
+                </select>
+            </div>
+            <div>
+                <p>second:</p>
+                <select id="second">
+                    <option value="numeric" selected>numeric</option>
+                    <option value="2-digit">2-digit</option>
+                </select>
+            </div>
+            <div>
+                <p>timeZoneName:</p>
+                <select id="timeZoneName">
+                    <option value="long">long</option>
+                    <option value="short" selected>short</option>
+                </select>
+            </div>
+        </div>
     </div>
 </section>

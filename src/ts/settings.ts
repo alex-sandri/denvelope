@@ -26,6 +26,7 @@ const resetBackground : HTMLButtonElement = document.querySelector("#change-back
 
 const changeDateFormat : HTMLButtonElement = document.querySelector("#date-format .edit");
 const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
+const dateFormatOptions : HTMLDivElement = document.querySelector("#date-format .date-format-options");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 
@@ -156,14 +157,46 @@ window.addEventListener("userready", () =>
     {
         const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
 
-        modal.AppendContent([ new Component("p", { children: [
-            new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
-            new Component("span", { innerText: Utilities.FormatDate(0) }).element
-        ] }).element ]);
+        modal.AppendContent([
+            new Component("p", { children: [
+                new Component("span", { innerText: Translation.Get("generic->reference") + ": " }).element,
+                new Component("a", {
+                    innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
+                    href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
+                    target: "_blank"
+                }).element
+            ] }).element,
+            new Component("p", { children: [
+                new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
+                new Component("span", { id: "example-date", innerText: Utilities.FormatDate(0) }).element
+            ] }).element,
+            dateFormatOptions
+        ]);
+
+        const GetDateTimeFormatOptions = () : Intl.DateTimeFormatOptions =>
+            ({
+                weekday: (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked
+                    ? (<HTMLSelectElement>dateFormatOptions.querySelector("#weekday")).selectedOptions[0].value
+                    : undefined,
+                era: (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked
+                    ? (<HTMLSelectElement>dateFormatOptions.querySelector("#era")).selectedOptions[0].value
+                    : undefined,
+                year: (<HTMLSelectElement>dateFormatOptions.querySelector("#year")).selectedOptions[0].value,
+                month: (<HTMLSelectElement>dateFormatOptions.querySelector("#month")).selectedOptions[0].value,
+                day: (<HTMLSelectElement>dateFormatOptions.querySelector("#day")).selectedOptions[0].value,
+                hour: (<HTMLSelectElement>dateFormatOptions.querySelector("#hour")).selectedOptions[0].value,
+                minute: (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedOptions[0].value,
+                second: (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedOptions[0].value,
+                timeZoneName: (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedOptions[0].value,
+            });
+
+        [ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
+            .forEach(element => element.addEventListener("change", () =>
+                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = Utilities.FormatDate(0, GetDateTimeFormatOptions())));
 
         modal.OnConfirm = () =>
         {
-            
+            console.log(GetDateTimeFormatOptions());
         }
 
         modal.Show(true);

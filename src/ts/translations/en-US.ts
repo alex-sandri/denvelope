@@ -159,6 +159,7 @@ export const en_US = {
         reset: "Reset",
         sign_in: "Sign In",
         example: "Example",
+        reference: "Reference",
     },
     header: {
         storage: {

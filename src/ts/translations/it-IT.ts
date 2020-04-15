@@ -159,6 +159,7 @@ export const it_IT = {
         reset: "Ripristina",
         sign_in: "Accedi",
         example: "Esempio",
+        reference: "Riferimento",
     },
     header: {
         storage: {

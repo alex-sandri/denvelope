@@ -179,7 +179,7 @@
     font-size: 20px;
     cursor: pointer;
     transition: $transition-time;
-    padding: $standard-spacing;
+    padding: 9px; // Same height as a button
     border: $border-width solid $border-color;
     border-radius: $border-radius;
 
