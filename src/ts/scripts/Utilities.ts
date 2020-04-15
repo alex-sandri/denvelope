@@ -80,7 +80,7 @@ export class Utilities
 
     public static DispatchEvent = (name : string) => window.dispatchEvent(new Event(name));
 
-    public static FormatStorage (bytes : number) : string
+    public static FormatStorage  = (bytes : number) : string =>
     {
         let unit = "";
 
@@ -124,10 +124,11 @@ export class Utilities
     }
 
     /**
-     * @param timestamp The serverTimestamp() value from Firestore or the number of milliseconds since the unix epoch
+     * @param milliseconds The number of milliseconds since the unix epoch
      */
-    public static GetDateFromTimestamp = (timestamp : number | string) : string => {
-        const date : Date = new Date(timestamp);
+    public static FormatDate = (milliseconds : number) : string =>
+    {
+        const date : Date = new Date(milliseconds);
         const options : Object = {
             weekday: undefined,
             year: "numeric",
@@ -138,9 +139,8 @@ export class Utilities
             second: "numeric",
             timeZoneName: "short",
         };
-    
-        //undefined will use the browser's default locale
-        return date.toLocaleDateString(undefined, options);
+
+        return date.toLocaleDateString(document.documentElement.lang, options);
     }
 
     public static GetCurrentFolderId = (allowFakeFolderIds ?: boolean) : string =>

@@ -503,10 +503,10 @@ window.addEventListener("userready", async () =>
                     innerHTML: `<span data-translation="generic->type"></span><span>${Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->created"></span><span>${Utilities.GetDateFromTimestamp(data.created.seconds * 1000)}</span>`
+                    innerHTML: `<span data-translation="generic->created"></span><span>${Utilities.FormatDate(data.created.seconds * 1000)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->last_modified"></span><span>${Utilities.GetDateFromTimestamp(data.updated.seconds * 1000)}</span>`
+                    innerHTML: `<span data-translation="generic->last_modified"></span><span>${Utilities.FormatDate(data.updated.seconds * 1000)}</span>`
                 }).element,
                 type === "file"
                     ? new Component("p", {
