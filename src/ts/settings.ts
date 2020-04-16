@@ -186,8 +186,12 @@ window.addEventListener("userready", () =>
                 day: (<HTMLSelectElement>dateFormatOptions.querySelector("#day")).selectedOptions[0].value,
                 hour: (<HTMLSelectElement>dateFormatOptions.querySelector("#hour")).selectedOptions[0].value,
                 minute: (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedOptions[0].value,
-                second: (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedOptions[0].value,
-                timeZoneName: (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedOptions[0].value,
+                second: (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked
+                    ? (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedOptions[0].value
+                    : undefined,
+                timeZoneName: (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked
+                    ? (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedOptions[0].value
+                    : undefined,
             });
 
         [ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
