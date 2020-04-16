@@ -309,6 +309,8 @@ window.addEventListener("userready", () =>
             document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
 
             resetBackground.disabled = !backgroundImageUrl;
+
+            resetDateFormat.disabled = user.data().dateFormatOptions === "default";
         });
 });
 
