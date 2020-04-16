@@ -153,7 +153,7 @@ window.addEventListener("userready", () =>
     resetBackground.addEventListener("click", () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: "" }, { merge: true }));
 
-    changeDateFormat.addEventListener("click", () =>
+    changeDateFormat.addEventListener("click", async() =>
     {
         const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
 
@@ -172,6 +172,50 @@ window.addEventListener("userready", () =>
             ] }).element,
             dateFormatOptions
         ]);
+
+        const userDateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
+
+        if (userDateFormatOptions !== "default")
+        {
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked = userDateFormatOptions.weekday !== "undefined";
+
+            if (userDateFormatOptions.weekday !== "undefined")
+                (<HTMLSelectElement>dateFormatOptions.querySelector("#weekday")).selectedIndex =
+                    <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.weekday}"]`)).index;
+
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked = userDateFormatOptions.era !== "undefined";
+            
+            if (userDateFormatOptions.era !== "undefined")
+                (<HTMLSelectElement>dateFormatOptions.querySelector("#era")).selectedIndex =
+                    <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.era}"]`)).index;
+
+            (<HTMLSelectElement>dateFormatOptions.querySelector("#year")).selectedIndex =
+                <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.year}"]`)).index;
+
+            (<HTMLSelectElement>dateFormatOptions.querySelector("#month")).selectedIndex =
+                <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.month}"]`)).index;
+
+            (<HTMLSelectElement>dateFormatOptions.querySelector("#day")).selectedIndex =
+                <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.day}"]`)).index;
+
+            (<HTMLSelectElement>dateFormatOptions.querySelector("#hour")).selectedIndex =
+                <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.hour}"]`)).index;
+
+            (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedIndex =
+                <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.minute}"]`)).index;
+
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked = userDateFormatOptions.second !== "undefined";
+            
+            if (userDateFormatOptions.second !== "undefined")
+                (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedIndex =
+                    <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.second}"]`)).index;
+                
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked = userDateFormatOptions.timeZoneName !== "undefined";
+            
+            if (userDateFormatOptions.timeZoneName !== "undefined")
+                (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedIndex =
+                    <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.timeZoneName}"]`)).index;
+        }
 
         const GetDateTimeFormatOptions = (allowUndefinedFields : boolean) : Intl.DateTimeFormatOptions =>
             ({
