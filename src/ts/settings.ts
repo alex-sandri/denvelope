@@ -168,19 +168,19 @@ window.addEventListener("userready", () =>
             ] }).element,
             new Component("p", { children: [
                 new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
-                new Component("span", { id: "example-date", innerText: Utilities.FormatDate(0) }).element
+                new Component("span", { id: "example-date", innerText: Utilities.FormatDate(Date.now()) }).element
             ] }).element,
             dateFormatOptions
         ]);
 
-        const GetDateTimeFormatOptions = () : Intl.DateTimeFormatOptions =>
+        const GetDateTimeFormatOptions = (allowUndefinedFields : boolean) : Intl.DateTimeFormatOptions =>
             ({
                 weekday: (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#weekday")).selectedOptions[0].value
-                    : undefined,
+                    : (allowUndefinedFields ? undefined : "undefined"),
                 era: (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#era")).selectedOptions[0].value
-                    : undefined,
+                    : (allowUndefinedFields ? undefined : "undefined"),
                 year: (<HTMLSelectElement>dateFormatOptions.querySelector("#year")).selectedOptions[0].value,
                 month: (<HTMLSelectElement>dateFormatOptions.querySelector("#month")).selectedOptions[0].value,
                 day: (<HTMLSelectElement>dateFormatOptions.querySelector("#day")).selectedOptions[0].value,
@@ -188,26 +188,24 @@ window.addEventListener("userready", () =>
                 minute: (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedOptions[0].value,
                 second: (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedOptions[0].value
-                    : undefined,
+                    : (allowUndefinedFields ? undefined : "undefined"),
                 timeZoneName: (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedOptions[0].value
-                    : undefined,
+                    : (allowUndefinedFields ? undefined : "undefined"),
             });
 
         [ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
             .forEach(element => element.addEventListener("change", () =>
-                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = Utilities.FormatDate(0, GetDateTimeFormatOptions())));
+                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = Utilities.FormatDate(Date.now(), GetDateTimeFormatOptions(true))));
 
         modal.OnConfirm = () =>
-        {
-            console.log(GetDateTimeFormatOptions());
-        }
+            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: GetDateTimeFormatOptions(false) }, { merge: true });
 
         modal.Show(true);
     });
 
     resetDateFormat.addEventListener("click", () =>
-        null);
+        db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: "default" }, { merge: true }));
 
     signOutFromAllDevices.addEventListener("click", () =>
     {
