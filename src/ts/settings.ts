@@ -26,7 +26,6 @@ const resetBackground : HTMLButtonElement = document.querySelector("#change-back
 
 const changeDateFormat : HTMLButtonElement = document.querySelector("#date-format .edit");
 const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
-const dateFormatOptions : HTMLDivElement = document.querySelector("#date-format .date-format-options");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 
@@ -83,6 +82,8 @@ window.addEventListener("userready", () =>
         });
 
         modal.AppendContent([ languageSelect ]);
+
+        languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[data-language=${Utilities.GetCookie("lang") ?? navigator.language}]`)).value;
 
         modal.OnConfirm = () =>
         {
@@ -157,23 +158,9 @@ window.addEventListener("userready", () =>
     {
         const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
 
-        modal.AppendContent([
-            new Component("p", { children: [
-                new Component("span", { innerText: Translation.Get("generic->reference") + ": " }).element,
-                new Component("a", {
-                    innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
-                    href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
-                    target: "_blank"
-                }).element
-            ] }).element,
-            new Component("p", { children: [
-                new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
-                new Component("span", { id: "example-date", innerText: Utilities.FormatDate(Date.now()) }).element
-            ] }).element,
-            dateFormatOptions
-        ]);
-
         const userDateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
+
+        const dateFormatOptions : HTMLDivElement = <HTMLDivElement>document.querySelector("#date-format .date-format-options").cloneNode(true);
 
         if (userDateFormatOptions !== "default")
         {
@@ -216,6 +203,30 @@ window.addEventListener("userready", () =>
                 (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedIndex =
                     <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.timeZoneName}"]`)).index;
         }
+
+        for (const entry in userDateFormatOptions)
+            if (userDateFormatOptions[entry] === "undefined")
+                userDateFormatOptions[entry] = undefined;
+
+        modal.AppendContent([
+            new Component("p", { children: [
+                new Component("span", { innerText: Translation.Get("generic->reference") + ": " }).element,
+                new Component("a", {
+                    innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
+                    href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
+                    target: "_blank"
+                }).element
+            ] }).element,
+            new Component("p", { children: [
+                new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
+                new Component("span", {
+                    id: "example-date",
+                    innerText: Utilities.FormatDate(Date.now(), userDateFormatOptions !== "default"
+                        ? userDateFormatOptions
+                        : null) }).element
+            ] }).element,
+            dateFormatOptions
+        ]);
 
         const GetDateTimeFormatOptions = (allowUndefinedFields : boolean) : Intl.DateTimeFormatOptions =>
             ({
