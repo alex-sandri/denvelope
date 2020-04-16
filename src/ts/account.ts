@@ -492,6 +492,14 @@ window.addEventListener("userready", async () =>
 
             modal.Title = Utilities.EscapeHtml(name);
 
+            let dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
+
+            for (const entry in dateFormatOptions)
+                if (dateFormatOptions[entry] === "undefined")
+                    dateFormatOptions[entry] = undefined;
+
+            if (dateFormatOptions === "default") dateFormatOptions = null;
+
             modal.AppendContent([
                 new Component("p", {
                     innerHTML: `<span data-translation="generic->id"></span><span>${doc.id}</span>`
@@ -503,10 +511,10 @@ window.addEventListener("userready", async () =>
                     innerHTML: `<span data-translation="generic->type"></span><span>${Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->created"></span><span>${Utilities.FormatDate(data.created.seconds * 1000)}</span>`
+                    innerHTML: `<span data-translation="generic->created"></span><span>${Utilities.FormatDate(data.created.seconds * 1000, dateFormatOptions)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->last_modified"></span><span>${Utilities.FormatDate(data.updated.seconds * 1000)}</span>`
+                    innerHTML: `<span data-translation="generic->last_modified"></span><span>${Utilities.FormatDate(data.updated.seconds * 1000, dateFormatOptions)}</span>`
                 }).element,
                 type === "file"
                     ? new Component("p", {

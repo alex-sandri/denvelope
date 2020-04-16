@@ -254,7 +254,11 @@ window.addEventListener("userready", () =>
                 (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = Utilities.FormatDate(Date.now(), GetDateTimeFormatOptions(true))));
 
         modal.OnConfirm = () =>
+        {
             db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: GetDateTimeFormatOptions(false) }, { merge: true });
+
+            modal.HideAndRemove();
+        };
 
         modal.Show(true);
     });
