@@ -20,12 +20,40 @@ service cloud.firestore {
       match /config/preferences {
         allow read: if isOwner();
 
-        allow write: if incomingData().size() == 1 &&
-        incomingData().backgroundImageUrl is string &&
-        incomingData().backgroundImageUrl != null &&
-        incomingData().backgroundImageUrl == incomingData().backgroundImageUrl.trim() &&
-        incomingData().backgroundImageUrl.size() <= 1024 &&
-        (incomingData().backgroundImageUrl.matches("https://.+[.].{2,}/.*") || incomingData().backgroundImageUrl == "");
+        allow write: if incomingData().size() <= 2 &&
+          incomingData().keys().hasOnly([ "backgroundImageUrl", "dateFormatOptions" ]) &&
+          (validateBackgroundImageUrl() || !("backgroundImageUrl" in incomingData())) &&
+          (validateDateFormatOptions() || !("dateFormatOptions" in incomingData()));
+      }
+
+      function validateBackgroundImageUrl() {
+        return incomingData().backgroundImageUrl is string &&
+          incomingData().backgroundImageUrl != null &&
+          incomingData().backgroundImageUrl == incomingData().backgroundImageUrl.trim() &&
+          incomingData().backgroundImageUrl.size() <= 1024 &&
+          (incomingData().backgroundImageUrl.matches("https://.+[.].{2,}/.*") || incomingData().backgroundImageUrl == "");
+      }
+
+      function validateDateFormatOptions() {
+        return incomingData().dateFormatOptions.keys().hasOnly([ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ]) &&
+          incomingData().dateFormatOptions.weekday is string &&
+          [ incomingData().dateFormatOptions.weekday ].hasAny([ "long", "short", "narrow", "undefined" ]) &&
+          incomingData().dateFormatOptions.era is string &&
+          [ incomingData().dateFormatOptions.era ].hasAny([ "long", "short", "narrow", "undefined" ]) &&
+          incomingData().dateFormatOptions.year is string &&
+          [ incomingData().dateFormatOptions.year ].hasAny([ "numeric", "2-digit" ]) &&
+          incomingData().dateFormatOptions.month is string &&
+          [ incomingData().dateFormatOptions.month ].hasAny([ "numeric", "2-digit", "long", "short", "narrow" ]) &&
+          incomingData().dateFormatOptions.day is string &&
+          [ incomingData().dateFormatOptions.day ].hasAny([ "numeric", "2-digit" ]) &&
+          incomingData().dateFormatOptions.hour is string &&
+          [ incomingData().dateFormatOptions.hour ].hasAny([ "numeric", "2-digit" ]) &&
+          incomingData().dateFormatOptions.minute is string &&
+          [ incomingData().dateFormatOptions.minute ].hasAny([ "numeric", "2-digit" ]) &&
+          incomingData().dateFormatOptions.second is string &&
+          [ incomingData().dateFormatOptions.second ].hasAny([ "numeric", "2-digit", "undefined" ]) &&
+          incomingData().dateFormatOptions.timeZoneName is string &&
+          [ incomingData().dateFormatOptions.timeZoneName ].hasAny([ "long", "short", "undefined" ]);
       }
 
       match /folders/{folderId} {
