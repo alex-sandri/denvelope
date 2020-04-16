@@ -31,7 +31,7 @@ const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-
 
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
-languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[data-language=${Utilities.GetCookie("lang") ?? navigator.language}]`)).value;
+languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang") ?? navigator.language}]`)).index;
 
 let section : string = "general";
 
@@ -83,7 +83,7 @@ window.addEventListener("userready", () =>
 
         modal.AppendContent([ languageSelect ]);
 
-        languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[data-language=${Utilities.GetCookie("lang") ?? navigator.language}]`)).value;
+        languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang") ?? navigator.language}]`)).index;
 
         modal.OnConfirm = () =>
         {
@@ -325,7 +325,7 @@ window.addEventListener("popstate", () =>
 
 const UpdateLanguage = () : void =>
 {
-    Translation.Init(null, languageSelect.selectedOptions[0].getAttribute("data-language"));
+    Translation.Init(null, languageSelect.selectedOptions[0].value);
 
     changeLanguage.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${languageSelect.selectedOptions[0].text}</span>`;
 };
