@@ -70,6 +70,27 @@
             {
                 display: none;
             }
+
+            @at-root .date-format-options
+            {
+                & > div > div
+                {
+                    @include flex;
+
+                    margin-bottom: $standard-spacing;
+
+                    input[type=checkbox]
+                    {
+                        margin: 0;
+                        margin-right: $standard-spacing;
+                    }
+
+                    select
+                    {
+                        margin-bottom: 0;
+                    }
+                }
+            }
         
             &:not(:last-child)
             {

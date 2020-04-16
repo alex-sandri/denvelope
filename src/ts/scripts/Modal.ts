@@ -63,7 +63,8 @@ export class Modal
         this.ConfirmButton.addEventListener("click", this.OnConfirm);
         this.UpdateButton.addEventListener("click", this.OnUpdate);
         
-        if (Utilities.IsSet(unique) && unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.remove());
+        if (Utilities.IsSet(unique) && unique)
+            document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
         else Utilities.AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
 
         if (!Utilities.HasClass(this.element, "show"))
