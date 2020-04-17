@@ -8,6 +8,12 @@
     left: 0;
     z-index: 999;
     display: none;
+
+    &.no-background
+    {
+        height: unset;
+        width: unset;
+    }
 }
 
 .modal

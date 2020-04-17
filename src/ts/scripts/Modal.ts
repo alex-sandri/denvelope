@@ -33,7 +33,12 @@ export class Modal
                 if ((<string[]>(<any>options).allow).includes("update")) Utilities.ShowElement(this.UpdateButton, "block");
             }
             
-            if (options.hasOwnProperty("floating") && (<any>options).floating) Utilities.AddClass(this.element, "floating");
+            if (options.hasOwnProperty("floating") && (<any>options).floating)
+            {
+                Utilities.AddClass(this.element, "floating");
+
+                Utilities.AddClass(this.container, "no-background");
+            }
 
             if (options.hasOwnProperty("animate") && !(<any>options).animate) Utilities.AddClass(this.element, "no-animate");
 
