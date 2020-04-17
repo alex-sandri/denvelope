@@ -21,9 +21,18 @@ header
         {
             @include flex;
 
+            border-radius: $border-radius;
+            transition: $transition-time;
+
             img
             {
                 height: #{$header-height - $standard-spacing * 2};
+            }
+
+            &:hover,
+            &:focus
+            {
+                box-shadow: 0 0 0 $border-width $secondary-color;
             }
         }
     }
