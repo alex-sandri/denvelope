@@ -95,6 +95,7 @@ body
 
     &.account
     {
+        .modal.floating,
         .generic-message
         {
             bottom: $standard-spacing + $account-bottom-bar-height

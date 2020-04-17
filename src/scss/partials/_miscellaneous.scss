@@ -173,7 +173,7 @@
 
     &.floating
     {
-        bottom: $standard-spacing + $account-bottom-bar-height;
+        bottom: $standard-spacing;
         left: $standard-spacing;
         width: calc(100% - (#{$standard-spacing} * 2));
         border-radius: $standard-spacing;
@@ -181,8 +181,6 @@
 
     &.aside
     {
-        left: unset;
-        right: $standard-spacing;
         width: 30%;
     }
 }
