@@ -54,6 +54,18 @@ html
             cursor: grabbing !important;
         }
     }
+
+    &:not(.file-open)
+    {
+        body.account
+        {
+            .modal.floating,
+            .generic-message
+            {
+                bottom: $standard-spacing + $account-bottom-bar-height
+            }
+        }
+    }
 }
 
 body
@@ -90,15 +102,6 @@ body
         {
             position: unset;
             backdrop-filter: unset;
-        }
-    }
-
-    &.account
-    {
-        .modal.floating,
-        .generic-message
-        {
-            bottom: $standard-spacing + $account-bottom-bar-height
         }
     }
 

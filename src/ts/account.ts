@@ -834,9 +834,9 @@ window.addEventListener("userready", async () =>
 
         editorElement.innerHTML = "";
 
-        Utilities.RemoveAllClasses(editorElement, { "except": "editor" });
+        Utilities.RemoveAllClasses(editorElement, { except: "editor" });
 
-        Utilities.RemoveAllAttributes(editorElement, { "except": [ "class", "id" ] });
+        Utilities.RemoveAllAttributes(editorElement, { except: [ "class", "id" ] });
 
         showFile.id = "";
         showFile.setAttribute("content-type", "");
@@ -856,6 +856,7 @@ window.addEventListener("userready", async () =>
 
         Utilities.RemoveClass(document.documentElement, "wait");
         Utilities.RemoveClass(document.documentElement, "file-loading");
+        Utilities.RemoveClass(document.documentElement, "file-open");
     });
 
     document.addEventListener("click", e =>
@@ -2087,6 +2088,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     if (Utilities.HasClass(document.documentElement, "file-loading")) return; // Do not allow multiple clicks
 
     Utilities.AddClass(document.documentElement, "wait");
+    Utilities.AddClass(document.documentElement, "file-open");
 
     showFileName.innerHTML = "";
     showFileName.insertAdjacentElement("afterbegin", new Spinner().element);
