@@ -839,6 +839,8 @@ window.addEventListener("userready", async () =>
 
         Utilities.RemoveAllAttributes(editorElement, { except: [ "class", "id" ] });
 
+        editorTabs.innerHTML = "";
+
         showFile.id = "";
         showFile.setAttribute("content-type", "");
         showFile.querySelector(".name").innerHTML = "";
