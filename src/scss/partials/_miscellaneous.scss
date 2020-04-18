@@ -354,6 +354,38 @@
         }
     }
 
+    .tabs
+    {
+        @include flex($justify-content: start);
+
+        overflow: auto;
+        background-color: #2d2d2d;
+        display: none;
+
+        .tab
+        {
+            @include flex;
+
+            padding: $standard-spacing;
+
+            .name
+            {
+                margin: 0;
+                margin-right: $standard-spacing;
+            }
+
+            .close
+            {
+                @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: none);
+            }
+
+            &.active
+            {
+                background-color: #1e1e1e;
+            }
+        }
+    }
+
     .editor
     {
         @include flex;
