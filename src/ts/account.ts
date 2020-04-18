@@ -261,7 +261,8 @@ window.addEventListener("userready", async () =>
         folderInput.value = null;
     });
 
-    contextMenuView.addEventListener("click", () => HandlePageChangeAndLoadUserContent(null, contextMenuItem));
+    contextMenuView.addEventListener("click", () =>
+        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach((item, index, array) => HandlePageChangeAndLoadUserContent(null, item, array.length > 1)));
 
     contextMenuSave.addEventListener("click", () =>
     {
@@ -1730,6 +1731,9 @@ const showContextMenu = (e : MouseEvent) : void =>
             Utilities.ShowElements([ contextMenuDownload ]);
         }
         else Utilities.ShowElement(contextMenuRestore);
+
+        if (contextMenuItems.filter(element => Utilities.HasClass(element, "file")).length === contextMenuItems.length)
+            Utilities.ShowElement(contextMenuView);
     }
 
     if (!showFile.getAttribute("content-type")?.startsWith("image/")) Utilities.HideElement(contextMenuDisplayImage);
@@ -1838,9 +1842,9 @@ const addUserContentEvents = () : void =>
  * @param e The event fired on user interaction (e.g.: MouseEvent)
  * @param targetElement Specified if an Event parameter is not available
  */
-const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetElement ?: HTMLElement) =>
+const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetElement ?: HTMLElement, isMultipleFilesEditor ?: boolean) =>
 {
-    const target = targetElement ?? (<HTMLElement>e.target);
+    const target : HTMLElement = targetElement ?? <HTMLElement>e.target;
 
     if (target.closest(".menu-button") === null &&
         GetUserContentElement(target)?.getAttribute("data-trashed") === "false" &&
@@ -1865,7 +1869,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
             }
             else ShowFile(closestFile.id);
     
-            history.pushState(null, "", getUserContentURL(GetUserContentElement(target), IsShared()));
+            if (!isMultipleFilesEditor) history.pushState(null, "", getUserContentURL(GetUserContentElement(target), IsShared()));
         }
     }
 }
@@ -2075,31 +2079,28 @@ const CreateEditor = (value : string, language : string) : void =>
 
     preventWindowUnload.editor = false;
 
-    editor = (<any>window).monaco.editor.create(editorElement, {
-        value: value,
-        language: language,
-        theme: "vs-dark",
-        automaticLayout: true,
-        readOnly: !Auth.IsSignedIn
-    });
+    if (!editor)
+        editor = (<any>window).monaco.editor.create(editorElement, {
+            model: null,
+            theme: "vs-dark",
+            automaticLayout: true,
+            readOnly: !Auth.IsSignedIn
+        });
+
+    const model = (<any>window).monaco.editor.createModel(value, language);
+
+    editor.setModel(model);
 
     editor.onDidChangeModelContent(() => preventWindowUnload.editor = value !== editor.getValue());
 }
 
 const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean) : void =>
 {
-    if (Utilities.HasClass(document.documentElement, "file-loading")) return; // Do not allow multiple clicks
-
     Utilities.AddClass(document.documentElement, "wait");
     Utilities.AddClass(document.documentElement, "file-open");
 
     showFileName.innerHTML = "";
     showFileName.insertAdjacentElement("afterbegin", new Spinner().element);
-
-    editorElement.innerHTML = "";
-    editorElement.insertAdjacentElement("afterbegin", new Spinner().element);
-
-    showFile.id = id;
 
     Utilities.ShowElement(showFile);
 
@@ -2116,7 +2117,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         const language = <string>Linguist.Detect(name, true);
         const size = doc.data().size;
 
-        showFileName.innerHTML = Utilities.EscapeHtml(name);
+        showFileName.innerHTML = "";
 
         editorTabs.appendChild(new Component("div", {
             id,
