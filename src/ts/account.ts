@@ -59,6 +59,7 @@ const showFileName : HTMLHeadingElement = showFile.querySelector(".name")
 const editorMenuSelector : string = ".show-file .editor-head .menu";
 const editorMenu : HTMLButtonElement = document.querySelector(editorMenuSelector);
 const editorClose : HTMLButtonElement = showFile.querySelector(".close");
+const editorTabs : HTMLElement = showFile.querySelector(".tabs");
 const editorElement : HTMLDivElement = document.querySelector("#editor");
 let editor : any;
 
@@ -2114,6 +2115,15 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         const size = doc.data().size;
 
         showFileName.innerHTML = Utilities.EscapeHtml(name);
+
+        editorTabs.appendChild(new Component("div", {
+            id,
+            class: "tab" + (editorTabs.querySelector("tab.active") === null ? " active" : ""),
+            children: [
+                new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
+                new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
+            ]
+        }).element);
 
         // document.title acts like innerText so it displays the escaped characters and not what the user typed
         document.head.querySelector("[data-update-field=folder-name]").innerHTML = Utilities.EscapeHtml(name);

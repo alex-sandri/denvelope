@@ -316,7 +316,7 @@
     left: 0;
     z-index: 10;
     width: 100vw;
-    height: 100%;
+    height: calc(100% - #{$header-height});
     overflow: hidden;
     background-color: $primary-color;
 
@@ -367,9 +367,13 @@
             @include flex;
 
             padding: $standard-spacing;
+            cursor: pointer;
+            max-width: 100%;
 
             .name
             {
+                @include text-ellipsis-on-overflow;
+
                 margin: 0;
                 margin-right: $standard-spacing;
             }
@@ -377,6 +381,14 @@
             .close
             {
                 @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: none);
+
+                transition: 50ms;
+
+                &:hover,
+                &:focus
+                {
+                    transform: scale(1.2);
+                }
             }
 
             &.active
