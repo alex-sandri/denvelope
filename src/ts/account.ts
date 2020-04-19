@@ -1844,7 +1844,7 @@ const addUserContentEvents = () : void =>
  * @param e The event fired on user interaction (e.g.: MouseEvent)
  * @param targetElement Specified if an Event parameter is not available
  */
-const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetElement ?: HTMLElement, isMultipleFilesEditor ?: boolean) =>
+const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetElement ?: HTMLElement, isMultipleFileEditor ?: boolean) =>
 {
     const target : HTMLElement = targetElement ?? <HTMLElement>e.target;
 
@@ -1869,9 +1869,9 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
     
                 GetUserContent();
             }
-            else ShowFile(closestFile.id, null, null, isMultipleFilesEditor);
+            else ShowFile(closestFile.id, null, null, isMultipleFileEditor);
     
-            if (!isMultipleFilesEditor) history.pushState(null, "", getUserContentURL(GetUserContentElement(target), IsShared()));
+            if (!isMultipleFileEditor) history.pushState(null, "", getUserContentURL(GetUserContentElement(target), IsShared()));
         }
     }
 }
@@ -2097,7 +2097,7 @@ const CreateEditor = (id : string, value : string, language : string) : void =>
     editor.onDidChangeModelContent(() => preventWindowUnload.editor = value !== editor.getValue());
 }
 
-const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean, isMultipleFilesEditor ?: boolean) : void =>
+const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean, isMultipleFileEditor ?: boolean) : void =>
 {
     Utilities.AddClass(document.documentElement, "wait");
     Utilities.AddClass(document.documentElement, "file-open");
@@ -2170,7 +2170,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         editorTabs.appendChild(tab);
 
-        if (!isMultipleFilesEditor)
+        if (!isMultipleFileEditor)
             // document.title acts like innerText so it displays the escaped characters and not what the user typed
             document.head.querySelector("[data-update-field=folder-name]").innerHTML = Utilities.EscapeHtml(name);
 
