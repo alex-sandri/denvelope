@@ -844,10 +844,6 @@ window.addEventListener("userready", async () =>
 
         editorTabs.innerHTML = "";
 
-        showFile.id = "";
-        showFile.setAttribute("content-type", "");
-        showFile.querySelector(".name").innerHTML = "";
-
         header.style.backgroundColor = "";
 
         editor = null;
@@ -1738,13 +1734,16 @@ const showContextMenu = (e : MouseEvent) : void =>
             Utilities.ShowElement(contextMenuView);
     }
 
-    if (!showFile.getAttribute("content-type")?.startsWith("image/")) Utilities.HideElement(contextMenuDisplayImage);
+    const activeEditorTabContentType = editorTabs.querySelector(".active")?.getAttribute("content-type");
+    const activeEditorTabName = (<HTMLParagraphElement>editorTabs.querySelector(".active")?.querySelector(".name"))?.innerText;
+
+    if (!activeEditorTabContentType?.startsWith("image/")) Utilities.HideElement(contextMenuDisplayImage);
     
-    if (showFile.getAttribute("content-type") !== "application/pdf") Utilities.HideElement(contextMenuDisplayPdf);
+    if (activeEditorTabContentType !== "application/pdf") Utilities.HideElement(contextMenuDisplayPdf);
 
-    if (!(<HTMLHeadingElement>showFile.querySelector(".name")).innerText.endsWith(".xml")) Utilities.HideElement(contextMenuValidateXml);
+    if (!activeEditorTabName?.endsWith(".xml")) Utilities.HideElement(contextMenuValidateXml);
 
-    if (!(<HTMLHeadingElement>showFile.querySelector(".name")).innerText.endsWith(".json")) Utilities.HideElement(contextMenuValidateJson);
+    if (!activeEditorTabName?.endsWith(".json")) Utilities.HideElement(contextMenuValidateJson);
 
     Utilities.ShowElement(contextMenu);
 
@@ -2249,7 +2248,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 const contentType = response.headers.get("Content-Type");
 
-                showFile.setAttribute("content-type", contentType);
+                editorTabs.querySelector(`#tab-${id}`).setAttribute("content-type", contentType);
 
                 if (size > 0)
                 {
