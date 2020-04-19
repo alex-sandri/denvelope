@@ -409,6 +409,17 @@
             {
                 background-color: #1e1e1e;
             }
+
+            &.modified
+            {
+                .name
+                {
+                    &::before
+                    {
+                        content: "*";
+                    }
+                }
+            }
         }
     }
 

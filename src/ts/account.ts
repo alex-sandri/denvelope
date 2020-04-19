@@ -2093,7 +2093,13 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
     editorModels.set(id, model);
 
-    editor.onDidChangeModelContent(() => preventWindowUnload.editor = value !== editor.getValue());
+    editor.onDidChangeModelContent(() =>
+    {
+        preventWindowUnload.editor = value !== editor.getValue();
+
+        if (preventWindowUnload.editor) Utilities.AddClass(editorTabs.querySelector(".active"), "modified");
+        else Utilities.RemoveClass(editorTabs.querySelector(".active"), "modified");
+    });
 }
 
 const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean, isMultipleFileEditor ?: boolean) : void =>
