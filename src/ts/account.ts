@@ -836,6 +836,8 @@ window.addEventListener("userready", async () =>
     {
         if (preventWindowUnload?.editor && !confirm(Translation.Get("generic->are_you_sure"))) return;
 
+        editorModels.forEach(model => model.dispose());
+
         editorElement.innerHTML = "";
 
         Utilities.RemoveAllClasses(editorElement, { except: "editor" });
