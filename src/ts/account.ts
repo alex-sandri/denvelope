@@ -2090,7 +2090,7 @@ const CreateEditor = (id : string, value : string, language : string) : void =>
     const model = (<any>window).monaco.editor.createModel(value, language);
 
     // The first model is the active one by default
-    if (editorModels.size === 0) editor.setModel(model);
+    if (editorModels.size === 0 && editorTabs.querySelector(".active").id.split("-")[1] === id) editor.setModel(model);
 
     editorModels.set(id, model);
 
