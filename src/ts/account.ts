@@ -269,9 +269,9 @@ window.addEventListener("userready", async () =>
     contextMenuSave.addEventListener("click", () =>
     {
         const value = editor.getValue();
-        const id = showFile.id;
+        const id = editorTabs.querySelector(".active").id.split("-")[1];
 
-        UploadFile(value, showFile.querySelector(".editor-head .name").innerHTML, value.length, Utilities.GetCurrentFolderId(), id);
+        UploadFile(value, editorTabs.querySelector(".active").querySelector(".name").innerHTML, value.length, Utilities.GetCurrentFolderId(), id);
 
         db.collection(`users/${Auth.UserId}/files`).doc(id).update({ ...Utilities.GetFirestoreUpdateTimestamp() });
 
