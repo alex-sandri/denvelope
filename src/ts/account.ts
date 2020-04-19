@@ -1620,7 +1620,7 @@ const showContextMenu = (e : MouseEvent) : void =>
         Utilities.ShowElements(<HTMLElement[]>[contextMenuContent, ...contextMenuContent.children]);
 
         if (isUserContentElement(contentTarget)) contextMenuItem = contentTarget;
-        else contextMenuItem = document.getElementById(showFile.id);
+        else contextMenuItem = document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]);
 
         Utilities.HideElements(<HTMLElement[]>[
             contextMenuGeneric,
