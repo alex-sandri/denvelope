@@ -61,7 +61,9 @@ const editorMenu : HTMLButtonElement = document.querySelector(editorMenuSelector
 const editorClose : HTMLButtonElement = showFile.querySelector(".close");
 const editorTabs : HTMLElement = showFile.querySelector(".tabs");
 const editorElement : HTMLDivElement = document.querySelector("#editor");
+
 let editor : any;
+const editorModels : Map<string, any> = new Map<string, any>();
 
 const contextMenu : HTMLDivElement = document.querySelector(".context-menu");
 
@@ -1867,7 +1869,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
     
                 GetUserContent();
             }
-            else ShowFile(closestFile.id);
+            else ShowFile(closestFile.id, null, null, isMultipleFilesEditor);
     
             if (!isMultipleFilesEditor) history.pushState(null, "", getUserContentURL(GetUserContentElement(target), IsShared()));
         }
@@ -2070,12 +2072,10 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
     return element;
 }
 
-const CreateEditor = (value : string, language : string) : void =>
+const CreateEditor = (id : string, value : string, language : string) : void =>
 {
     Utilities.RemoveClass(document.documentElement, "wait");
     Utilities.RemoveClass(document.documentElement, "file-loading");
-
-    editorElement.innerHTML = "";
 
     preventWindowUnload.editor = false;
 
@@ -2089,12 +2089,15 @@ const CreateEditor = (value : string, language : string) : void =>
 
     const model = (<any>window).monaco.editor.createModel(value, language);
 
-    editor.setModel(model);
+    // The first model is the active one by default
+    if (editorModels.size === 0) editor.setModel(model);
+
+    editorModels.set(id, model);
 
     editor.onDidChangeModelContent(() => preventWindowUnload.editor = value !== editor.getValue());
 }
 
-const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean) : void =>
+const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean, isMultipleFilesEditor ?: boolean) : void =>
 {
     Utilities.AddClass(document.documentElement, "wait");
     Utilities.AddClass(document.documentElement, "file-open");
@@ -2119,17 +2122,57 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         showFileName.innerHTML = "";
 
-        editorTabs.appendChild(new Component("div", {
-            id,
-            class: "tab" + (editorTabs.querySelector("tab.active") === null ? " active" : ""),
+        const tab = new Component("div", {
+            id: `tab-${id}`,
+            class: "tab" + (editorTabs.querySelector(".tab.active") === null ? " active" : ""),
             children: [
                 new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
                 new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
             ]
-        }).element);
+        }).element;
 
-        // document.title acts like innerText so it displays the escaped characters and not what the user typed
-        document.head.querySelector("[data-update-field=folder-name]").innerHTML = Utilities.EscapeHtml(name);
+        tab.addEventListener("click", e =>
+        {
+            const target = (<HTMLElement>e.target);
+
+            if (target.closest(".close") !== null) return;
+
+            const id = target.closest(".tab").id;
+
+            editor.setModel(editorModels.get(id.split("-")[1]));
+
+            Utilities.RemoveClass(editorTabs.querySelector(".active"), "active");
+
+            Utilities.AddClass(editorTabs.querySelector(`#${id}`), "active");
+        });
+
+        tab.querySelector(".close").addEventListener("click", () =>
+        {
+            editorModels.get(id).dispose();
+
+            editorModels.delete(id);
+
+            tab.remove();
+
+            if (editorModels.size === 0)
+            {
+                editorClose.click();
+
+                return;
+            }
+
+            if (!Utilities.HasClass(tab, "active")) return;
+
+            editor.setModel(Array.from(editorModels.values())[0]);
+
+            Utilities.AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`), "active");
+        });
+
+        editorTabs.appendChild(tab);
+
+        if (!isMultipleFilesEditor)
+            // document.title acts like innerText so it displays the escaped characters and not what the user typed
+            document.head.querySelector("[data-update-field=folder-name]").innerHTML = Utilities.EscapeHtml(name);
 
         Utilities.LogPageViewEvent();
 
@@ -2206,7 +2249,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])));
                 }
 
-                CreateEditor(value, language);
+                CreateEditor(id, value, language);
 
                 if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
                 else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
