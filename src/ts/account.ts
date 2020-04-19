@@ -840,10 +840,6 @@ window.addEventListener("userready", async () =>
 
         editorElement.innerHTML = "";
 
-        Utilities.RemoveAllClasses(editorElement, { except: "editor" });
-
-        Utilities.RemoveAllAttributes(editorElement, { except: [ "class", "id" ] });
-
         editorTabs.innerHTML = "";
 
         showFile.id = "";

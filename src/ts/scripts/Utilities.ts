@@ -17,37 +17,7 @@ export class Utilities
 
     public static RemoveClass = (element : HTMLElement, className : string) : void => element.classList.remove(className);
 
-    public static RemoveAllClasses = (element : HTMLElement, options : Object = {except: ""}) : void =>
-    {
-        const numOfClasses = element.classList.length;
-        let numOfDeletedClasses = 0;
-    
-        for (let i = 0; i < numOfClasses; i++)
-        {
-            if (element.classList[i - numOfDeletedClasses] !== (<any>options).except)
-            {
-                Utilities.RemoveClass(element, element.classList[i - numOfDeletedClasses]);
-                numOfDeletedClasses++;
-            }
-        }
-    }
-
     public static HasClass = (element : HTMLElement, className : string) : boolean => element.classList.contains(className);
-
-    public static RemoveAllAttributes = (element : HTMLElement, options : Object = {except: ""}) : void =>
-    {
-        const numOfAttributes = element.attributes.length;
-        let numOfDeletedAttributes = 0;
-    
-        for (let i = 0; i < numOfAttributes; i++)
-        {
-            if (element.attributes[i - numOfDeletedAttributes] !== (<any>options).except)
-            {
-                element.removeAttribute(element.attributes[i - numOfDeletedAttributes].nodeValue);
-                numOfDeletedAttributes++;
-            }
-        }
-    }
 
     public static IsSet = (object : any) : boolean => object !== null && object !== undefined;
 
