@@ -2147,6 +2147,30 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                 Utilities.RemoveClass(editorTabs.querySelector(".active"), "active");
     
                 Utilities.AddClass(editorTabs.querySelector(`#${id}`), "active");
+
+                editorElement.querySelector(".force-download")?.remove();
+
+                if (tab.getAttribute("data-force-download") === "true")
+                {
+                    editorElement.innerHTML = "";
+                    editorElement.insertAdjacentElement("afterbegin", new Component("button", {
+                        class: "force-download",
+                        children: [
+                            new Component("i", { class: "fas fa-download" }).element,
+                            new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element
+                        ]
+                    }).element);
+
+                    editorElement.querySelector(".force-download").addEventListener("click", () =>
+                    {
+                        tab.setAttribute("data-force-download", "false");
+
+                        ShowFile(id, false, true);
+                    });
+
+                    Utilities.RemoveClass(document.documentElement, "wait");
+                    Utilities.RemoveClass(document.documentElement, "file-loading");
+                }
             });
     
             tab.querySelector(".close").addEventListener("click", () =>
@@ -2209,10 +2233,12 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
             Utilities.RemoveClass(document.documentElement, "wait");
             Utilities.RemoveClass(document.documentElement, "file-loading");
 
+            editorTabs.querySelector(`#tab-${id}`).setAttribute("data-force-download", "true");
+
             return;
         }
 
-        editorElement.querySelector(".force-download")?.remove();
+        if (forceDownload) editorElement.querySelector(".force-download").remove();
 
         storage.ref(`${Auth.UserId}/${id}`).getDownloadURL().then((url : string) =>
             fetch(url).then(async response =>
