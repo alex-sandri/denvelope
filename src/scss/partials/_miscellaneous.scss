@@ -369,16 +369,31 @@
             cursor: pointer;
             max-width: 100%;
 
+            .icon
+            {
+                @include flex;
+
+                i
+                {
+                    width: 20px;
+                    height: 20px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    background-origin: content-box;
+                }
+            }
+
             .name
             {
                 @include text-ellipsis-on-overflow;
 
-                margin: 0;
-                margin-right: $standard-spacing;
+                margin: 0 $standard-spacing / 2;
             }
 
             .close
             {
+                @include flex;
                 @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: none);
 
                 transition: 50ms;

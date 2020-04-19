@@ -2146,10 +2146,20 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         // If forceDownload the file tab has already been appended
         if (!forceDownload)
         {
+            const language = Linguist.Get(<string>Linguist.Detect(name, true));
+
             const tab = new Component("div", {
                 id: `tab-${id}`,
                 class: "tab" + (editorTabs.querySelector(".tab.active") === null ? " active" : ""),
                 children: [
+                    new Component("div", {
+                        class: "icon",
+                        children: [
+                            new Component("i", {
+                                style: { backgroundImage: `url("/assets/img/icons/languages/${language.iconName ?? language.name}.svg?v=2")` }
+                            }).element
+                        ]
+                    }).element,
                     new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
                     new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
                 ]
@@ -2163,7 +2173,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     
                 const id = target.closest(".tab").id;
     
-                editor.setModel(editorModels.get(id.split("-")[1]));
+                editor?.setModel(editorModels.get(id.split("-")[1]));
     
                 Utilities.RemoveClass(editorTabs.querySelector(".active"), "active");
     
@@ -2191,7 +2201,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     
                 if (!Utilities.HasClass(tab, "active")) return;
     
-                editor.setModel(Array.from(editorModels.values())[0]);
+                editor?.setModel(Array.from(editorModels.values())[0]);
     
                 Utilities.AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`) ?? <HTMLElement>editorTabs.children[0], "active");
 
