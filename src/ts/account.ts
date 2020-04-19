@@ -2072,7 +2072,7 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
     return element;
 }
 
-const CreateEditor = (id : string, value : string, language : string) : void =>
+const CreateEditor = (id : string, value : string, language : string, isActive ?: boolean) : void =>
 {
     Utilities.RemoveClass(document.documentElement, "wait");
     Utilities.RemoveClass(document.documentElement, "file-loading");
@@ -2090,7 +2090,7 @@ const CreateEditor = (id : string, value : string, language : string) : void =>
     const model = (<any>window).monaco.editor.createModel(value, language);
 
     // The first model is the active one by default
-    if (editorModels.size === 0 && editorTabs.querySelector(".active").id.split("-")[1] === id) editor.setModel(model);
+    if (editorTabs.querySelector(".active").id.split("-")[1] === id && (editorModels.size === 0 || isActive)) editor.setModel(model);
 
     editorModels.set(id, model);
 
@@ -2276,7 +2276,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])));
                 }
 
-                CreateEditor(id, value, language);
+                CreateEditor(id, value, language, forceDownload);
 
                 if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
                 else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
