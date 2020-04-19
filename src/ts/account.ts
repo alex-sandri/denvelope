@@ -2114,6 +2114,28 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
     Utilities.AddClass(document.documentElement, "file-loading");
 
+    const ShowForceDownloadButton = () =>
+    {
+        editorElement.innerHTML = "";
+        editorElement.insertAdjacentElement("afterbegin", new Component("button", {
+            class: "force-download",
+            children: [
+                new Component("i", { class: "fas fa-download" }).element,
+                new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element
+            ]
+        }).element);
+
+        editorElement.querySelector(".force-download").addEventListener("click", () =>
+        {
+            editorTabs.querySelector(".active").setAttribute("data-force-download", "false");
+
+            ShowFile(id, false, true);
+        });
+
+        Utilities.RemoveClass(document.documentElement, "wait");
+        Utilities.RemoveClass(document.documentElement, "file-loading");
+    }
+
     db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
     {
         const name : string = doc.data().name;
@@ -2150,27 +2172,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 editorElement.querySelector(".force-download")?.remove();
 
-                if (tab.getAttribute("data-force-download") === "true")
-                {
-                    editorElement.innerHTML = "";
-                    editorElement.insertAdjacentElement("afterbegin", new Component("button", {
-                        class: "force-download",
-                        children: [
-                            new Component("i", { class: "fas fa-download" }).element,
-                            new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element
-                        ]
-                    }).element);
-
-                    editorElement.querySelector(".force-download").addEventListener("click", () =>
-                    {
-                        tab.setAttribute("data-force-download", "false");
-
-                        ShowFile(id, false, true);
-                    });
-
-                    Utilities.RemoveClass(document.documentElement, "wait");
-                    Utilities.RemoveClass(document.documentElement, "file-loading");
-                }
+                if (tab.getAttribute("data-force-download") === "true") ShowForceDownloadButton();
             });
     
             tab.querySelector(".close").addEventListener("click", () =>
@@ -2192,7 +2194,12 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     
                 editor.setModel(Array.from(editorModels.values())[0]);
     
-                Utilities.AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`), "active");
+                Utilities.AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`) ?? <HTMLElement>editorTabs.children[0], "active");
+
+                editorElement.querySelector(".force-download")?.remove();
+
+                if ((editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`) ?? <HTMLElement>editorTabs.children[0]).getAttribute("data-force-download") === "true")
+                    ShowForceDownloadButton();
             });
     
             editorTabs.appendChild(tab);
@@ -2219,19 +2226,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         // If the size of the file to be downloaded is bigger than what the user can download in one second
         if (((<any>navigator)?.connection.saveData && size > 1 * 1000 * 1000 || size > ((<any>navigator)?.connection.downlink / 8) * 1000 * 1000) && !forceDownload)
         {
-            editorElement.innerHTML = "";
-            editorElement.insertAdjacentElement("afterbegin", new Component("button", {
-                class: "force-download",
-                children: [
-                    new Component("i", { class: "fas fa-download" }).element,
-                    new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element
-                ]
-            }).element);
-
-            editorElement.querySelector(".force-download").addEventListener("click", () => ShowFile(id, false, true));
-
-            Utilities.RemoveClass(document.documentElement, "wait");
-            Utilities.RemoveClass(document.documentElement, "file-loading");
+            ShowForceDownloadButton();
 
             editorTabs.querySelector(`#tab-${id}`).setAttribute("data-force-download", "true");
 
