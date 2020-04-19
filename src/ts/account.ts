@@ -2113,7 +2113,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
     Utilities.AddClass(document.documentElement, "file-loading");
 
-    const ShowForceDownloadButton = () =>
+    const ShowForceDownloadButton = (id : string) =>
     {
         editorElement.innerHTML = "";
         editorElement.insertAdjacentElement("afterbegin", new Component("button", {
@@ -2128,7 +2128,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         {
             editorTabs.querySelector(".active").setAttribute("data-force-download", "false");
 
-            ShowFile(id, false, true);
+            ShowFile(id, false, true, isMultipleFileEditor);
         });
 
         Utilities.RemoveClass(document.documentElement, "wait");
@@ -2171,7 +2171,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 editorElement.querySelector(".force-download")?.remove();
 
-                if (tab.getAttribute("data-force-download") === "true") ShowForceDownloadButton();
+                if (tab.getAttribute("data-force-download") === "true") ShowForceDownloadButton(id.split("-")[1]);
             });
     
             tab.querySelector(".close").addEventListener("click", () =>
@@ -2197,8 +2197,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 editorElement.querySelector(".force-download")?.remove();
 
-                if ((editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`) ?? <HTMLElement>editorTabs.children[0]).getAttribute("data-force-download") === "true")
-                    ShowForceDownloadButton();
+                if (editorTabs.querySelector(".active").getAttribute("data-force-download") === "true")
+                    ShowForceDownloadButton(editorTabs.querySelector(".active").id.split("-")[1]);
             });
     
             editorTabs.appendChild(tab);
@@ -2225,7 +2225,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         // If the size of the file to be downloaded is bigger than what the user can download in one second
         if (((<any>navigator)?.connection.saveData && size > 1 * 1000 * 1000 || size > ((<any>navigator)?.connection.downlink / 8) * 1000 * 1000) && !forceDownload)
         {
-            ShowForceDownloadButton();
+            ShowForceDownloadButton(id);
 
             editorTabs.querySelector(`#tab-${id}`).setAttribute("data-force-download", "true");
 
