@@ -838,6 +838,8 @@ window.addEventListener("userready", async () =>
 
         editorModels.forEach(model => model.dispose());
 
+        editorModels.clear();
+
         editorElement.innerHTML = "";
 
         editorTabs.innerHTML = "";
