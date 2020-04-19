@@ -2157,7 +2157,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     
                 tab.remove();
     
-                if (editorModels.size === 0)
+                if (editorModels.size === 0 && editorTabs.childElementCount === 0)
                 {
                     editorClose.click();
     
