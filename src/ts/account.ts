@@ -2122,53 +2122,57 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         showFileName.innerHTML = "";
 
-        const tab = new Component("div", {
-            id: `tab-${id}`,
-            class: "tab" + (editorTabs.querySelector(".tab.active") === null ? " active" : ""),
-            children: [
-                new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
-                new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
-            ]
-        }).element;
-
-        tab.addEventListener("click", e =>
+        // If forceDownload the file tab has already been appended
+        if (!forceDownload)
         {
-            const target = (<HTMLElement>e.target);
-
-            if (target.closest(".close") !== null) return;
-
-            const id = target.closest(".tab").id;
-
-            editor.setModel(editorModels.get(id.split("-")[1]));
-
-            Utilities.RemoveClass(editorTabs.querySelector(".active"), "active");
-
-            Utilities.AddClass(editorTabs.querySelector(`#${id}`), "active");
-        });
-
-        tab.querySelector(".close").addEventListener("click", () =>
-        {
-            editorModels.get(id).dispose();
-
-            editorModels.delete(id);
-
-            tab.remove();
-
-            if (editorModels.size === 0)
+            const tab = new Component("div", {
+                id: `tab-${id}`,
+                class: "tab" + (editorTabs.querySelector(".tab.active") === null ? " active" : ""),
+                children: [
+                    new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
+                    new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
+                ]
+            }).element;
+    
+            tab.addEventListener("click", e =>
             {
-                editorClose.click();
-
-                return;
-            }
-
-            if (!Utilities.HasClass(tab, "active")) return;
-
-            editor.setModel(Array.from(editorModels.values())[0]);
-
-            Utilities.AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`), "active");
-        });
-
-        editorTabs.appendChild(tab);
+                const target = (<HTMLElement>e.target);
+    
+                if (target.closest(".close") !== null) return;
+    
+                const id = target.closest(".tab").id;
+    
+                editor.setModel(editorModels.get(id.split("-")[1]));
+    
+                Utilities.RemoveClass(editorTabs.querySelector(".active"), "active");
+    
+                Utilities.AddClass(editorTabs.querySelector(`#${id}`), "active");
+            });
+    
+            tab.querySelector(".close").addEventListener("click", () =>
+            {
+                editorModels.get(id)?.dispose();
+    
+                editorModels.delete(id);
+    
+                tab.remove();
+    
+                if (editorModels.size === 0)
+                {
+                    editorClose.click();
+    
+                    return;
+                }
+    
+                if (!Utilities.HasClass(tab, "active")) return;
+    
+                editor.setModel(Array.from(editorModels.values())[0]);
+    
+                Utilities.AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`), "active");
+            });
+    
+            editorTabs.appendChild(tab);
+        }
 
         if (!isMultipleFileEditor)
             // document.title acts like innerText so it displays the escaped characters and not what the user typed
@@ -2207,6 +2211,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
             return;
         }
+
+        editorElement.querySelector(".force-download")?.remove();
 
         storage.ref(`${Auth.UserId}/${id}`).getDownloadURL().then((url : string) =>
             fetch(url).then(async response =>
