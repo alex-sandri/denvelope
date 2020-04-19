@@ -2161,7 +2161,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                         ]
                     }).element,
                     new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
-                    new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
+                    new Component("button", { class: "close", innerHTML: "&times;" }).element
                 ]
             }).element;
     
