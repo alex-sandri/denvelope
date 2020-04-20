@@ -693,13 +693,13 @@ window.addEventListener("userready", async () =>
         let translateX = 0;
         let translateY = 0;
 
-        const MoveImage = (e : KeyboardEvent) =>
+        const MoveImageWithKeyboard = (e : KeyboardEvent) =>
         {
             const key = e.key.toLowerCase();
 
-            const moveBy = 10;
-
             if (!key.startsWith("arrow")) return;
+
+            const moveBy = 10;
 
             switch (key)
             {
@@ -723,6 +723,40 @@ window.addEventListener("userready", async () =>
             if (img.style.transform.indexOf("translate") === -1) img.style.transform += translateString;
         }
 
+        let offsetX : number, offsetY : number;
+
+        const MoveImageWithMouse = (e : MouseEvent) =>
+        {
+            // If mousedown hasn't been fired on the image element
+            if (e.target !== img && e.type === "mousedown") return;
+
+            if (offsetX === undefined && offsetY === undefined)
+            {
+                offsetX = e.offsetX;
+                offsetY = e.offsetY;
+            }
+
+            const top : number = e.pageY - offsetY;
+            const left : number = e.pageX - offsetX;
+        
+            Object.assign(img.style, {
+                top: top + "px",
+                left: left + "px"
+            });
+
+            document.addEventListener("mousemove", MoveImageWithMouse);
+
+            const Reset = () =>
+            {
+                offsetX = offsetY = undefined;
+
+                document.removeEventListener("mousemove", MoveImageWithMouse);
+                document.removeEventListener("mouseup", Reset);
+            }
+
+            document.addEventListener("mouseup", Reset);
+        }
+
         const RemoveContent = (e : MouseEvent) =>
         {
             if (!img.contains(<HTMLElement>e.target))
@@ -733,7 +767,8 @@ window.addEventListener("userready", async () =>
 
                 document.removeEventListener("wheel", ScaleImage);
                 document.removeEventListener("keydown", RotateImage);
-                document.removeEventListener("keydown", MoveImage);
+                document.removeEventListener("keydown", MoveImageWithKeyboard);
+                document.removeEventListener("mousedown", MoveImageWithMouse);
 
                 filePreviewContainer.removeEventListener("click", RemoveContent);
             }
@@ -743,7 +778,8 @@ window.addEventListener("userready", async () =>
 
         document.addEventListener("wheel", ScaleImage);
         document.addEventListener("keydown", RotateImage);
-        document.addEventListener("keydown", MoveImage);
+        document.addEventListener("keydown", MoveImageWithKeyboard);
+        document.addEventListener("mousedown", MoveImageWithMouse);
     });
 
     contextMenuDisplayPdf.addEventListener("click", async () =>
