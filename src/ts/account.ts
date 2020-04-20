@@ -2237,6 +2237,18 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
             return;
         }
 
+        const fileRef = storage.ref(`${Auth.UserId}/${id}`);
+
+        fileRef.getMetadata().then((metadata : any) =>
+        {
+            const contentType = metadata.contentType;
+
+            editorTabs.querySelector(`#tab-${id}`).setAttribute("content-type", contentType);
+
+            if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
+            else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
+        });
+
         // If the user enabled the Data Saving option do not allow downloading files bigger than 1MB
         // If the size of the file to be downloaded is bigger than what the user can download in one second
         if (((<any>navigator)?.connection.saveData && size > 1 * 1000 * 1000 || size > ((<any>navigator)?.connection.downlink / 8) * 1000 * 1000) && !forceDownload)
@@ -2250,7 +2262,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         if (forceDownload) editorElement.querySelector(".force-download").remove();
 
-        storage.ref(`${Auth.UserId}/${id}`).getDownloadURL().then((url : string) =>
+        fileRef.getDownloadURL().then((url : string) =>
             fetch(url).then(async response =>
             {
                 const reader = response.body.getReader();
@@ -2261,10 +2273,6 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                 let downloadedBytes = 0;
 
                 let value = "";
-
-                const contentType = response.headers.get("Content-Type");
-
-                editorTabs.querySelector(`#tab-${id}`).setAttribute("content-type", contentType);
 
                 if (size > 0)
                 {
@@ -2293,9 +2301,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 CreateEditor(id, value, language, forceDownload);
 
-                if (contentType.startsWith("image/")) Utilities.ShowElement(contextMenuDisplayImage);
-                else if (contentType === "application/pdf") Utilities.ShowElement(contextMenuDisplayPdf);
-                else if (name.endsWith(".xml")) Utilities.ShowElement(contextMenuValidateXml);
+                // These are handled with the downloaded data, so they need to be put here and not in getMetadata()
+                if (name.endsWith(".xml")) Utilities.ShowElement(contextMenuValidateXml);
                 else if (name.endsWith(".json")) Utilities.ShowElement(contextMenuValidateJson);
             })).catch((err : any) => err);
     });
