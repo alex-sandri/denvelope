@@ -690,6 +690,39 @@ window.addEventListener("userready", async () =>
             if (img.style.transform.indexOf("rotate") === -1) img.style.transform += rotateString;
         }
 
+        let translateX = 0;
+        let translateY = 0;
+
+        const MoveImage = (e : KeyboardEvent) =>
+        {
+            const key = e.key.toLowerCase();
+
+            const moveBy = 10;
+
+            if (!key.startsWith("arrow")) return;
+
+            switch (key)
+            {
+                case "arrowleft": translateX += moveBy; break;
+                case "arrowup": translateY += moveBy; break;
+                case "arrowright": translateX -= moveBy; break;
+                case "arrowdown": translateY -= moveBy; break;
+            }
+
+            const translateString = `translateX(${translateX}px) translateY(${translateY}px)`;
+
+            img.style.transform = img.style.transform.split(" ").map(value =>
+            {
+                return value.indexOf("translateX") > -1
+                    ? translateString.split(" ")[0]
+                    : (value.indexOf("translateY") > -1
+                        ? translateString.split(" ")[1]
+                        : value);
+            }).join(" ");
+
+            if (img.style.transform.indexOf("translate") === -1) img.style.transform += translateString;
+        }
+
         const RemoveContent = (e : MouseEvent) =>
         {
             if (!img.contains(<HTMLElement>e.target))
@@ -700,6 +733,7 @@ window.addEventListener("userready", async () =>
 
                 document.removeEventListener("wheel", ScaleImage);
                 document.removeEventListener("keydown", RotateImage);
+                document.removeEventListener("keydown", MoveImage);
 
                 filePreviewContainer.removeEventListener("click", RemoveContent);
             }
@@ -709,6 +743,7 @@ window.addEventListener("userready", async () =>
 
         document.addEventListener("wheel", ScaleImage);
         document.addEventListener("keydown", RotateImage);
+        document.addEventListener("keydown", MoveImage);
     });
 
     contextMenuDisplayPdf.addEventListener("click", async () =>
