@@ -664,10 +664,7 @@ window.addEventListener("userready", async () =>
 
             const scaleString = `scale(${scale})`;
 
-            img.style.transform = img.style.transform.split(" ").map(value =>
-                {
-                    return value.indexOf("scale") > -1 ? scaleString : value;
-                }).join(" ");
+            img.style.transform = img.style.transform.split(" ").map(value => value.indexOf("scale") > -1 ? scaleString : value).join(" ");
         
             if (img.style.transform.indexOf("scale") === -1) img.style.transform += scaleString;
         }
@@ -682,10 +679,7 @@ window.addEventListener("userready", async () =>
 
             const rotateString = `rotate(${rotateAngle}deg)`;
 
-            img.style.transform = img.style.transform.split(" ").map(value =>
-            {
-                return value.indexOf("rotate") > -1 ? rotateString : value;
-            }).join(" ");
+            img.style.transform = img.style.transform.split(" ").map(value => value.indexOf("rotate") > -1 ? rotateString : value).join(" ");
 
             if (img.style.transform.indexOf("rotate") === -1) img.style.transform += rotateString;
         }
@@ -712,13 +706,12 @@ window.addEventListener("userready", async () =>
             const translateString = `translateX(${translateX}px) translateY(${translateY}px)`;
 
             img.style.transform = img.style.transform.split(" ").map(value =>
-            {
-                return value.indexOf("translateX") > -1
+                value.indexOf("translateX") > -1
                     ? translateString.split(" ")[0]
                     : (value.indexOf("translateY") > -1
                         ? translateString.split(" ")[1]
-                        : value);
-            }).join(" ");
+                        : value)
+            ).join(" ");
 
             if (img.style.transform.indexOf("translate") === -1) img.style.transform += translateString;
         }
@@ -732,8 +725,8 @@ window.addEventListener("userready", async () =>
 
             if (offsetX === undefined && offsetY === undefined)
             {
-                offsetX = e.offsetX;
-                offsetY = e.offsetY;
+                offsetX = e.offsetX + translateX;
+                offsetY = e.offsetY + translateY;
             }
 
             const top : number = e.pageY - offsetY;
