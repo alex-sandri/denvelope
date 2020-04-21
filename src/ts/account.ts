@@ -643,11 +643,20 @@ window.addEventListener("userready", async () =>
 
         const img = new Image();
 
+        const canvas = document.createElement("canvas");
+
+        const ctx = canvas.getContext("2d");
+
         img.onload = () =>
         {
             Utilities.HideElement(filePreviewSpinner);
+            
+            filePreviewContainer.appendChild(canvas);
 
-            filePreviewContainer.appendChild(img);
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
         };
 
         img.onerror = () => filePreviewContainer.click();
@@ -664,9 +673,9 @@ window.addEventListener("userready", async () =>
 
             const scaleString = `scale(${scale})`;
 
-            img.style.transform = img.style.transform.split(" ").map(value => value.indexOf("scale") > -1 ? scaleString : value).join(" ");
+            canvas.style.transform = canvas.style.transform.split(" ").map(value => value.indexOf("scale") > -1 ? scaleString : value).join(" ");
         
-            if (img.style.transform.indexOf("scale") === -1) img.style.transform += scaleString;
+            if (canvas.style.transform.indexOf("scale") === -1) canvas.style.transform += scaleString;
         }
 
         let rotateAngle = 0;
@@ -679,9 +688,9 @@ window.addEventListener("userready", async () =>
 
             const rotateString = `rotate(${rotateAngle}deg)`;
 
-            img.style.transform = img.style.transform.split(" ").map(value => value.indexOf("rotate") > -1 ? rotateString : value).join(" ");
+            canvas.style.transform = canvas.style.transform.split(" ").map(value => value.indexOf("rotate") > -1 ? rotateString : value).join(" ");
 
-            if (img.style.transform.indexOf("rotate") === -1) img.style.transform += rotateString;
+            if (canvas.style.transform.indexOf("rotate") === -1) canvas.style.transform += rotateString;
         }
 
         let translateX = 0;
@@ -705,7 +714,7 @@ window.addEventListener("userready", async () =>
 
             const translateString = `translateX(${translateX}px) translateY(${translateY}px)`;
 
-            img.style.transform = img.style.transform.split(" ").map(value =>
+            canvas.style.transform = canvas.style.transform.split(" ").map(value =>
                 value.indexOf("translateX") > -1
                     ? translateString.split(" ")[0]
                     : (value.indexOf("translateY") > -1
@@ -713,7 +722,7 @@ window.addEventListener("userready", async () =>
                         : value)
             ).join(" ");
 
-            if (img.style.transform.indexOf("translate") === -1) img.style.transform += translateString;
+            if (canvas.style.transform.indexOf("translate") === -1) canvas.style.transform += translateString;
         }
 
         let offsetX : number, offsetY : number;
@@ -721,7 +730,7 @@ window.addEventListener("userready", async () =>
         const MoveImageWithMouse = (e : MouseEvent) =>
         {
             // If mousedown hasn't been fired on the image element
-            if (e.target !== img && e.type === "mousedown") return;
+            if (e.target !== canvas && e.type === "mousedown") return;
 
             if (offsetX === undefined && offsetY === undefined)
             {
@@ -732,9 +741,10 @@ window.addEventListener("userready", async () =>
             const top : number = e.pageY - offsetY;
             const left : number = e.pageX - offsetX;
         
-            Object.assign(img.style, {
+            Object.assign(canvas.style, {
                 top: top + "px",
-                left: left + "px"
+                left: left + "px",
+                transformOrigin: `${offsetX}px ${offsetY}px`
             });
 
             document.addEventListener("mousemove", MoveImageWithMouse);
@@ -752,11 +762,11 @@ window.addEventListener("userready", async () =>
 
         const RemoveContent = (e : MouseEvent) =>
         {
-            if (!img.contains(<HTMLElement>e.target))
+            if (!canvas.contains(<HTMLElement>e.target))
             {
                 Utilities.HideElement(filePreviewContainer);
 
-                filePreviewContainer.querySelector("img").remove();
+                canvas.remove();
 
                 document.removeEventListener("wheel", ScaleImage);
                 document.removeEventListener("keydown", RotateImage);
