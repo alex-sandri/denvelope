@@ -322,34 +322,23 @@
 
     .editor-head
     {
-        @include flex($justify-content: space-between);
+        @include flex($justify-content: flex-end);
 
         padding: $standard-spacing;
         padding-top: 0;
-
-        .name
-        {
-            @include text-ellipsis-on-overflow;
-
-            margin: 0;
-
-            .spinner
-            {
-                font-size: unset;
-                margin: 0;
-            }
-        }
 
         .buttons
         {
             @include flex;
 
-            .menu,
-            .close
+            button
             {
                 @include button;
 
-                margin-left: $standard-spacing;
+                &:not(:first-child)
+                {
+                    margin-left: $standard-spacing;
+                }
             }
         }
     }

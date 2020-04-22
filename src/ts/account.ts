@@ -55,7 +55,6 @@ const filesContainer : HTMLDivElement = document.querySelector(".files-container
 const fileSelector : string = "div.file";
 
 const showFile : HTMLDivElement = document.querySelector(".show-file");
-const showFileName : HTMLHeadingElement = showFile.querySelector(".name")
 const editorMenuSelector : string = ".show-file .editor-head .menu";
 const editorMenu : HTMLButtonElement = document.querySelector(editorMenuSelector);
 const editorClose : HTMLButtonElement = showFile.querySelector(".close");
@@ -2181,9 +2180,6 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     Utilities.AddClass(document.documentElement, "wait");
     Utilities.AddClass(document.documentElement, "file-open");
 
-    showFileName.innerHTML = "";
-    showFileName.insertAdjacentElement("afterbegin", new Spinner().element);
-
     Utilities.ShowElement(showFile);
 
     header.style.backgroundColor = getComputedStyle(showFile).getPropertyValue("background-color");
@@ -2220,8 +2216,6 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         const name : string = doc.data().name;
         const language = <string>Linguist.Detect(name, true);
         const size = doc.data().size;
-
-        showFileName.innerHTML = "";
 
         // If forceDownload the file tab has already been appended
         if (!forceDownload)
