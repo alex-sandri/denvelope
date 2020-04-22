@@ -43,169 +43,6 @@ header
         font-size: 15px;
     }
 
-    & + .menu
-    {
-        display: none;
-        border: $border-width solid $secondary-color;
-        border-radius: $border-radius;
-        position: fixed;
-        top: $header-height;
-        right: $standard-spacing;
-        z-index: 999;
-        background-color: rgba($primary-color, 0.8);
-        backdrop-filter: blur(20px);
-        padding: $standard-spacing;
-        max-width: calc(100% - #{$standard-spacing * 2});
-        max-height: calc(100% - #{$header-height + $standard-spacing});
-        overflow: auto;
-        overflow-x: hidden;
-        overscroll-behavior: contain;
-
-        .account,
-        .settings,
-        button
-        {
-            @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-bg-color: $secondary-color, $hover-color: $primary-color);
-
-            width: 100%;
-        }
-
-        .account,
-        .settings,
-        .bmc-button
-        {
-            margin-bottom: $standard-spacing;
-            border-radius: 25px;
-            text-decoration: none;
-            text-align: center;
-            display: block;
-        }
-
-        hr
-        {
-            margin: $standard-spacing 0;
-            border: #{$border-width / 4} solid $secondary-color;
-            width: calc(100% + #{$standard-spacing * 2});
-            margin-left: -$standard-spacing;
-        }
-
-        .user
-        {
-            img
-            {
-                display: block;
-                height: 100px;
-                border-radius: 50%;
-                margin: auto;
-                margin-bottom: $standard-spacing;
-            }
-
-            p
-            {
-                @include text-ellipsis-on-overflow;
-
-                margin: 0;
-                font-weight: $black;
-                text-align: center;
-                font-size: 25px;
-
-                &:last-child
-                {
-                    font-weight: $light;
-                    font-size: 20px;
-                    margin-bottom: $standard-spacing;
-                }
-            }
-        }
-
-        .storage
-        {
-            margin: $standard-spacing 0;
-
-            p
-            {
-                @include text-ellipsis-on-overflow;
-                    
-                margin: 0;
-                text-align: center;
-            }
-
-            .used-container
-            {
-                background-color: rgba($color: $secondary-color, $alpha: 0.1);
-                border-radius: $border-radius;
-
-                .used
-                {
-                    height: 5px;
-                    background-color: $secondary-color;
-                    border-radius: $border-radius;
-                    margin-top: 5px;
-                    width: 0%;
-                    transition: $transition-time;
-                }
-            }
-
-            .spinner
-            {
-                display: inline;
-                margin: 0;
-                font-size: 16px;
-            }
-        }
-
-        .install-pwa
-        {
-            &,
-            & + hr
-            {
-                display: none;
-            }
-        }
-
-        .links
-        {
-            a,
-            span
-            {
-                color: $secondary-color;
-                font-size: 12px;
-            }
-
-            a
-            {
-                padding: 4px 8px;
-                margin: auto;
-                text-decoration: none;
-                display: block;
-                width: max-content;
-    
-                &.privacy
-                {
-                    margin-right: #{$standard-spacing / 2};
-                }
-    
-                &.terms
-                {
-                    margin-left: #{$standard-spacing / 2};
-                }
-
-                &:hover,
-                &:focus
-                {
-                    text-decoration: underline;
-                }
-            }
-
-            .legal
-            {
-                @include flex;
-
-                margin-bottom: $standard-spacing;
-            }
-        }
-    }
-
     .waiting-user .spinner
     {
         @include flex;
@@ -244,12 +81,184 @@ header
             }
         }
     }
+
+    & + .menu-container
+    {
+        @include flex;
+
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+
+        .menu
+        {
+            border: $border-width solid $secondary-color;
+            border-radius: $border-radius;
+            z-index: 999;
+            background-color: rgba($primary-color, 0.8);
+            backdrop-filter: blur(20px);
+            padding: $standard-spacing;
+            max-width: calc(100% - #{$standard-spacing * 2});
+            max-height: calc(100% - #{$header-height + $standard-spacing});
+            overflow: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+
+            .account,
+            .settings,
+            button
+            {
+                @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-bg-color: $secondary-color, $hover-color: $primary-color);
+
+                width: 100%;
+            }
+
+            .account,
+            .settings,
+            .bmc-button
+            {
+                margin-bottom: $standard-spacing;
+                border-radius: 25px;
+                text-decoration: none;
+                text-align: center;
+                display: block;
+            }
+
+            hr
+            {
+                margin: $standard-spacing 0;
+                border: #{$border-width / 4} solid $secondary-color;
+                width: calc(100% + #{$standard-spacing * 2});
+                margin-left: -$standard-spacing;
+            }
+
+            .user
+            {
+                img
+                {
+                    display: block;
+                    height: 100px;
+                    border-radius: 50%;
+                    margin: auto;
+                    margin-bottom: $standard-spacing;
+                }
+
+                p
+                {
+                    @include text-ellipsis-on-overflow;
+
+                    margin: 0;
+                    font-weight: $black;
+                    text-align: center;
+                    font-size: 25px;
+
+                    &:last-child
+                    {
+                        font-weight: $light;
+                        font-size: 20px;
+                        margin-bottom: $standard-spacing;
+                    }
+                }
+            }
+
+            .storage
+            {
+                margin: $standard-spacing 0;
+
+                p
+                {
+                    @include text-ellipsis-on-overflow;
+                        
+                    margin: 0;
+                    text-align: center;
+                }
+
+                .used-container
+                {
+                    background-color: rgba($color: $secondary-color, $alpha: 0.1);
+                    border-radius: $border-radius;
+
+                    .used
+                    {
+                        height: 5px;
+                        background-color: $secondary-color;
+                        border-radius: $border-radius;
+                        margin-top: 5px;
+                        width: 0%;
+                        transition: $transition-time;
+                    }
+                }
+
+                .spinner
+                {
+                    display: inline;
+                    margin: 0;
+                    font-size: 16px;
+                }
+            }
+
+            .install-pwa
+            {
+                &,
+                & + hr
+                {
+                    display: none;
+                }
+            }
+
+            .links
+            {
+                a,
+                span
+                {
+                    color: $secondary-color;
+                    font-size: 12px;
+                }
+
+                a
+                {
+                    padding: 4px 8px;
+                    margin: auto;
+                    text-decoration: none;
+                    display: block;
+                    width: max-content;
+        
+                    &.privacy
+                    {
+                        margin-right: #{$standard-spacing / 2};
+                    }
+        
+                    &.terms
+                    {
+                        margin-left: #{$standard-spacing / 2};
+                    }
+
+                    &:hover,
+                    &:focus
+                    {
+                        text-decoration: underline;
+                    }
+                }
+
+                .legal
+                {
+                    @include flex;
+
+                    margin-bottom: $standard-spacing;
+                }
+            }
+        }
+    }
 }
 
 @supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
 {
     header,
-    header + .menu
+    header + .menu-container .menu
     {
         background-color: $primary-color;
     }

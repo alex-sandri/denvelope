@@ -8,7 +8,7 @@ import { Auth } from './scripts/Auth';
 import { Linguist } from './scripts/Linguist';
 import { Component, Input, Spinner, InputWithIcon } from './scripts/Component';
 import { Translation } from './scripts/Translation';
-import { loggedInNavMenu, HideHeaderMenu, header } from "./scripts/header";
+import { HideHeaderMenu, header } from "./scripts/header";
 
 loadEvents.Init();
 
@@ -224,7 +224,7 @@ window.addEventListener("userready", async () =>
 
     searchBar.addEventListener("input", () => GetUserContent(searchBar.value));
 
-    searchBar.addEventListener("focusin", () => Utilities.HideElement(loggedInNavMenu));
+    searchBar.addEventListener("focusin", () => HideHeaderMenu());
 
     addContent.addEventListener("click", () =>
     {
@@ -979,8 +979,6 @@ window.addEventListener("userready", async () =>
         if (isUserContentElement(<HTMLElement>e.target)) return;
         
         (<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element => Utilities.RemoveClass(element, "selected"));
-
-        HideHeaderMenu();
 
         if (e.button === 2) return;
 
@@ -1930,7 +1928,6 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
         const openInNewWindow = e instanceof MouseEvent && e.button === 1; // Mouse wheel
 
         HideContextMenu();
-        HideHeaderMenu();
 
         if (openInNewWindow) open(getUserContentURL(GetUserContentElement(target), IsShared()));
         else

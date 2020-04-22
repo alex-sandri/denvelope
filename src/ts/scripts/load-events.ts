@@ -1,6 +1,6 @@
 import { Utilities } from "./Utilities";
 import { Auth } from "./Auth";
-import { signOutButton, loggedInMenuToggle } from "./header";
+import { signOutButton, accountMenuToggle } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
 import { Translation } from "./Translation";
 
@@ -55,7 +55,7 @@ export const Init = () : void =>
 
         if (["m", "a", "e", "h", "s"].includes(key)) e.preventDefault();
 
-        if (key === "m") loggedInMenuToggle.click();
+        if (key === "m") accountMenuToggle.click();
         else if (key === "a") location.href = "/account";
         else if (key === "e") signOutButton.click();
         else if (key === "h") location.href = "/";
