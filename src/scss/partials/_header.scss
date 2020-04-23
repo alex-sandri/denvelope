@@ -89,21 +89,21 @@ header
         height: 100%;
         width: 100%;
         background-color: rgba(0, 0, 0, 0.5);
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
+        z-index: 999;
         display: none;
 
         .menu
         {
             border: $border-width solid $secondary-color;
             border-radius: $border-radius;
-            z-index: 999;
-            background-color: rgba($primary-color, 0.8);
+            background-color: rgba($primary-color, 0.5);
             backdrop-filter: blur(20px);
             padding: $standard-spacing;
             max-width: calc(100% - #{$standard-spacing * 2});
-            max-height: calc(100% - #{$header-height + $standard-spacing});
+            max-height: calc(100% - #{$standard-spacing * 2});
             overflow: auto;
             overflow-x: hidden;
             overscroll-behavior: contain;
