@@ -103,7 +103,7 @@ header
             backdrop-filter: blur(20px);
             padding: $standard-spacing;
             max-width: calc(100% - #{$standard-spacing * 2});
-            max-height: calc(100% - #{$standard-spacing * 2});
+            max-height: calc(100vh - #{$standard-spacing * 2});
             overflow: auto;
             overflow-x: hidden;
             overscroll-behavior: contain;
