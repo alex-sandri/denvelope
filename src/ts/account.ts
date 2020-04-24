@@ -2488,7 +2488,9 @@ const GetUserContentElement = (target : HTMLElement) : HTMLElement => target?.cl
 
 const DownloadContent = async (id : string, name : string, isFolder : boolean, format ?: string) =>
 {
-    if (isFolder && (!Utilities.IsSet(format) || (format !== "zip" && format !== "tar" && format !== "tar.gz"))) format = "zip";
+    let timestamp : number;
+
+    if (isFolder && (!Utilities.IsSet(format) || !["zip", "tar", "tar.gz"].includes(format))) format = "zip";
 
     if (isFolder)
     {
@@ -2504,13 +2506,14 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
         await functions.httpsCallable("createFolderArchive")({
             id,
             userId: Auth.UserId,
-            format: format
-        }).finally(() => modalCompressingFolder.HideAndRemove());
+            format
+        }).then((result : any) => timestamp = result.data.timestamp)
+        .finally(() => modalCompressingFolder.HideAndRemove());
     }
 
-    preventWindowUnload.fileDownload = true;
+    const fileRef = storage.ref(`${Auth.UserId}/${id}${isFolder ? `.${timestamp}.${format}` : ""}`);
 
-    storage.ref(`${Auth.UserId}/${id}${isFolder ? `.${format}` : ""}`).getDownloadURL().then((url : string) =>
+    fileRef.getDownloadURL().then((url : string) =>
         fetch(url).then(async response =>
         {
             const reader = response.body.getReader();
@@ -2521,6 +2524,8 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
             let downloadedBytes = 0;
 
             const modal = new DownloadModal(name, downloadSize);
+
+            preventWindowUnload.fileDownload = true;
 
             while (true)
             {
@@ -2555,6 +2560,8 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
             a.remove();
 
             preventWindowUnload.fileDownload = false;
+
+            if (isFolder) fileRef.delete();
         }));
 }
 

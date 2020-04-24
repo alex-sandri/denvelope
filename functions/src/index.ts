@@ -388,7 +388,7 @@ const CopyFolderToAccount = async (fromUserId : string, toUserId : string, folde
     resolve();
 });
 
-const CreateFolderArchive = async (userId : string, folderId : string, isUserAuthenticated : boolean, format : string) : Promise<void> => new Promise(async (resolve, reject) =>
+const CreateFolderArchive = async (userId : string, folderId : string, isUserAuthenticated : boolean, format : string) : Promise<Object> => new Promise(async (resolve, reject) =>
 {
     const folderDoc = await db.collection(`users/${userId}/folders`).doc(folderId).get();
 
@@ -401,6 +401,8 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
         return;
     }
 
+    const timestamp = Date.now();
+
     let tmpPath = path.join(os.tmpdir(), userId);
     
     if (!fs.existsSync(tmpPath)) fs.mkdirSync(tmpPath);
@@ -411,7 +413,7 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
     tmpPath = path.join(tmpPath, `${Math.round(Date.now())}`);
     fs.mkdirSync(tmpPath);
     
-    const output = fs.createWriteStream(path.join(tmpPath, `${folderDoc.id}.${format}`));
+    const output = fs.createWriteStream(path.join(tmpPath, `${folderId}.${format}`));
 
     const archiverOptions = format === "zip" ? { zlib: { level: 9 } } : (format === "tar.gz" ? { gzip: true, gzipOptions: { level: 1 } } : {})
     
@@ -419,9 +421,12 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
     
     output.on("close", async () =>
     {
-        await storage.bucket().upload(path.join(tmpPath, `${folderDoc.id}.${format}`), { destination: `${userId}/${folderId}.${format}` });
+        await storage.bucket().upload(path.join(tmpPath, `${folderId}.${format}`), {
+            destination: `${userId}/${folderId}.${timestamp}.${format}`,
+            metadata: { /* Custom metadata */ metadata: { shared: `${folderData.shared}`, inVault: `${folderData.inVault}` } }
+        });
 
-        resolve();
+        resolve({ timestamp });
     });
 
     archive.on("warning", (err : Error) => reject(err));
@@ -430,7 +435,7 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
           
     archive.pipe(output);
     
-    const AddFilesToArchive = (parentFolderId : string, folderPath : string) => new Promise(async (addFilesResolve, AddFilesReject) =>
+    const AddFilesToArchive = (parentFolderId : string, folderPath : string) => new Promise(async (addFilesResolve, addFilesReject) =>
     {
         const RetrieveFiles = () => new Promise(async archiveResolve =>
         {
