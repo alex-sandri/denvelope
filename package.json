@@ -11,18 +11,18 @@
   "license": "MIT",
   "devDependencies": {
     "@types/source-map": "^0.5.2",
-    "css-loader": "^3.5.1",
+    "css-loader": "^3.5.2",
     "extract-loader": "^5.0.1",
     "file-loader": "^6.0.0",
     "glob": "^7.1.6",
     "handlebars": "^4.7.6",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.2.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.0",
     "sass-loader": "^8.0.2",
-    "ts-loader": "^6.2.2",
+    "ts-loader": "^7.0.1",
     "typescript": "^3.8.3",
-    "webpack": "^4.42.1",
+    "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {}
