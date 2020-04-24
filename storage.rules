@@ -5,12 +5,14 @@ service firebase.storage {
         (resource.metadata.shared == "true" &&
         !inVaultResource());
 
-      allow write: if isOwner() &&
+      // If request.resource == null this is a delete operation
+      allow write: if (request.resource != null && isOwner() &&
         (isVaultUnlocked() || !inVaultRequest()) &&
         "shared" in request.resource.metadata &&
         (request.resource.metadata.shared == "true" || request.resource.metadata.shared == "false") &&
         "inVault" in request.resource.metadata &&
-        (request.resource.metadata.inVault == "true" || request.resource.metadata.inVault == "false");
+        (request.resource.metadata.inVault == "true" || request.resource.metadata.inVault == "false")) ||
+        (request.resource == null && fileId.split(".").length > 0);
 
       function isOwner() {
         return request.auth != null &&
