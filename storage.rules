@@ -12,7 +12,7 @@ service firebase.storage {
         (request.resource.metadata.shared == "true" || request.resource.metadata.shared == "false") &&
         "inVault" in request.resource.metadata &&
         (request.resource.metadata.inVault == "true" || request.resource.metadata.inVault == "false")) ||
-        (request.resource == null && fileId.split(".").size() > 0);
+        (request.resource == null && fileId.split("\.").size() > 0);
 
       function isOwner() {
         return request.auth != null &&
