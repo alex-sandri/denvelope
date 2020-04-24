@@ -218,8 +218,12 @@ export const createFolderArchive = functions.region(region).runWith({
 }).https.onCall(async (data, context) =>
 {
     if (!data.userId || !data.id || !data.format) return;
+
+    const timestamp = Date.now();
     
-    await CreateFolderArchive(data.userId, data.id, context.auth !== undefined, data.format);
+    await CreateFolderArchive(data.userId, data.id, context.auth !== undefined, data.format, timestamp);
+
+    return { timestamp };
 });
 
 export const emptyTrash = functions.region(region).https.onCall(async (data, context) =>
@@ -388,92 +392,83 @@ const CopyFolderToAccount = async (fromUserId : string, toUserId : string, folde
     resolve();
 });
 
-const CreateFolderArchive = async (userId : string, folderId : string, isUserAuthenticated : boolean, format : string) : Promise<void> =>
+const CreateFolderArchive = async (userId : string, folderId : string, isUserAuthenticated : boolean, format : string, outputTimestamp : number) : Promise<void> => new Promise(async (resolve, reject) =>
 {
-    const timestamp = Date.now();
+    const folderDoc = await db.collection(`users/${userId}/folders`).doc(folderId).get();
 
-    return new Promise(async (resolve, reject) =>
+    const folderData = folderDoc.data();
+
+    if (!folderDoc.exists || !folderData || (!isUserAuthenticated && !folderData.shared) || !["zip", "tar", "tar.gz"].includes(format))
     {
-        const folderDoc = await db.collection(`users/${userId}/folders`).doc(folderId).get();
+        reject();
 
-        const folderData = folderDoc.data();
+        return;
+    }
 
-        if (!folderDoc.exists || !folderData || (!isUserAuthenticated && !folderData.shared) || !["zip", "tar", "tar.gz"].includes(format))
-        {
-            reject();
+    let tmpPath = path.join(os.tmpdir(), userId);
+        
+    if (!fs.existsSync(tmpPath)) fs.mkdirSync(tmpPath);
+        
+    tmpPath = path.join(tmpPath, folderId);
+    if (!fs.existsSync(tmpPath)) fs.mkdirSync(tmpPath);
+        
+    tmpPath = path.join(tmpPath, `${Math.round(Date.now())}`);
+    fs.mkdirSync(tmpPath);
+        
+    const output = fs.createWriteStream(path.join(tmpPath, `${folderId}.${format}`));
 
-            return;
-        }
-
-        let tmpPath = path.join(os.tmpdir(), userId);
+    const archiverOptions = format === "zip" ? { zlib: { level: 9 } } : (format === "tar.gz" ? { gzip: true, gzipOptions: { level: 1 } } : {})
         
-        if (!fs.existsSync(tmpPath)) fs.mkdirSync(tmpPath);
+    const archive = archiver(format === "zip" ? "zip" : "tar", archiverOptions);
         
-        tmpPath = path.join(tmpPath, folderId);
-        if (!fs.existsSync(tmpPath)) fs.mkdirSync(tmpPath);
-        
-        tmpPath = path.join(tmpPath, `${Math.round(Date.now())}`);
-        fs.mkdirSync(tmpPath);
-        
-        const output = fs.createWriteStream(path.join(tmpPath, `${folderId}.${format}`));
-
-        const archiverOptions = format === "zip" ? { zlib: { level: 9 } } : (format === "tar.gz" ? { gzip: true, gzipOptions: { level: 1 } } : {})
-        
-        const archive = archiver(format === "zip" ? "zip" : "tar", archiverOptions);
-        
-        output.on("close", async () =>
-        {
-            await storage.bucket().upload(path.join(tmpPath, `${folderId}.${format}`), {
-                destination: `${userId}/${folderId}.${timestamp}.${format}`,
-                metadata: { /* Custom metadata */ metadata: { shared: `${folderData.shared}`, inVault: `${folderData.inVault}` } }
-            });
-
-            resolve();
+    output.on("close", async () =>
+    {
+        await storage.bucket().upload(path.join(tmpPath, `${folderId}.${format}`), {
+            destination: `${userId}/${folderId}.${outputTimestamp}.${format}`,
+            metadata: { /* Custom metadata */ metadata: { shared: `${folderData.shared}`, inVault: `${folderData.inVault}` } }
         });
 
-        archive.on("warning", (err : Error) => reject(err));
+        resolve();
+    });
+
+    archive.on("warning", (err : Error) => reject(err));
             
-        archive.on("error", (err : Error) => reject(err));
+    archive.on("error", (err : Error) => reject(err));
             
-        archive.pipe(output);
+    archive.pipe(output);
         
-        const AddFilesToArchive = (parentFolderId : string, folderPath : string) => new Promise(async (addFilesResolve, addFilesReject) =>
+    const AddFilesToArchive = (parentFolderId : string, folderPath : string) => new Promise(async (addFilesResolve, addFilesReject) =>
+    {
+        const RetrieveFiles = () => new Promise(async archiveResolve =>
         {
-            const RetrieveFiles = () => new Promise(async archiveResolve =>
+            const files = await db.collection(`users/${userId}/files`).where("parentId", "==", parentFolderId).get();
+
+            for (const file of files.docs)
             {
-                const files = await db.collection(`users/${userId}/files`).where("parentId", "==", parentFolderId).get();
-
-                for (const file of files.docs)
-                {
-                    const fileName = file.data().name;
+                const fileName = file.data().name;
                 
-                    const fileTmpPath = path.join(tmpPath, fileName);
-                    const filePath = path.join(folderPath, fileName);
+                const fileTmpPath = path.join(tmpPath, fileName);
+                const filePath = path.join(folderPath, fileName);
                 
-                    await storage.bucket().file(`${userId}/${file.id}`).download({
-                        destination: fileTmpPath
-                    });
+                await storage.bucket().file(`${userId}/${file.id}`).download({ destination: fileTmpPath });
                 
-                    archive.file(fileTmpPath, {
-                        name: filePath
-                    });
-                }
+                archive.file(fileTmpPath, { name: filePath });
+            }
 
-                archiveResolve();
-            });
-
-            void RetrieveFiles().then(() => new Promise(async retrieveFilesResolve =>
-            {
-                const folders = await db.collection(`users/${userId}/folders`).where("parentId", "==", parentFolderId).get();
-
-                for (const folder of folders.docs) await AddFilesToArchive(folder.id, path.join(folderPath, folder.data().name));
-
-                retrieveFilesResolve();
-            }).then(() => addFilesResolve()));
+            archiveResolve();
         });
-        
-        await AddFilesToArchive(folderId, "/");
 
-        archive.finalize();
-    }).then(() => { timestamp });
-}
+        void RetrieveFiles().then(() => new Promise(async retrieveFilesResolve =>
+        {
+            const folders = await db.collection(`users/${userId}/folders`).where("parentId", "==", parentFolderId).get();
+
+            for (const folder of folders.docs) await AddFilesToArchive(folder.id, path.join(folderPath, folder.data().name));
+
+            retrieveFilesResolve();
+        }).then(() => addFilesResolve()));
+    });
+        
+    await AddFilesToArchive(folderId, "/");
+
+    archive.finalize();
+});
