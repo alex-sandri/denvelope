@@ -50,7 +50,7 @@
             .empty-trash-button,
             .lock-vault-button
             {
-                @include button($focus-effect: box-shadow);
+                @include button($bg-color: transparent, $hover-color: $primary-color, $focus-effect: box-shadow);
             }
 
             .back-button
