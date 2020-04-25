@@ -433,39 +433,49 @@
 
 .file-preview-container
 {
-    @include flex;
-
     width: 100vw;
     height: 100vh;
     position: absolute;
     z-index: 999;
     top: 0;
     background-color: rgba(0, 0, 0, 0.9);
+    padding: $standard-spacing;
     display: none;
 
-    .close
+    .menu
     {
-        @include button;
+        @include flex($justify-content: flex-end);
 
-        position: absolute;
-        top: $standard-spacing;
-        right: $standard-spacing;
+        position: relative;
         z-index: inherit;
+
+        .close
+        {
+            @include button;
+        }
     }
 
-    canvas,
-    iframe
+    .file-preview
     {
-        position: absolute;
-        top: $standard-spacing * 2 + 49px;
-        max-width: calc(100vw - 30px);
-        max-height: calc(100vh - #{$standard-spacing * 3} - 49px);
-    }
+        @include flex;
 
-    iframe
-    {
-        width: 100%;
-        height: 100%;
+        margin-top: $standard-spacing;
+        height: calc(100vh - #{$standard-spacing * 3} - 49px);
+
+        canvas,
+        iframe
+        {
+            position: absolute;
+            max-width: calc(100vw - 30px);
+            max-height: calc(100vh - #{$standard-spacing * 3} - 49px);
+        }
+    
+        iframe
+        {
+            top: $standard-spacing * 2 + 49px;
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 

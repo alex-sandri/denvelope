@@ -109,7 +109,8 @@ const contextMenuMoveSelectorOptions : HTMLDivElement = contextMenuMoveSelector.
 const emptyFolder : HTMLDivElement = document.querySelector(".empty-folder");
 
 const filePreviewContainer : HTMLDivElement = document.querySelector(".file-preview-container");
-const filePreviewSpinner : HTMLElement = filePreviewContainer.querySelector(".spinner");
+const filePreview : HTMLDivElement = filePreviewContainer.querySelector(".file-preview");
+const filePreviewSpinner : HTMLElement = filePreview.querySelector(".spinner");
 
 let unsubscribeFoldersListener : any = null;
 let unsubscribeFilesListener : any = null;
@@ -638,7 +639,7 @@ window.addEventListener("userready", async () =>
 
     contextMenuDisplayImage.addEventListener("click", async () =>
     {
-        Utilities.ShowElement(filePreviewContainer, "flex");
+        Utilities.ShowElement(filePreviewContainer);
 
         const img = new Image();
 
@@ -650,7 +651,7 @@ window.addEventListener("userready", async () =>
         {
             Utilities.HideElement(filePreviewSpinner);
             
-            filePreviewContainer.appendChild(canvas);
+            filePreview.appendChild(canvas);
 
             canvas.width = img.width;
             canvas.height = img.height;
@@ -786,7 +787,7 @@ window.addEventListener("userready", async () =>
 
     contextMenuDisplayPdf.addEventListener("click", async () =>
     {
-        Utilities.ShowElement(filePreviewContainer, "flex");
+        Utilities.ShowElement(filePreviewContainer);
 
         const iframe = document.createElement("iframe");
 
@@ -804,7 +805,7 @@ window.addEventListener("userready", async () =>
 
         Utilities.HideElement(iframe);
 
-        filePreviewContainer.appendChild(iframe);
+        filePreview.appendChild(iframe);
 
         const RemoveContent = (e : MouseEvent) =>
         {
@@ -812,7 +813,7 @@ window.addEventListener("userready", async () =>
             {
                 Utilities.HideElement(filePreviewContainer);
 
-                filePreviewContainer.querySelector("iframe").remove();
+                iframe.remove();
 
                 filePreviewContainer.removeEventListener("click", RemoveContent);
             }
