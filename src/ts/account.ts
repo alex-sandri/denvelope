@@ -1175,9 +1175,9 @@ window.addEventListener("userready", async () =>
     GetUserContent();
 
     if (Auth.IsAuthenticated)
-        db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((user : any) =>
+        db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
         {
-            const backgroundImageUrl = user.data().backgroundImageUrl;
+            const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
             
             document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
         });
