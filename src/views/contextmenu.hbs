@@ -1,39 +1,41 @@
-<div class="context-menu">
-    <div id="cm-content">
-        <button id="cm-view" data-translation="generic->view"><i class="fas fa-eye fa-fw"></i></button>
-        <button id="cm-save" data-translation="generic->save" data-keyboard-shortcut="ctrl + s"><i class="fas fa-save fa-fw"></i></button>
-        <button id="cm-save-to-my-account" data-translation="generic->save_to_my_account"><i class="fas fa-file-export fa-fw"></i></button>
-        <button id="cm-share" data-translation="generic->share"><i class="fas fa-share fa-fw"></i></button>
-        <button id="cm-sharing-options" data-translation="generic->sharing_options"><i class="fas fa-share fa-fw"></i></button>
-        <button id="cm-copy-shareable-link" data-translation="generic->copy_shareable_link"><i class="fas fa-link fa-fw"></i></button>
-        <button id="cm-unshare" data-translation="generic->unshare"><i class="fas fa-unlink fa-fw"></i></button>
-        <button id="cm-move" data-translation="generic->move"><i class="fas fa-arrows-alt fa-fw"></i></button>
-        <button id="cm-add-to-favourites" data-translation="generic->add_to_favourites"><i class="fas fa-star fa-fw"></i></button>
-        <button id="cm-remove-from-favourites" data-translation="generic->remove_from_favourites"><i class="fas fa-star fa-fw"></i></button>
-        <button id="cm-rename" data-translation="generic->rename"><i class="fas fa-edit fa-fw"></i></button>
-        <button id="cm-info" data-translation="generic->info"><i class="fas fa-info-circle fa-fw"></i></button>
-        <button id="cm-download" data-translation="generic->download"><i class="fas fa-download fa-fw"></i></button>
-        <button id="cm-restore" data-translation="generic->restore"><i class="fas fa-trash-restore fa-fw"></i></button>
-        <button id="cm-delete" data-translation="generic->delete"><i class="fas fa-trash fa-fw"></i></button>
-        <button id="cm-display-image" data-translation="account->display_image"><i class="fas fa-image fa-fw"></i></button>
-        <button id="cm-display-pdf" data-translation="account->display_pdf"><i class="fas fa-file-pdf fa-fw"></i></button>
-        <button id="cm-validate-xml" data-translation="account->validate_xml"><i class="fas fa-file-alt fa-fw"></i></button>
-        <button id="cm-validate-json" data-translation="account->validate_json"><i class="fas fa-file-alt fa-fw"></i></button>
-    </div>
-    <div id="cm-generic">
-        <button id="cm-add-files" data-translation="account->add_files"><i class="fas fa-file fa-fw"></i></button>
-        <button id="cm-add-folder" data-translation="account->add_folder"><i class="fas fa-folder fa-fw"></i></button>
-        <button id="cm-create-file" data-translation="account->create_file"><i class="fas fa-file-code fa-fw"></i></button>
-        <button id="cm-create-folder" data-translation="account->create_folder"><i class="fas fa-folder-plus fa-fw"></i></button>
-    </div>
-    <div id="cm-vault">
-        <button id="cm-create-vault" data-translation="account->create_vault"><i class="fas fa-archive fa-fw"></i></button>
-        <button id="cm-lock" data-translation="generic->lock"><i class="fas fa-lock fa-fw"></i></button>
-        <button id="cm-unlock" data-translation="generic->unlock"><i class="fas fa-lock-open fa-fw"></i></button>
-    </div>
-    <div id="cm-tools"></div>
-    <div id="move-selector">
-        {{> spinner}}
-        <div class="options"></div>
+<div class="context-menu-container">
+    <div class="context-menu">
+        <div id="cm-content">
+            <button id="cm-view" data-translation="generic->view"><i class="fas fa-eye fa-fw"></i></button>
+            <button id="cm-save" data-translation="generic->save" data-keyboard-shortcut="ctrl + s"><i class="fas fa-save fa-fw"></i></button>
+            <button id="cm-save-to-my-account" data-translation="generic->save_to_my_account"><i class="fas fa-file-export fa-fw"></i></button>
+            <button id="cm-share" data-translation="generic->share"><i class="fas fa-share fa-fw"></i></button>
+            <button id="cm-sharing-options" data-translation="generic->sharing_options"><i class="fas fa-share fa-fw"></i></button>
+            <button id="cm-copy-shareable-link" data-translation="generic->copy_shareable_link"><i class="fas fa-link fa-fw"></i></button>
+            <button id="cm-unshare" data-translation="generic->unshare"><i class="fas fa-unlink fa-fw"></i></button>
+            <button id="cm-move" data-translation="generic->move"><i class="fas fa-arrows-alt fa-fw"></i></button>
+            <button id="cm-add-to-favourites" data-translation="generic->add_to_favourites"><i class="fas fa-star fa-fw"></i></button>
+            <button id="cm-remove-from-favourites" data-translation="generic->remove_from_favourites"><i class="fas fa-star fa-fw"></i></button>
+            <button id="cm-rename" data-translation="generic->rename"><i class="fas fa-edit fa-fw"></i></button>
+            <button id="cm-info" data-translation="generic->info"><i class="fas fa-info-circle fa-fw"></i></button>
+            <button id="cm-download" data-translation="generic->download"><i class="fas fa-download fa-fw"></i></button>
+            <button id="cm-restore" data-translation="generic->restore"><i class="fas fa-trash-restore fa-fw"></i></button>
+            <button id="cm-delete" data-translation="generic->delete"><i class="fas fa-trash fa-fw"></i></button>
+            <button id="cm-display-image" data-translation="account->display_image"><i class="fas fa-image fa-fw"></i></button>
+            <button id="cm-display-pdf" data-translation="account->display_pdf"><i class="fas fa-file-pdf fa-fw"></i></button>
+            <button id="cm-validate-xml" data-translation="account->validate_xml"><i class="fas fa-file-alt fa-fw"></i></button>
+            <button id="cm-validate-json" data-translation="account->validate_json"><i class="fas fa-file-alt fa-fw"></i></button>
+        </div>
+        <div id="cm-generic">
+            <button id="cm-add-files" data-translation="account->add_files"><i class="fas fa-file fa-fw"></i></button>
+            <button id="cm-add-folder" data-translation="account->add_folder"><i class="fas fa-folder fa-fw"></i></button>
+            <button id="cm-create-file" data-translation="account->create_file"><i class="fas fa-file-code fa-fw"></i></button>
+            <button id="cm-create-folder" data-translation="account->create_folder"><i class="fas fa-folder-plus fa-fw"></i></button>
+        </div>
+        <div id="cm-vault">
+            <button id="cm-create-vault" data-translation="account->create_vault"><i class="fas fa-archive fa-fw"></i></button>
+            <button id="cm-lock" data-translation="generic->lock"><i class="fas fa-lock fa-fw"></i></button>
+            <button id="cm-unlock" data-translation="generic->unlock"><i class="fas fa-lock-open fa-fw"></i></button>
+        </div>
+        <div id="cm-tools"></div>
+        <div id="move-selector">
+            {{> spinner}}
+            <div class="options"></div>
+        </div>
     </div>
 </div>

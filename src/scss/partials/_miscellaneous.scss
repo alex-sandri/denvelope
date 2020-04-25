@@ -225,40 +225,44 @@
     border-radius: $border-radius;
 }
 
-.context-menu
+.context-menu-container
 {
-    border: $border-width solid $secondary-color;
-    position: fixed;
-    border-radius: $border-radius;
-    z-index: 999;
-    background-color: rgba($primary-color, 0.5);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     display: none;
-    max-height: 100%;
-    overflow: auto;
-    width: fit-content;
 
-    button
-    {
-        @include button($bg-color: transparent, $has-border: false, $has-border-radius: false, $hover-color: $primary-color);
-
-        display: block;
-        width: 100%;
-        text-align: start;
-    }
-
-    #move-selector p
-    {
-        margin: $standard-spacing;
-    }
-}
-
-@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
-{
     .context-menu
     {
-        background-color: $primary-color;
+        border: $border-width solid $secondary-color;
+        position: fixed;
+        border-radius: $border-radius;
+        z-index: 999;
+        background-color: rgba($primary-color, 0.5);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        max-height: 100%;
+        overflow: auto;
+        width: fit-content;
+
+        button
+        {
+            @include button($bg-color: transparent, $has-border: false, $has-border-radius: false, $hover-color: $primary-color);
+
+            display: block;
+            width: 100%;
+            text-align: start;
+        }
+
+        #move-selector p
+        {
+            margin: $standard-spacing;
+        }
+    }
+
+    @supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
+    {
+        .context-menu
+        {
+            background-color: $primary-color;
+        }
     }
 }
 

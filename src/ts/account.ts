@@ -64,7 +64,8 @@ const editorElement : HTMLDivElement = document.querySelector("#editor");
 let editor : any;
 const editorModels : Map<string, any> = new Map<string, any>();
 
-const contextMenu : HTMLDivElement = document.querySelector(".context-menu");
+const contextMenuContainer : HTMLDivElement = document.querySelector(".context-menu-container");
+const contextMenu : HTMLDivElement = contextMenuContainer.querySelector(".context-menu");
 
 const contextMenuContent : HTMLDivElement = contextMenu.querySelector("#cm-content");
 const contextMenuView : HTMLButtonElement = contextMenuContent.querySelector("#cm-view");
@@ -1817,7 +1818,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (!activeEditorTabName?.endsWith(".json")) Utilities.HideElement(contextMenuValidateJson);
 
-    Utilities.ShowElement(contextMenu);
+    Utilities.ShowElement(contextMenuContainer, "flex");
 
     let top : number = e.pageY - scrollY;
     let left : number = e.pageX;
@@ -1838,7 +1839,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 
 const HideContextMenu = () : void =>
 {
-    Utilities.HideElement(contextMenu);
+    Utilities.HideElement(contextMenuContainer);
 
     contextMenuItem = null;
 }
