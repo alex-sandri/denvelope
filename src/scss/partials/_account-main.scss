@@ -12,7 +12,7 @@
 
             .search-bar
             {
-                @include input-container($bg-color: transparent, $has-icon: false);
+                @include input-container($bg-color: rgba($primary-color, 0.5), $has-icon: false);
 
                 margin-bottom: 0;
                 width: 100%;
@@ -28,7 +28,7 @@
             #add-content,
             .more-options
             {
-                @include button($bg-color: transparent, $hover-color: $primary-color);
+                @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color);
 
                 margin-left: $standard-spacing;
             }
@@ -50,7 +50,7 @@
             .empty-trash-button,
             .lock-vault-button
             {
-                @include button($bg-color: transparent, $hover-color: $primary-color, $focus-effect: box-shadow);
+                @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color, $focus-effect: box-shadow);
             }
 
             .back-button
