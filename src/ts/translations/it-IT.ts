@@ -195,6 +195,10 @@ export const it_IT = {
                 title: "Cassaforte",
                 description: "Denvelope dispone di una cassaforte, il posto perfetto per archiviare file di estrema importanza.",
             },
+            pwa: {
+                title: "Progressive Web App",
+                description: "Denvelope è una PWA, il che vuol dire che puoi installarlo praticamente ovunque. Questo ha il vantaggio delle piccolissime dimensioni di installazione.",
+            },
         },
     },
     page_not_found: {

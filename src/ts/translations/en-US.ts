@@ -195,6 +195,10 @@ export const en_US = {
                 title: "Vault",
                 description: "Denvelope has a vault where you can store extremely important files.",
             },
+            pwa: {
+                title: "Progressive Web App",
+                description: "Denvelope is a PWA, this means you can install it basically everywhere. This has the advantage of the very small install size.",
+            },
         },
     },
     page_not_found: {
