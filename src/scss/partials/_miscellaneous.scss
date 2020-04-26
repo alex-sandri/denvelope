@@ -151,6 +151,16 @@
         }
     }
 
+    a
+    {
+        color: $primary-color;
+
+        &:hover
+        {
+            text-decoration: none;
+        }
+    }
+
     &.show
     {
         animation: account-modal-show 100ms linear forwards;
