@@ -1,4 +1,4 @@
-const cacheName : string = "static-v1961";
+const cacheName : string = "static-v1962";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -53,6 +53,7 @@ self.addEventListener("install", (e : any) =>
         "/assets/img/miscellaneous/trash.svg",
         "/assets/img/miscellaneous/offline.svg",
         "/assets/img/miscellaneous/vault.svg?v=2",
+        "/assets/img/miscellaneous/pwa.svg",
         "/assets/img/miscellaneous/web-developer.svg",
         "/assets/img/icons/languages/file.svg?v=2",
         "/assets/img/icons/languages/folder.svg?v=2",
