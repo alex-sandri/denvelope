@@ -1633,34 +1633,35 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     let foldersUpdateCount = 0;
 
-    unsubscribeFoldersListener = foldersRef.onSnapshot((snapshot : any) =>
-    {
-        Utilities.HideElement(userContentLoadingSpinner);
+    if (orderBy !== "size") // size is not a field of a folder document
+        unsubscribeFoldersListener = foldersRef.onSnapshot((snapshot : any) =>
+        {
+            Utilities.HideElement(userContentLoadingSpinner);
 
-        const elements = Array.from(<NodeListOf<HTMLElement>>foldersContainer.querySelectorAll(folderSelector));
+            const elements = Array.from(<NodeListOf<HTMLElement>>foldersContainer.querySelectorAll(folderSelector));
 
-        elements.forEach(element => Utilities.AddClass(element, "old"));
+            elements.forEach(element => Utilities.AddClass(element, "old"));
 
-        snapshot.docs
-            .sort((a : any, b : any) => collator.compare(a.data().name, b.data().name))
-            .forEach((doc : any) =>
-            {
-                CreateUserContent(
-                    "folder",
-                    doc.data().name,
-                    doc.id,
-                    doc.data().shared,
-                    doc.data().starred,
-                    doc.data().trashed
-                ).setAttribute("data-search-term", searchTerm ?? "");
-            });
+            snapshot.docs
+                .sort((a : any, b : any) => collator.compare(a.data().name, b.data().name))
+                .forEach((doc : any) =>
+                {
+                    CreateUserContent(
+                        "folder",
+                        doc.data().name,
+                        doc.id,
+                        doc.data().shared,
+                        doc.data().starred,
+                        doc.data().trashed
+                    ).setAttribute("data-search-term", searchTerm ?? "");
+                });
 
-        foldersContainer.querySelectorAll(".old").forEach(element => element.remove());
+            foldersContainer.querySelectorAll(".old").forEach(element => element.remove());
 
-        UserContentLoaded(foldersUpdateCount > 0);
+            UserContentLoaded(foldersUpdateCount > 0);
 
-        foldersUpdateCount++;
-    });
+            foldersUpdateCount++;
+        });
 
     let filesUpdateCount = 0;
 
