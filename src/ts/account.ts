@@ -1199,12 +1199,11 @@ window.addEventListener("resize", () => HideContextMenu());
 
 window.addEventListener("popstate", async () =>
 {
-    let id : string;
+    let id : string = "root";
 
-    if (location.href.indexOf("/account/") === -1)
+    if (location.href.indexOf("/account") === -1)
     {
-        if (location.pathname === "/account") id = "root";
-        else if (location.pathname.indexOf("/folder/") > -1) id = location.href.substr(location.href.indexOf("/folder/") + 8);
+        if (location.pathname.indexOf("/folder/") > -1) id = location.href.substr(location.href.indexOf("/folder/") + 8);
         else if (location.pathname.indexOf("/file/") > -1)
         {
             id = location.href.substr(location.href.indexOf("/file/") + 6);
