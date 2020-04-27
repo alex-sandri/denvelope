@@ -942,6 +942,8 @@ window.addEventListener("userready", async () =>
 
         HideHeaderMenu();
 
+        history.pushState(null, "", "/account/storage/info");
+
         GetUserContent(null, "size", "desc", 20, true);
     });
 
@@ -1181,7 +1183,8 @@ window.addEventListener("userready", async () =>
 
     if (await vaultOnly()) Auth.RefreshToken();
 
-    GetUserContent();
+    if (location.pathname === "/account/storage/info") whatIsTakingUpSpace.click();
+    else GetUserContent();
 
     if (Auth.IsAuthenticated)
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
@@ -1666,7 +1669,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
     unsubscribeFilesListener = filesRef.onSnapshot((snapshot : any) =>
     {
         Utilities.HideElement(userContentLoadingSpinner);
-        
+
         const elements = <NodeListOf<HTMLElement>>filesContainer.querySelectorAll(fileSelector);
 
         elements.forEach(element => Utilities.AddClass(element, "old"));
@@ -2721,6 +2724,10 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
     {
         currentFolderId = "vault";
 
+        Utilities.AddClass(viewMyAccount, "selected");
+    }
+    else if (location.pathname === "/account/storage/info")
+    {
         Utilities.AddClass(viewMyAccount, "selected");
     }
     else Utilities.AddClass(viewMyAccount, "selected");
