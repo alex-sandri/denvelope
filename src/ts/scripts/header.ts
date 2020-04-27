@@ -6,6 +6,8 @@ export const accountMenuToggle : HTMLButtonElement = header.querySelector(".menu
 export const accountMenuContainer : HTMLDivElement = document.querySelector(".menu-container");
 export const accountMenu : HTMLDivElement = accountMenuContainer.querySelector(".menu");
 
+export const whatIsTakingUpSpace : HTMLAnchorElement = accountMenu.querySelector(".storage-info");
+
 export const signOutButton : HTMLButtonElement = accountMenu.querySelector(".sign-out");
 
 export const userPhoto : NodeListOf<HTMLImageElement> = document.querySelectorAll("[data-update-field=photo]");

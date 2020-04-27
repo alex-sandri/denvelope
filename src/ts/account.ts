@@ -8,7 +8,7 @@ import { Auth } from './scripts/Auth';
 import { Linguist } from './scripts/Linguist';
 import { Component, Input, Spinner, InputWithIcon } from './scripts/Component';
 import { Translation } from './scripts/Translation';
-import { HideHeaderMenu, header } from "./scripts/header";
+import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
 
 loadEvents.Init();
 
@@ -936,6 +936,15 @@ window.addEventListener("userready", async () =>
         Utilities.RemoveClass(document.documentElement, "file-open");
     });
 
+    whatIsTakingUpSpace.addEventListener("click", e =>
+    {
+        e.preventDefault();
+
+        HideHeaderMenu();
+
+        GetUserContent(null, "size", "desc", 20);
+    });
+
     document.addEventListener("click", e =>
     {
         const target = <HTMLElement>e.target;
@@ -1396,7 +1405,7 @@ const ShowFileUploadModal = async (uploadTask : any, name : string, size : numbe
     else resolve();
 });
 
-const GetUserContent = async (searchTerm ?: string) =>
+const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir ?: "desc" | "asc", limit ?: number) =>
 {
     const parentId = Utilities.GetCurrentFolderId(true);
 
@@ -1594,6 +1603,10 @@ const GetUserContent = async (searchTerm ?: string) =>
         analytics.logEvent("search", { search_term: searchTerm });
     }
 
+    if (orderBy) foldersRef = foldersRef.orderBy(orderBy, orderDir ?? "desc");
+
+    if (limit) foldersRef = foldersRef.limit(limit);
+
     foldersRef = foldersRef.where("inVault", "==", await vaultOnly());
 
     let foldersUpdateCount = 0;
@@ -1636,6 +1649,10 @@ const GetUserContent = async (searchTerm ?: string) =>
         filesRef = filesRef.where("parentId", "==", parentId);
 
     if (searchTerm?.length > 0) filesRef = filesRef.where("name", ">=", searchTerm).where("name", "<", end);
+
+    if (orderBy) filesRef = filesRef.orderBy(orderBy, orderDir ?? "desc");
+
+    if (limit) filesRef = filesRef.limit(limit);
 
     filesRef = filesRef.where("inVault", "==", await vaultOnly() && !trashedOnly());
 

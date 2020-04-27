@@ -195,7 +195,19 @@ header
 
                 .storage-info
                 {
+                    margin: auto;
                     margin-top: $standard-spacing;
+                    color: $secondary-color;
+                    padding: 4px 8px;
+                    text-decoration: none;
+                    display: block;
+                    width: max-content;
+
+                    &:hover,
+                    &:focus
+                    {
+                        text-decoration: underline;
+                    }
                 }
 
                 .spinner
