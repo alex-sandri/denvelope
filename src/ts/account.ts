@@ -942,7 +942,7 @@ window.addEventListener("userready", async () =>
 
         HideHeaderMenu();
 
-        GetUserContent(null, "size", "desc", 20);
+        GetUserContent(null, "size", "desc", 20, true);
     });
 
     document.addEventListener("click", e =>
@@ -1405,7 +1405,7 @@ const ShowFileUploadModal = async (uploadTask : any, name : string, size : numbe
     else resolve();
 });
 
-const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir ?: "desc" | "asc", limit ?: number) =>
+const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir ?: "desc" | "asc", limit ?: number, globalSearch ?: boolean) =>
 {
     const parentId = Utilities.GetCurrentFolderId(true);
 
@@ -1602,7 +1602,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
         filesRef = filesRef.where("starred", "==", true);
     }
 
-    if (!(sharedOnly() && Auth.IsAuthenticated) && !starredOnly() && !trashedOnly() && (searchTerm ?? "").length === 0)
+    if (!(sharedOnly() && Auth.IsAuthenticated) && !starredOnly() && !trashedOnly() && (searchTerm ?? "").length === 0 && !globalSearch)
     {
         foldersRef = foldersRef.where("parentId", "==", parentId);
         filesRef = filesRef.where("parentId", "==", parentId);
