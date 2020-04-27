@@ -1643,9 +1643,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
             elements.forEach(element => Utilities.AddClass(element, "old"));
 
             snapshot.docs
-                .sort((a : any, b : any) => collator.compare(a.data().name, b.data().name))
+                .sort((a : any, b : any) => !orderBy ? collator.compare(a.data().name, b.data().name) : 0 /* DO NOT SORT ON THE CLIENT IF ORDERBY IS SET */)
                 .forEach((doc : any) =>
-                {
                     CreateUserContent(
                         "folder",
                         doc.data().name,
@@ -1653,8 +1652,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
                         doc.data().shared,
                         doc.data().starred,
                         doc.data().trashed
-                    ).setAttribute("data-search-term", searchTerm ?? "");
-                });
+                    ).setAttribute("data-search-term", searchTerm ?? ""));
 
             foldersContainer.querySelectorAll(".old").forEach(element => element.remove());
 
@@ -1672,9 +1670,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
         elements.forEach(element => Utilities.AddClass(element, "old"));
 
         snapshot.docs
-            .sort((a : any, b : any) => collator.compare(a.data().name, b.data().name))
+            .sort((a : any, b : any) => !orderBy ? collator.compare(a.data().name, b.data().name) : 0)
             .forEach((doc : any) =>
-            {
                 CreateUserContent(
                     "file",
                     doc.data().name,
@@ -1682,8 +1679,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
                     doc.data().shared,
                     doc.data().starred,
                     doc.data().trashed
-                ).setAttribute("data-search-term", searchTerm ?? "");
-            });
+                ).setAttribute("data-search-term", searchTerm ?? ""));
 
         filesContainer.querySelectorAll(".old").forEach(element => element.remove());
 
