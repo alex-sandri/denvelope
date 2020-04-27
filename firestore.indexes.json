@@ -81,6 +81,24 @@
       ]
     },
     {
+      "collectionGroup": "files",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "inVault",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "trashed",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "size",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "folders",
       "queryScope": "COLLECTION",
       "fields": [
