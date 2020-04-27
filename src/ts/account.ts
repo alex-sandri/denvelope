@@ -1411,7 +1411,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     EmptyUserContentContainers();
 
-    if (parentId === "root" && navigator.onLine && !searchTerm)
+    if (parentId === "root" && navigator.onLine && !searchTerm && !globalSearch)
     {
         Utilities.ShowElement(vault, "flex");
 
@@ -1665,6 +1665,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     unsubscribeFilesListener = filesRef.onSnapshot((snapshot : any) =>
     {
+        Utilities.HideElement(userContentLoadingSpinner);
+        
         const elements = <NodeListOf<HTMLElement>>filesContainer.querySelectorAll(fileSelector);
 
         elements.forEach(element => Utilities.AddClass(element, "old"));
