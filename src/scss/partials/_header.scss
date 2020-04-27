@@ -110,6 +110,7 @@ header
 
             .account,
             .settings,
+            .storage-info,
             button
             {
                 @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-bg-color: $secondary-color, $hover-color: $primary-color);
@@ -119,6 +120,7 @@ header
 
             .account,
             .settings,
+            .storage-info,
             .bmc-button
             {
                 margin-bottom: $standard-spacing;
@@ -195,19 +197,7 @@ header
 
                 .storage-info
                 {
-                    margin: auto;
                     margin-top: $standard-spacing;
-                    color: $secondary-color;
-                    padding: 4px 8px;
-                    text-decoration: none;
-                    display: block;
-                    width: max-content;
-
-                    &:hover,
-                    &:focus
-                    {
-                        text-decoration: underline;
-                    }
                 }
 
                 .spinner
