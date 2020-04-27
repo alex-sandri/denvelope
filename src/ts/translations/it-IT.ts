@@ -27,6 +27,7 @@ export const it_IT = {
         validate_xml: "Valida XML",
         validate_json: "Valida JSON",
         image_address: "Indirizzo dell'immagine",
+        what_is_taking_up_space: "Cosa occupa spazio?",
         context_menu: {
             move: {
                 impossible: "Impossibile spostare questo elemento, non ci sono cartelle in cui spostarlo",
