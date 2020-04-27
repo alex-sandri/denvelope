@@ -1589,25 +1589,47 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
     const end = searchTerm?.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
     let foldersRef = db.collection(`users/${Auth.UserId}/folders`).where("trashed", "==", trashedOnly());
+    let filesRef = db.collection(`users/${Auth.UserId}/files`).where("trashed", "==", trashedOnly());
 
-    if (sharedOnly()) foldersRef = foldersRef.where("shared", "==", true);
-    else if (starredOnly()) foldersRef = foldersRef.where("starred", "==", true);
+    if (sharedOnly())
+    {
+        foldersRef = foldersRef.where("shared", "==", true);
+        filesRef = filesRef.where("shared", "==", true);
+    }
+    else if (starredOnly())
+    {
+        foldersRef = foldersRef.where("starred", "==", true);
+        filesRef = filesRef.where("starred", "==", true);
+    }
 
     if (!(sharedOnly() && Auth.IsAuthenticated) && !starredOnly() && !trashedOnly() && (searchTerm ?? "").length === 0)
+    {
         foldersRef = foldersRef.where("parentId", "==", parentId);
+        filesRef = filesRef.where("parentId", "==", parentId);
+    }
 
     if (searchTerm?.length > 0)
     {
         foldersRef = foldersRef.where("name", ">=", searchTerm).where("name", "<", end);
+        filesRef = filesRef.where("name", ">=", searchTerm).where("name", "<", end);
 
         analytics.logEvent("search", { search_term: searchTerm });
     }
 
-    if (orderBy) foldersRef = foldersRef.orderBy(orderBy, orderDir ?? "desc");
+    if (orderBy)
+    {
+        foldersRef = foldersRef.orderBy(orderBy, orderDir ?? "desc");
+        filesRef = filesRef.orderBy(orderBy, orderDir ?? "desc");
+    }
 
-    if (limit) foldersRef = foldersRef.limit(limit);
+    if (limit)
+    {
+        foldersRef = foldersRef.limit(limit);
+        filesRef = filesRef.limit(limit);
+    }
 
     foldersRef = foldersRef.where("inVault", "==", await vaultOnly());
+    filesRef = filesRef.where("inVault", "==", await vaultOnly() && !trashedOnly());
 
     let foldersUpdateCount = 0;
 
@@ -1639,22 +1661,6 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
         foldersUpdateCount++;
     });
-
-    let filesRef = db.collection(`users/${Auth.UserId}/files`).where("trashed", "==", trashedOnly());
-
-    if (sharedOnly()) filesRef = filesRef.where("shared", "==", true);
-    else if (starredOnly()) filesRef = filesRef.where("starred", "==", true);
-
-    if (!(sharedOnly() && Auth.IsAuthenticated) && !starredOnly() && !trashedOnly() && (searchTerm ?? "").length === 0)
-        filesRef = filesRef.where("parentId", "==", parentId);
-
-    if (searchTerm?.length > 0) filesRef = filesRef.where("name", ">=", searchTerm).where("name", "<", end);
-
-    if (orderBy) filesRef = filesRef.orderBy(orderBy, orderDir ?? "desc");
-
-    if (limit) filesRef = filesRef.limit(limit);
-
-    filesRef = filesRef.where("inVault", "==", await vaultOnly() && !trashedOnly());
 
     let filesUpdateCount = 0;
 
