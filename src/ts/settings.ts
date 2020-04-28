@@ -326,7 +326,12 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
-    resetCacheSize.addEventListener("click", () => null);
+    resetCacheSize.addEventListener("click", () =>
+    {
+        resetCacheSize.disabled = true;
+        
+        localStorage.setItem("cache-size", defaultCacheSize.toString());
+    });
 
     deleteAccount.addEventListener("click", () =>
     {
