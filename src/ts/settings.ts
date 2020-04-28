@@ -30,6 +30,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 
 const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
+const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .reset");
 
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
@@ -49,10 +50,13 @@ if (location.pathname.indexOf("/settings/") > -1)
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
 
+let cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
+const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
+
 changeCacheSize.parentElement.querySelector("p").innerHTML =
-    `${Translation.Get("generic->current")}: <span>${
-        parseInt(localStorage.getItem("cache-size")) / 1000 / 1000 ||
-        (<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value}MB</span>`;
+    `${Translation.Get("generic->current")}: <span>${cacheSizeBytes / 1000 / 1000 || defaultCacheSize}MB</span>`;
+
+resetCacheSize.disabled = cacheSizeBytes === null || defaultCacheSize === cacheSizeBytes;
 
 settingsMenuButtons.forEach(element =>
 {
@@ -321,6 +325,8 @@ window.addEventListener("userready", () =>
 
         modal.Show(true);
     });
+
+    resetCacheSize.addEventListener("click", () => null);
 
     deleteAccount.addEventListener("click", () =>
     {
