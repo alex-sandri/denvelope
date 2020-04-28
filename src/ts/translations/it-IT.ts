@@ -225,6 +225,13 @@ export const it_IT = {
             delete_account: "Elimina account",
             cache_size: "Dimensioni cache",
         },
+        privacy: {
+            title: "Privacy",
+            clear_cache: {
+                title: "Svuota cache",
+                clear: "Svuota",
+            },
+        },
         info: {
             title: "Informazioni",
         },

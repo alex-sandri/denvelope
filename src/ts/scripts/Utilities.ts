@@ -155,4 +155,9 @@ export class Utilities
             offline: !navigator.onLine,
             isPwa: (<any>navigator).standalone || window.matchMedia("(display-mode: standalone)").matches
         });
+
+    public static ClearCache = () =>
+    {
+        console.log("cleared");
+    }
 }

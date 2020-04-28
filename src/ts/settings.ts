@@ -35,6 +35,8 @@ const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .
 
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
+const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
+
 languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang")}]`)).index;
 
 let section : string = "general";
@@ -45,8 +47,7 @@ if (location.pathname.indexOf("/settings/") > -1)
 
     if (section.indexOf("/") > -1) section = section.substr(0, section.indexOf("/"));
 
-    if (section !== "general" && section !== "security" && section !== "advanced" && section !== "info")
-        section = "general";
+    if (![ "general", "security", "advanced", "privacy", "info" ].includes(section)) section = "general";
 }
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
@@ -347,6 +348,8 @@ window.addEventListener("userready", () =>
 
         modal.Show(true);
     });
+
+    clearCache.addEventListener("click", Utilities.ClearCache);
 
     if (Auth.IsAuthenticated)
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>

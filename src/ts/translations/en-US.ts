@@ -225,6 +225,13 @@ export const en_US = {
             delete_account: "Delete account",
             cache_size: "Cache size",
         },
+        privacy: {
+            title: "Privacy",
+            clear_cache: {
+                title: "Clear cache",
+                clear: "Clear",
+            },
+        },
         info: {
             title: "Info",
         },
