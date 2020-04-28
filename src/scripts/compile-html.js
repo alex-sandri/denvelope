@@ -3,18 +3,19 @@ const path = require("path");
 const handlebars = require("handlebars");
 const glob = require("glob");
 
-handlebars.registerPartial("advanced", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/advanced.hbs")).toString("utf-8")));
+handlebars.registerPartial("advanced", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/advanced.hbs")).toString("utf-8")));
 handlebars.registerPartial("buymeacoffee", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/buymeacoffee.hbs")).toString("utf-8")));
 handlebars.registerPartial("contextmenu", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/contextmenu.hbs")).toString("utf-8")));
 handlebars.registerPartial("defaulttags", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/defaulttags.hbs")).toString("utf-8")));
 handlebars.registerPartial("editor", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/editor.hbs")).toString("utf-8")));
 handlebars.registerPartial("firebase", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/firebase.hbs")).toString("utf-8")));
 handlebars.registerPartial("footer", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/footer.hbs")).toString("utf-8")));
-handlebars.registerPartial("general", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/general.hbs")).toString("utf-8")));
+handlebars.registerPartial("general", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/general.hbs")).toString("utf-8")));
 handlebars.registerPartial("header", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/header.hbs")).toString("utf-8")));
-handlebars.registerPartial("info", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/info.hbs")).toString("utf-8")));
+handlebars.registerPartial("info", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/info.hbs")).toString("utf-8")));
 handlebars.registerPartial("modal", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/modal.hbs")).toString("utf-8")));
-handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/security.hbs")).toString("utf-8")));
+handlebars.registerPartial("privacy", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/privacy.hbs")).toString("utf-8")));
+handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/security.hbs")).toString("utf-8")));
 handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/spinner.hbs")).toString("utf-8")));
 
 const CssFileName = glob.sync("../../public/assets/css/bundle.*.css")[0].split("/").pop();
