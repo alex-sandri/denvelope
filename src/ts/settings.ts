@@ -51,13 +51,7 @@ if (location.pathname.indexOf("/settings/") > -1)
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
 
-let cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
 const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
-
-changeCacheSize.parentElement.querySelector("p").innerHTML =
-    `${Translation.Get("generic->current")}: <span>${cacheSizeBytes / 1000 / 1000 || defaultCacheSize}MB</span>`;
-
-resetCacheSize.disabled = cacheSizeBytes === null || defaultCacheSize === cacheSizeBytes;
 
 settingsMenuButtons.forEach(element =>
 {
@@ -321,7 +315,7 @@ window.addEventListener("userready", () =>
         {
             modal.HideAndRemove();
 
-            localStorage.setItem("cache-size", (parseInt(cacheSizeOptions.selectedOptions[0].value) * 1000 * 1000).toString());
+            UpdateCacheSize(parseInt(cacheSizeOptions.selectedOptions[0].value) * 1000 * 1000);
 
             genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
         }
@@ -331,9 +325,7 @@ window.addEventListener("userready", () =>
 
     resetCacheSize.addEventListener("click", () =>
     {
-        resetCacheSize.disabled = true;
-
-        localStorage.setItem("cache-size", defaultCacheSize.toString());
+        UpdateCacheSize(defaultCacheSize);
 
         genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
     });
@@ -387,4 +379,16 @@ const UpdateLanguage = () : void =>
     changeLanguage.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${languageSelect.selectedOptions[0].text}</span>`;
 };
 
+const UpdateCacheSize = (bytes : number) =>
+{
+    localStorage.setItem("cache-size", bytes.toString());
+
+    changeCacheSize.parentElement.querySelector("p").innerHTML =
+        `${Translation.Get("generic->current")}: <span>${bytes / 1000 / 1000}MB</span>`;
+
+    resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
+}
+
 UpdateLanguage();
+
+UpdateCacheSize(parseInt(localStorage.getItem("cache-size")) || defaultCacheSize); // if cache-size is null parseInt returns NaN
