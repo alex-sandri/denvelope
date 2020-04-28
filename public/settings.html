@@ -99,18 +99,11 @@
         </div>
     </div>    <main>
         <div class="settings-menu">
-            <button data-sect="general" data-translation="settings->general->title">
-                <i class="fas fa-cog"></i>
-            </button>
-            <button data-sect="security" data-translation="settings->security->title">
-                <i class="fas fa-shield-alt"></i>
-            </button>
-            <button data-sect="advanced" data-translation="settings->advanced->title">
-                <i class="fas fa-sliders-h"></i>
-            </button>
-            <button data-sect="info" data-translation="settings->info->title">
-                <i class="fas fa-info-circle"></i>
-            </button>
+            <button data-sect="general" data-translation="settings->general->title"><i class="fas fa-cog"></i></button>
+            <button data-sect="security" data-translation="settings->security->title"><i class="fas fa-shield-alt"></i></button>
+            <button data-sect="advanced" data-translation="settings->advanced->title"><i class="fas fa-sliders-h"></i></button>
+            <button data-sect="privacy" data-translation="settings->privacy->title"><i class="fas fa-user-secret"></i></button>
+            <button data-sect="info" data-translation="settings->info->title"><i class="fas fa-info-circle"></i></button>
         </div>
         <section class="settings-section" id="general">
             <div class="setting" id="change-language">
@@ -243,6 +236,11 @@
             <div class="setting" id="delete-account">
                 <h1 data-translation="settings->advanced->delete_account"></h1>
                 <div><button class="delete delete-account-button" data-translation="generic->delete"><i class="fas fa-trash"></i></button></div>
+            </div>
+        </section>        <section class="settings-section" id="privacy">
+            <div class="setting" id="empty-cache">
+                <h1 data-translation="settings->advanced->empty_cache"></h1>
+                <div><button class="empty" data-translation="generic->empty"><i class="fas fa-recycle"></i></button></div>
             </div>
         </section>        <section class="settings-section" id="info">
             <div class="setting">
