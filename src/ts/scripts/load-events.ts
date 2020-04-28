@@ -1,6 +1,6 @@
 import { Utilities } from "./Utilities";
 import { Auth } from "./Auth";
-import { signOutButton, accountMenuToggle } from "./header";
+import { signOutButton, accountMenuToggle, whatIsTakingUpSpace } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
 import { Translation } from "./Translation";
 
@@ -87,6 +87,9 @@ export const Init = () : void =>
                 document.querySelector("[data-update-field=used-storage-percent]").innerHTML = `(${percent})`;
 
                 (<HTMLElement>document.querySelector(".storage .used")).style.width = percent;
+
+                if (usedStorage > 0) Utilities.ShowElement(whatIsTakingUpSpace);
+                else Utilities.HideElement(whatIsTakingUpSpace);
             });
     });
 }
