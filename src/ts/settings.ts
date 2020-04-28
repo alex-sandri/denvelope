@@ -349,7 +349,7 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
-    clearCache.addEventListener("click", Utilities.ClearCache);
+    clearCache.addEventListener("click", Utilities.ClearFirestoreCache);
 
     if (Auth.IsAuthenticated)
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>

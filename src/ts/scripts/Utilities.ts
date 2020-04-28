@@ -156,8 +156,21 @@ export class Utilities
             isPwa: (<any>navigator).standalone || window.matchMedia("(display-mode: standalone)").matches
         });
 
-    public static ClearCache = () =>
+    public static ClearFirestoreCache = () =>
+        // Firebase Cloud Firestore DB to keep persisted data for offline usage
+        indexedDB.deleteDatabase("firestore/[DEFAULT]/denvelope-firebase/main");
+
+    public static ClearCache = () => // This method is to be used when signing out the user
     {
-        console.log("cleared");
+        Utilities.ClearFirestoreCache();
+
+        // Firebase Auth DB to keep the auth token
+        indexedDB.deleteDatabase("firebase-installations-database");
+
+        // Firebase Auth DB to keep informations about the signed in user
+        indexedDB.deleteDatabase("firebaseLocalStorageDb");
+
+        // Clear localStorage, it contains all Firestore pending writes and its cache size
+        localStorage.clear();
     }
 }
