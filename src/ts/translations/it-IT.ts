@@ -228,6 +228,7 @@ export const it_IT = {
         info: {
             title: "Informazioni",
         },
+        changes_will_be_applied_at_the_next_page_load: "Le modifiche saranno applicate al prossimo caricamento di pagina",
     },
     share: {
         check_out: "Guarda",

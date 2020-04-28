@@ -7,6 +7,7 @@ import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
 import { Component, InputWithIcon } from "./scripts/Component";
+import * as genericMessage from "./scripts/generic-message";
 
 loadEvents.Init();
 
@@ -321,6 +322,8 @@ window.addEventListener("userready", () =>
             modal.HideAndRemove();
 
             localStorage.setItem("cache-size", (parseInt(cacheSizeOptions.selectedOptions[0].value) * 1000 * 1000).toString());
+
+            genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
         }
 
         modal.Show(true);
@@ -329,8 +332,10 @@ window.addEventListener("userready", () =>
     resetCacheSize.addEventListener("click", () =>
     {
         resetCacheSize.disabled = true;
-        
+
         localStorage.setItem("cache-size", defaultCacheSize.toString());
+
+        genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
     });
 
     deleteAccount.addEventListener("click", () =>

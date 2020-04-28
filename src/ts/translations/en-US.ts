@@ -228,6 +228,7 @@ export const en_US = {
         info: {
             title: "Info",
         },
+        changes_will_be_applied_at_the_next_page_load: "Changes will be applied at the next page load",
     },
     share: {
         check_out: "Check out",
