@@ -25,7 +25,7 @@ export class Auth
     {
         Auth.auth.signOut();
 
-        (<any>window).firebase.firestore().clearPersistence();
+        Utilities.ClearCache();
 
         location.href = "/";
     }
