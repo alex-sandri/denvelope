@@ -161,6 +161,7 @@ export const en_US = {
         sign_in: "Sign In",
         example: "Example",
         reference: "Reference",
+        default: "Default",
     },
     header: {
         storage: {
@@ -222,6 +223,7 @@ export const en_US = {
         advanced: {
             title: "Advanced",
             delete_account: "Delete account",
+            cache_size: "Cache size",
         },
         info: {
             title: "Info",

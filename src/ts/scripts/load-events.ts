@@ -8,12 +8,21 @@ export const Init = () : void =>
 {
     const db = (<any>window).firebase.firestore();
 
+    const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
+
+    if (cacheSizeBytes)  db.settings({ cacheSizeBytes });
+
     // Enable caching firestore queries for offline support and enable synchronization between tabs
-    db.enablePersistence({
-        synchronizeTabs: true
-    });
+    db.enablePersistence({ synchronizeTabs: true });
 
     Auth.Init();
+
+    Utilities.SetCookie("cookie_consent", "true", 60);
+
+    Translation.Init();
+
+    // This needs to wait for the translation to be completed
+    Utilities.LogPageViewEvent();
 
     const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
 
@@ -34,16 +43,6 @@ export const Init = () : void =>
     });
 
     signOutButton.addEventListener("click", () => Auth.SignOut());
-
-    document.addEventListener("DOMContentLoaded", () =>
-    {
-        Utilities.SetCookie("cookie_consent", "true", 60);
-
-        Translation.Init();
-
-        // This needs to wait for the translation to be completed
-        Utilities.LogPageViewEvent();
-    });
 
     window.addEventListener("load", () => Utilities.RemoveClass(document.body, "preload"));
 

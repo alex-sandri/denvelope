@@ -161,6 +161,7 @@ export const it_IT = {
         sign_in: "Accedi",
         example: "Esempio",
         reference: "Riferimento",
+        default: "Predefinito",
     },
     header: {
         storage: {
@@ -222,6 +223,7 @@ export const it_IT = {
         advanced: {
             title: "Avanzate",
             delete_account: "Elimina account",
+            cache_size: "Dimensioni cache",
         },
         info: {
             title: "Informazioni",

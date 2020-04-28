@@ -29,9 +29,11 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 
+const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
+
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
-languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang") ?? navigator.language}]`)).index;
+languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang")}]`)).index;
 
 let section : string = "general";
 
@@ -46,6 +48,11 @@ if (location.pathname.indexOf("/settings/") > -1)
 }
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
+
+const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
+
+if (cacheSizeBytes)
+    changeCacheSize.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${cacheSizeBytes / 1000 / 1000}MB</span>`;
 
 settingsMenuButtons.forEach(element =>
 {
@@ -282,6 +289,32 @@ window.addEventListener("userready", () =>
             Auth.SignOut();
 
             modal.HideAndRemove();
+        }
+
+        modal.Show(true);
+    });
+
+    changeCacheSize.addEventListener("click", () =>
+    {
+        const modal = new Modal({
+            title: changeCacheSize.closest(".setting").querySelector("h1").innerText,
+            allow: [ "close", "confirm" ],
+            loading: false
+        });
+
+        const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>document.querySelector("#cache-size .cache-size-options").cloneNode(true);
+
+        (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText += ` (${Translation.Get("generic->default")})`;
+
+        if (cacheSizeBytes) cacheSizeOptions.selectedIndex = (<HTMLOptionElement>cacheSizeOptions.querySelector(`[value="${cacheSizeBytes / 1000 / 1000}"]`)).index;
+
+        modal.AppendContent([ cacheSizeOptions ]);
+
+        modal.OnConfirm = () =>
+        {
+            modal.HideAndRemove();
+
+            localStorage.setItem("cache-size", (parseInt(cacheSizeOptions.selectedOptions[0].value) * 1000 * 1000).toString());
         }
 
         modal.Show(true);
