@@ -49,10 +49,10 @@ if (location.pathname.indexOf("/settings/") > -1)
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
 
-const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
-
-if (cacheSizeBytes)
-    changeCacheSize.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${cacheSizeBytes / 1000 / 1000}MB</span>`;
+changeCacheSize.parentElement.querySelector("p").innerHTML =
+    `${Translation.Get("generic->current")}: <span>${
+        parseInt(localStorage.getItem("cache-size")) / 1000 / 1000 ||
+        (<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value}MB</span>`;
 
 settingsMenuButtons.forEach(element =>
 {
@@ -305,6 +305,8 @@ window.addEventListener("userready", () =>
         const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>document.querySelector("#cache-size .cache-size-options").cloneNode(true);
 
         (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText += ` (${Translation.Get("generic->default")})`;
+
+        const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
 
         if (cacheSizeBytes) cacheSizeOptions.selectedIndex = (<HTMLOptionElement>cacheSizeOptions.querySelector(`[value="${cacheSizeBytes / 1000 / 1000}"]`)).index;
 
