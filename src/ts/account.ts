@@ -216,9 +216,7 @@ window.addEventListener("userready", async () =>
     {
         history.pushState(null, "", "/account/recents");
 
-        Utilities.SetCurrentFolderId("recents");
-
-        GetUserContent();
+        GetUserContent(null, "updated", "desc", 20, true);
 
         UpdateBottomSectionBar(viewRecentContent);
     });
@@ -1461,7 +1459,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     if (IsShowFileVisible() && location.pathname.indexOf("/file/") === -1) editorClose.click();
 
-    if ((searchTerm ?? "").length === 0)
+    if ((searchTerm ?? "").length === 0 && !globalSearch)
     {
         if (parentId !== "root" && Utilities.GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && location.pathname.indexOf("/file/") === -1)
         {
@@ -2610,7 +2608,6 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 const sharedOnly = () : boolean => (location.pathname === "/account/shared" && Utilities.GetCurrentFolderId(true) === "shared") || !Auth.IsAuthenticated;
 const starredOnly = () : boolean => location.pathname === "/account/starred" && Utilities.GetCurrentFolderId(true) === "starred";
-const recentsOnly = () : boolean => location.pathname === "/account/recents" && Utilities.GetCurrentFolderId(true) === "recents";
 const trashedOnly = () : boolean => location.pathname === "/account/trash" && Utilities.GetCurrentFolderId(true) === "trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
     (location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
@@ -2733,8 +2730,6 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
     }
     else if (location.pathname === "/account/recents")
     {
-        currentFolderId = "recents";
-
         Utilities.AddClass(viewRecentContent, "selected");
     }
     else if (location.pathname === "/account/trash")
