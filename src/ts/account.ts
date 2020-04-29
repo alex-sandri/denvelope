@@ -216,7 +216,7 @@ window.addEventListener("userready", async () =>
     {
         history.pushState(null, "", "/account/recents");
 
-        GetUserContent(null, "updated", "desc", 20, true);
+        GetUserContent(null, "updated", "desc", 20, true, false);
 
         UpdateBottomSectionBar(viewRecentContent);
     });
@@ -954,7 +954,7 @@ window.addEventListener("userready", async () =>
 
         history.pushState(null, "", "/account/storage/info");
 
-        GetUserContent(null, "size", "desc", 20, true);
+        GetUserContent(null, "size", "desc", 20, true, false);
     });
 
     document.addEventListener("click", e =>
@@ -1421,7 +1421,7 @@ const ShowFileUploadModal = async (uploadTask : any, name : string, size : numbe
     else resolve();
 });
 
-const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir ?: "desc" | "asc", limit ?: number, globalSearch ?: boolean) =>
+const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir ?: "desc" | "asc", limit ?: number, globalSearch ?: boolean, includeFolders : boolean = true) =>
 {
     const parentId = Utilities.GetCurrentFolderId(true);
 
@@ -1649,7 +1649,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     let foldersUpdateCount = 0;
 
-    if (orderBy !== "size") // size is not a field of a folder document
+    if (includeFolders)
         unsubscribeFoldersListener = foldersRef.onSnapshot((snapshot : any) =>
         {
             Utilities.HideElement(userContentLoadingSpinner);
