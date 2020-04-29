@@ -2610,6 +2610,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 const sharedOnly = () : boolean => (location.pathname === "/account/shared" && Utilities.GetCurrentFolderId(true) === "shared") || !Auth.IsAuthenticated;
 const starredOnly = () : boolean => location.pathname === "/account/starred" && Utilities.GetCurrentFolderId(true) === "starred";
+const recentsOnly = () : boolean => location.pathname === "/account/recents" && Utilities.GetCurrentFolderId(true) === "recents";
 const trashedOnly = () : boolean => location.pathname === "/account/trash" && Utilities.GetCurrentFolderId(true) === "trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
     (location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
