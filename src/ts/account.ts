@@ -955,6 +955,8 @@ window.addEventListener("userready", async () =>
         history.pushState(null, "", "/account/storage/info");
 
         GetUserContent(null, "size", "desc", 20, true, false);
+
+        UpdateBottomSectionBar(viewMyAccount);
     });
 
     document.addEventListener("click", e =>
