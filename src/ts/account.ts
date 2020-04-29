@@ -216,6 +216,8 @@ window.addEventListener("userready", async () =>
     {
         history.pushState(null, "", "/account/recents");
 
+        Utilities.SetCurrentFolderId("root"); // Reset it to default
+
         GetUserContent(null, "updated", "desc", 20, true, false);
 
         UpdateBottomSectionBar(viewRecentContent);
@@ -954,6 +956,8 @@ window.addEventListener("userready", async () =>
 
         history.pushState(null, "", "/account/storage/info");
 
+        Utilities.SetCurrentFolderId("root"); // Reset it to default
+
         GetUserContent(null, "size", "desc", 20, true, false);
 
         UpdateBottomSectionBar(viewMyAccount);
@@ -1428,6 +1432,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
     const parentId = Utilities.GetCurrentFolderId(true);
 
     EmptyUserContentContainers();
+
+    if (globalSearch) Utilities.HideElement(folderNavigation);
 
     if (parentId === "root" && navigator.onLine && !searchTerm && !globalSearch)
     {
