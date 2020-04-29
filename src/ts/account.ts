@@ -1194,6 +1194,7 @@ window.addEventListener("userready", async () =>
     if (await vaultOnly()) Auth.RefreshToken();
 
     if (location.pathname === "/account/storage/info") whatIsTakingUpSpace.click();
+    else if (recentsOnly()) viewRecentContent.click();
     else GetUserContent();
 
     if (Auth.IsAuthenticated)
@@ -2608,6 +2609,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 const sharedOnly = () : boolean => (location.pathname === "/account/shared" && Utilities.GetCurrentFolderId(true) === "shared") || !Auth.IsAuthenticated;
 const starredOnly = () : boolean => location.pathname === "/account/starred" && Utilities.GetCurrentFolderId(true) === "starred";
+const recentsOnly = () : boolean => location.pathname === "/account/recents";
 const trashedOnly = () : boolean => location.pathname === "/account/trash" && Utilities.GetCurrentFolderId(true) === "trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
     (location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
