@@ -46,19 +46,7 @@
         "destination": "/account.html"
       },
       {
-        "source": "/account/shared",
-        "destination": "/account.html"
-      },
-      {
-        "source": "/account/starred",
-        "destination": "/account.html"
-      },
-      {
-        "source": "/account/trash",
-        "destination": "/account.html"
-      },
-      {
-        "source": "/account/vault",
+        "source": "/account/**",
         "destination": "/account.html"
       },
       {
