@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2017";
+const cacheName = "static-v2019";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -9,9 +9,9 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/cookies",
     "/accessibility",
     "/assets/css/bundle.e5e9d9dc7e83ea6010d6eeb18f738132.css",
-    "/assets/js/home.0ef4417fe6b0aec08047.js",
-    "/assets/js/account.834094ac7de051235231.js",
-    "/assets/js/settings.ea76901b5afade11840e.js",
+    "/assets/js/home.8c1c35952c2f7e38ac07.js",
+    "/assets/js/account.837d7ab4665b404713d1.js",
+    "/assets/js/settings.f0bb869e8800ddd9d03d.js",
     "/__/firebase/7.14.2/firebase-app.js",
     "/__/firebase/7.14.2/firebase-auth.js",
     "/__/firebase/7.14.2/firebase-firestore.js",
@@ -133,13 +133,7 @@ self.addEventListener("fetch", (e) => {
     if (url.origin === location.origin &&
         (url.pathname.startsWith("/folder") ||
             url.pathname.startsWith("/file") ||
-            [
-                "/account/shared",
-                "/account/starred",
-                "/account/trash",
-                "/account/vault",
-                "/account/storage/info"
-            ].includes(url.pathname))) {
+            url.pathname.startsWith("/account"))) {
         e.respondWith(caches.open(cacheName).then(cache => cache.match("/account").then(response => response)));
         return;
     }

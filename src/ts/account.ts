@@ -32,6 +32,7 @@ const bottomMenu : HTMLElement = document.querySelector("aside");
 const viewMyAccount : HTMLButtonElement = bottomMenu.querySelector("#my-account");
 const viewSharedContent : HTMLButtonElement = bottomMenu.querySelector("#shared");
 const viewStarredContent : HTMLButtonElement = bottomMenu.querySelector("#starred");
+const viewRecentContent : HTMLButtonElement = bottomMenu.querySelector("#recents");
 const viewTrashedContent : HTMLButtonElement = bottomMenu.querySelector("#trash");
 
 const searchBar : HTMLInputElement = document.querySelector("#search");
@@ -209,6 +210,17 @@ window.addEventListener("userready", async () =>
         GetUserContent();
 
         UpdateBottomSectionBar(viewStarredContent);
+    });
+
+    viewRecentContent.addEventListener("click", () =>
+    {
+        history.pushState(null, "", "/account/recents");
+
+        Utilities.SetCurrentFolderId("recents");
+
+        GetUserContent();
+
+        UpdateBottomSectionBar(viewRecentContent);
     });
 
     viewTrashedContent.addEventListener("click", () =>
@@ -1258,6 +1270,10 @@ window.addEventListener("keydown", e =>
     else if (key === "p")
     {
         if (!e.ctrlKey) viewStarredContent.click();
+    }
+    else if (key === "r")
+    {
+        if (!e.ctrlKey) viewRecentContent.click();
     }
     else if (key === "t")
     {
@@ -2503,6 +2519,7 @@ const UpdateBottomSectionBar = (selectedItem : HTMLElement) : void =>
     Utilities.RemoveClass(viewMyAccount, "selected");
     Utilities.RemoveClass(viewSharedContent, "selected");
     Utilities.RemoveClass(viewStarredContent, "selected");
+    Utilities.RemoveClass(viewRecentContent, "selected");
     Utilities.RemoveClass(viewTrashedContent, "selected");
 
     Utilities.AddClass(selectedItem, "selected");
@@ -2712,6 +2729,12 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
         currentFolderId = "starred";
 
         Utilities.AddClass(viewStarredContent, "selected");
+    }
+    else if (location.pathname === "/account/recents")
+    {
+        currentFolderId = "recents";
+
+        Utilities.AddClass(viewRecentContent, "selected");
     }
     else if (location.pathname === "/account/trash")
     {

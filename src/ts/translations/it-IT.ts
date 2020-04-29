@@ -19,6 +19,7 @@ export const it_IT = {
         create_folder: "Crea cartella",
         shared: "Condivisi",
         starred: "Preferiti",
+        recents: "Recenti",
         trash: "Cestino",
         empty_trash: "Svuota cestino",
         create_vault: "Crea cassaforte",

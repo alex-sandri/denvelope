@@ -19,6 +19,7 @@ export const en_US = {
         create_folder: "Create folder",
         shared: "Shared",
         starred: "Starred",
+        recents: "Recents",
         trash: "Trash",
         empty_trash: "Empty trash",
         create_vault: "Create vault",
