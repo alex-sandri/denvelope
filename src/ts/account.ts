@@ -1226,19 +1226,18 @@ window.addEventListener("popstate", async () =>
             id = (await db.collection(`users/${Auth.UserId}/folders`).doc((await db.collection(`users/${Auth.UserId}/files`).doc(id).get()).data().parentId).get()).id;
         }
     }
-    else
-    {
-        if (location.pathname === "/account/shared") id = "shared";
-        else if (location.pathname.indexOf("/account/shared/") > -1) id = location.href.substr(location.href.indexOf("/account/shared/") + 16);
-        else if (location.pathname === "/account/starred") id = "starred";
-        else if (location.pathname === "/account/trash") id = "trash";
-    }
+    else if (location.pathname.indexOf("/account/shared/") > -1) id = location.href.substr(location.href.indexOf("/account/shared/") + 16);
 
     if (id.indexOf("/") > -1) id = id.substr(0, id.indexOf("/"));
 
     Utilities.SetCurrentFolderId(id);
 
-    GetUserContent();
+    if (location.pathname === "/account/shared") viewSharedContent.click();
+    else if (location.pathname === "/account/starred") viewStarredContent.click();
+    else if (location.pathname === "/account/trash") viewTrashedContent.click();
+    else if (location.pathname === "/account/storage/info") whatIsTakingUpSpace.click();
+    else if (recentsOnly()) viewRecentContent.click();
+    else GetUserContent();
 });
 
 window.addEventListener("keydown", e =>
