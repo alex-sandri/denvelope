@@ -53,6 +53,7 @@ export const it_IT = {
                 choose_download_format: "Scegli formato download",
                 offline: "Sei attualmente offline",
                 vault_empty: "La cassaforte è vuota",
+                no_recents: "Non ci sono file recenti",
             },
             user: {
                 not_enough_storage: "Non hai spazio di archiviazione sufficiente per questo file",

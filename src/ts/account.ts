@@ -1561,16 +1561,19 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
         addUserContentEvents();
 
-        if (AreUserContentContainersEmpty() && (callCount === 2 || isUpdate)) // When both folders and files are loaded
+        if (AreUserContentContainersEmpty() && (callCount === 2 || isUpdate || (callCount === 1 && !includeFolders)))
         {
             emptyFolder.querySelector("h2").innerHTML = Translation.Get(`api->messages->folder->${
                 !navigator.onLine
                     ? "offline"
                     : (searchTerm?.length > 0
                         ? "no_search_results"
-                        : (await vaultOnly(false)
-                            ? "vault_empty"
-                            : "empty"
+                        : (recentsOnly()
+                            ? "no_recents"
+                            : (await vaultOnly(false)
+                                ? "vault_empty"
+                                : "empty"
+                            )
                         )
                     )
             }`);
@@ -1582,11 +1585,14 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
                         ? "share"
                         : (starredOnly()
                             ? "starred"
-                            : (trashedOnly()
-                                ? "trash"
-                                : (await vaultOnly(false)
-                                    ? "vault"
-                                    : "empty"
+                            : (recentsOnly()
+                                ? "empty-recents"
+                                : (trashedOnly()
+                                    ? "trash"
+                                    : (await vaultOnly(false)
+                                        ? "vault"
+                                        : "empty"
+                                    )
                                 )
                             )
                         )

@@ -53,6 +53,7 @@ export const en_US = {
                 choose_download_format: "Choose download format",
                 offline: "You are currently offline",
                 vault_empty: "The vault is empty",
+                no_recents: "There are no recent files",
             },
             user: {
                 not_enough_storage: "You do not have enough storage space for this file",
