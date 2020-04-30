@@ -183,7 +183,7 @@ window.addEventListener("userready", async () =>
     {
         Utilities.SetCurrentFolderId("root");
 
-        history.pushState(null, "", GetFolderUrl(Utilities.GetCurrentFolderId(), false));
+        if (location.pathname !== "/account") history.pushState(null, "", "/account");
 
         GetUserContent();
 
@@ -192,7 +192,7 @@ window.addEventListener("userready", async () =>
 
     viewSharedContent.addEventListener("click", () =>
     {
-        history.pushState(null, "", "/account/shared");
+        if (location.pathname !== "/account/shared") history.pushState(null, "", "/account/shared");
 
         Utilities.SetCurrentFolderId("shared");
 
@@ -203,7 +203,7 @@ window.addEventListener("userready", async () =>
 
     viewStarredContent.addEventListener("click", () =>
     {
-        history.pushState(null, "", "/account/starred");
+        if (!starredOnly()) history.pushState(null, "", "/account/starred");
 
         Utilities.SetCurrentFolderId("starred");
 
@@ -214,7 +214,7 @@ window.addEventListener("userready", async () =>
 
     viewRecentContent.addEventListener("click", () =>
     {
-        history.pushState(null, "", "/account/recents");
+        if (!recentsOnly()) history.pushState(null, "", "/account/recents");
 
         Utilities.SetCurrentFolderId("root"); // Reset it to default
 
@@ -225,7 +225,7 @@ window.addEventListener("userready", async () =>
 
     viewTrashedContent.addEventListener("click", () =>
     {
-        history.pushState(null, "", "/account/trash");
+        if (!trashedOnly()) history.pushState(null, "", "/account/trash");
 
         Utilities.SetCurrentFolderId("trash");
 
@@ -899,7 +899,9 @@ window.addEventListener("userready", async () =>
 
             Utilities.SetCurrentFolderId(parentId);
 
-            history.pushState(null, "", GetFolderUrl(Utilities.GetCurrentFolderId(), IsShared()));
+            const url = GetFolderUrl(Utilities.GetCurrentFolderId(), IsShared());
+
+            if (location.href !== url) history.pushState(null, "", url);
 
             GetUserContent();
         });
@@ -937,7 +939,9 @@ window.addEventListener("userready", async () =>
 
         preventWindowUnload.editor = false;
 
-        history.pushState(null, "", GetFolderUrl(Utilities.GetCurrentFolderId(true), IsShared()));
+        const url = GetFolderUrl(Utilities.GetCurrentFolderId(true), IsShared());
+
+        if (location.href !== url) history.pushState(null, "", url);
 
         GetUserContent();
 
@@ -954,7 +958,7 @@ window.addEventListener("userready", async () =>
 
         HideHeaderMenu();
 
-        history.pushState(null, "", "/account/storage/info");
+        if (location.pathname !== "/account/storage/info") history.pushState(null, "", "/account/storage/info");
 
         Utilities.SetCurrentFolderId("root"); // Reset it to default
 
@@ -1078,7 +1082,7 @@ window.addEventListener("userready", async () =>
         {
             const LoadVault = () =>
             {
-                history.pushState(null, "", "/account/vault");
+                if (location.pathname !== "/account/vault") history.pushState(null, "", "/account/vault");
 
                 Utilities.SetCurrentFolderId("vault");
 
@@ -1241,7 +1245,12 @@ window.addEventListener("popstate", async () =>
     else if (location.pathname === "/account/trash") viewTrashedContent.click();
     else if (location.pathname === "/account/storage/info") whatIsTakingUpSpace.click();
     else if (recentsOnly()) viewRecentContent.click();
-    else GetUserContent();
+    else
+    {
+        UpdateBottomSectionBar(viewMyAccount);
+
+        GetUserContent();
+    }
 });
 
 window.addEventListener("keydown", e =>
@@ -1983,7 +1992,9 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
 
         HideContextMenu();
 
-        if (openInNewWindow) open(getUserContentURL(GetUserContentElement(target), IsShared()));
+        const url = getUserContentURL(GetUserContentElement(target), IsShared());
+
+        if (openInNewWindow) open(url);
         else
         {
             if (closestFile === null)
@@ -1994,7 +2005,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
             }
             else ShowFile(closestFile.id, null, null, isMultipleFileEditor);
     
-            if (!isMultipleFileEditor) history.pushState(null, "", getUserContentURL(GetUserContentElement(target), IsShared()));
+            if (!isMultipleFileEditor && location.href !== url) history.pushState(null, "", url);
         }
     }
 }
@@ -2620,10 +2631,10 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
         }));
 }
 
-const sharedOnly = () : boolean => (location.pathname === "/account/shared" && Utilities.GetCurrentFolderId(true) === "shared") || !Auth.IsAuthenticated;
-const starredOnly = () : boolean => location.pathname === "/account/starred" && Utilities.GetCurrentFolderId(true) === "starred";
+const sharedOnly = () : boolean => location.pathname === "/account/shared" || !Auth.IsAuthenticated;
+const starredOnly = () : boolean => location.pathname === "/account/starred";
 const recentsOnly = () : boolean => location.pathname === "/account/recents";
-const trashedOnly = () : boolean => location.pathname === "/account/trash" && Utilities.GetCurrentFolderId(true) === "trash";
+const trashedOnly = () : boolean => location.pathname === "/account/trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
     (location.pathname === "/account/vault" && Utilities.GetCurrentFolderId(true) === "vault") ||
     (((!Utilities.IsSet(checkCurrentFolder) || checkCurrentFolder) &&
