@@ -10,10 +10,12 @@ aside
         @include button($bg-color: rgba($color: $secondary-color, $alpha: 0.1), $color: rgba($color: $secondary-color, $alpha: 0.5), $hover-effect: none, $has-border: false, $has-border-radius: false);
 
         padding: 5px;
-        width: 100%;
+        width: 20%;
 
         span
         {
+            @include text-ellipsis-on-overflow;
+
             display: none;
             font-size: 15px;
         }
