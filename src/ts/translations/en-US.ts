@@ -221,6 +221,7 @@ export const en_US = {
         security: {
             title: "Security",
             sign_out_from_all_devices: "Sign Out from all devices",
+            change_vault_pin: "Change vault PIN",
         },
         advanced: {
             title: "Advanced",

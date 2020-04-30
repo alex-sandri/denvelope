@@ -29,6 +29,7 @@ const changeDateFormat : HTMLButtonElement = document.querySelector("#date-forma
 const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
+const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
 
 const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
 const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .reset");
@@ -288,6 +289,22 @@ window.addEventListener("userready", () =>
             // Use the SignOut() method to sign out immediately and not wait for the user to refresh the page
             Auth.SignOut();
 
+            modal.HideAndRemove();
+        }
+
+        modal.Show(true);
+    });
+
+    changeVaultPin.addEventListener("click", () =>
+    {
+        const modal = new Modal({
+            title: changeVaultPin.closest(".setting").querySelector("h1").innerText,
+            allow: [ "close", "confirm" ],
+            loading: false
+        });
+
+        modal.OnConfirm = () =>
+        {
             modal.HideAndRemove();
         }
 
