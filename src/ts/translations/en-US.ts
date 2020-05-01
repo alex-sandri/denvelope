@@ -221,7 +221,11 @@ export const en_US = {
         security: {
             title: "Security",
             sign_out_from_all_devices: "Sign Out from all devices",
-            change_vault_pin: "Change vault PIN",
+            change_vault_pin: {
+                title: "Change vault PIN",
+                current: "Current PIN",
+                new: "New PIN",
+            },
         },
         advanced: {
             title: "Advanced",

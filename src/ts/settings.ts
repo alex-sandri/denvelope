@@ -303,10 +303,67 @@ window.addEventListener("userready", () =>
             loading: false
         });
 
-        modal.OnConfirm = () =>
+        const currentVaultPinInput = new InputWithIcon({
+            attributes: {
+                id: "current-vault-pin",
+                placeholder: Translation.Get("settings->security->change_vault_pin->current"),
+                type: "password"
+            },
+            iconClassName: "fas fa-key fa-fw"
+        }).element;
+
+        const newVaultPinInput = new InputWithIcon({
+            attributes: {
+                id: "new-vault-pin",
+                placeholder: Translation.Get("settings->security->change_vault_pin->new"),
+                type: "password"
+            },
+            iconClassName: "fas fa-key fa-fw"
+        }).element;
+
+        const currentPinInput = currentVaultPinInput.querySelector("input");
+        const newPinInput = newVaultPinInput.querySelector("input");
+
+        modal.AppendContent([ currentVaultPinInput, newVaultPinInput ]);
+
+        modal.OnConfirm = async () =>
         {
-            modal.HideAndRemove();
+            const pin = currentPinInput.value;
+
+            if (Utilities.HasClass(currentPinInput, "error")) currentVaultPinInput.previousElementSibling.remove();
+
+            Utilities.RemoveClass(currentPinInput, "error");
+
+            if (pin.length < 4)
+            {
+                Utilities.AddClass(currentPinInput, "error");
+
+                currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                    class: "input-error",
+                    innerText: Translation.Get("errors->vault_pin_too_short")
+                }).element);
+
+                return;
+            }
+
+            modal.Hide();
+            
+            functions.httpsCallable("changeVaultPin")({ pin }).then((result : any) =>
+            {
+                if (result.data.success) modal.Remove();
+                else
+                {
+                    currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                        class: "input-error",
+                        innerText: Translation.Get("api->messages->vault->wrong_pin")
+                    }).element);
+
+                    modal.Show(true);
+                }
+            });
         }
+
+        currentPinInput.focus();
 
         modal.Show(true);
     });
@@ -368,17 +425,23 @@ window.addEventListener("userready", () =>
 
     clearCache.addEventListener("click", Utilities.ClearFirestoreCache);
 
-    if (Auth.IsAuthenticated)
-        db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
-        {
-            const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
+    db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
+    {
+        const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
 
-            document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
+        document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
 
-            resetBackground.disabled = !backgroundImageUrl;
+        resetBackground.disabled = !backgroundImageUrl;
 
-            resetDateFormat.disabled = preferences.data()?.dateFormatOptions === "default";
-        });
+        resetDateFormat.disabled = preferences.data()?.dateFormatOptions === "default";
+    });
+
+    db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
+    {
+        changeVaultPin.disabled = !snapshot.exists;
+
+        Auth.RefreshToken();
+    });
 });
 
 window.addEventListener("popstate", () =>

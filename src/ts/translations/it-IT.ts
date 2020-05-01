@@ -221,7 +221,11 @@ export const it_IT = {
         security: {
             title: "Sicurezza",
             sign_out_from_all_devices: "Esci da tutti i dispositivi",
-            change_vault_pin: "Cambia PIN cassaforte",
+            change_vault_pin: {
+                title: "Cambia PIN cassaforte",
+                current: "PIN attuale",
+                new: "Nuovo PIN",
+            },
         },
         advanced: {
             title: "Avanzate",
