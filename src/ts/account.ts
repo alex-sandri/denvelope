@@ -1239,7 +1239,9 @@ window.addEventListener("popstate", async () =>
 
             if (id.indexOf("/") > -1) id = id.substr(0, id.indexOf("/"));
 
-            id = (await db.collection(`users/${Auth.UserId}/folders`).doc((await db.collection(`users/${Auth.UserId}/files`).doc(id).get()).data().parentId).get()).id;
+            ShowFile(id);
+
+            return;
         }
     }
     else if (location.pathname.indexOf("/account/shared/") > -1) id = location.href.substr(location.href.indexOf("/account/shared/") + 16);
