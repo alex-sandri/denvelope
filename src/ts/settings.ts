@@ -328,27 +328,43 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = async () =>
         {
-            const pin = currentPinInput.value;
+            const currentPin = currentPinInput.value;
+            const newPin = newPinInput.value;
 
             if (Utilities.HasClass(currentPinInput, "error")) currentVaultPinInput.previousElementSibling.remove();
+            if (Utilities.HasClass(newPinInput, "error")) newVaultPinInput.previousElementSibling.remove();
 
             Utilities.RemoveClass(currentPinInput, "error");
+            Utilities.RemoveClass(newPinInput, "error");
 
-            if (pin.length < 4)
+            if (currentPin.length < 4 || newPin.length < 4)
             {
-                Utilities.AddClass(currentPinInput, "error");
+                if (currentPin.length < 4)
+                {
+                    Utilities.AddClass(currentPinInput, "error");
 
-                currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
-                    class: "input-error",
-                    innerText: Translation.Get("errors->vault_pin_too_short")
-                }).element);
+                    currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                        class: "input-error",
+                        innerText: Translation.Get("errors->vault_pin_too_short")
+                    }).element);
+                }
+
+                if (newPin.length < 4)
+                {
+                    Utilities.AddClass(newPinInput, "error");
+
+                    newVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                        class: "input-error",
+                        innerText: Translation.Get("errors->vault_pin_too_short")
+                    }).element);
+                }
 
                 return;
             }
 
             modal.Hide();
             
-            functions.httpsCallable("changeVaultPin")({ pin }).then((result : any) =>
+            functions.httpsCallable("changeVaultPin")({ currentPin, newPin }).then((result : any) =>
             {
                 if (result.data.success) modal.Remove();
                 else
