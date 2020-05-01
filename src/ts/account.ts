@@ -941,9 +941,13 @@ window.addEventListener("userready", async () =>
 
         const url = GetFolderUrl(Utilities.GetCurrentFolderId(true), IsShared());
 
-        if (location.href !== url) history.pushState(null, "", url);
+        if (!Utilities.HasClass(viewRecentContent, "selected"))
+        {
+            if (location.href !== url) history.pushState(null, "", url);
 
-        GetUserContent();
+            GetUserContent();
+        }
+        else viewRecentContent.click();
 
         Utilities.HideElement(showFile);
 
