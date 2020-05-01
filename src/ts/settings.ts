@@ -154,9 +154,9 @@ window.addEventListener("userready", () =>
             db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: url.href }, { merge: true });
         }
 
-        input.focus();
-
         modal.Show(true);
+
+        input.focus();
     });
 
     resetBackground.addEventListener("click", () =>
@@ -369,6 +369,8 @@ window.addEventListener("userready", () =>
                 if (result.data.success) modal.Remove();
                 else
                 {
+                    Utilities.AddClass(currentPinInput, "error");
+
                     currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
                         class: "input-error",
                         innerText: Translation.Get("api->messages->vault->wrong_pin")
@@ -379,9 +381,9 @@ window.addEventListener("userready", () =>
             });
         }
 
-        currentPinInput.focus();
-
         modal.Show(true);
+
+        currentPinInput.focus();
     });
 
     changeCacheSize.addEventListener("click", () =>

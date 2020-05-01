@@ -149,8 +149,6 @@ window.addEventListener("userready", async () =>
 
             modal.AppendContent([input.parentElement]);
 
-            input.focus();
-
             modal.OnConfirm = () =>
             {
                 const name = input.value;
@@ -177,6 +175,8 @@ window.addEventListener("userready", async () =>
             }
 
             modal.Show(true);
+
+            input.focus();
         }));
 
     viewMyAccount.addEventListener("click", () =>
@@ -426,8 +426,6 @@ window.addEventListener("userready", async () =>
 
         nameElement.value = Utilities.UnescapeHtml(contextMenuItem.querySelector(".name p").innerHTML);
 
-        nameElement.focus();
-
         modal.OnUpdate = async () =>
         {
             const name = nameElement.value;
@@ -470,6 +468,8 @@ window.addEventListener("userready", async () =>
         }
 
         modal.Show(true);
+
+        nameElement.focus();
     });
 
     contextMenuInfo.addEventListener("click", () =>
@@ -1148,6 +1148,8 @@ window.addEventListener("userready", async () =>
                     }
                     else if (snapshot.exists)
                     {
+                        Utilities.AddClass(input, "error");
+
                         vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
                             class: "input-error",
                             innerText: Translation.Get("api->messages->vault->wrong_pin")
@@ -1158,9 +1160,9 @@ window.addEventListener("userready", async () =>
                 });
             }
 
-            input.focus();
-
             modal.Show(true);
+
+            input.focus();
         });
     });
 
