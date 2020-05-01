@@ -357,6 +357,25 @@ export const unlockVault = functions.region(region).runWith({ memory: "2GB" }).h
     return { success: allowUnlock };
 });
 
+export const changeVaultPin = functions.region(region).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.currentPin || !data.newPin) return;
+
+    const userId : string = context.auth.uid;
+    const currentPin : string = data.currentPin;
+    const newPin : string = data.newPin;
+
+    const vaultConfig = await db.collection(`users/${userId}/vault`).doc("config").get();
+
+    const correctPin = await bcrypt.compare(currentPin, (<FirebaseFirestore.DocumentData>vaultConfig.data()).pin);
+
+    const success = correctPin && typeof(newPin) === "string" && newPin !== null && newPin.length >= 4;
+
+    if (success) await vaultConfig.ref.set({ pin: await bcrypt.hash(newPin, 15) });
+
+    return { success };
+});
+
 const CopyFolderToAccount = async (fromUserId : string, toUserId : string, folderId : string) => new Promise(async resolve =>
 {
     await db.collection(`users/${fromUserId}/folders`).where("parentId", "==", folderId).get().then(async snapshot =>
