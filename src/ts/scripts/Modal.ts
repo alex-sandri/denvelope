@@ -50,8 +50,6 @@ export class Modal
         this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
 
         document.body.appendChild(this.container);
-
-        Utilities.ShowElement(this.container);
     }
 
     /**
@@ -75,6 +73,8 @@ export class Modal
         if (!Utilities.HasClass(this.element, "show"))
         {
             if (this.Content.innerHTML.trim() === "") Utilities.ShowElement(this.spinner, "block");
+
+            Utilities.ShowElement(this.container);
 
             Utilities.RemoveClass(this.element, "hide");
             Utilities.AddClass(this.element, "show");
