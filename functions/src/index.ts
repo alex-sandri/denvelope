@@ -23,6 +23,27 @@ const storage = admin.storage();
 
 const GetCurrentTimestamp = () : FirebaseFirestore.FieldValue => admin.firestore.FieldValue.serverTimestamp();
 
+const ExecDeleteBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore.DocumentData>) : Promise<void> =>
+{
+    let end : boolean = false;
+
+    while (!end)
+    {
+        const batch = db.batch();
+
+        // No need to offset the query as at every loop the previous batch has already been deleted from the db
+        const querySnapshot = await query.limit(500 /* Firestore batched write limit */).get();
+
+        const docs = querySnapshot.docs;
+
+        docs.forEach(doc => batch.delete(doc.ref));
+
+        await batch.commit();
+
+        end = querySnapshot.empty;
+    }
+}
+
 export const userCreated = functions.region(region).auth.user().onCreate(async user =>
 {
     void db.collection("users").doc(user.uid).set({
@@ -36,13 +57,11 @@ export const userCreated = functions.region(region).auth.user().onCreate(async u
 
 export const userDeleted = functions.region(region).auth.user().onDelete(async user =>
 {
-    const batch = db.batch();
+    ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "root"));
+    ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "root"));
 
-    await db.collection(`users/${user.uid}/folders`).where("parent", "==", "root").get().then(docs => docs.forEach(doc => batch.delete(doc.ref)));
-
-    await db.collection(`users/${user.uid}/files`).where("parent", "==", "root").get().then(docs => docs.forEach(doc => batch.delete(doc.ref)));
-
-    await batch.commit();
+    ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "vault"));
+    ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "vault"));
 
     await db.collection(`users/${user.uid}/config`).doc("preferences").delete();
 
