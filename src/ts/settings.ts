@@ -377,6 +377,8 @@ window.addEventListener("userready", () =>
                     }).element);
 
                     modal.Show(true);
+
+                    currentPinInput.focus();
                 }
             });
         }

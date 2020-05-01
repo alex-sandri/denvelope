@@ -1156,6 +1156,8 @@ window.addEventListener("userready", async () =>
                         }).element);
 
                         modal.Show(true);
+
+                        input.focus();
                     }
                 });
             }
