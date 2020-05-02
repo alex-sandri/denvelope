@@ -15,7 +15,7 @@ admin.initializeApp({
     storageBucket: "denvelope-firebase.appspot.com",
 });
 
-const region = "europe-west1";
+const FUNCTIONS_REGION = "europe-west1";
 
 const auth = admin.auth();
 const db = admin.firestore();
@@ -44,7 +44,7 @@ const ExecDeleteBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
     }
 }
 
-export const userCreated = functions.region(region).auth.user().onCreate(async user =>
+export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCreate(async user =>
 {
     void db.collection("users").doc(user.uid).set({
         created: GetCurrentTimestamp(),
@@ -55,7 +55,7 @@ export const userCreated = functions.region(region).auth.user().onCreate(async u
     return user;
 });
 
-export const userDeleted = functions.region(region).auth.user().onDelete(async user =>
+export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDelete(async user =>
 {
     await ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "root"));
     await ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "root"));
@@ -73,14 +73,14 @@ export const userDeleted = functions.region(region).auth.user().onDelete(async u
     return user;
 });
 
-export const signOutUserFromAllDevices = functions.region(region).https.onCall((data, context) =>
+export const signOutUserFromAllDevices = functions.region(FUNCTIONS_REGION).https.onCall((data, context) =>
 {
     if (!context.auth) return;
 
     void admin.auth().revokeRefreshTokens(context.auth.uid);
 });
 
-export const fileUploaded = functions.region(region).storage.object().onFinalize(async object =>
+export const fileUploaded = functions.region(FUNCTIONS_REGION).storage.object().onFinalize(async object =>
 {
     const userId = (<string>object.name).split("/")[0];
     const fileId = (<string>object.name).split("/")[1];
@@ -107,7 +107,7 @@ export const fileUploaded = functions.region(region).storage.object().onFinalize
     return object;
 });
 
-export const fileUpdated = functions.region(region).firestore.document("users/{userId}/files/{fileId}").onUpdate(async (change, context) =>
+export const fileUpdated = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/files/{fileId}").onUpdate(async (change, context) =>
 {
     const userId = context.params.userId;
     const fileId = context.params.fileId;
@@ -134,7 +134,7 @@ export const fileUpdated = functions.region(region).firestore.document("users/{u
     return change;
 });
 
-export const fileDeleted = functions.region(region).firestore.document("users/{userId}/files/{fileId}").onDelete(async (doc, context) => {
+export const fileDeleted = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/files/{fileId}").onDelete(async (doc, context) => {
     const userId = context.params.userId;
     const fileId = context.params.fileId;
 
@@ -148,7 +148,7 @@ export const fileDeleted = functions.region(region).firestore.document("users/{u
     return doc;
 });
 
-export const folderUpdated = functions.region(region).firestore.document("users/{userId}/folders/{folderId}").onUpdate(async (change, context) =>
+export const folderUpdated = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/folders/{folderId}").onUpdate(async (change, context) =>
 {
     const userId = context.params.userId;
     const folderId = context.params.folderId;
@@ -172,7 +172,7 @@ export const folderUpdated = functions.region(region).firestore.document("users/
     }
 });
 
-export const folderDeleted = functions.region(region).firestore.document("users/{userId}/folders/{folderId}").onDelete(async (snapshot, context) =>
+export const folderDeleted = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/folders/{folderId}").onDelete(async (snapshot, context) =>
 {
     const userId = context.params.userId;
     const folderId = context.params.folderId;
@@ -197,7 +197,7 @@ export const folderDeleted = functions.region(region).firestore.document("users/
     return snapshot;
 });
 
-export const shareFolder = functions.region(region).https.onCall(async (data, context) =>
+export const shareFolder = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.id || typeof data.shared !== "boolean") return;
 
@@ -224,7 +224,7 @@ const ShareFolder = async (userId : string, folderId : string, shared : boolean)
     });
 }
 
-export const createFolderArchive = functions.region(region).runWith({
+export const createFolderArchive = functions.region(FUNCTIONS_REGION).runWith({
     memory: "2GB",
     timeoutSeconds: 540
 }).https.onCall(async (data, context) =>
@@ -238,7 +238,7 @@ export const createFolderArchive = functions.region(region).runWith({
     return { timestamp };
 });
 
-export const emptyTrash = functions.region(region).https.onCall(async (data, context) =>
+export const emptyTrash = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
 
@@ -248,7 +248,7 @@ export const emptyTrash = functions.region(region).https.onCall(async (data, con
     await ExecDeleteBatch(db.collection(`users/${userId}/files`).where("trashed", "==", true));
 });
 
-export const saveToMyAccount = functions.region(region).https.onCall(async (data, context) =>
+export const saveToMyAccount = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.userId || !data.id || !data.type || (context.auth.uid === data.userId)) return;
 
@@ -311,7 +311,7 @@ export const saveToMyAccount = functions.region(region).https.onCall(async (data
 });
 
 // Run with 2GB of memory to get the 2.4GHz CPU for faster hashing
-export const createVault = functions.region(region).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
+export const createVault = functions.region(FUNCTIONS_REGION).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.pin) return;
 
@@ -332,7 +332,7 @@ export const createVault = functions.region(region).runWith({ memory: "2GB" }).h
     return { success };
 });
 
-export const lockVault = functions.region(region).https.onCall(async (data, context) =>
+export const lockVault = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
 
@@ -343,7 +343,7 @@ export const lockVault = functions.region(region).https.onCall(async (data, cont
     await auth.setCustomUserClaims(userId, { vaultLocked: true });
 });
 
-export const unlockVault = functions.region(region).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
+export const unlockVault = functions.region(FUNCTIONS_REGION).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.pin) return;
 
@@ -364,7 +364,7 @@ export const unlockVault = functions.region(region).runWith({ memory: "2GB" }).h
     return { success: allowUnlock };
 });
 
-export const changeVaultPin = functions.region(region).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
+export const changeVaultPin = functions.region(FUNCTIONS_REGION).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.currentPin || !data.newPin) return;
 
