@@ -34,9 +34,7 @@ const ExecDeleteBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
         // No need to offset the query as at every loop the previous batch has already been deleted from the db
         const querySnapshot = await query.limit(500 /* Firestore batched write limit */).get();
 
-        const docs = querySnapshot.docs;
-
-        docs.forEach(doc => batch.delete(doc.ref));
+        querySnapshot.docs.forEach(doc => batch.delete(doc.ref));
 
         await batch.commit();
 
