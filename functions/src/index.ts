@@ -47,17 +47,17 @@ const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
     let end : boolean = false;
     let lastDoc : FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData> | undefined;
 
+    // Use always the created field as for now this method is only used to update user content documents
+    // Using this field should also prevent missing documents if the user uploads new files while this function is running
+    let newQuery = query.orderBy("created").limit(500);
+
     while (!end)
     {
         const batch = db.batch();
 
-        // Use always the created field as for now this method is only used to update user content documents
-        // Using this field should also prevent missing documents if the user uploads new files while this function is running
-        query = query.orderBy("created").limit(500);
+        if (lastDoc) newQuery = newQuery.startAfter(lastDoc);
 
-        if (lastDoc) query = query.startAfter(lastDoc);
-
-        const querySnapshot = await query.get();
+        const querySnapshot = await newQuery.get();
 
         const docs = querySnapshot.docs;
 
