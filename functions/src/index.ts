@@ -73,13 +73,11 @@ const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
 
 export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCreate(async user =>
 {
-    void db.collection("users").doc(user.uid).set({
+    await db.collection("users").doc(user.uid).set({
         created: GetCurrentTimestamp(),
         usedStorage: 0,
         maxStorage: 100 * 1000 * 1000, // 100MB
     });
-
-    return user;
 });
 
 export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDelete(async user =>
@@ -96,15 +94,13 @@ export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDele
     await db.collection(`users/${user.uid}/vault`).doc("status").delete();
 
     await db.collection("users").doc(user.uid).delete();
-    
-    return user;
 });
 
-export const signOutUserFromAllDevices = functions.region(FUNCTIONS_REGION).https.onCall((data, context) =>
+export const signOutUserFromAllDevices = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
 
-    void admin.auth().revokeRefreshTokens(context.auth.uid);
+    await admin.auth().revokeRefreshTokens(context.auth.uid);
 });
 
 export const fileUploaded = functions.region(FUNCTIONS_REGION).storage.object().onFinalize(async object =>
@@ -115,7 +111,7 @@ export const fileUploaded = functions.region(FUNCTIONS_REGION).storage.object().
     const size = parseInt(object.size);
 
     // Avoid continuing if the event is from a compressed folder being uploaded
-    if (fileId.indexOf(".") > -1) return object;
+    if (fileId.indexOf(".") > -1) return;
 
     const fileRef = db.collection(`users/${userId}/files`).doc(fileId);
 
@@ -127,11 +123,7 @@ export const fileUploaded = functions.region(FUNCTIONS_REGION).storage.object().
 
     if (!userSnap.exists || !fileSnap.exists || userData.usedStorage + size > userData.maxStorage) return fileRef.delete();
 
-    await fileSnap.ref.update({
-        size: size
-    });
-
-    return object;
+    return fileSnap.ref.update({ size });
 });
 
 export const fileUpdated = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/files/{fileId}").onUpdate(async (change, context) =>
@@ -143,7 +135,7 @@ export const fileUpdated = functions.region(FUNCTIONS_REGION).firestore.document
     const beforeData = <FirebaseFirestore.DocumentData>change.before.data();
 
     if (afterData.shared !== beforeData.shared || afterData.inVault !== beforeData.inVault)
-        void storage.bucket().file(`${userId}/${fileId}`).setMetadata({
+        await storage.bucket().file(`${userId}/${fileId}`).setMetadata({
             metadata: {
                 shared: `${afterData.shared}`,
                 inVault: `${afterData.inVault}`
@@ -152,13 +144,11 @@ export const fileUpdated = functions.region(FUNCTIONS_REGION).firestore.document
 
     if (afterData.trashed !== beforeData.trashed && afterData.trashed === false)
         if (afterData.parentId !== "root" && !(await db.collection(`users/${userId}/folders`).doc(afterData.parentId).get()).exists)
-            void change.after.ref.update("parentId", "root");
+            await change.after.ref.update("parentId", "root");
 
     if (afterData.size !== beforeData.size)
-        void db.collection("users").doc(userId)
+        await db.collection("users").doc(userId)
             .update("usedStorage", admin.firestore.FieldValue.increment(afterData.size - (beforeData.size || 0)));
-
-    return change;
 });
 
 export const fileDeleted = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/files/{fileId}").onDelete(async (doc, context) => {
@@ -171,8 +161,6 @@ export const fileDeleted = functions.region(FUNCTIONS_REGION).firestore.document
 
     // Not executed if size is equal to 0 or if the file was deleted before adding its size because the storage space wasn't enough
     if (size) await db.collection("users").doc(userId).update("usedStorage", admin.firestore.FieldValue.increment(-size));
-
-    return doc;
 });
 
 export const folderUpdated = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/folders/{folderId}").onUpdate(async (change, context) =>
@@ -213,8 +201,6 @@ export const folderDeleted = functions.region(FUNCTIONS_REGION).firestore.docume
             // data[0] is a boolean that represents the file existance
             if (data[0]) void fileRef.delete();
         });
-
-    return snapshot;
 });
 
 export const shareFolder = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
