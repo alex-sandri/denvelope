@@ -45,7 +45,7 @@ const ExecDeleteBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
 const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore.DocumentData>, data : FirebaseFirestore.UpdateData) : Promise<void> =>
 {
     let end : boolean = false;
-    let lastDoc : FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData> | undefined = undefined;
+    let lastDoc : FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData> | undefined;
 
     while (!end)
     {
