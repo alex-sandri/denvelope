@@ -57,11 +57,11 @@ export const userCreated = functions.region(region).auth.user().onCreate(async u
 
 export const userDeleted = functions.region(region).auth.user().onDelete(async user =>
 {
-    ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "root"));
-    ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "root"));
+    await ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "root"));
+    await ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "root"));
 
-    ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "vault"));
-    ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "vault"));
+    await ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "vault"));
+    await ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "vault"));
 
     await db.collection(`users/${user.uid}/config`).doc("preferences").delete();
 
