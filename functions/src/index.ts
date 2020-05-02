@@ -177,15 +177,8 @@ export const folderDeleted = functions.region(region).firestore.document("users/
     const userId = context.params.userId;
     const folderId = context.params.folderId;
 
-    const batch = db.batch();
-
-    await db.collection(`users/${userId}/folders`).where("parentId", "==", folderId).where("trashed", "==", false).get().then(docs =>
-        docs.forEach(doc => batch.delete(doc.ref)));
-
-    await db.collection(`users/${userId}/files`).where("parentId", "==", folderId).where("trashed", "==", false).get().then(docs =>
-        docs.forEach(doc => batch.delete(doc.ref)));
-
-    void batch.commit();
+    await ExecDeleteBatch(db.collection(`users/${userId}/folders`).where("parentId", "==", folderId).where("trashed", "==", false));
+    await ExecDeleteBatch(db.collection(`users/${userId}/files`).where("parentId", "==", folderId).where("trashed", "==", false));
 
     const fileRefs = [
         storage.bucket().file(`${userId}/${folderId}.zip`),
@@ -251,13 +244,8 @@ export const emptyTrash = functions.region(region).https.onCall(async (data, con
 
     const userId : string = context.auth.uid;
 
-    const batch = db.batch();
-
-    await db.collection(`users/${userId}/folders`).where("trashed", "==", true).get().then(docs => docs.forEach(doc => batch.delete(doc.ref)));
-
-    await db.collection(`users/${userId}/files`).where("trashed", "==", true).get().then(docs => docs.forEach(doc => batch.delete(doc.ref)));
-
-    void batch.commit();
+    await ExecDeleteBatch(db.collection(`users/${userId}/folders`).where("trashed", "==", true));
+    await ExecDeleteBatch(db.collection(`users/${userId}/files`).where("trashed", "==", true));
 });
 
 export const saveToMyAccount = functions.region(region).https.onCall(async (data, context) =>
