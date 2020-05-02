@@ -67,7 +67,7 @@ const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
 
         lastDoc = docs.pop();
 
-        end = querySnapshot.size < 500;
+        end = querySnapshot.empty;
     }
 }
 
