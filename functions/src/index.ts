@@ -42,6 +42,33 @@ const ExecDeleteBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
     }
 }
 
+const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore.DocumentData>, data : FirebaseFirestore.UpdateData) : Promise<void> =>
+{
+    let end : boolean = false;
+    let lastDoc : FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData> | undefined = undefined;
+
+    while (!end)
+    {
+        const batch = db.batch();
+
+        query = query.limit(500);
+
+        if (lastDoc) query = query.startAfter(lastDoc);
+
+        const querySnapshot = await query.get();
+
+        const docs = querySnapshot.docs;
+
+        docs.forEach(doc => batch.update(doc.ref, data));
+
+        await batch.commit();
+
+        lastDoc = docs.pop();
+
+        end = querySnapshot.size < 500;
+    }
+}
+
 export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCreate(async user =>
 {
     void db.collection("users").doc(user.uid).set({
@@ -158,15 +185,8 @@ export const folderUpdated = functions.region(FUNCTIONS_REGION).firestore.docume
 
     if (inVault !== beforeData.inVault)
     {
-        const batch = db.batch();
-
-        await db.collection(`users/${userId}/folders`).where("parentId", "==", folderId).get().then(docs =>
-            docs.forEach(doc => batch.update(doc.ref, { inVault })));
-
-        await db.collection(`users/${userId}/files`).where("parentId", "==", folderId).get().then(docs =>
-            docs.forEach(doc => batch.update(doc.ref, { inVault })));
-
-        await batch.commit();
+        await ExecUpdateBatch(db.collection(`users/${userId}/folders`).where("parentId", "==", folderId), { inVault });
+        await ExecUpdateBatch(db.collection(`users/${userId}/files`).where("parentId", "==", folderId), { inVault });
     }
 });
 
