@@ -30,6 +30,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
+const deleteVault : HTMLButtonElement = document.querySelector("#delete-vault .delete");
 
 const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
 const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .reset");
@@ -388,6 +389,11 @@ window.addEventListener("userready", () =>
         currentPinInput.focus();
     });
 
+    deleteVault.addEventListener("click", () =>
+    {
+        // TODO
+    });
+
     changeCacheSize.addEventListener("click", () =>
     {
         const modal = new Modal({
@@ -458,7 +464,7 @@ window.addEventListener("userready", () =>
 
     db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
     {
-        changeVaultPin.disabled = !snapshot.exists;
+        changeVaultPin.disabled = deleteVault.disabled = !snapshot.exists;
 
         Auth.RefreshToken();
     });
