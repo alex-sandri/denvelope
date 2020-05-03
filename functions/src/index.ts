@@ -82,18 +82,16 @@ export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCrea
 
 export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDelete(async user =>
 {
-    await ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "root"));
-    await ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "root"));
+    const userId : string = user.uid;
 
-    await ExecDeleteBatch(db.collection(`users/${user.uid}/folders`).where("parentId", "==", "vault"));
-    await ExecDeleteBatch(db.collection(`users/${user.uid}/files`).where("parentId", "==", "vault"));
+    await ExecDeleteBatch(db.collection(`users/${userId}/folders`).where("parentId", "==", "root"));
+    await ExecDeleteBatch(db.collection(`users/${userId}/files`).where("parentId", "==", "root"));
 
-    await db.collection(`users/${user.uid}/config`).doc("preferences").delete();
+    await db.collection(`users/${userId}/config`).doc("preferences").delete();
 
-    await db.collection(`users/${user.uid}/vault`).doc("config").delete();
-    await db.collection(`users/${user.uid}/vault`).doc("status").delete();
+    await DeleteVault(userId);
 
-    await db.collection("users").doc(user.uid).delete();
+    await db.collection("users").doc(userId).delete();
 });
 
 export const signOutUserFromAllDevices = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
@@ -324,7 +322,7 @@ export const createVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
     const userId : string = context.auth.uid;
     const pin : string = data.pin;
 
-    const success = typeof(pin) === "string" && pin !== null && pin.length >= 4;
+    const success : boolean = IsValidVaultPin(pin);
 
     if (success)
     {
@@ -356,18 +354,16 @@ export const unlockVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
     const userId : string = context.auth.uid;
     const pin : string = data.pin;
 
-    const vaultConfig = await db.collection(`users/${userId}/vault`).doc("config").get();
+    const success : boolean = await IsCorrectVaultPin(pin, userId);
 
-    const allowUnlock = await bcrypt.compare(pin, (<FirebaseFirestore.DocumentData>vaultConfig.data()).pin);
-
-    if (allowUnlock)
+    if (success)
     {
         await db.collection(`users/${userId}/vault`).doc("status").update("locked", false);
 
         await auth.setCustomUserClaims(userId, { vaultLocked: false });
     }
 
-    return { success: allowUnlock };
+    return { success };
 });
 
 export const changeVaultPin = functions.region(FUNCTIONS_REGION).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
@@ -380,14 +376,44 @@ export const changeVaultPin = functions.region(FUNCTIONS_REGION).runWith({ memor
 
     const vaultConfig = await db.collection(`users/${userId}/vault`).doc("config").get();
 
-    const correctPin = await bcrypt.compare(currentPin, (<FirebaseFirestore.DocumentData>vaultConfig.data()).pin);
-
-    const success = correctPin && typeof(newPin) === "string" && newPin !== null && newPin.length >= 4;
+    const success : boolean = (await IsCorrectVaultPin(currentPin, userId)) && IsValidVaultPin(newPin);
 
     if (success) await vaultConfig.ref.set({ pin: await bcrypt.hash(newPin, 15) });
 
     return { success };
 });
+
+export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.pin) return;
+
+    const userId : string = context.auth.uid;
+    const pin : string = data.pin;
+
+    const success : boolean = await IsCorrectVaultPin(pin, userId);
+
+    if (success) await DeleteVault(userId);
+
+    return { success };
+});
+
+const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin !== null && pin.length >= 4;
+
+const IsCorrectVaultPin = async (pin : string, userId : string) : Promise<boolean> =>
+{
+    const vaultConfig = await db.collection(`users/${userId}/vault`).doc("config").get();
+
+    return <boolean>(await bcrypt.compare(pin, (<FirebaseFirestore.DocumentData>vaultConfig.data()).pin));
+}
+
+const DeleteVault = async (userId : string) =>
+{
+    await ExecDeleteBatch(db.collection(`users/${userId}/folders`).where("parentId", "==", "vault"));
+    await ExecDeleteBatch(db.collection(`users/${userId}/files`).where("parentId", "==", "vault"));
+
+    await db.collection(`users/${userId}/vault`).doc("config").delete();
+    await db.collection(`users/${userId}/vault`).doc("status").delete();
+}
 
 const CopyFolderToAccount = async (fromUserId : string, toUserId : string, folderId : string) => new Promise(async resolve =>
 {
