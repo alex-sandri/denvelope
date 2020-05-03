@@ -226,6 +226,7 @@ export const it_IT = {
                 current: "PIN attuale",
                 new: "Nuovo PIN",
             },
+            delete_vault: "Elimina cassaforte",
         },
         advanced: {
             title: "Avanzate",

@@ -48,7 +48,7 @@
                     text-decoration: none;
                 }
 
-                .delete-account-button:not(.blocked):not(:disabled)
+                .delete:not(.blocked):not(:disabled)
                 {
                     &:focus,
                     &:hover

@@ -226,6 +226,7 @@ export const en_US = {
                 current: "Current PIN",
                 new: "New PIN",
             },
+            delete_vault: "Delete vault",
         },
         advanced: {
             title: "Advanced",
