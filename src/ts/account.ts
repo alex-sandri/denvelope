@@ -147,6 +147,10 @@ window.addEventListener("userready", async () =>
                 }
             }).element.querySelector("input");
 
+            input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length === 0);
+
+            modal.ConfirmButton.disabled = true;
+
             modal.AppendContent([input.parentElement]);
 
             modal.OnConfirm = () =>
@@ -413,26 +417,28 @@ window.addEventListener("userready", async () =>
             ]
         });
 
-        modal.AppendContent([
-            new Input({
-                attributes: {
-                    class: "name",
-                    placeholder: Translation.Get("generic->name")
-                }
-            }).element
-        ]);
+        const nameInput = new Input({
+            attributes: {
+                class: "name",
+                placeholder: Translation.Get("generic->name")
+            }
+        }).element;
 
-        const nameElement : HTMLInputElement = modal.Content.querySelector(".name");
+        const input : HTMLInputElement = nameInput.querySelector(".name");
 
-        nameElement.value = Utilities.UnescapeHtml(contextMenuItem.querySelector(".name p").innerHTML);
+        input.addEventListener("input", () => modal.UpdateButton.disabled = input.value.length === 0);
+
+        modal.AppendContent([ nameInput ]);
+
+        input.value = Utilities.UnescapeHtml(contextMenuItem.querySelector(".name p").innerHTML);
 
         modal.OnUpdate = async () =>
         {
-            const name = nameElement.value;
+            const name = input.value;
 
             modal.element.querySelectorAll(".input-error").forEach(element => element.remove());
 
-            Utilities.RemoveClass(nameElement, "error");
+            Utilities.RemoveClass(input, "error");
 
             modal.Hide();
 
@@ -458,18 +464,18 @@ window.addEventListener("userready", async () =>
             {
                 modal.Show(true);
 
-                nameElement.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
+                input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
                     innerHTML: Translation.Get(`errors->${name.length === 0 ? "empty" : "user_content->already_exists"}`),
                     class: "input-error"
                 }).element);
 
-                Utilities.AddClass(nameElement, "error");
+                Utilities.AddClass(input, "error");
             }
         }
 
         modal.Show(true);
 
-        nameElement.focus();
+        input.focus();
     });
 
     contextMenuInfo.addEventListener("click", () =>
