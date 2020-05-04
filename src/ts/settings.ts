@@ -391,7 +391,68 @@ window.addEventListener("userready", () =>
 
     deleteVault.addEventListener("click", () =>
     {
-        // TODO
+        const modal = new Modal({
+            title: deleteVault.closest(".setting").querySelector("h1").innerText,
+            allow: [ "confirm", "close" ]
+        });
+
+        const vaultPinInput = new InputWithIcon({
+            attributes: {
+                id: "vault-pin",
+                placeholder: "PIN",
+                type: "password"
+            },
+            iconClassName: "fas fa-key fa-fw"
+        }).element;
+
+        const input = vaultPinInput.querySelector("input");
+
+        modal.AppendContent([ vaultPinInput ]);
+
+        modal.OnConfirm = async () =>
+        {
+            const pin = input.value;
+
+            if (Utilities.HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
+
+            Utilities.RemoveClass(input, "error");
+
+            if (pin.length < 4)
+            {
+                Utilities.AddClass(input, "error");
+
+                vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                    class: "input-error",
+                    innerText: Translation.Get("errors->vault_pin_too_short")
+                }).element);
+
+                return;
+            }
+
+            modal.Hide();
+                
+            functions.httpsCallable("deleteVault")({ pin }).then((result : any) =>
+            {
+                if (result.data.success) modal.Remove();
+                else
+                {
+                    Utilities.AddClass(input, "error");
+
+                    vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                        class: "input-error",
+                        innerText: Translation.Get("api->messages->vault->wrong_pin")
+                    }).element);
+
+                    modal.Show(true);
+
+                    input.focus();
+                }
+            });
+        }
+
+        modal.Show(true);
+
+        input.focus();
     });
 
     changeCacheSize.addEventListener("click", () =>
