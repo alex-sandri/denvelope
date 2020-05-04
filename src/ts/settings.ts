@@ -117,38 +117,34 @@ window.addEventListener("userready", () =>
             iconClassName: "fas fa-link fa-fw"
         }).element;
 
-        modal.AppendContent([ backgroundImageUrlInput ]);
-
         const input = backgroundImageUrlInput.querySelector("input");
+
+        input.addEventListener("input", () =>
+        {
+            let valid : boolean = true;
+
+            try
+            {
+                const url = new URL(input.value);
+
+                valid = url.protocol === "https:";
+            }
+            catch (err) { valid = false; }
+
+            modal.ConfirmButton.disabled = !valid;
+        });
+
+        modal.ConfirmButton.disabled = true;
+
+        modal.AppendContent([ backgroundImageUrlInput ]);
 
         modal.OnConfirm = () =>
         {
-            let error : string;
             let url : URL;
 
             if (Utilities.HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
 
             Utilities.RemoveClass(input, "error");
-
-            try
-            {
-                url = new URL(input.value);
-
-                if (url.protocol !== "https:") error = Translation.Get("errors->url_must_be_https");
-            }
-            catch (err)
-            {
-                error = Translation.Get("errors->invalid_url");
-            }
-
-            if (error)
-            {
-                Utilities.AddClass(input, "error");
-
-                backgroundImageUrlInput.insertAdjacentElement("beforebegin", new Component("p", { class: "input-error", innerText: error }).element);
-
-                return;
-            }
 
             modal.HideAndRemove();
 
