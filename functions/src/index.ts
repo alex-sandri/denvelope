@@ -397,7 +397,7 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
     return { success };
 });
 
-const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin !== null && pin.length >= 4;
+const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
 
 const IsCorrectVaultPin = async (pin : string, userId : string) : Promise<boolean> =>
 {
