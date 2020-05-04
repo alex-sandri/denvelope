@@ -1118,6 +1118,10 @@ window.addEventListener("userready", async () =>
 
             const input = vaultPinInput.querySelector("input");
 
+            input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length < 4);
+
+            modal.ConfirmButton.disabled = true;
+
             modal.AppendContent([ vaultPinInput ]);
 
             modal.OnConfirm = async () =>
@@ -1127,18 +1131,6 @@ window.addEventListener("userready", async () =>
                 if (Utilities.HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
 
                 Utilities.RemoveClass(input, "error");
-
-                if (pin.length < 4)
-                {
-                    Utilities.AddClass(input, "error");
-
-                    vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
-                        class: "input-error",
-                        innerText: Translation.Get("errors->vault_pin_too_short")
-                    }).element);
-
-                    return;
-                }
 
                 modal.Hide();
                 
