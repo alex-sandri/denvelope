@@ -10,6 +10,7 @@
   "author": "Alex Sandri <me@alexsandri.com> (https://alexsandri.com)",
   "license": "MIT",
   "devDependencies": {
+    "@firebase/testing": "^0.19.2",
     "@types/source-map": "^0.5.2",
     "css-loader": "^3.5.2",
     "extract-loader": "^5.0.1",
