@@ -84,6 +84,17 @@ describe("USER_CONTENT", () =>
         })).toAllow();
     });
 
+    test("COLLECTION:FOLDERS|FILES;DENY:READ;OWNER:FALSE", async () =>
+    {
+        const db = await setup({ uid: "test" }, data);
+
+        const folderRef = db.collection("users/test1/folders").doc("folderId");
+        const fileRef = db.collection("users/tes1/files").doc("fileId");
+
+        await expect(folderRef.get()).toDeny();
+        await expect(fileRef.get()).toDeny();
+    });
+
     test("COLLECTION:FOLDERS;DENY:UPDATE;OWNER:TRUE", async () =>
     {
         const db = await setup({ uid: "test" }, data);
@@ -101,16 +112,5 @@ describe("USER_CONTENT", () =>
             updated: firebase.firestore.FieldValue.serverTimestamp(),
             lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
         })).toDeny();
-    });
-
-    test("COLLECTION:FOLDERS|FILES;DENY:READ;OWNER:FALSE", async () =>
-    {
-        const db = await setup({ uid: "test" }, data);
-
-        const folderRef = db.collection("users/test1/folders").doc("folderId");
-        const fileRef = db.collection("users/tes1/files").doc("fileId");
-
-        await expect(folderRef.get()).toDeny();
-        await expect(fileRef.get()).toDeny();
     });
 });
