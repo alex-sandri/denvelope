@@ -4,7 +4,7 @@ describe("User document read/write", () =>
 {
     afterEach(async () => await teardown());
 
-    test("Fail when not the owner", async () =>
+    test("Fail read/write when not the owner", async () =>
     {
         const db = await setup({ uid: "test" });
 
@@ -16,7 +16,7 @@ describe("User document read/write", () =>
         await expect(ref.delete()).toDeny();
     });
 
-    test("Succeed when the owner", async () =>
+    test("Succeed read and fail write when the owner", async () =>
     {
         const db = await setup({ uid: "test" });
 
