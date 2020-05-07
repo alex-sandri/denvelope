@@ -1,6 +1,6 @@
 const { setup, teardown } = require("./helpers");
 
-describe("Cloud Firestore Security Rules", () =>
+describe("Non-existent collection read/write", () =>
 {
     let db, ref;
 
