@@ -1,4 +1,4 @@
-const { setup, teardown } = require("./helpers");
+const { setup, teardown } = require("../helpers");
 
 describe("Non-existent collection read/write", () =>
 {

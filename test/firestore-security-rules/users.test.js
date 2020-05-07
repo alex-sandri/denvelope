@@ -1,4 +1,4 @@
-const { setup, teardown } = require("./helpers");
+const { setup, teardown } = require("../helpers");
 
 describe("User document read/write", () =>
 {
