@@ -11,7 +11,9 @@ describe("User document read/write", () =>
         const ref = db.collection("users").doc("test1");
 
         await expect(ref.get()).toDeny();
+        await expect(ref.set({})).toDeny();
         await expect(ref.update({})).toDeny();
+        await expect(ref.delete()).toDeny();
     });
 
     test("Succeed when the owner", async () =>
@@ -21,6 +23,8 @@ describe("User document read/write", () =>
         const ref = db.collection("users").doc("test");
 
         await expect(ref.get()).toAllow();
+        await expect(ref.set({})).toDeny();
         await expect(ref.update({})).toDeny();
+        await expect(ref.delete()).toDeny();
     });
 });
