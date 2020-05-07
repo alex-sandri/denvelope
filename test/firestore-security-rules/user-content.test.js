@@ -56,6 +56,13 @@ describe("USER_CONTENT", () =>
             updated: firebase.firestore.FieldValue.serverTimestamp(),
             lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
         })).toAllow();
+    });
+
+    test("COLLECTION:FOLDERS;DENY:UPDATE;OWNER:TRUE", async () =>
+    {
+        const db = await setup({ uid: "test" }, data);
+
+        const ref = db.collection("users/test/folders").doc("folderId");
 
         await expect(ref.update({
             parentId: "nonExistentFolderId",
