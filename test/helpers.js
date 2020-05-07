@@ -11,7 +11,7 @@ module.exports.setup = async (auth, data) =>
 
     if (data)
         for (const key in data)
-            db.doc(key).set(data[key]);
+            await db.doc(key).set(data[key]);
 
     await firebase.loadFirestoreRules({ projectId, rules: fs.readFileSync("firestore.rules") });
 
