@@ -3,7 +3,7 @@ const { setup, teardown } = require("../helpers");
 
 const data = {
     "users/test/folders/folderId": {
-        name: "test",
+        name: "folder",
         parentId: "root",
         shared: false,
         starred: false,
@@ -14,8 +14,32 @@ const data = {
         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
     },
     "users/test/folders/anotherFolderId": {
-        name: "test1",
+        name: "folder1",
         parentId: "root",
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/fileId": {
+        name: "file",
+        parentId: "root",
+        size: 42,
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/anotherFileId": {
+        name: "file1",
+        parentId: "root",
+        size: 0,
         shared: false,
         starred: false,
         trashed: false,
@@ -30,13 +54,15 @@ describe("USER_CONTENT", () =>
 {
     afterEach(async () => await teardown());
 
-    test("COLLECTION:FOLDERS;ALLOW:READ;OWNER:TRUE", async () =>
+    test("COLLECTION:FOLDERS|FILES;ALLOW:READ;OWNER:TRUE", async () =>
     {
         const db = await setup({ uid: "test" }, data);
 
-        const ref = db.collection("users/test/folders").doc("folderId");
+        const folderRef = db.collection("users/test/folders").doc("folderId");
+        const fileRef = db.collection("users/test/files").doc("fileId");
 
-        await expect(ref.get()).toAllow();
+        await expect(folderRef.get()).toAllow();
+        await expect(fileRef.get()).toAllow();
     });
 
     test("COLLECTION:FOLDERS;ALLOW:UPDATE;OWNER:TRUE", async () =>
