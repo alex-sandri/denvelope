@@ -1,4 +1,4 @@
-const { setup, teardown } = require("./helper");
+const { setup, teardown } = require("./helpers");
 
 describe("Cloud Firestore Security Rules", () =>
 {
