@@ -42,6 +42,7 @@ describe("OWNER:TRUE", () =>
         })).toAllow();
 
         await expect(ref.update({
+            parentId: "vault",
             inVault: true,
             updated: firebase.firestore.FieldValue.serverTimestamp(),
             lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
