@@ -145,8 +145,6 @@ export const it_IT = {
         file: "File",
         files: "File",
         install: "Installa",
-        in_short: "In breve",
-        the_team: "Il Team Denvelope",
         id: "ID",
         created: "Creato",
         last_modified: "Ultima modifica",

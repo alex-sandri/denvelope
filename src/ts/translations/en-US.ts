@@ -145,8 +145,6 @@ export const en_US = {
         file: "File",
         files: "Files",
         install: "Install",
-        in_short: "In short",
-        the_team: "The Denvelope Team",
         id: "ID",
         created: "Created",
         last_modified: "Last modified",
