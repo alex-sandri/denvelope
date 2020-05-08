@@ -23,22 +23,10 @@ html
 {
     height: 100%;
 
-    .logged-in,
-    .logged-out
-    {
-        visibility: hidden;
-    }
-
-    &.logged-out .logged-in,
-    &.logged-in .logged-out
+    &:not(.logged-out) .logged-out,
+    &:not(.logged-in) .logged-in
     {
         display: none;
-    }
-
-    &.logged-in .logged-in,
-    &.logged-out .logged-out
-    {
-        visibility: visible;
     }
 
     &.wait
