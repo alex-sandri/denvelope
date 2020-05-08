@@ -13,7 +13,7 @@ module.exports.setup = async (auth, data) =>
         for (const key in data)
             await db.doc(key).set(data[key]);
 
-    await firebase.loadFirestoreRules({ projectId, rules: fs.readFileSync("firestore.rules") });
+    await firebase.loadFirestoreRules({ projectId, rules: fs.readFileSync("firestore.rules", "utf8") });
 
     return db;
 }
