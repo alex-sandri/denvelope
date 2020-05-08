@@ -101,13 +101,13 @@ export class Auth
 
         if (Auth.IsSignedIn)
         {
-            Utilities.RemoveClass(document.documentElement, "logged-out");
-            Utilities.AddClass(document.documentElement, "logged-in");
+            Utilities.RemoveClass(document.documentElement, "signed-out");
+            Utilities.AddClass(document.documentElement, "signed-in");
         }
         else
         {
-            Utilities.RemoveClass(document.documentElement, "logged-in");
-            Utilities.AddClass(document.documentElement, "logged-out");
+            Utilities.RemoveClass(document.documentElement, "signed-in");
+            Utilities.AddClass(document.documentElement, "signed-out");
         }
 
         Utilities.DispatchEvent("userready");

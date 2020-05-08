@@ -21,15 +21,15 @@
         </a>
     </div>
     <div class="waiting-user">{{> spinner}}</div>
-    <button class="sign-in logged-out" data-translation="generic->sign_in"></button>
-    <div class="menu-toggle logged-in">
+    <button class="sign-in signed-out" data-translation="generic->sign_in"></button>
+    <div class="menu-toggle signed-in">
         <button>
             <img src="" data-update-field="photo">
         </button>
     </div>
 </header>
 <div class="menu-container">
-    <div class="menu logged-in">
+    <div class="menu signed-in">
         <div class="user">
             <img src="" data-update-field="photo">
             <p data-update-field="name"></p>
@@ -39,7 +39,7 @@
         <a href="settings" class="settings" data-translation="generic->settings" data-keyboard-shortcut="s"><i class="fas fa-cog"></i></a>
         <button class="sign-out" data-translation="generic->sign_out" data-keyboard-shortcut="e"><i class="fas fa-sign-out-alt"></i></button>
         <hr>
-        <div class="storage logged-in">
+        <div class="storage signed-in">
             <p>
                 <span data-update-field="used-storage" data-bytes="">{{> spinner}}</span>
                 <span data-translation="header->storage->of"></span>

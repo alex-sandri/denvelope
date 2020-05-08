@@ -23,8 +23,8 @@ html
 {
     height: 100%;
 
-    &:not(.logged-out) .logged-out,
-    &:not(.logged-in) .logged-in
+    &:not(.signed-out) .signed-out,
+    &:not(.signed-in) .signed-in
     {
         display: none;
     }
