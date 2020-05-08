@@ -152,6 +152,7 @@ export const it_IT = {
         size: "Dimensioni",
         shared: "Condiviso",
         starred: "Preferito",
+        position: "Posizione",
         keyboard_shortcut: "Scorciatoia da tastiera",
         accessibility: "Accessibilità",
         are_you_sure: "Sei sicuro?",

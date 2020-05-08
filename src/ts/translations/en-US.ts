@@ -152,6 +152,7 @@ export const en_US = {
         size: "Size",
         shared: "Shared",
         starred: "Starred",
+        position: "Position",
         keyboard_shortcut: "Keyboard shortcut",
         accessibility: "Accessibility",
         are_you_sure: "Are you sure?",

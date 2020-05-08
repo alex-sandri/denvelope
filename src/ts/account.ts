@@ -552,6 +552,18 @@ window.addEventListener("userready", async () =>
                         innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
                     }).element
                     :null,
+                Auth.IsAuthenticated
+                    ? new Component("p", {
+                        innerHTML: `<span data-translation="generic->position"></span><a href="${GetFolderUrl(data.parentId, false)}">${
+                            data.parentId === "root"
+                                ? Translation.Get("account->title")
+                                : (data.parentId === "vault"
+                                    ? Translation.Get("generic->vault")
+                                    : (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
+                                )
+                        }</a>`
+                    }).element
+                    : null,
             ]);
 
             Translation.Init(modal.Content);
