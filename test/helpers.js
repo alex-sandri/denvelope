@@ -22,6 +22,107 @@ module.exports.setup = async (auth, data) =>
 
 module.exports.teardown = async () => Promise.all(firebase.apps().map(app => app.delete()));
 
+module.exports.mockData = {
+    "users/test/folders/folderId": {
+        name: "folder",
+        parentId: "root",
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/folders/anotherFolderId": {
+        name: "folder1",
+        parentId: "root",
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/fileId": {
+        name: "file",
+        parentId: "root",
+        size: 42,
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/anotherFileId": {
+        name: "file1",
+        parentId: "root",
+        size: 0,
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/trashedFile": {
+        name: "trashedFile",
+        parentId: "root",
+        size: 0,
+        shared: false,
+        starred: false,
+        trashed: true,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/inVaultFile": {
+        name: "inVaultFile",
+        parentId: "vault",
+        size: 0,
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: true,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    }
+}
+
+module.exports.newFileValidMockData = {
+    name: "newFile",
+    parentId: "root",
+    shared: false,
+    starred: false,
+    trashed: false,
+    inVault: false,
+    created: firebase.firestore.FieldValue.serverTimestamp(),
+    updated: firebase.firestore.FieldValue.serverTimestamp(),
+    lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+}
+
+module.exports.newFileInvalidMockData = {
+    name: "newFile",
+    parentId: "nonExistentFolderId",
+    shared: false,
+    starred: false,
+    trashed: false,
+    inVault: false,
+    created: firebase.firestore.FieldValue.serverTimestamp(),
+    updated: firebase.firestore.FieldValue.serverTimestamp(),
+    lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+}
+
+module.exports.lockedVaultMockData = { "/users/test/vault/status": { locked: true } }
+
+module.exports.unlockedVaultMockData = { "/users/test/vault/status": { locked: false } }
+
 expect.extend({
     async toAllow(x)
     {
