@@ -45,6 +45,28 @@ module.exports.mockData = {
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
     },
+    "users/test/files/trashedFolder": {
+        name: "trashedFolder",
+        parentId: "root",
+        shared: false,
+        starred: false,
+        trashed: true,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/inVaultFolder": {
+        name: "inVaultFolder",
+        parentId: "vault",
+        shared: false,
+        starred: false,
+        trashed: false,
+        inVault: true,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
     "users/test/files/fileId": {
         name: "file",
         parentId: "root",
@@ -93,6 +115,30 @@ module.exports.mockData = {
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
     }
+}
+
+module.exports.newFolderValidMockData = {
+    name: "newFolder",
+    parentId: "root",
+    shared: false,
+    starred: false,
+    trashed: false,
+    inVault: false,
+    created: firebase.firestore.FieldValue.serverTimestamp(),
+    updated: firebase.firestore.FieldValue.serverTimestamp(),
+    lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+}
+
+module.exports.newFolderInvalidMockData = {
+    name: "newFolder",
+    parentId: "nonExistentFolderId",
+    shared: false,
+    starred: false,
+    trashed: false,
+    inVault: false,
+    created: firebase.firestore.FieldValue.serverTimestamp(),
+    updated: firebase.firestore.FieldValue.serverTimestamp(),
+    lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
 }
 
 module.exports.newFileValidMockData = {
