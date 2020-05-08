@@ -542,29 +542,48 @@ window.addEventListener("userready", async () =>
                         innerHTML: `<span data-translation="generic->size"></span><span>${Utilities.FormatStorage(data.size || 0)}</span>`
                     }).element
                     : null,
-                Auth.IsAuthenticated
-                    ? new Component("p", {
-                        innerHTML: `<span data-translation="generic->shared"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
-                    }).element
-                    : null,
-                Auth.IsAuthenticated
-                    ? new Component("p", {
-                        innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
-                    }).element
-                    :null,
-                Auth.IsAuthenticated
-                    ? new Component("p", {
-                        innerHTML: `<span data-translation="generic->position"></span><a href="${GetFolderUrl(data.parentId, false)}">${
-                            data.parentId === "root"
-                                ? Translation.Get("account->title")
-                                : (data.parentId === "vault"
-                                    ? Translation.Get("generic->vault")
-                                    : (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
-                                )
-                        }</a>`
-                    }).element
-                    : null,
             ]);
+
+            if (Auth.IsAuthenticated)
+            {
+                const parentFolderUrl = GetFolderUrl(data.parentId, false);
+
+                const contentPosition = new Component("p", {
+                    innerHTML: `<span data-translation="generic->position"></span><a href="${parentFolderUrl}">${
+                        data.parentId === "root"
+                            ? Translation.Get("account->title")
+                            : (data.parentId === "vault"
+                                ? Translation.Get("generic->vault")
+                                : (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
+                            )
+                    }</a>`
+                }).element;
+
+                contentPosition.querySelector("a").addEventListener("click", e =>
+                {
+                    e.preventDefault();
+
+                    if (location.href !== parentFolderUrl) history.pushState(null, "", parentFolderUrl);
+
+                    Utilities.SetCurrentFolderId(data.parentId);
+
+                    GetUserContent();
+
+                    UpdateBottomSectionBar(viewMyAccount);
+
+                    modal.HideAndRemove();
+                });
+
+                modal.AppendContent([
+                    new Component("p", {
+                        innerHTML: `<span data-translation="generic->shared"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                    }).element,
+                    new Component("p", {
+                        innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                    }).element,
+                    contentPosition,
+                ]);
+            }
 
             Translation.Init(modal.Content);
         });
