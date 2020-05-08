@@ -144,7 +144,7 @@ describe("OWNER:TRUE", () =>
                 const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
                 await expect(ref.update({
-                    trashed: false,
+                    trashed: true,
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
                 })).toDeny();
