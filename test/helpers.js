@@ -45,7 +45,7 @@ module.exports.mockData = {
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
     },
-    "users/test/files/trashedFolder": {
+    "users/test/folders/trashedFolder": {
         name: "trashedFolder",
         parentId: "root",
         shared: false,
@@ -56,7 +56,7 @@ module.exports.mockData = {
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
     },
-    "users/test/files/inVaultFolder": {
+    "users/test/folders/inVaultFolder": {
         name: "inVaultFolder",
         parentId: "vault",
         shared: false,
