@@ -109,7 +109,7 @@ describe("OWNER:TRUE", () =>
                     parentId: "folderId",
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-                })).toAllow();
+                })).toDeny();
 
                 await expect(ref.update({
                     parentId: "nonExistentFolderId",
