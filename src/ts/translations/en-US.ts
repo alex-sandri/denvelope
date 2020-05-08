@@ -152,6 +152,8 @@ export const en_US = {
         last_modified: "Last modified",
         type: "Type",
         size: "Size",
+        shared: "Shared",
+        starred: "Starred",
         keyboard_shortcut: "Keyboard shortcut",
         accessibility: "Accessibility",
         are_you_sure: "Are you sure?",
@@ -164,6 +166,8 @@ export const en_US = {
         example: "Example",
         reference: "Reference",
         default: "Default",
+        yes: "Yes",
+        no: "No",
     },
     header: {
         storage: {

@@ -152,6 +152,8 @@ export const it_IT = {
         last_modified: "Ultima modifica",
         type: "Tipo",
         size: "Dimensioni",
+        shared: "Condiviso",
+        starred: "Preferito",
         keyboard_shortcut: "Scorciatoia da tastiera",
         accessibility: "Accessibilità",
         are_you_sure: "Sei sicuro?",
@@ -164,6 +166,8 @@ export const it_IT = {
         example: "Esempio",
         reference: "Riferimento",
         default: "Predefinito",
+        yes: "Sì",
+        no: "No",
     },
     header: {
         storage: {

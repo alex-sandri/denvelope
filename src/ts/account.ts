@@ -541,7 +541,13 @@ window.addEventListener("userready", async () =>
                     ? new Component("p", {
                         innerHTML: `<span data-translation="generic->size"></span><span>${Utilities.FormatStorage(data.size || 0)}</span>`
                     }).element
-                    : null
+                    : null,
+                new Component("p", {
+                    innerHTML: `<span data-translation="generic->shared"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                }).element,
+                new Component("p", {
+                    innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                }).element,
             ]);
 
             Translation.Init(modal.Content);
