@@ -78,35 +78,68 @@ describe("OWNER:TRUE", () =>
         await expect(ref.add(newFileInvalidMockData)).toDeny();
     });
 
-    test("DENY:UPDATE", async () =>
+    describe("DENY:UPDATE", () =>
     {
-        const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData});
+        test("VAULT:LOCKED", async () =>
+        {
+            const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData});
 
-        const ref = db.collection("users/test/files").doc("fileId");
+            const ref = db.collection("users/test/files").doc("fileId");
 
-        await expect(ref.update({
-            size: 0,
-            updated: firebase.firestore.FieldValue.serverTimestamp(),
-            lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-        })).toDeny();
+            await expect(ref.update({
+                size: 0,
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
 
-        await expect(ref.update({
-            parentId: "nonExistentFolderId",
-            updated: firebase.firestore.FieldValue.serverTimestamp(),
-            lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-        })).toDeny();
+            await expect(ref.update({
+                parentId: "nonExistentFolderId",
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
 
-        await expect(ref.update({
-            parentId: "vault",
-            inVault: true,
-            updated: firebase.firestore.FieldValue.serverTimestamp(),
-            lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-        })).toDeny();
+            await expect(ref.update({
+                parentId: "vault",
+                inVault: true,
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
 
-        await expect(ref.update({
-            updated: firebase.firestore.FieldValue.serverTimestamp(),
-            lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
-        })).toDeny();
+            await expect(ref.update({
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
+            })).toDeny();
+        });
+
+        test("VAULT:UNLOCKED", async () =>
+        {
+            const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData});
+
+            const ref = db.collection("users/test/files").doc("fileId");
+
+            await expect(ref.update({
+                trashed: false,
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
+
+            await expect(ref.update({
+                parentId: "vault",
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
+
+            await expect(ref.update({
+                inVault: true,
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
+
+            await expect(ref.update({
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
+            })).toDeny();
+        });
     });
 
     test("DENY:DELETE", async () =>
