@@ -113,4 +113,47 @@ describe("USER_CONTENT", () =>
             lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
         })).toDeny();
     });
+
+    test("COLLECTION:FILES;DENY:UPDATE;OWNER:TRUE", async () =>
+    {
+        const db = await setup({ uid: "test" }, data);
+
+        const ref = db.collection("users/test/folders").doc("fileId");
+
+        await expect(ref.update({
+            parentId: "nonExistentFolderId",
+            updated: firebase.firestore.FieldValue.serverTimestamp(),
+            lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+        })).toDeny();
+
+        await expect(ref.update({
+            size: 0,
+            updated: firebase.firestore.FieldValue.serverTimestamp(),
+            lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
+        })).toDeny();
+    });
+
+    test("COLLECTION:FILES;DENY:UPDATE;OWNER:FALSE", async () =>
+    {
+        const db = await setup({ uid: "test1" }, data);
+
+        const ref = db.collection("users/test/folders").doc("fileId");
+
+        await expect(ref.update({
+            parentId: "nonExistentFolderId",
+            updated: firebase.firestore.FieldValue.serverTimestamp(),
+            lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+        })).toDeny();
+
+        await expect(ref.update({
+            size: 0,
+            updated: firebase.firestore.FieldValue.serverTimestamp(),
+            lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+        })).toDeny();
+
+        await expect(ref.update({
+            updated: firebase.firestore.FieldValue.serverTimestamp(),
+            lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
+        })).toDeny();
+    });
 });
