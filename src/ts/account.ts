@@ -513,8 +513,6 @@ window.addEventListener("userready", async () =>
 
             const name = data.name;
 
-            modal.Title = Utilities.EscapeHtml(name);
-
             let dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
 
             for (const entry in dateFormatOptions)

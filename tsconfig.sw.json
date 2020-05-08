@@ -6,6 +6,7 @@
     "compilerOptions": {
         "outDir": "public/",
         "rootDir": "src/ts/service_workers/",
-        "sourceMap": false
+        "sourceMap": false,
+        "moduleResolution": "node"
     }
 }
