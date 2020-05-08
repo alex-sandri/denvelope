@@ -80,27 +80,14 @@ describe("OWNER:TRUE", () =>
 
     describe("DENY:UPDATE", () =>
     {
-        test("VAULT:LOCKED", async () =>
+        test("GENERIC", async () =>
         {
-            const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData});
+            const db = await setup({ uid: "test" }, mockData);
 
             const ref = db.collection("users/test/files").doc("fileId");
 
             await expect(ref.update({
-                size: 0,
-                updated: firebase.firestore.FieldValue.serverTimestamp(),
-                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-            })).toDeny();
-
-            await expect(ref.update({
                 parentId: "nonExistentFolderId",
-                updated: firebase.firestore.FieldValue.serverTimestamp(),
-                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-            })).toDeny();
-
-            await expect(ref.update({
-                parentId: "vault",
-                inVault: true,
                 updated: firebase.firestore.FieldValue.serverTimestamp(),
                 lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
             })).toDeny();
@@ -111,11 +98,25 @@ describe("OWNER:TRUE", () =>
             })).toDeny();
         });
 
+        test("VAULT:LOCKED", async () =>
+        {
+            const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData});
+
+            const ref = db.collection("users/test/files").doc("fileId");
+
+            await expect(ref.update({
+                parentId: "vault",
+                inVault: true,
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+            })).toDeny();
+        });
+
         test("VAULT:UNLOCKED", async () =>
         {
             const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData});
 
-            const ref = db.collection("users/test/files").doc("fileId");
+            const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
             await expect(ref.update({
                 trashed: false,
@@ -124,20 +125,15 @@ describe("OWNER:TRUE", () =>
             })).toDeny();
 
             await expect(ref.update({
-                parentId: "vault",
+                parentId: "root",
                 updated: firebase.firestore.FieldValue.serverTimestamp(),
                 lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
             })).toDeny();
 
             await expect(ref.update({
-                inVault: true,
+                inVault: false,
                 updated: firebase.firestore.FieldValue.serverTimestamp(),
                 lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-            })).toDeny();
-
-            await expect(ref.update({
-                updated: firebase.firestore.FieldValue.serverTimestamp(),
-                lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
             })).toDeny();
         });
     });
