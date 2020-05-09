@@ -350,7 +350,7 @@ window.addEventListener("userready", async () =>
         if (type === "folder") functions.httpsCallable("shareFolder")({ id, shared: false });
     });
 
-    contextMenuMove.addEventListener("click", async () =>
+    contextMenuMove.addEventListener("click", () =>
     {
         const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
 
@@ -359,37 +359,42 @@ window.addEventListener("userready", async () =>
             contextMenuGeneric
         ]);
 
-        Utilities.ShowElements([
-            contextMenuMoveSelector,
-            contextMenuMoveSelector.querySelector(".spinner")
-        ]);
+        Utilities.ShowElement(contextMenuMoveSelector);
 
-        contextMenuMoveSelectorOptions.innerHTML = "";
-
-        db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", Utilities.GetCurrentFolderId()).get().then((docs : any) =>
+        const ShowAvailableFoldersIn = async (id : string) =>
         {
-            Utilities.HideElement(contextMenuMoveSelector.querySelector(".spinner"));
+            Utilities.ShowElement(contextMenuMoveSelector.querySelector(".spinner"));
 
-            docs.forEach((doc : any) =>
+            contextMenuMoveSelectorOptions.innerHTML = "";
+
+            db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get().then((docs : any) =>
             {
-                if (tempArray.filter(element => element.id === doc.id).length === 0)
-                {
-                    const element = <HTMLButtonElement>new Component("button", {
-                        innerHTML: `<i class="fas fa-folder"></i> ${doc.data().name}`,
-                        id: doc.id
-                    }).element;
-
-                    contextMenuMoveSelectorOptions.appendChild(element);
+                Utilities.HideElement(contextMenuMoveSelector.querySelector(".spinner"));
     
-                    element.addEventListener("click", async () => MoveElements(tempArray, element.id));
-                }
+                docs.forEach((doc : any) =>
+                {
+                    if (tempArray.filter(element => element.id === doc.id).length === 0)
+                    {
+                        const element = <HTMLButtonElement>new Component("div", {
+                            innerHTML: `<button class="select"><i class="fas fa-folder"></i><span>${doc.data().name}</span></button><button class="goto"><i class="fas fa-chevron-right fa-fw"></i></button>`,
+                            id: doc.id
+                        }).element;
+    
+                        contextMenuMoveSelectorOptions.appendChild(element);
+        
+                        element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
+                        element.querySelector(".goto").addEventListener("click", () => ShowAvailableFoldersIn(doc.id));
+                    }
+                });
+    
+                if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0)
+                    contextMenuMoveSelectorOptions.appendChild(new Component("p", {
+                        innerHTML: Translation.Get("account->context_menu->move->impossible")
+                    }).element);
             });
+        }
 
-            if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0)
-                contextMenuMoveSelectorOptions.appendChild(new Component("p", {
-                    innerHTML: Translation.Get("account->context_menu->move->impossible")
-                }).element);
-        });
+        ShowAvailableFoldersIn(Utilities.GetCurrentFolderId());
     });
 
     [contextMenuAddToFavourites, contextMenuRemoveFromFavourites].forEach(element => element.addEventListener("click", () =>
@@ -1021,7 +1026,8 @@ window.addEventListener("userready", async () =>
         const target = <HTMLElement>e.target;
 
         if(target.closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button, .vault .menu-button`) === null &&
-            target.closest(editorMenuSelector) === null && target.closest("#cm-move") === null && !moreOptions.contains(target)) HideContextMenu();
+            target.closest(editorMenuSelector) === null && target.closest("#cm-move") === null && !moreOptions.contains(target) &&
+            target.closest(".goto") === null) HideContextMenu();
 
         if ((<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => Utilities.HasClass(element, "selected")).length === 0)
             contextMenuItems = [];

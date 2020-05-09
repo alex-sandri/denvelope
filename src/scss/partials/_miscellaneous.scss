@@ -261,9 +261,40 @@
             text-align: start;
         }
 
-        #move-selector p
+        #move-selector
         {
-            margin: $standard-spacing;
+            .options div
+            {
+                @include flex($align-items: unset);
+
+                span
+                {
+                    margin: 0 $standard-spacing;
+                }
+
+                .goto
+                {
+                    @include button($has-border: false, $has-padding: false, $has-border-radius: false);
+
+                    display: inline-block;
+                    width: unset;
+                    visibility: hidden;
+                    transition: 0ms;
+                }
+                    
+                &:hover
+                {
+                    .goto
+                    {
+                        visibility: visible;
+                    }
+                }
+            }
+
+            p
+            {
+                margin: $standard-spacing;
+            }
         }
     }
 
