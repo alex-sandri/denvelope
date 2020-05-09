@@ -74,6 +74,12 @@
 
             @at-root .date-format-options
             {
+                label
+                {
+                    display: inline-block;
+                    margin-bottom: $standard-spacing / 2;
+                }
+
                 & > div > div
                 {
                     @include flex;
