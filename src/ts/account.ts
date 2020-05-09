@@ -579,7 +579,7 @@ window.addEventListener("userready", async () =>
                         innerHTML: `<span data-translation="generic->shared"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
                     }).element,
                     new Component("p", {
-                        innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                        innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.starred ? "yes" : "no"}`)}</span>`
                     }).element,
                     contentPosition,
                 ]);
