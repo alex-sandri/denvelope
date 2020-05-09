@@ -5,17 +5,19 @@ import { it_IT } from "../translations/it-IT";
 
 export class Translation
 {
-    private static Language : string;
+    private static language : string;
+
+    public static get Language () : string { return Translation.language; }
 
     public static Init = (element ?: HTMLElement, language ?: string) : void =>
     {
         if (!Utilities.IsSet(element)) (<any>element) = document;
 
-        if (!Utilities.IsSet(language)) language = Utilities.IsSetCookie("lang") ? Utilities.GetCookie("lang") : navigator.language;
+        if (!Utilities.IsSet(language)) language = localStorage.getItem("lang") ?? navigator.language;
 
-        Utilities.SetCookie("lang", language, 60);
+        localStorage.setItem("lang", language);
 
-        document.documentElement.lang = Translation.Language = language;
+        document.documentElement.lang = Translation.language = language;
 
         const ids = Array.from(new Set(
             Array.from(element.querySelectorAll("*"))

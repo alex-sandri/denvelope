@@ -17,8 +17,6 @@ export const Init = () : void =>
 
     Auth.Init();
 
-    Utilities.SetCookie("cookie_consent", "true", 60);
-
     Translation.Init();
 
     // This needs to wait for the translation to be completed
@@ -28,12 +26,14 @@ export const Init = () : void =>
 
     new ServiceWorkerController();
 
-    if (!Utilities.IsSetCookie("cookie_consent"))
+    if (!localStorage.getItem("cookie-consent"))
     {
         Utilities.ShowElement(cookieBanner, "flex");
 
         cookieBanner.querySelector("i:last-child").addEventListener("click", () => Utilities.HideElement(document.querySelector(".cookie-banner")));
     }
+
+    localStorage.setItem("cookie-consent", "true");
 
     Utilities.PreventDragEvents();
 

@@ -39,7 +39,7 @@ const deleteAccount : HTMLButtonElement = document.querySelector("#delete-accoun
 
 const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
 
-languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang")}]`)).index;
+languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Translation.Language}]`)).index;
 
 let section : string = "general";
 
@@ -92,7 +92,7 @@ window.addEventListener("userready", () =>
 
         modal.AppendContent([ languageSelect ]);
 
-        languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Utilities.GetCookie("lang") ?? navigator.language}]`)).index;
+        languageSelect.selectedIndex = <number><unknown>(<HTMLOptionElement>languageSelect.querySelector(`[value=${Translation.Language}]`)).index;
 
         modal.OnConfirm = () =>
         {
