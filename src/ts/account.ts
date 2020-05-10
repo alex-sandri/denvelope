@@ -353,6 +353,7 @@ window.addEventListener("userready", async () =>
     contextMenuMove.addEventListener("click", () =>
     {
         const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
+        const previousIds : string[] = [];
 
         Utilities.HideElements([
             contextMenuContent,
@@ -363,6 +364,9 @@ window.addEventListener("userready", async () =>
 
         const ShowAvailableFoldersIn = async (id : string) =>
         {
+            if (id === "root") Utilities.HideElement(contextMenuMoveSelector.querySelector(".back"));
+            else Utilities.ShowElement(contextMenuMoveSelector.querySelector(".back"));
+
             Utilities.ShowElement(contextMenuMoveSelector.querySelector(".spinner"));
 
             contextMenuMoveSelectorOptions.innerHTML = "";
@@ -370,6 +374,8 @@ window.addEventListener("userready", async () =>
             db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get().then((docs : any) =>
             {
                 Utilities.HideElement(contextMenuMoveSelector.querySelector(".spinner"));
+
+                contextMenuMoveSelectorOptions.innerHTML = "";
     
                 docs.forEach((doc : any) =>
                 {
@@ -383,7 +389,12 @@ window.addEventListener("userready", async () =>
                         contextMenuMoveSelectorOptions.appendChild(element);
         
                         element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
-                        element.querySelector(".goto").addEventListener("click", () => ShowAvailableFoldersIn(doc.id));
+                        element.querySelector(".goto").addEventListener("click", () =>
+                        {
+                            previousIds.push(id);
+
+                            ShowAvailableFoldersIn(doc.id);
+                        });
                     }
                 });
     
@@ -393,6 +404,8 @@ window.addEventListener("userready", async () =>
                     }).element);
             });
         }
+
+        contextMenuMoveSelector.querySelector(".back").addEventListener("click", () => ShowAvailableFoldersIn(previousIds.pop()));
 
         ShowAvailableFoldersIn(Utilities.GetCurrentFolderId());
     });
@@ -1027,7 +1040,7 @@ window.addEventListener("userready", async () =>
 
         if(target.closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button, .vault .menu-button`) === null &&
             target.closest(editorMenuSelector) === null && target.closest("#cm-move") === null && !moreOptions.contains(target) &&
-            target.closest(".goto") === null) HideContextMenu();
+            target.closest(".goto, .back") === null) HideContextMenu();
 
         if ((<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => Utilities.HasClass(element, "selected")).length === 0)
             contextMenuItems = [];
