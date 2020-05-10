@@ -269,25 +269,13 @@
 
                 span
                 {
-                    margin: 0 $standard-spacing;
+                    margin-left: $standard-spacing;
                 }
 
                 .goto
                 {
-                    @include button($has-border: false, $has-padding: false, $has-border-radius: false);
-
                     display: inline-block;
                     width: unset;
-                    visibility: hidden;
-                    transition: 0ms;
-                }
-                    
-                &:hover
-                {
-                    .goto
-                    {
-                        visibility: visible;
-                    }
                 }
             }
 
