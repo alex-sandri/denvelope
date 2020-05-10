@@ -56,9 +56,7 @@ const filesContainer : HTMLDivElement = document.querySelector(".files-container
 const fileSelector : string = "div.file";
 
 const showFile : HTMLDivElement = document.querySelector(".show-file");
-const editorMenuSelector : string = ".show-file .editor-head .menu";
-const editorMenu : HTMLButtonElement = document.querySelector(editorMenuSelector);
-const editorClose : HTMLButtonElement = showFile.querySelector(".close");
+const editorMenuSelector : string = ".show-file .tabs .tab .menu";
 const editorTabs : HTMLElement = showFile.querySelector(".tabs");
 const editorElement : HTMLDivElement = document.querySelector("#editor");
 
@@ -709,7 +707,7 @@ window.addEventListener("userready", async () =>
         {
             preventWindowUnload.editor = false;
 
-            editorClose.click();
+            CloseEditor();
         }
     }));
 
@@ -984,41 +982,6 @@ window.addEventListener("userready", async () =>
         viewMyAccount.click();
     });
 
-    editorClose.addEventListener("click", () =>
-    {
-        if (preventWindowUnload?.editor && !confirm(Translation.Get("generic->are_you_sure"))) return;
-
-        editorModels.forEach(model => model.dispose());
-
-        editorModels.clear();
-
-        editorElement.innerHTML = "";
-
-        editorTabs.innerHTML = "";
-
-        header.style.backgroundColor = "";
-
-        editor = null;
-
-        preventWindowUnload.editor = false;
-
-        const url = GetFolderUrl(Utilities.GetCurrentFolderId(true), IsShared());
-
-        if (!Utilities.HasClass(viewRecentContent, "selected"))
-        {
-            if (location.href !== url) history.pushState(null, "", url);
-
-            GetUserContent();
-        }
-        else viewRecentContent.click();
-
-        Utilities.HideElement(showFile);
-
-        Utilities.RemoveClass(document.documentElement, "wait");
-        Utilities.RemoveClass(document.documentElement, "file-loading");
-        Utilities.RemoveClass(document.documentElement, "file-open");
-    });
-
     whatIsTakingUpSpace.addEventListener("click", e =>
     {
         e.preventDefault();
@@ -1261,8 +1224,6 @@ window.addEventListener("userready", async () =>
 
             GetUserContent();
         });
-
-        if (!Auth.IsAuthenticated && location.pathname.indexOf("/shared/") > -1) Utilities.HideElement(editorClose);
     }
 
     if (await vaultOnly()) Auth.RefreshToken();
@@ -1540,7 +1501,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
     if (Utilities.IsSet(unsubscribeFoldersListener)) unsubscribeFoldersListener();
     if (Utilities.IsSet(unsubscribeFilesListener)) unsubscribeFilesListener();
 
-    if (IsShowFileVisible() && location.pathname.indexOf("/file/") === -1) editorClose.click();
+    if (IsShowFileVisible() && location.pathname.indexOf("/file/") === -1) CloseEditor();
 
     if ((searchTerm ?? "").length === 0 && !globalSearch)
     {
@@ -1980,8 +1941,6 @@ const addUserContentEvents = () : void =>
 
     [ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", showContextMenu));
 
-    editorMenu.addEventListener("click", showContextMenu);
-
     if (sharedOnly() || starredOnly() || trashedOnly()) return;
 
     [...userContentElements, navigationBackButton, vault].forEach(element =>
@@ -2363,7 +2322,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                         ]
                     }).element,
                     new Component("p", { class: "name", innerHTML: Utilities.UnescapeHtml(name) }).element,
-                    new Component("button", { class: "close", innerHTML: "&times;" }).element
+                    new Component("button", { class: "menu", innerHTML: `<i class="fas fa-ellipsis-v fa-fw"></i>` }).element,
+                    new Component("button", { class: "close", innerHTML: `<i class="fas fa-times fa-fw"></i>` }).element
                 ]
             }).element;
     
@@ -2385,6 +2345,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
                 if (tab.getAttribute("data-force-download") === "true") ShowForceDownloadButton(id.split("-")[1]);
             });
+
+            (<HTMLButtonElement>tab.querySelector(".menu")).addEventListener("click", showContextMenu);
     
             tab.querySelector(".close").addEventListener("click", () =>
             {
@@ -2396,7 +2358,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     
                 if (editorModels.size === 0 && editorTabs.childElementCount === 0)
                 {
-                    editorClose.click();
+                    CloseEditor();
     
                     return;
                 }
@@ -2772,6 +2734,41 @@ const MoveElements = async (elements: HTMLElement[], parentId : string) : Promis
 }
 
 const IsShowFileVisible = () : boolean => getComputedStyle(showFile).getPropertyValue("display") !== "none";
+
+const CloseEditor = () =>
+{
+    if (preventWindowUnload?.editor && !confirm(Translation.Get("generic->are_you_sure"))) return;
+
+    editorModels.forEach(model => model.dispose());
+
+    editorModels.clear();
+
+    editorElement.innerHTML = "";
+
+    editorTabs.innerHTML = "";
+
+    header.style.backgroundColor = "";
+
+    editor = null;
+
+    preventWindowUnload.editor = false;
+
+    const url = GetFolderUrl(Utilities.GetCurrentFolderId(true), IsShared());
+
+    Utilities.HideElement(showFile);
+
+    Utilities.RemoveClass(document.documentElement, "wait");
+    Utilities.RemoveClass(document.documentElement, "file-loading");
+    Utilities.RemoveClass(document.documentElement, "file-open");
+
+    if (!Utilities.HasClass(viewRecentContent, "selected"))
+    {
+        if (location.href !== url) history.pushState(null, "", url);
+
+        GetUserContent();
+    }
+    else viewRecentContent.click();
+}
 
 if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/folder/") > -1 || location.pathname.indexOf("/file/") > -1)
 {
