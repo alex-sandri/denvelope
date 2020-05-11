@@ -1,4 +1,4 @@
-const cacheName : string = "static-v2151";
+const cacheName : string = "static-v2152";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -12,7 +12,7 @@ self.addEventListener("install", (e : any) =>
         "/assets/css/bundle.1c1ec358971c608d6ca2f5d9748dc8b1.css",
         "/assets/js/home.ac2e48ae5836e5647a9b.js",
         "/assets/js/account.3e3d2ab716b6d140aaed.js",
-        "/assets/js/settings.e06a7977cd7c671e23bb.js",
+        "/assets/js/settings.483fd0c7bf159954041f.js",
         "/__/firebase/7.14.2/firebase-app.js",
         "/__/firebase/7.14.2/firebase-auth.js",
         "/__/firebase/7.14.2/firebase-firestore.js",

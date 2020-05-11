@@ -140,15 +140,13 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = () =>
         {
-            let url : URL;
-
             if (Utilities.HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
 
             Utilities.RemoveClass(input, "error");
 
             modal.HideAndRemove();
 
-            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: url.href }, { merge: true });
+            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: input.value }, { merge: true });
         }
 
         modal.Show(true);
