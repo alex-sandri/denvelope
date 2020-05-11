@@ -60,7 +60,7 @@ const editorMenuSelector : string = ".show-file .tabs .tab .menu";
 const editorTabs : HTMLElement = showFile.querySelector(".tabs");
 const editorElement : HTMLDivElement = document.querySelector("#editor");
 
-let editor : any;
+let editor : any, editorSavedValue : string;
 const editorModels : Map<string, any> = new Map<string, any>();
 
 const contextMenuContainer : HTMLDivElement = document.querySelector(".context-menu-container");
@@ -291,6 +291,10 @@ window.addEventListener("userready", async () =>
         db.collection(`users/${Auth.UserId}/files`).doc(id).update({ ...Utilities.GetFirestoreUpdateTimestamp() });
 
         preventWindowUnload.editor = false;
+
+        editorSavedValue = value;
+
+        Utilities.RemoveClass(editorTabs.querySelector(".active"), "modified");
     });
 
     contextMenuSaveToMyAccount.addEventListener("click", () =>
@@ -2238,6 +2242,8 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
     preventWindowUnload.editor = false;
 
+    editorSavedValue = value;
+
     if (!editor)
         editor = (<any>window).monaco.editor.create(editorElement, {
             model: null,
@@ -2255,7 +2261,7 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
     editor.onDidChangeModelContent(() =>
     {
-        preventWindowUnload.editor = value !== editor.getValue();
+        preventWindowUnload.editor = editorSavedValue !== editor.getValue();
 
         if (preventWindowUnload.editor) Utilities.AddClass(editorTabs.querySelector(".active"), "modified");
         else Utilities.RemoveClass(editorTabs.querySelector(".active"), "modified");
