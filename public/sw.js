@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2155";
+const cacheName = "static-v2163";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -8,7 +8,7 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/privacy",
     "/cookies",
     "/accessibility",
-    "/assets/css/bundle.1c1ec358971c608d6ca2f5d9748dc8b1.css",
+    "/assets/css/bundle.0d53641e4b000050fa5a1afbe29aa349.css",
     "/assets/js/home.ac2e48ae5836e5647a9b.js",
     "/assets/js/account.16f4ee21fe859507dbb6.js",
     "/assets/js/settings.483fd0c7bf159954041f.js",
@@ -25,20 +25,6 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/editor/0.20.0/min/vs/loader.js",
     "/editor/0.20.0/min/vs/editor/editor.main.nls.js",
     "/editor/0.20.0/min/vs/editor/editor.main.js",
-    "/assets/font/SourceCodePro/ExtraLight.ttf",
-    "/assets/font/SourceCodePro/ExtraLight-Italic.ttf",
-    "/assets/font/SourceCodePro/Light.ttf",
-    "/assets/font/SourceCodePro/Light-Italic.ttf",
-    "/assets/font/SourceCodePro/Regular.ttf",
-    "/assets/font/SourceCodePro/Regular-Italic.ttf",
-    "/assets/font/SourceCodePro/Medium.ttf",
-    "/assets/font/SourceCodePro/Medium-Italic.ttf",
-    "/assets/font/SourceCodePro/SemiBold.ttf",
-    "/assets/font/SourceCodePro/SemiBold-Italic.ttf",
-    "/assets/font/SourceCodePro/Bold.ttf",
-    "/assets/font/SourceCodePro/Bold-Italic.ttf",
-    "/assets/font/SourceCodePro/Black.ttf",
-    "/assets/font/SourceCodePro/Black-Italic.ttf",
     "/assets/img/miscellaneous/empty.svg",
     "/assets/img/miscellaneous/file-sync.svg",
     "/assets/img/miscellaneous/open-source.svg",
