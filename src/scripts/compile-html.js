@@ -14,6 +14,7 @@ handlebars.registerPartial("general", handlebars.compile(fs.readFileSync(path.jo
 handlebars.registerPartial("header", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/header.hbs")).toString("utf-8")));
 handlebars.registerPartial("info", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/info.hbs")).toString("utf-8")));
 handlebars.registerPartial("modal", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/modal.hbs")).toString("utf-8")));
+handlebars.registerPartial("plan", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/plan.hbs")).toString("utf-8")));
 handlebars.registerPartial("privacy", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/privacy.hbs")).toString("utf-8")));
 handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/security.hbs")).toString("utf-8")));
 handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/spinner.hbs")).toString("utf-8")));

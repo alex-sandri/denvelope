@@ -28,6 +28,9 @@ const resetBackground : HTMLButtonElement = document.querySelector("#change-back
 const changeDateFormat : HTMLButtonElement = document.querySelector("#date-format .edit");
 const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
 
+const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
+const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
+
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
 const deleteVault : HTMLButtonElement = document.querySelector("#delete-vault .delete");
@@ -49,10 +52,15 @@ if (location.pathname.indexOf("/settings/") > -1)
 
     if (section.indexOf("/") > -1) section = section.substr(0, section.indexOf("/"));
 
-    if (![ "general", "security", "advanced", "privacy", "info" ].includes(section)) section = "general";
+    if (![ "general", "plan", "security", "advanced", "privacy", "info" ].includes(section)) section = "general";
 }
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
+
+document.querySelectorAll("#plan .plans .plan")
+    .forEach(plan => (<HTMLParagraphElement>plan.querySelector(".price")).innerText =
+    Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
+    .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`))));
 
 const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
 
@@ -269,6 +277,15 @@ window.addEventListener("userready", () =>
     resetDateFormat.addEventListener("click", () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: "default" }, { merge: true }));
 
+    changePlan.addEventListener("click", () => null);
+
+    (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
+    {
+        plans.querySelector(".selected")?.classList.remove("selected");
+
+        Utilities.AddClass(plan, "selected");
+    }));
+
     signOutFromAllDevices.addEventListener("click", () =>
     {
         const modal = new Modal({
@@ -479,6 +496,13 @@ window.addEventListener("userready", () =>
 
     clearCache.addEventListener("click", Utilities.ClearFirestoreCache);
 
+    db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
+    {
+        const plan = user.data().plan;
+
+        UpdatePlan(plan);
+    });
+
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
     {
         const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
@@ -525,6 +549,17 @@ const UpdateCacheSize = (bytes : number) =>
 
     resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 }
+
+const UpdatePlan = (plan : string) : void =>
+{
+    Translation.Init(null, languageSelect.selectedOptions[0].value);
+
+    changePlan.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
+
+    plans.querySelector(".current")?.classList.remove("current");
+
+    Utilities.AddClass(plans.querySelector(`.${plan}`), "current");
+};
 
 UpdateLanguage();
 

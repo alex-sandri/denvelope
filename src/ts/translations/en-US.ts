@@ -221,6 +221,28 @@ export const en_US = {
             background: "Background",
             date_format: "Date format",
         },
+        plan: {
+            title: "Plan",
+            change_plan: {
+                title: "Change plan",
+                change: "Change",
+            },
+            currency: "USD", // Used in Intl.NumberFormat
+            plans: {
+                free: {
+                    name: "Free",
+                    price: {
+                        month: "0"
+                    },
+                },
+                premium: {
+                    name: "Premium",
+                    price: {
+                        month: "10"
+                    },
+                },
+            },
+        },
         security: {
             title: "Security",
             sign_out_from_all_devices: "Sign Out from all devices",

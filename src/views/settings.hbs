@@ -10,12 +10,14 @@
     <main>
         <div class="settings-menu">
             <button data-sect="general" data-translation="settings->general->title"><i class="fas fa-cog"></i></button>
+            <button data-sect="plan" data-translation="settings->plan->title"><i class="fas fa-credit-card"></i></button>
             <button data-sect="security" data-translation="settings->security->title"><i class="fas fa-shield-alt"></i></button>
             <button data-sect="advanced" data-translation="settings->advanced->title"><i class="fas fa-sliders-h"></i></button>
             <button data-sect="privacy" data-translation="settings->privacy->title"><i class="fas fa-user-secret"></i></button>
             <button data-sect="info" data-translation="settings->info->title"><i class="fas fa-info-circle"></i></button>
         </div>
         {{> general}}
+        {{> plan}}
         {{> security}}
         {{> advanced}}
         {{> privacy}}

@@ -509,6 +509,49 @@
     font-size: 50px;
 }
 
+.plans
+{
+    .plan
+    {
+        padding: $standard-spacing;
+        background-color: rgba($primary-color, 0.5);
+        margin-top: $standard-spacing;
+        border: $border-width solid $secondary-color;
+        border-radius: $border-radius;
+        cursor: pointer;
+        transition: $transition-time;
+
+        .name,
+        .price
+        {
+            margin: 0;
+        }
+
+        .name
+        {
+            font-weight: $regular;
+        }
+
+        .price
+        {
+            font-weight: $black;
+            font-size: xx-large;
+        }
+
+        &.current,
+        &.selected
+        {
+            color: $primary-color;
+            background-color: $secondary-color;
+        }
+
+        &:hover
+        {
+            box-shadow: 0 0 0 5px $secondary-color;
+        }
+    }
+}
+
 .firebaseui-auth-container
 {
     @include flex($flex-direction: column);

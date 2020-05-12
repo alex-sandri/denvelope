@@ -221,6 +221,28 @@ export const it_IT = {
             background: "Sfondo",
             date_format: "Formato della data",
         },
+        plan: {
+            title: "Piano",
+            change_plan: {
+                title: "Cambia piano",
+                change: "Cambia",
+            },
+            currency: "EUR",
+            plans: {
+                free: {
+                    name: "Gratuito",
+                    price: {
+                        month: "0"
+                    },
+                },
+                premium: {
+                    name: "Premium",
+                    price: {
+                        month: "10"
+                    },
+                },
+            },
+        },
         security: {
             title: "Sicurezza",
             sign_out_from_all_devices: "Esci da tutti i dispositivi",
