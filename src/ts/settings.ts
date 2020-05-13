@@ -287,6 +287,8 @@ window.addEventListener("userready", () =>
             loading: false
         });
 
+        modal.ConfirmButton.disabled = true;
+
         const stripeElements = stripe.elements({
             fonts: [ {
                 family: "Source Code Variable",
@@ -317,7 +319,18 @@ window.addEventListener("userready", () =>
             hidePostalCode: true
         });
 
-        cardElement.mount(modal.Content);
+        cardElement.on("change", (e : any) =>
+        {
+            modal.ConfirmButton.disabled = !e.complete;
+
+            modal.Content.querySelector(".input-error")?.remove();
+
+            if (e.error) modal.Content.insertAdjacentHTML("afterbegin", `<p class="input-error">${e.error.message}</p>`);
+        });
+
+        modal.AppendContent([ document.createElement("div") ])
+
+        cardElement.mount(modal.Content.querySelector("div"));
 
         modal.OnConfirm = () =>
         {
