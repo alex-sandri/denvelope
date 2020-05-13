@@ -332,9 +332,11 @@ window.addEventListener("userready", () =>
 
         cardElement.mount(modal.Content.querySelector("div"));
 
-        modal.OnConfirm = () =>
+        modal.OnConfirm = async () =>
         {
-            // TODO
+            const paymentMethod = stripe.createPaymentMethod({ type: "card", card: cardElement });
+
+            functions.httpsCallable("createSubscription")({ paymentMethod });
 
             modal.HideAndRemove();
         }

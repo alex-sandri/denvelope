@@ -56,8 +56,10 @@ export class Auth
     }
 
     public static RefreshToken = () : void => Auth.auth.currentUser.getIdToken(true);
+
+    public static get CurrentUser () : any { return Auth.auth.currentUser; }
     
-    public static get UserId () : string {return Auth.sharedContentUserId || Auth.auth.currentUser.uid;}
+    public static get UserId () : string { return Auth.sharedContentUserId || Auth.CurrentUser.uid; }
 
     private static AuthStateChanged = async (user : any) : Promise<void> =>
     {
