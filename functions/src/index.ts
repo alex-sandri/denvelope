@@ -404,6 +404,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 {
     if (!context.auth || !data.plan || !data.paymentMethod) return;
 
+    if (![ "free", "premium" ].includes(data.plan)) return;
+
     const userId : string = context.auth.uid;
 
     const user = await db.collection("users").doc(userId).get();
@@ -422,10 +424,35 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     }
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).customerId);
 
-    await stripe.subscriptions.create({
-        customer: customer.id,
-        items: [ { plan: "TODO" } ]
-    })
+    let planId : string = "";
+
+    switch (data.plan)
+    {
+        case "premium": planId = "TODO"; break;
+    }
+
+    if (planId !== "")
+    {
+        if (!user.data()?.subscriptionId) // The user currently does not have a subscription
+        {
+            const subscription = await stripe.subscriptions.create({
+                customer: customer.id,
+                items: [ { plan: planId } ]
+            });
+
+            await user.ref.update("subscriptionId", subscription.id);
+        }
+        else
+            await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, {
+                items: [ { plan: planId } ]
+            });
+    }
+    else // The new selected plan is the free one
+    {
+        await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
+
+        user.ref.update("subscriptionId", "");
+    }
 });
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
