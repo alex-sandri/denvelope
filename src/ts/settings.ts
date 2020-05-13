@@ -334,9 +334,9 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = async () =>
         {
-            const paymentMethod = stripe.createPaymentMethod({ type: "card", card: cardElement });
+            const result = stripe.createPaymentMethod({ type: "card", card: cardElement });
 
-            functions.httpsCallable("createSubscription")({ paymentMethod });
+            functions.httpsCallable("createSubscription")({ paymentMethod: result.paymentMethod.id });
 
             modal.HideAndRemove();
         }
