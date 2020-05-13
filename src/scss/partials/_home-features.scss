@@ -45,18 +45,6 @@
                     text-decoration: none;
                 }
             }
-
-            .bmc-button
-            {
-                color: $primary-color;
-                box-shadow: 0 0 0 $border-width $primary-color;
-
-                &:hover,
-                &:focus
-                {
-                    box-shadow: 0 0 0 $border-radius $primary-color;
-                }
-            }
         }
 
         &:nth-child(2n)

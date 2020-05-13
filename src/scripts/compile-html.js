@@ -4,7 +4,6 @@ const handlebars = require("handlebars");
 const glob = require("glob");
 
 handlebars.registerPartial("advanced", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/advanced.hbs")).toString("utf-8")));
-handlebars.registerPartial("buymeacoffee", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/buymeacoffee.hbs")).toString("utf-8")));
 handlebars.registerPartial("contextmenu", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/contextmenu.hbs")).toString("utf-8")));
 handlebars.registerPartial("defaulttags", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/defaulttags.hbs")).toString("utf-8")));
 handlebars.registerPartial("editor", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/editor.hbs")).toString("utf-8")));
