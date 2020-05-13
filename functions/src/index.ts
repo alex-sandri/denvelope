@@ -10,7 +10,7 @@ import * as serviceAccount from "./service-account-key.json";
 const archiver = require("archiver");
 const bcrypt = require("bcrypt");
 
-const stripe = new Stripe("TODO", { apiVersion: "2020-03-02" });
+const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
@@ -402,11 +402,30 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
 
 export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
-    if (!context.auth || !data.paymentMethod) return;
+    if (!context.auth || !data.plan || !data.paymentMethod) return;
 
     const userId : string = context.auth.uid;
 
-    // TODO
+    const user = await db.collection("users").doc(userId).get();
+
+    let customer : Stripe.Customer;
+
+    if (!user.data()?.customerId)
+    {
+        customer = await stripe.customers.create({
+            payment_method: data.paymentMethod,
+            email: context.auth.token.email,
+            invoice_settings: { default_payment_method: data.paymentMethod }
+        });
+
+        await user.ref.update("customerId", customer.id);
+    }
+    else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).customerId);
+
+    await stripe.subscriptions.create({
+        customer: customer.id,
+        items: [ { plan: "TODO" } ]
+    })
 });
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
