@@ -287,6 +287,18 @@ window.addEventListener("userready", () =>
             loading: false
         });
 
+        const stripeElements = stripe.elements({
+            fonts: [ {
+                family: "Source Code Variable",
+                src: "url(/assets/font/SourceCodePro/Variable.woff2)"
+            } ],
+            locale: Translation.Language
+        });
+
+        const cardElement = stripeElements.create("card", { hidePostalCode: true });
+
+        cardElement.mount(modal.Content);
+
         modal.OnConfirm = () =>
         {
             // TODO
