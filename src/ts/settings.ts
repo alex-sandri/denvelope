@@ -633,6 +633,10 @@ const UpdatePlan = (plan : string) : void =>
     plans.querySelector(".current")?.classList.remove("current");
 
     Utilities.AddClass(plans.querySelector(`.${plan}`), "current");
+
+    plans.querySelector(".selected")?.classList.remove("selected");
+
+    changePlan.disabled = true;
 };
 
 UpdateLanguage();
