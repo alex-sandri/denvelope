@@ -334,7 +334,7 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = async () =>
         {
-            const result = stripe.createPaymentMethod({ type: "card", card: cardElement });
+            const result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
 
             functions.httpsCallable("createSubscription")({
                 plan: plans.querySelector(".selected").classList[1],
