@@ -428,7 +428,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     switch (data.plan)
     {
-        case "premium": planId = "TODO"; break;
+        case "premium": planId = "prod_HGwfXJWgxpWqTw"; break;
     }
 
     if (planId !== "")
