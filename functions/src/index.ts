@@ -402,9 +402,11 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
 
 export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
-    if (!context.auth || !data.plan || !data.paymentMethod) return;
+    if (!context.auth || !data.plan || !data.currency || !data.paymentMethod) return;
 
     if (![ "free", "premium" ].includes(data.plan)) return;
+
+    if (![ "USD", "EUR" ].includes(data.currency)) return;
 
     const userId : string = context.auth.uid;
 
