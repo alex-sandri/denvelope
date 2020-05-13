@@ -14,6 +14,8 @@ loadEvents.Init();
 const db = (<any>window).firebase.firestore();
 const functions = (<any>window).firebase.app().functions("europe-west1");
 
+const stripe = (<any>window).Stripe("pk_test_Rqpdq6Rg3NdyuTBGzzpkTeGw009ERd4wpw", { locale: Translation.Language });
+
 const settingsMenu = document.querySelector(".settings-menu");
 const settingsMenuButtons = settingsMenu.querySelectorAll("button");
 
@@ -277,7 +279,23 @@ window.addEventListener("userready", () =>
     resetDateFormat.addEventListener("click", () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: "default" }, { merge: true }));
 
-    changePlan.addEventListener("click", () => null);
+    changePlan.addEventListener("click", () =>
+    {
+        const modal = new Modal({
+            title: changePlan.closest(".setting").querySelector("h1").innerText,
+            allow: [ "close", "confirm" ],
+            loading: false
+        });
+
+        modal.OnConfirm = () =>
+        {
+            // TODO
+
+            modal.HideAndRemove();
+        }
+
+        modal.Show(true);
+    });
 
     (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
     {
