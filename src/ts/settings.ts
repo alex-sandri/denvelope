@@ -336,7 +336,11 @@ window.addEventListener("userready", () =>
         {
             const result = stripe.createPaymentMethod({ type: "card", card: cardElement });
 
-            functions.httpsCallable("createSubscription")({ paymentMethod: result.paymentMethod.id });
+            functions.httpsCallable("createSubscription")({
+                plan: plans.querySelector(".selected").classList[1],
+                currency: Translation.Get(`settings->plan->currency`),
+                paymentMethod: result.paymentMethod.id
+            });
 
             modal.HideAndRemove();
         }
