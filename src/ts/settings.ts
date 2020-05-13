@@ -31,6 +31,7 @@ const changeDateFormat : HTMLButtonElement = document.querySelector("#date-forma
 const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
 
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
+const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
@@ -348,6 +349,24 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
+    deletePlan.addEventListener("click", () =>
+    {
+        const modal = new Modal({
+            title: deletePlan.closest(".setting").querySelector("h1").innerText,
+            allow: [ "close", "confirm" ],
+            loading: false
+        });
+
+        modal.OnConfirm = () =>
+        {
+            functions.httpsCallable("deleteSubscription")({});
+
+            modal.HideAndRemove();
+        }
+
+        modal.Show(true);
+    });
+
     (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
     {
         const currentPlan = plans.querySelector(".current");
@@ -637,6 +656,8 @@ const UpdatePlan = (plan : string) : void =>
     plans.querySelector(".selected")?.classList.remove("selected");
 
     changePlan.disabled = true;
+
+    deletePlan.disabled = plan === "free";
 };
 
 UpdateLanguage();

@@ -45,6 +45,7 @@ export class Modal
             if (options.hasOwnProperty("aside") && (<any>options).aside) Utilities.AddClass(this.element, "aside");
 
             if (options.hasOwnProperty("loading") && !(<any>options).loading) Utilities.HideElement(this.spinner);
+            else Utilities.ShowElement(this.spinner, "block");
         }
 
         this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
@@ -72,8 +73,6 @@ export class Modal
 
         if (!Utilities.HasClass(this.element, "show"))
         {
-            if (this.Content.innerHTML.trim() === "") Utilities.ShowElement(this.spinner, "block");
-
             Utilities.ShowElement(this.container);
 
             Utilities.RemoveClass(this.element, "hide");
