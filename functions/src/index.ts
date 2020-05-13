@@ -3,11 +3,14 @@ import * as admin from "firebase-admin";
 import * as os from "os";
 import * as fs from "fs";
 import * as path from "path";
+import Stripe from "stripe";
 
 import * as serviceAccount from "./service-account-key.json";
 
 const archiver = require("archiver");
 const bcrypt = require("bcrypt");
+
+const stripe = new Stripe("TODO", { apiVersion: "2020-03-02" });
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
@@ -395,6 +398,15 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
     if (success) await DeleteVault(userId);
 
     return { success };
+});
+
+export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.paymentMethod) return;
+
+    const userId : string = context.auth.uid;
+
+    // TODO
 });
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
