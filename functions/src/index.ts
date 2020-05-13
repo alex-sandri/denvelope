@@ -459,7 +459,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     {
         await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
 
-        user.ref.update("subscriptionId", "");
+        await user.ref.update("subscriptionId", "");
     }
 });
 
