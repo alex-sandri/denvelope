@@ -281,9 +281,14 @@ window.addEventListener("userready", () =>
 
     (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
     {
-        plans.querySelector(".selected")?.classList.remove("selected");
+        const currentPlan = plans.querySelector(".current");
+        const previouslySelectedPlan = plans.querySelector(".selected");
 
-        Utilities.AddClass(plan, "selected");
+        previouslySelectedPlan?.classList.remove("selected");
+
+        if (previouslySelectedPlan !== plan) Utilities.AddClass(plan, "selected");
+
+        changePlan.disabled = (plans.querySelector(".selected") ?? currentPlan) === currentPlan;
     }));
 
     signOutFromAllDevices.addEventListener("click", () =>
