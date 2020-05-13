@@ -428,7 +428,13 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     switch (data.plan)
     {
-        case "premium": planId = "prod_HGwfXJWgxpWqTw"; break;
+        case "premium":
+            switch (data.currency)
+            {
+                case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
+                case "EUR": planId = "plan_HGwqTN4yc8fUex"; break;
+            }
+        break;
     }
 
     if (planId !== "")
