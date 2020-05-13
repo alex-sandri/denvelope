@@ -461,6 +461,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
         await user.ref.update("subscriptionId", "");
     }
+
+    await user.ref.update("plan", data.plan);
 });
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
