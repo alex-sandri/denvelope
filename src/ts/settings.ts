@@ -362,10 +362,7 @@ window.addEventListener("userready", () =>
                     currency: Translation.Get(`settings->plan->currency`),
                     paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
                 });
-            else
-            {
-                console.log(result);
-            }
+            else functions.httpsCallable("changePaymentMethod")({ paymentMethod: result.paymentMethod.id });
         }
 
         modal.Show(true);
