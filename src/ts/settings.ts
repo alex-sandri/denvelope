@@ -366,7 +366,7 @@ window.addEventListener("userready", () =>
     deletePlan.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: deletePlan.closest(".setting").querySelector("h1").innerText,
+            title: Translation.Get("settings->plan->delete_plan"),
             allow: [ "close", "confirm" ],
             loading: false
         });

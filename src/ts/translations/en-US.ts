@@ -228,6 +228,7 @@ export const en_US = {
                 title: "Change plan",
                 change: "Change",
             },
+            delete_plan: "Delete plan",
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
                 free: {

@@ -228,6 +228,7 @@ export const it_IT = {
                 title: "Cambia piano",
                 change: "Cambia",
             },
+            delete_plan: "Cancella piano",
             currency: "EUR",
             plans: {
                 free: {
