@@ -455,15 +455,26 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                 items: [ { plan: planId } ]
             });
     }
-    else // The new selected plan is the free one
-    {
-        await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
-
-        await user.ref.update("subscriptionId", "");
-    }
+    else await DeleteSubscription(userId); // The new selected plan is the free one
 
     await user.ref.update("plan", data.plan);
 });
+
+export const deleteSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth) return;
+
+    await DeleteSubscription(context.auth.uid);
+});
+
+const DeleteSubscription = async (userId : string) =>
+{
+    const user = await db.collection("users").doc(userId).get();
+
+    await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
+
+    await user.ref.update("subscriptionId", "");
+}
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
 
