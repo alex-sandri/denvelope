@@ -416,6 +416,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     const user = await db.collection("users").doc(userId).get();
 
     let customer : Stripe.Customer;
+    let subscription : Stripe.Subscription;
 
     if (!user.data()?.customerId)
     {
@@ -453,11 +454,11 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         break;
     }
 
-    if (planId !== "")
+    if (data.plan !== "free")
     {
         if (!user.data()?.subscriptionId) // The user currently does not have a subscription
         {
-            const subscription = await stripe.subscriptions.create({
+            subscription = await stripe.subscriptions.create({
                 customer: customer.id,
                 items: [ { plan: planId } ]
             });
@@ -465,9 +466,11 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             await user.ref.update("stripe.subscriptionId", subscription.id);
         }
         else
-            await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, {
+            subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, {
                 items: [ { plan: planId } ]
             });
+
+        await user.ref.update("stripe.nextRenewal", subscription.current_period_end);
     }
     else await DeleteSubscription(userId); // The new selected plan is the free one
 
