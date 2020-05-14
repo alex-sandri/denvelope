@@ -636,8 +636,6 @@ window.addEventListener("userready", () =>
             (<HTMLSpanElement>creditCardInfo.querySelector(".expiration")).innerText = `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}`;
         }
         else Utilities.ShowElement(noPaymentMethod);
-
-        changePaymentMethod.disabled = !userAlreadyHasCardInformation;
     });
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
