@@ -34,6 +34,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
+const changePaymentMethod : HTMLButtonElement = document.querySelector("#payment-method .edit");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
@@ -287,17 +288,19 @@ window.addEventListener("userready", () =>
     resetDateFormat.addEventListener("click", () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: "default" }, { merge: true }));
 
-    changePlan.addEventListener("click", () =>
+    [ changePlan, changePaymentMethod ].forEach(button => button.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: changePlan.closest(".setting").querySelector("h1").innerText,
+            title: button.closest(".setting").querySelector("h1").innerText,
             allow: [ "close", "confirm" ],
             loading: false
         });
 
         let cardElement : any;
 
-        if (!userAlreadyHasCardInformation)
+        const showCreditCardInput : boolean = !userAlreadyHasCardInformation || button === changePaymentMethod;
+
+        if (showCreditCardInput)
         {
             modal.ConfirmButton.disabled = true;
 
@@ -308,7 +311,7 @@ window.addEventListener("userready", () =>
                 } ],
                 locale: Translation.Language
             });
-    
+
             cardElement = stripeElements.create("card", {
                 style: {
                     base: {
@@ -330,18 +333,18 @@ window.addEventListener("userready", () =>
                 },
                 hidePostalCode: true
             });
-    
+
             cardElement.on("change", (e : any) =>
             {
                 modal.ConfirmButton.disabled = !e.complete;
-    
+
                 modal.Content.querySelector(".input-error")?.remove();
-    
+
                 if (e.error) modal.Content.insertAdjacentHTML("afterbegin", `<p class="input-error">${e.error.message}</p>`);
             });
-    
+
             modal.AppendContent([ document.createElement("div") ])
-    
+
             cardElement.mount(modal.Content.querySelector("div"));
         }
 
@@ -351,17 +354,22 @@ window.addEventListener("userready", () =>
 
             modal.HideAndRemove();
 
-            if (!userAlreadyHasCardInformation) result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
+            if (showCreditCardInput) result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
 
-            functions.httpsCallable("createSubscription")({
-                plan: plans.querySelector(".selected").classList[1],
-                currency: Translation.Get(`settings->plan->currency`),
-                paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
-            });
+            if (button === changePlan)
+                functions.httpsCallable("createSubscription")({
+                    plan: plans.querySelector(".selected").classList[1],
+                    currency: Translation.Get(`settings->plan->currency`),
+                    paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
+                });
+            else
+            {
+                console.log(result);
+            }
         }
 
         modal.Show(true);
-    });
+    }));
 
     deletePlan.addEventListener("click", () =>
     {
@@ -628,6 +636,8 @@ window.addEventListener("userready", () =>
             (<HTMLSpanElement>creditCardInfo.querySelector(".expiration")).innerText = `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}`;
         }
         else Utilities.HideElement(creditCardInfo);
+
+        changePaymentMethod.disabled = !userAlreadyHasCardInformation;
     });
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
@@ -692,7 +702,7 @@ const UpdatePlan = (plan : string) : void =>
     changePlan.disabled = true;
 
     deletePlan.disabled = plan === "free";
-};
+}
 
 UpdateLanguage();
 
