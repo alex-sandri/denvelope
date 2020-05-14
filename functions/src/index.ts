@@ -25,7 +25,7 @@ const db = admin.firestore();
 const storage = admin.storage();
 
 const FREE_STORAGE : number = 100 * 1000 * 1000; // 100MB
-const PREMIUM_STORAGE : number = 1 * 1000 * 1000; // 1GB
+const PREMIUM_STORAGE : number = 1 * 1000 * 1000 * 1000; // 1GB
 
 const GetCurrentTimestamp = () : FirebaseFirestore.FieldValue => admin.firestore.FieldValue.serverTimestamp();
 
