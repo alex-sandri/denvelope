@@ -231,6 +231,7 @@ export const en_US = {
             delete_plan: "Delete plan",
             payment_method: "Payment method",
             next_renewal: "Next renewal",
+            no_payment_method: "You haven't added any payment method",
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
                 free: {

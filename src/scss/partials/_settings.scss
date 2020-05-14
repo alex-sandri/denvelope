@@ -78,6 +78,12 @@
                 padding: $standard-spacing;
                 border: $border-width solid $secondary-color;
                 border-radius: $border-radius;
+                display: none;
+            }
+
+            .no-payment-method
+            {
+                font-weight: $thin;
             }
 
             @at-root .date-format-options

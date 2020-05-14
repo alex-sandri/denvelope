@@ -35,6 +35,7 @@ const changePlan : HTMLButtonElement = document.querySelector("#change-plan .cha
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const changePaymentMethod : HTMLButtonElement = document.querySelector("#payment-method .edit");
+const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-method .no-payment-method");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
@@ -624,6 +625,8 @@ window.addEventListener("userready", () =>
 
         const creditCardInfo : HTMLElement = document.querySelector("#payment-method .cc-info");
 
+        Utilities.HideElements([ creditCardInfo, noPaymentMethod ]);
+
         if (userAlreadyHasCardInformation)
         {
             Utilities.ShowElement(creditCardInfo);
@@ -632,7 +635,7 @@ window.addEventListener("userready", () =>
             creditCardInfo.querySelector(".last4").innerHTML = `&bull;&bull;&bull;&bull;${defaultPaymentMethod.last4}`;
             (<HTMLSpanElement>creditCardInfo.querySelector(".expiration")).innerText = `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}`;
         }
-        else Utilities.HideElement(creditCardInfo);
+        else Utilities.ShowElement(noPaymentMethod);
 
         changePaymentMethod.disabled = !userAlreadyHasCardInformation;
     });
