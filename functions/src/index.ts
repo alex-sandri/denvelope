@@ -24,6 +24,9 @@ const auth = admin.auth();
 const db = admin.firestore();
 const storage = admin.storage();
 
+const FREE_STORAGE : number = 100 * 1000 * 1000; // 100MB
+const PREMIUM_STORAGE : number = 1 * 1000 * 1000; // 1GB
+
 const GetCurrentTimestamp = () : FirebaseFirestore.FieldValue => admin.firestore.FieldValue.serverTimestamp();
 
 const ExecDeleteBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore.DocumentData>) : Promise<void> =>
@@ -79,7 +82,7 @@ export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCrea
     await db.collection("users").doc(user.uid).set({
         created: GetCurrentTimestamp(),
         usedStorage: 0,
-        maxStorage: 100 * 1000 * 1000, // 100MB
+        maxStorage: FREE_STORAGE
     });
 });
 
@@ -427,10 +430,13 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).customerId);
 
     let planId : string = "";
+    let maxStorage : number = FREE_STORAGE;
 
     switch (data.plan)
     {
         case "premium":
+            maxStorage = PREMIUM_STORAGE;
+
             switch (data.currency)
             {
                 case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
@@ -457,7 +463,10 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     }
     else await DeleteSubscription(userId); // The new selected plan is the free one
 
-    await user.ref.update("plan", data.plan);
+    await user.ref.update({
+        plan: data.plan,
+        maxStorage
+    });
 });
 
 export const deleteSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
@@ -473,7 +482,11 @@ const DeleteSubscription = async (userId : string) =>
 
     await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
 
-    await user.ref.update("subscriptionId", "");
+    await user.ref.update({
+        subscriptionId: "",
+        plan: "free",
+        maxStorage: FREE_STORAGE
+    });
 }
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
