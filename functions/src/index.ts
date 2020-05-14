@@ -517,6 +517,7 @@ const DeleteSubscription = async (userId : string) =>
 
     await user.ref.update({
         "stripe.subscriptionId": "",
+        "stripe.nextRenewal": "",
         plan: "free",
         maxStorage: FREE_STORAGE
     });
