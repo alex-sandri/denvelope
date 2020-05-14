@@ -484,6 +484,28 @@ export const deleteSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     await DeleteSubscription(context.auth.uid);
 });
 
+export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.paymentMethod) return;
+
+    const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
+
+    const user = await db.collection("users").doc(context.auth.uid).get();
+
+    const customerId = user.data()?.stripe.customerId;
+
+    if (!customerId) return;
+
+    await stripe.customers.update(customerId, { invoice_settings: { default_payment_method: paymentMethod.id } });
+
+    await user.ref.update({
+        "stripe.defaultPaymentMethod.last4": paymentMethod.card?.last4,
+        "stripe.defaultPaymentMethod.brand": paymentMethod.card?.brand,
+        "stripe.defaultPaymentMethod.expirationMonth": paymentMethod.card?.exp_month,
+        "stripe.defaultPaymentMethod.expirationYear": paymentMethod.card?.exp_year,
+    });
+});
+
 const DeleteSubscription = async (userId : string) =>
 {
     const user = await db.collection("users").doc(userId).get();
