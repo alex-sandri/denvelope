@@ -349,6 +349,8 @@ window.addEventListener("userready", () =>
         {
             let result : any;
 
+            modal.HideAndRemove();
+
             if (!userAlreadyHasCardInformation) result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
 
             functions.httpsCallable("createSubscription")({
@@ -356,8 +358,6 @@ window.addEventListener("userready", () =>
                 currency: Translation.Get(`settings->plan->currency`),
                 paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
             });
-
-            modal.HideAndRemove();
         }
 
         modal.Show(true);
