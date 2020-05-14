@@ -422,19 +422,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     {
         const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
 
-        customer = await stripe.customers.create({
-            payment_method: data.paymentMethod,
-            email: context.auth.token.email,
-            invoice_settings: { default_payment_method: paymentMethod.id }
-        });
-
-        await user.ref.update({
-            "stripe.customerId": customer.id,
-            "stripe.defaultPaymentMethod.last4": paymentMethod.card?.last4,
-            "stripe.defaultPaymentMethod.brand": paymentMethod.card?.brand,
-            "stripe.defaultPaymentMethod.expirationMonth": paymentMethod.card?.exp_month,
-            "stripe.defaultPaymentMethod.expirationYear": paymentMethod.card?.exp_year,
-        });
+        customer = await CreateCustomer(userId, <string>context.auth.token.email, paymentMethod);
     }
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).customerId);
 
@@ -493,21 +481,39 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
 
     const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
 
-    const user = await db.collection("users").doc(context.auth.uid).get();
+    await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
+});
+
+const ChangePaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
+{
+    const user = await db.collection("users").doc(userId).get();
 
     const customerId = user.data()?.stripe.customerId;
 
-    if (!customerId) return;
+    if (!customerId) await CreateCustomer(userId, userEmail, paymentMethod);
+    else
+    {
+        await stripe.customers.update(customerId, { invoice_settings: { default_payment_method: paymentMethod.id } });
 
-    await stripe.customers.update(customerId, { invoice_settings: { default_payment_method: paymentMethod.id } });
+        await user.ref.update({
+            "stripe.defaultPaymentMethod.last4": paymentMethod.card?.last4,
+            "stripe.defaultPaymentMethod.brand": paymentMethod.card?.brand,
+            "stripe.defaultPaymentMethod.expirationMonth": paymentMethod.card?.exp_month,
+            "stripe.defaultPaymentMethod.expirationYear": paymentMethod.card?.exp_year,
+        });
+    }
+}
 
-    await user.ref.update({
-        "stripe.defaultPaymentMethod.last4": paymentMethod.card?.last4,
-        "stripe.defaultPaymentMethod.brand": paymentMethod.card?.brand,
-        "stripe.defaultPaymentMethod.expirationMonth": paymentMethod.card?.exp_month,
-        "stripe.defaultPaymentMethod.expirationYear": paymentMethod.card?.exp_year,
-    });
-});
+const CreateCustomer = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) : Promise<Stripe.Customer> =>
+{
+    const customer = await stripe.customers.create({ email: userEmail });
+
+    await db.collection("users").doc(userId).update("stripe.customerId", customer.id);
+
+    await ChangePaymentMethod(userId, userEmail, paymentMethod);
+
+    return customer;
+}
 
 const DeleteSubscription = async (userId : string) =>
 {
