@@ -15,6 +15,7 @@ const db = (<any>window).firebase.firestore();
 const functions = (<any>window).firebase.app().functions("europe-west1");
 
 const stripe = (<any>window).Stripe("pk_test_Rqpdq6Rg3NdyuTBGzzpkTeGw009ERd4wpw", { locale: Translation.Language });
+let userAlreadyHasCardInformation : boolean = false;
 
 const settingsMenu = document.querySelector(".settings-menu");
 const settingsMenuButtons = settingsMenu.querySelectorAll("button");
@@ -294,59 +295,66 @@ window.addEventListener("userready", () =>
             loading: false
         });
 
-        modal.ConfirmButton.disabled = true;
+        let cardElement : any;
 
-        const stripeElements = stripe.elements({
-            fonts: [ {
-                family: "Source Code Variable",
-                src: "url(/assets/font/SourceCodePro/Variable.woff2)"
-            } ],
-            locale: Translation.Language
-        });
-
-        const cardElement = stripeElements.create("card", {
-            style: {
-                base: {
-                    iconColor: "#efcb68",
-                    color: "#efcb68",
-                    fontFamily: "Source Code Variable, monospace",
-                    fontSize: "16px",
-                    ":-webkit-autofill": {
-                        color: '#fce883',
-                    },
-                    "::placeholder": {
-                        color: '#efcb68',
-                    },
-                },
-                invalid: {
-                    iconColor: "red",
-                    color: "red",
-                },
-            },
-            hidePostalCode: true
-        });
-
-        cardElement.on("change", (e : any) =>
+        if (!userAlreadyHasCardInformation)
         {
-            modal.ConfirmButton.disabled = !e.complete;
+            modal.ConfirmButton.disabled = true;
 
-            modal.Content.querySelector(".input-error")?.remove();
-
-            if (e.error) modal.Content.insertAdjacentHTML("afterbegin", `<p class="input-error">${e.error.message}</p>`);
-        });
-
-        modal.AppendContent([ document.createElement("div") ])
-
-        cardElement.mount(modal.Content.querySelector("div"));
+            const stripeElements = stripe.elements({
+                fonts: [ {
+                    family: "Source Code Variable",
+                    src: "url(/assets/font/SourceCodePro/Variable.woff2)"
+                } ],
+                locale: Translation.Language
+            });
+    
+            cardElement = stripeElements.create("card", {
+                style: {
+                    base: {
+                        iconColor: "#efcb68",
+                        color: "#efcb68",
+                        fontFamily: "Source Code Variable, monospace",
+                        fontSize: "16px",
+                        ":-webkit-autofill": {
+                            color: '#fce883',
+                        },
+                        "::placeholder": {
+                            color: '#efcb68',
+                        },
+                    },
+                    invalid: {
+                        iconColor: "red",
+                        color: "red",
+                    },
+                },
+                hidePostalCode: true
+            });
+    
+            cardElement.on("change", (e : any) =>
+            {
+                modal.ConfirmButton.disabled = !e.complete;
+    
+                modal.Content.querySelector(".input-error")?.remove();
+    
+                if (e.error) modal.Content.insertAdjacentHTML("afterbegin", `<p class="input-error">${e.error.message}</p>`);
+            });
+    
+            modal.AppendContent([ document.createElement("div") ])
+    
+            cardElement.mount(modal.Content.querySelector("div"));
+        }
 
         modal.OnConfirm = async () =>
         {
-            const result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
+            let result : any;
+
+            if (!userAlreadyHasCardInformation) result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
 
             functions.httpsCallable("createSubscription")({
                 plan: plans.querySelector(".selected").classList[1],
                 currency: Translation.Get(`settings->plan->currency`),
-                paymentMethod: result.paymentMethod.id
+                paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
             });
 
             modal.HideAndRemove();
@@ -600,6 +608,8 @@ window.addEventListener("userready", () =>
         const plan = user.data().plan;
 
         UpdatePlan(plan);
+
+        let userAlreadyHasCardInformation = user.data().stripe?.defaultPaymentMethod;
     });
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
