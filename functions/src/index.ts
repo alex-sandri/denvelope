@@ -419,13 +419,21 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     if (!user.data()?.customerId)
     {
+        const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
+
         customer = await stripe.customers.create({
             payment_method: data.paymentMethod,
             email: context.auth.token.email,
-            invoice_settings: { default_payment_method: data.paymentMethod }
+            invoice_settings: { default_payment_method: paymentMethod.id }
         });
 
-        await user.ref.update("customerId", customer.id);
+        await user.ref.update({
+            "stripe.customerId": customer.id,
+            "stripe.defaultPaymentMethod.last4": paymentMethod.card?.last4,
+            "stripe.defaultPaymentMethod.brand": paymentMethod.card?.brand,
+            "stripe.defaultPaymentMethod.expirationMonth": paymentMethod.card?.exp_month,
+            "stripe.defaultPaymentMethod.expirationYear": paymentMethod.card?.exp_year,
+        });
     }
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).customerId);
 
@@ -454,7 +462,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                 items: [ { plan: planId } ]
             });
 
-            await user.ref.update("subscriptionId", subscription.id);
+            await user.ref.update("stripe.subscriptionId", subscription.id);
         }
         else
             await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, {
@@ -483,7 +491,7 @@ const DeleteSubscription = async (userId : string) =>
     await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
 
     await user.ref.update({
-        subscriptionId: "",
+        "stripe.subscriptionId": "",
         plan: "free",
         maxStorage: FREE_STORAGE
     });
