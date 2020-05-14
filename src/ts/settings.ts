@@ -63,7 +63,8 @@ if (location.pathname.indexOf("/settings/") > -1)
 document.querySelectorAll("#plan .plans .plan")
     .forEach(plan => (<HTMLParagraphElement>plan.querySelector(".price")).innerText =
     Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
-    .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`))));
+    .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`)))
+    .replace(/\s/, ""));
 
 const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
 
