@@ -167,6 +167,7 @@ export const en_US = {
         default: "Default",
         yes: "Yes",
         no: "No",
+        month: "Month",
     },
     header: {
         storage: {

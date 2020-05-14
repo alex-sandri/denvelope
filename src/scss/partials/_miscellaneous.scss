@@ -521,21 +521,32 @@
         cursor: pointer;
         transition: $transition-time;
 
-        .name,
-        .price
-        {
-            margin: 0;
-        }
-
         .name
         {
+            margin: 0;
             font-weight: $regular;
         }
 
-        .price
+        div
         {
-            font-weight: $black;
-            font-size: xx-large;
+            @include flex($align-items: baseline, $justify-content: unset);
+
+            .price
+            {
+                font-weight: $black;
+                font-size: xx-large;
+                font-size: xxx-large;
+            }
+
+            .billing-period
+            {
+                white-space: pre;
+            }
+        }
+
+        .storage
+        {
+            font-size: x-large;
         }
 
         &.current,

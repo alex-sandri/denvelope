@@ -61,10 +61,15 @@ if (location.pathname.indexOf("/settings/") > -1)
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
 
 document.querySelectorAll("#plan .plans .plan")
-    .forEach(plan => (<HTMLParagraphElement>plan.querySelector(".price")).innerText =
-    Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
-    .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`)))
-    .replace(/\s/, ""));
+    .forEach(plan =>
+    {
+        (<HTMLSpanElement>plan.querySelector(".price")).innerText =
+        Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
+        .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`)))
+        .replace(/\s/, "");
+
+        (<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
+    });
 
 const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
 

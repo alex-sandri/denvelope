@@ -167,6 +167,7 @@ export const it_IT = {
         default: "Predefinito",
         yes: "Sì",
         no: "No",
+        month: "Mese",
     },
     header: {
         storage: {
