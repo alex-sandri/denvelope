@@ -609,7 +609,25 @@ window.addEventListener("userready", () =>
 
         UpdatePlan(plan);
 
-        userAlreadyHasCardInformation = user.data().stripe?.defaultPaymentMethod;
+        if (plan !== "free")
+            changePlan.parentElement.querySelector(".next-renewal").innerHTML = `${Translation.Get("settings->plan->next_renewal")}: <span>${user.data().stripe.nextRenewal}</span>`;
+        else Utilities.HideElement(changePlan.parentElement.querySelector(".next-renewal"));
+
+        const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
+
+        userAlreadyHasCardInformation = !!defaultPaymentMethod;
+
+        const creditCardInfo : HTMLElement = document.querySelector("#payment-method .cc-info");
+
+        if (userAlreadyHasCardInformation)
+        {
+            Utilities.ShowElement(creditCardInfo);
+
+            creditCardInfo.querySelector(".brand").innerHTML = `<i class="fab fa-cc-${defaultPaymentMethod.brand}"></i>`;
+            creditCardInfo.querySelector(".last4").innerHTML = `&bull;&bull;&bull;&bull;${defaultPaymentMethod.last4}`;
+            (<HTMLSpanElement>creditCardInfo.querySelector(".expiration")).innerText = `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}`;
+        }
+        else Utilities.HideElement(creditCardInfo);
     });
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
@@ -663,7 +681,7 @@ const UpdatePlan = (plan : string) : void =>
 {
     Translation.Init(null, languageSelect.selectedOptions[0].value);
 
-    changePlan.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
+    changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}: <span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
 
     plans.querySelector(".current")?.classList.remove("current");
 

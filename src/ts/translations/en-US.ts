@@ -229,6 +229,8 @@ export const en_US = {
                 change: "Change",
             },
             delete_plan: "Delete plan",
+            payment_method: "Payment method",
+            next_renewal: "Next renewal",
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
                 free: {

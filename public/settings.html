@@ -22,7 +22,7 @@
     <link rel="icon" type="image/png" sizes="194x194" href="favicon-194x194.png">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#160c28">
-    <link rel="stylesheet" href="assets/css/bundle.c86c31aeb824a92f091a66f2090de86a.css">
+    <link rel="stylesheet" href="assets/css/bundle.eb92317d5170b9bcf8e981f2c284e8b2.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <script src="https://js.stripe.com/v3/"></script>    <title data-only-translation="generic->settings"></title>
 </head>
@@ -218,7 +218,8 @@
             <div class="setting" id="change-plan">
                 <h1 data-translation="settings->plan->change_plan->title"></h1>
                 <div>
-                    <p></p>
+                    <p class="current-plan"></p>
+                    <p class="next-renewal"></p>
                     <div class="plans">
                         <div class="plan free">
                             <h1 class="name" data-translation="settings->plan->plans->free->name"></h1>
@@ -239,6 +240,17 @@
                     </div>
                     <button class="change" data-translation="settings->plan->change_plan->change" disabled><i class="fas fa-cash-register"></i></button>
                     <button class="delete" data-translation="generic->delete" disabled><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="setting" id="payment-method">
+                <h1 data-translation="settings->plan->payment_method"></h1>
+                <div>
+                    <div class="cc-info">
+                        <span class="brand"></span>
+                        <span class="last4"></span>
+                        <span class="expiration"></span>
+                    </div>
+                    <button class="edit" data-translation="generic->edit" disabled><i class="fas fa-edit"></i></button>
                 </div>
             </div>
         </section>        <section class="settings-section" id="security">
@@ -308,6 +320,6 @@
         const perf = firebase.performance();
     
         analytics.setAnalyticsCollectionEnabled(!navigator.doNotTrack);
-    </script>    <script type="module" src="assets/js/settings.334bf277bc2f875f4ea5.js"></script>
+    </script>    <script type="module" src="assets/js/settings.de4abda4cee7fe92dc1d.js"></script>
 </body>
 </html>

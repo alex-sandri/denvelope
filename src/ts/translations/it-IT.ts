@@ -229,6 +229,8 @@ export const it_IT = {
                 change: "Cambia",
             },
             delete_plan: "Cancella piano",
+            payment_method: "Metodo di pagamento",
+            next_renewal: "Prossimo rinnovo",
             currency: "EUR",
             plans: {
                 free: {

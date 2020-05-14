@@ -72,6 +72,14 @@
                 display: none;
             }
 
+            .cc-info
+            {
+                background-color: rgba($primary-color, 0.5);
+                padding: $standard-spacing;
+                border: $border-width solid $secondary-color;
+                border-radius: $border-radius;
+            }
+
             @at-root .date-format-options
             {
                 label
