@@ -609,7 +609,7 @@ window.addEventListener("userready", () =>
 
         UpdatePlan(plan);
 
-        let userAlreadyHasCardInformation = user.data().stripe?.defaultPaymentMethod;
+        userAlreadyHasCardInformation = user.data().stripe?.defaultPaymentMethod;
     });
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
