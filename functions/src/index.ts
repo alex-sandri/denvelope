@@ -461,7 +461,10 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                 items: [ { plan: planId } ]
             });
 
-        await user.ref.update("stripe.nextRenewal", subscription.current_period_end);
+        await user.ref.update({
+            "stripe.nextRenewal": subscription.current_period_end,
+            "stripe.cancelAt": ""
+        });
     }
     else await DeleteSubscription(userId); // The new selected plan is the free one
 
@@ -524,11 +527,12 @@ const DeleteSubscription = async (userId : string) =>
 {
     const user = await db.collection("users").doc(userId).get();
 
-    await stripe.subscriptions.del((<FirebaseFirestore.DocumentData>user.data()).subscriptionId);
+    const subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, { cancel_at_period_end: true });
 
     await user.ref.update({
         "stripe.subscriptionId": "",
         "stripe.nextRenewal": "",
+        "stripe.cancelAt": subscription.cancel_at,
         plan: "free",
         maxStorage: FREE_STORAGE
     });
