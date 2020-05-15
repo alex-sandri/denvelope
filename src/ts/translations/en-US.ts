@@ -169,6 +169,8 @@ export const en_US = {
         yes: "Yes",
         no: "No",
         month: "Month",
+        from: "From",
+        to: "To",
     },
     header: {
         storage: {

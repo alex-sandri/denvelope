@@ -301,6 +301,16 @@ window.addEventListener("userready", () =>
 
         const showCreditCardInput : boolean = !userAlreadyHasCardInformation || button === changePaymentMethod;
 
+        if (button === changePlan)
+            modal.AppendContent([
+                new Component("p", {
+                    innerHTML: `<span>${Translation.Get("generic->from")}</span><span>${(<HTMLElement>plans.querySelector(".current > .name")).innerText}</span>`
+                }).element,
+                new Component("p", {
+                    innerHTML: `<span>${Translation.Get("generic->to")}</span><span>${(<HTMLElement>plans.querySelector(".selected > .name")).innerText}</span>`
+                }).element
+            ]);
+
         if (showCreditCardInput)
         {
             modal.ConfirmButton.disabled = true;
@@ -346,7 +356,7 @@ window.addEventListener("userready", () =>
 
             cardElement.on("ready", () => cardElement.focus());
 
-            modal.AppendContent([ document.createElement("div") ])
+            modal.AppendContent([ document.createElement("div") ]);
 
             cardElement.mount(modal.Content.querySelector("div"));
         }
