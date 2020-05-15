@@ -111,6 +111,7 @@ header
             .account,
             .settings,
             .storage-info,
+            .upgrade-plan,
             button
             {
                 @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-bg-color: $secondary-color, $hover-color: $primary-color);
@@ -120,7 +121,8 @@ header
 
             .account,
             .settings,
-            .storage-info
+            .storage-info,
+            .upgrade-plan
             {
                 margin-bottom: $standard-spacing;
                 border-radius: 25px;
@@ -194,7 +196,7 @@ header
                     }
                 }
 
-                .storage-info
+                .upgrade-plan
                 {
                     margin-top: $standard-spacing;
                 }
