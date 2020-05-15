@@ -9,7 +9,7 @@
     "test": "set FIRESTORE_EMULATOR_HOST=localhost:5002 && firebase emulators:exec --only firestore \"jest --detectOpenHandles\""
   },
   "author": "Alex Sandri <me@alexsandri.com> (https://alexsandri.com)",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@firebase/testing": "^0.19.2",
     "css-loader": "^3.5.2",
