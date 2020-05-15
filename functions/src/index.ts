@@ -488,7 +488,7 @@ const ChangePaymentMethod = async (userId : string, userEmail : string, paymentM
 {
     const user = await db.collection("users").doc(userId).get();
 
-    const customerId = user.data()?.stripe.customerId;
+    const customerId = (<FirebaseFirestore.DocumentData>user.data()).stripe?.customerId;
 
     if (!customerId) await CreateCustomer(userId, userEmail, paymentMethod);
     else
