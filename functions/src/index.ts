@@ -419,7 +419,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     let customer : Stripe.Customer;
     let subscription : Stripe.Subscription;
 
-    if (!user.data()?.customerId)
+    if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.customerId)
     {
         if (!data.paymentMethod) return;
 
@@ -427,7 +427,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
         customer = await CreateCustomer(userId, <string>context.auth.token.email, paymentMethod);
     }
-    else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).customerId);
+    else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
 
     let planId : string = "";
     let maxStorage : number = FREE_STORAGE;
@@ -447,7 +447,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     if (data.plan !== "free")
     {
-        if (!user.data()?.subscriptionId) // The user currently does not have a subscription
+        if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.subscriptionId) // The user currently does not have a subscription
         {
             subscription = await stripe.subscriptions.create({
                 customer: customer.id,
@@ -457,7 +457,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             await user.ref.update("stripe.subscriptionId", subscription.id);
         }
         else
-            subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, {
+            subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, {
                 items: [ { plan: planId } ]
             });
 
