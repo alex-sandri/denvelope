@@ -82,6 +82,11 @@
                 border: $border-width solid $secondary-color;
                 border-radius: $border-radius;
                 display: none;
+
+                span:not(:last-child)
+                {
+                    margin-right: $standard-spacing;
+                }
             }
 
             .no-payment-method
