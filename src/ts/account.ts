@@ -604,8 +604,6 @@ window.addEventListener("userready", async () =>
                     contentPosition,
                 ]);
             }
-
-            Translation.Init(modal.Content);
         });
 
         modal.OnClose = unsubscribe;
