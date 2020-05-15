@@ -628,7 +628,8 @@ window.addEventListener("userready", () =>
         UpdatePlan(plan);
 
         if (plan !== "free")
-            changePlan.parentElement.querySelector(".next-renewal").innerHTML = `${Translation.Get("settings->plan->next_renewal")}: <span>${user.data().stripe.nextRenewal}</span>`;
+            changePlan.parentElement.querySelector(".next-renewal").innerHTML =
+                `${Translation.Get("settings->plan->next_renewal")}: <span>${Utilities.FormatDate(user.data().stripe.nextRenewal * 1000)}</span>`;
         else Utilities.HideElement(changePlan.parentElement.querySelector(".next-renewal"));
 
         const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
