@@ -17,6 +17,8 @@ const functions = (<any>window).firebase.app().functions("europe-west1");
 const stripe = (<any>window).Stripe("pk_test_Rqpdq6Rg3NdyuTBGzzpkTeGw009ERd4wpw", { locale: Translation.Language });
 let userAlreadyHasCardInformation : boolean = false;
 
+let userDateFormatOptions : Intl.DateTimeFormatOptions;
+
 const settingsMenu = document.querySelector(".settings-menu");
 const settingsMenuButtons = settingsMenu.querySelectorAll("button");
 
@@ -626,6 +628,7 @@ window.addEventListener("userready", () =>
         const plan = user.data().plan;
 
         const userCanceledSubscription : boolean = !!user.data().stripe?.cancelAt;
+        const subscriptionNextRenewalOrEndDate = user.data().stripe?.cancelAt || user.data().stripe?.nextRenewal;
 
         UpdatePlan(plan);
 
@@ -633,8 +636,8 @@ window.addEventListener("userready", () =>
             changePlan.parentElement.querySelector(".next-renewal").innerHTML =
                 `${Translation.Get(`settings->plan->${
                     userCanceledSubscription ? "subscription_end" : "next_renewal"
-                }`)}<span>${
-                    Utilities.FormatDate((user.data().stripe?.cancelAt || user.data().stripe?.nextRenewal) * 1000)
+                }`)}<span data-date="${subscriptionNextRenewalOrEndDate}">${
+                    Utilities.FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
                 }</span>`;
         else Utilities.HideElement(changePlan.parentElement.querySelector(".next-renewal"));
 
@@ -665,7 +668,14 @@ window.addEventListener("userready", () =>
 
         resetBackground.disabled = !backgroundImageUrl;
 
-        resetDateFormat.disabled = preferences.data()?.dateFormatOptions === "default";
+        userDateFormatOptions = preferences.data()?.dateFormatOptions;
+
+        if (userDateFormatOptions === "default") userDateFormatOptions = null;
+
+        document.querySelectorAll("[data-date]").forEach(element =>
+            (<HTMLElement>element).innerText = Utilities.FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions));
+
+        resetDateFormat.disabled = userDateFormatOptions === "default";
     });
 
     db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
