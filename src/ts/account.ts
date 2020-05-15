@@ -543,23 +543,23 @@ window.addEventListener("userready", async () =>
 
             modal.AppendContent([
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->id"></span><span>${doc.id}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->id")}</span><span>${doc.id}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML:  `<span data-translation="generic->name"></span><span>${Utilities.EscapeHtml(name)}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->name")}</span><span>${Utilities.EscapeHtml(name)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->type"></span><span>${Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`)}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->type")}</span><span>${Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->created"></span><span>${Utilities.FormatDate(data.created.seconds * 1000, dateFormatOptions)}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->created")}</span><span>${Utilities.FormatDate(data.created.seconds * 1000, dateFormatOptions)}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span data-translation="generic->last_modified"></span><span>${Utilities.FormatDate(data.updated.seconds * 1000, dateFormatOptions)}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->last_modified")}</span><span>${Utilities.FormatDate(data.updated.seconds * 1000, dateFormatOptions)}</span>`
                 }).element,
                 type === "file"
                     ? new Component("p", {
-                        innerHTML: `<span data-translation="generic->size"></span><span>${Utilities.FormatStorage(data.size || 0)}</span>`
+                        innerHTML: `<span>${Translation.Get("generic->size")}</span><span>${Utilities.FormatStorage(data.size || 0)}</span>`
                     }).element
                     : null,
             ]);
@@ -569,7 +569,7 @@ window.addEventListener("userready", async () =>
                 const parentFolderUrl = GetFolderUrl(data.parentId, false);
 
                 const contentPosition = new Component("p", {
-                    innerHTML: `<span data-translation="generic->position"></span><a href="${parentFolderUrl}">${
+                    innerHTML: `<span>${Translation.Get("generic->position")}</span><a href="${parentFolderUrl}">${
                         data.parentId === "root"
                             ? Translation.Get("account->title")
                             : (data.parentId === "vault"
@@ -596,10 +596,10 @@ window.addEventListener("userready", async () =>
 
                 modal.AppendContent([
                     new Component("p", {
-                        innerHTML: `<span data-translation="generic->shared"></span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                        innerHTML: `<span>${Translation.Get("generic->shared")}</span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
                     }).element,
                     new Component("p", {
-                        innerHTML: `<span data-translation="generic->starred"></span><span>${Translation.Get(`generic->${data.starred ? "yes" : "no"}`)}</span>`
+                        innerHTML: `<span>${Translation.Get("generic->starred")}</span><span>${Translation.Get(`generic->${data.starred ? "yes" : "no"}`)}</span>`
                     }).element,
                     contentPosition,
                 ]);
