@@ -493,6 +493,8 @@ const ChangePaymentMethod = async (userId : string, userEmail : string, paymentM
     if (!customerId) await CreateCustomer(userId, userEmail, paymentMethod);
     else
     {
+        await stripe.paymentMethods.attach(paymentMethod.id, { customer: customerId });
+
         await stripe.customers.update(customerId, { invoice_settings: { default_payment_method: paymentMethod.id } });
 
         await user.ref.update({
