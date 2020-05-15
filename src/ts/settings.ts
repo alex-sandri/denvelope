@@ -629,7 +629,7 @@ window.addEventListener("userready", () =>
 
         if (plan !== "free")
             changePlan.parentElement.querySelector(".next-renewal").innerHTML =
-                `${Translation.Get("settings->plan->next_renewal")}: <span>${Utilities.FormatDate(user.data().stripe.nextRenewal * 1000)}</span>`;
+                `${Translation.Get("settings->plan->next_renewal")}<span>${Utilities.FormatDate(user.data().stripe.nextRenewal * 1000)}</span>`;
         else Utilities.HideElement(changePlan.parentElement.querySelector(".next-renewal"));
 
         const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
@@ -685,7 +685,7 @@ const UpdateLanguage = () : void =>
 {
     Translation.Init(null, languageSelect.selectedOptions[0].value);
 
-    changeLanguage.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}: <span>${languageSelect.selectedOptions[0].text}</span>`;
+    changeLanguage.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}<span>${languageSelect.selectedOptions[0].text}</span>`;
 };
 
 const UpdateCacheSize = (bytes : number) =>
@@ -693,7 +693,7 @@ const UpdateCacheSize = (bytes : number) =>
     localStorage.setItem("cache-size", bytes.toString());
 
     changeCacheSize.parentElement.querySelector("p").innerHTML =
-        `${Translation.Get("generic->current")}: <span>${bytes / 1000 / 1000}MB</span>`;
+        `${Translation.Get("generic->current")}<span>${bytes / 1000 / 1000}MB</span>`;
 
     resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 }
@@ -702,7 +702,7 @@ const UpdatePlan = (plan : string) : void =>
 {
     Translation.Init(null, languageSelect.selectedOptions[0].value);
 
-    changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}: <span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
+    changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}<span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
 
     plans.querySelector(".current")?.classList.remove("current");
 
