@@ -82,7 +82,8 @@ export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCrea
     await db.collection("users").doc(user.uid).set({
         created: GetCurrentTimestamp(),
         usedStorage: 0,
-        maxStorage: FREE_STORAGE
+        maxStorage: FREE_STORAGE,
+        plan: "free"
     });
 });
 
