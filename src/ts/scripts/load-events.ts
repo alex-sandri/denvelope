@@ -1,6 +1,6 @@
 import { Utilities } from "./Utilities";
 import { Auth } from "./Auth";
-import { signOutButton, accountMenuToggle, whatIsTakingUpSpace } from "./header";
+import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
 import { Translation } from "./Translation";
 
@@ -89,6 +89,9 @@ export const Init = () : void =>
 
                 if (usedStorage > 0) Utilities.ShowElement(whatIsTakingUpSpace);
                 else Utilities.HideElement(whatIsTakingUpSpace);
+
+                if (doc.data().plan === "free") Utilities.ShowElement(upgradePlan);
+                else Utilities.HideElement(upgradePlan);
             });
     });
 }

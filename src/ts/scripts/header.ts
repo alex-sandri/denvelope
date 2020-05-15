@@ -6,6 +6,7 @@ export const accountMenuToggle : HTMLButtonElement = header.querySelector(".menu
 export const accountMenuContainer : HTMLDivElement = document.querySelector(".menu-container");
 export const accountMenu : HTMLDivElement = accountMenuContainer.querySelector(".menu");
 
+export const upgradePlan : HTMLAnchorElement = accountMenu.querySelector(".upgrade-plan");
 export const whatIsTakingUpSpace : HTMLAnchorElement = accountMenu.querySelector(".storage-info");
 
 export const signOutButton : HTMLButtonElement = accountMenu.querySelector(".sign-out");
