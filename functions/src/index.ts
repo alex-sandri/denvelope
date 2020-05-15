@@ -406,7 +406,7 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
 
 export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
-    if (!context.auth || !data.plan || !data.currency || !data.paymentMethod) return;
+    if (!context.auth || !data.plan || !data.currency) return;
 
     if (![ "free", "premium" ].includes(data.plan)) return;
 
@@ -421,6 +421,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     if (!user.data()?.customerId)
     {
+        if (!data.paymentMethod) return;
+
         const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
 
         customer = await CreateCustomer(userId, <string>context.auth.token.email, paymentMethod);
