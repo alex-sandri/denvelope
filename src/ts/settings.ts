@@ -344,6 +344,8 @@ window.addEventListener("userready", () =>
                 if (e.error) modal.Content.insertAdjacentHTML("afterbegin", `<p class="input-error">${e.error.message}</p>`);
             });
 
+            cardElement.on("ready", () => cardElement.focus());
+
             modal.AppendContent([ document.createElement("div") ])
 
             cardElement.mount(modal.Content.querySelector("div"));
