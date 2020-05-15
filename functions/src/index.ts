@@ -530,11 +530,8 @@ const DeleteSubscription = async (userId : string) =>
     const subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).subscriptionId, { cancel_at_period_end: true });
 
     await user.ref.update({
-        "stripe.subscriptionId": "",
         "stripe.nextRenewal": "",
-        "stripe.cancelAt": subscription.cancel_at,
-        plan: "free",
-        maxStorage: FREE_STORAGE
+        "stripe.cancelAt": subscription.cancel_at
     });
 }
 
