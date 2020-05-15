@@ -632,6 +632,8 @@ window.addEventListener("userready", () =>
 
         UpdatePlan(plan);
 
+        deletePlan.disabled = plan === "free" || userCanceledSubscription;
+
         if (plan !== "free")
             changePlan.parentElement.querySelector(".next-renewal").innerHTML =
                 `${Translation.Get(`settings->plan->${
@@ -727,8 +729,6 @@ const UpdatePlan = (plan : string) : void =>
     plans.querySelector(".selected")?.classList.remove("selected");
 
     changePlan.disabled = true;
-
-    deletePlan.disabled = plan === "free";
 }
 
 UpdateLanguage();
