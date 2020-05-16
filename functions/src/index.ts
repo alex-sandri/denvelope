@@ -5,7 +5,6 @@ import * as fs from "fs";
 import * as path from "path";
 import Stripe from "stripe";
 import * as express from "express";
-import * as bodyParser from "body-parser";
 
 import * as serviceAccount from "./service-account-key.json";
 
@@ -495,7 +494,7 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
-app.post("/stripeWebhooks", bodyParser.raw({ type: "application/json" }), async (request, response) =>
+app.post("/stripeWebhooks", async (request, response) =>
 {
     let event;
 
@@ -511,7 +510,7 @@ app.post("/stripeWebhooks", bodyParser.raw({ type: "application/json" }), async 
         case "invoice.payment_failed":
             const user = await GetUserByCustomerId(<string>(<Stripe.Invoice | Stripe.Subscription>(<Stripe.Event>event).data.object).customer);
 
-            user.ref.update({
+            await user.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAt": "",
                 "stripe.subscriptionId": "",
