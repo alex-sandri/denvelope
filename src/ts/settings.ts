@@ -393,7 +393,7 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = () =>
         {
-            functions.httpsCallable("deleteSubscription")({});
+            functions.httpsCallable("cancelSubscription")({});
 
             modal.HideAndRemove();
         }
