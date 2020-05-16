@@ -239,7 +239,7 @@ export const en_US = {
             next_renewal: "Next renewal",
             subscription_end: "Subscription end",
             no_payment_method: "You haven't added any payment method",
-            undo_cancellation: "Undo cancellation",
+            reactivate_subscription: "Reactivate subscription",
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
                 free: {

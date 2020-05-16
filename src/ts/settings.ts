@@ -35,7 +35,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
-const undoCancellation : HTMLButtonElement = document.querySelector("#change-plan .undo-cancellation");
+const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const changePaymentMethod : HTMLButtonElement = document.querySelector("#payment-method .edit");
 const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
@@ -405,9 +405,22 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
-    undoCancellation.addEventListener("click", () =>
+    reactivateSubscription.addEventListener("click", () =>
     {
+        const modal = new Modal({
+            title: Translation.Get("settings->plan->undo_cancellation"),
+            allow: [ "close", "confirm" ],
+            loading: false
+        });
 
+        modal.OnConfirm = () =>
+        {
+            functions.httpsCallable("reactivateSubscription")({});
+
+            modal.HideAndRemove();
+        }
+
+        modal.Show(true);
     });
 
     (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
@@ -643,8 +656,8 @@ window.addEventListener("userready", () =>
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
-        if (userCanceledSubscription) Utilities.ShowElement(undoCancellation);
-        else Utilities.HideElement(undoCancellation);
+        if (userCanceledSubscription) Utilities.ShowElement(reactivateSubscription);
+        else Utilities.HideElement(reactivateSubscription);
 
         if (plan !== "free")
         {
