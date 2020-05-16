@@ -4,8 +4,6 @@ import * as os from "os";
 import * as fs from "fs";
 import * as path from "path";
 import Stripe from "stripe";
-import * as express from "express";
-import * as bodyParser from "body-parser";
 
 import * as serviceAccount from "./service-account-key.json";
 
@@ -14,8 +12,6 @@ const bcrypt = require("bcrypt");
 
 const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
 const STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
-
-const app = express();
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
@@ -495,13 +491,13 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
-app.post("/", bodyParser.raw({ type: "application/json" }), async (request, response) =>
+export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(async (request, response) =>
 {
     let event;
 
     const signature : string = <string>request.headers["stripe-signature"];
   
-    try { event = stripe.webhooks.constructEvent(request.body, signature, STRIPE_WEBHOOK_SECRET); }
+    try { event = stripe.webhooks.constructEvent(request.rawBody, signature, STRIPE_WEBHOOK_SECRET); }
     catch (err)
     {
         response.status(400).send(`Webhook Error: ${err.message}`);
@@ -545,8 +541,6 @@ const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirest
 
     return user.docs[0];
 }
-
-export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(app);
 
 const ChangePaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
 {
