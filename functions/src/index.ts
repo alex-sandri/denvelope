@@ -494,7 +494,7 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
-app.post("/stripeWebhooks", async (request, response) =>
+app.post("/", async (request, response) =>
 {
     let event;
 
