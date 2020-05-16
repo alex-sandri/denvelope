@@ -231,7 +231,10 @@ export const it_IT = {
                 title: "Cambia piano",
                 change: "Cambia",
             },
-            delete_plan: "Cancella piano",
+            delete_plan: {
+                title: "Cancella piano",
+                message: "Il piano verrà cancellato alla fine del periodo corrente",
+            },
             payment_method: "Metodo di pagamento",
             next_renewal: "Prossimo rinnovo",
             subscription_end: "Fine sottoscrizione",

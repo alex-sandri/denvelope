@@ -387,10 +387,12 @@ window.addEventListener("userready", () =>
     deletePlan.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: Translation.Get("settings->plan->delete_plan"),
+            title: Translation.Get("settings->plan->delete_plan->title"),
             allow: [ "close", "confirm" ],
             loading: false
         });
+
+        modal.AppendContent([ new Component("p", { innerText: Translation.Get("settings->plan->delete_plan->message") }).element ]);
 
         modal.OnConfirm = () =>
         {

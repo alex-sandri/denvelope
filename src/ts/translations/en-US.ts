@@ -231,7 +231,10 @@ export const en_US = {
                 title: "Change plan",
                 change: "Change",
             },
-            delete_plan: "Delete plan",
+            delete_plan: {
+                title: "Delete plan",
+                message: "The plan will be cancelled at the current period end",
+            },
             payment_method: "Payment method",
             next_renewal: "Next renewal",
             subscription_end: "Subscription end",
