@@ -37,6 +37,7 @@ const changePlan : HTMLButtonElement = document.querySelector("#change-plan .cha
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const changePaymentMethod : HTMLButtonElement = document.querySelector("#payment-method .edit");
+const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-method .no-payment-method");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
@@ -635,13 +636,17 @@ window.addEventListener("userready", () =>
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
         if (plan !== "free")
-            changePlan.parentElement.querySelector(".next-renewal").innerHTML =
+        {
+            nextRenewal.innerHTML =
                 `${Translation.Get(`settings->plan->${
                     userCanceledSubscription ? "subscription_end" : "next_renewal"
                 }`)}<span data-date="${subscriptionNextRenewalOrEndDate}">${
                     Utilities.FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
                 }</span>`;
-        else Utilities.HideElement(changePlan.parentElement.querySelector(".next-renewal"));
+
+            Utilities.ShowElement(nextRenewal);
+        }
+        else Utilities.HideElement(nextRenewal);
 
         const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
 
