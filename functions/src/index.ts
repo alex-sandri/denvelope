@@ -431,13 +431,10 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
 
     let planId : string = "";
-    let maxStorage : number = FREE_STORAGE;
 
     switch (data.plan)
     {
         case "premium":
-            maxStorage = PREMIUM_STORAGE;
-
             switch (data.currency)
             {
                 case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
@@ -468,11 +465,6 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         });
     }
     else await CancelSubscription(userId); // The new selected plan is the free one
-
-    await user.ref.update({
-        plan: data.plan,
-        maxStorage
-    });
 });
 
 export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
