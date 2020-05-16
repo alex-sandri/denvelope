@@ -532,6 +532,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await (await GetUserByCustomerId(<string>subscription.customer)).ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
+                "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
                 plan,
                 maxStorage
             });
@@ -594,8 +595,6 @@ const CancelSubscription = async (userId : string) =>
     const user = await db.collection("users").doc(userId).get();
 
     await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: true });
-
-    await user.ref.update("stripe.cancelAtPeriodEnd", true);
 }
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
