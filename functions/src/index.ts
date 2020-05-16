@@ -459,7 +459,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                 items: [ { plan: planId } ]
             });
 
-        await user.ref.update("stripe.cancelAt", "");
+        await user.ref.update("stripe.cancelAtPeriodEnd", false);
     }
     else await CancelSubscription(userId); // The new selected plan is the free one
 });
@@ -500,7 +500,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "invoice.payment_failed":
             await (await GetUserByCustomerId(<string>(<Stripe.Subscription | Stripe.Invoice>event.data.object).customer)).ref.update({
                 "stripe.nextRenewal": "",
-                "stripe.cancelAt": "",
+                "stripe.cancelAtPeriodEnd": false,
                 "stripe.subscriptionId": "",
                 plan: "free",
                 maxStorage: FREE_STORAGE
@@ -584,9 +584,9 @@ const CancelSubscription = async (userId : string) =>
 {
     const user = await db.collection("users").doc(userId).get();
 
-    const subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: true });
+    await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: true });
 
-    await user.ref.update("stripe.cancelAtPeriodEnd", subscription.cancel_at_period_end);
+    await user.ref.update("stripe.cancelAtPeriodEnd", true);
 }
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
