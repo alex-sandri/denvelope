@@ -459,10 +459,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                 items: [ { plan: planId } ]
             });
 
-        await user.ref.update({
-            "stripe.nextRenewal": subscription.current_period_end,
-            "stripe.cancelAt": ""
-        });
+        await user.ref.update("stripe.cancelAt", "");
     }
     else await CancelSubscription(userId); // The new selected plan is the free one
 });
