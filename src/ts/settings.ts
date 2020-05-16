@@ -408,7 +408,7 @@ window.addEventListener("userready", () =>
     reactivateSubscription.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: Translation.Get("settings->plan->undo_cancellation"),
+            title: Translation.Get("settings->plan->reactivate_subscription"),
             allow: [ "close", "confirm" ],
             loading: false
         });
