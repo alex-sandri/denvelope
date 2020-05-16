@@ -521,7 +521,7 @@ app.post("/stripeWebhooks", async (request, response) =>
         case "customer.subscription.updated":
             // TODO    
         break;
-        default: return response.status(400).end();
+        default: response.status(400).end();
     }
 
     response.json({ received: true }).end();
