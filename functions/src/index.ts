@@ -495,7 +495,7 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
-app.post("/customerSubscriptionDeleted", bodyParser.raw({ type: "application/json" }), async (request, response) =>
+app.post("/stripeWebhooks", bodyParser.raw({ type: "application/json" }), async (request, response) =>
 {
     let event;
 
