@@ -480,6 +480,13 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
+export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth) return;
+
+    // TODO
+});
+
 export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(async (request, response) =>
 {
     let event;
