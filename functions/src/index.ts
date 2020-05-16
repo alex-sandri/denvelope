@@ -12,7 +12,7 @@ const archiver = require("archiver");
 const bcrypt = require("bcrypt");
 
 const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
-const STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhookSecret;
+const STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
 
 const app = express();
 
