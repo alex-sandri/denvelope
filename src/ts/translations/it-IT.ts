@@ -188,7 +188,7 @@ export const it_IT = {
         feature_section: {
             open_source: {
                 title: "Noi siamo Open Source",
-                description: "Denvelope è un progetto Open Source e non commerciale, per questo motivo possiamo offrirti solo 100MB di spazio di archiviazione non aumentabile. Se necessiti di più spazio di archiviazione puoi clonare Denvelope e hostarlo su Firebase.",
+                description: "Denvelope è un progetto Open Source.",
             },
             store: {
                 title: "Non perdere più il tuo codice",
