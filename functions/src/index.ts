@@ -506,9 +506,12 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 maxStorage: FREE_STORAGE
             });
         break;
-        case "customer.subscription.created":
         case "customer.subscription.updated":
-            const subscription : Stripe.Subscription = <Stripe.Subscription>event.data.object;
+        case "invoice.payment_succeeded":
+            let subscription : Stripe.Subscription;
+
+            if (event.type.startsWith("customer.subscription.")) subscription = <Stripe.Subscription>event.data.object;
+            else subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
 
             const plan : string = subscription.items.data[0].plan.metadata.plan;
             let maxStorage : number = FREE_STORAGE;
