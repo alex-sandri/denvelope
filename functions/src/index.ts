@@ -500,7 +500,7 @@ app.post("/stripeWebhooks", async (request, response) =>
 
     const signature : string = <string>request.headers["stripe-signature"];
   
-    try { event = stripe.webhooks.constructEvent(request.body, <string>signature, STRIPE_WEBHOOK_SECRET); }
+    try { event = stripe.webhooks.constructEvent(request.body, signature, STRIPE_WEBHOOK_SECRET); }
     catch (err) { response.status(400).send(`Webhook Error: ${err.message}`); }
 
     // Handle the event
