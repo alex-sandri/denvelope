@@ -510,7 +510,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "customer.subscription.updated":
             const subscription : Stripe.Subscription = <Stripe.Subscription>event.data.object;
 
-            const plan : string = subscription.items.data[0].metadata.plan;
+            const plan : string = subscription.items.data[0].plan.metadata.plan;
             let maxStorage : number = FREE_STORAGE;
 
             switch (plan)
