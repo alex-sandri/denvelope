@@ -35,6 +35,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
+const undoCancellation : HTMLButtonElement = document.querySelector("#change-plan .undo-cancellation");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const changePaymentMethod : HTMLButtonElement = document.querySelector("#payment-method .edit");
 const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
@@ -404,6 +405,11 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
+    undoCancellation.addEventListener("click", () =>
+    {
+
+    });
+
     (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
     {
         const currentPlan = plans.querySelector(".current");
@@ -636,6 +642,9 @@ window.addEventListener("userready", () =>
         UpdatePlan(plan);
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
+
+        if (userCanceledSubscription) Utilities.ShowElement(undoCancellation);
+        else Utilities.HideElement(undoCancellation);
 
         if (plan !== "free")
         {

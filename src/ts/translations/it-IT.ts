@@ -239,6 +239,7 @@ export const it_IT = {
             next_renewal: "Prossimo rinnovo",
             subscription_end: "Fine sottoscrizione",
             no_payment_method: "Non hai aggiunto nessun metodo di pagamento",
+            undo_cancellation: "Annulla cancellazione",
             currency: "EUR",
             plans: {
                 free: {
