@@ -4,6 +4,7 @@ import * as os from "os";
 import * as fs from "fs";
 import * as path from "path";
 import Stripe from "stripe";
+import * as express from "express";
 
 import * as serviceAccount from "./service-account-key.json";
 
@@ -11,6 +12,7 @@ const archiver = require("archiver");
 const bcrypt = require("bcrypt");
 
 const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
+const app = express();
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
@@ -489,6 +491,13 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
 
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
+
+app.post("/customerSubscriptionDeleted", (req, res) =>
+{
+
+});
+
+export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(app);
 
 const ChangePaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
 {
