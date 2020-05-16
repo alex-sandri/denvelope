@@ -586,10 +586,7 @@ const CancelSubscription = async (userId : string) =>
 
     const subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: true });
 
-    await user.ref.update({
-        "stripe.nextRenewal": "",
-        "stripe.cancelAt": subscription.cancel_at
-    });
+    await user.ref.update("stripe.cancelAtPeriodEnd", subscription.cancel_at_period_end);
 }
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;
