@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import Stripe from "stripe";
 import * as express from "express";
+import * as bodyParser from "body-parser";
 
 import * as serviceAccount from "./service-account-key.json";
 
@@ -494,7 +495,7 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
-app.post("/", async (request, response) =>
+app.post("/", bodyParser.raw({ type: "application/json" }), async (request, response) =>
 {
     let event;
 
