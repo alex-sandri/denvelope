@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import Stripe from "stripe";
 import * as express from "express";
+import * as bodyParser from "body-parser";
 
 import * as serviceAccount from "./service-account-key.json";
 
@@ -12,6 +13,8 @@ const archiver = require("archiver");
 const bcrypt = require("bcrypt");
 
 const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
+const STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhookSecret;
+
 const app = express();
 
 admin.initializeApp({
@@ -468,7 +471,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             "stripe.cancelAt": ""
         });
     }
-    else await DeleteSubscription(userId); // The new selected plan is the free one
+    else await CancelSubscription(userId); // The new selected plan is the free one
 
     await user.ref.update({
         plan: data.plan,
@@ -476,11 +479,11 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     });
 });
 
-export const deleteSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
 
-    await DeleteSubscription(context.auth.uid);
+    await CancelSubscription(context.auth.uid);
 });
 
 export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
@@ -492,10 +495,49 @@ export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
-app.post("/customerSubscriptionDeleted", (req, res) =>
+app.post("/customerSubscriptionDeleted", bodyParser.raw({ type: "application/json" }), async (request, response) =>
 {
+    let event;
 
+    const signature : string = <string>request.headers["stripe-signature"];
+  
+    try { event = stripe.webhooks.constructEvent(request.body, <string>signature, STRIPE_WEBHOOK_SECRET); }
+    catch (err) { response.status(400).send(`Webhook Error: ${err.message}`); }
+
+    // Handle the event
+    switch ((<Stripe.Event>event).type)
+    {
+        case "customer.subscription.deleted":
+        case "invoice.payment_failed":
+            const user = await GetUserByCustomerId(<string>(<Stripe.Invoice | Stripe.Subscription>(<Stripe.Event>event).data.object).customer);
+
+            user.ref.update({
+                "stripe.nextRenewal": "",
+                "stripe.cancelAt": "",
+                "stripe.subscriptionId": "",
+                plan: "free",
+                maxStorage: FREE_STORAGE
+            });
+        break;
+        case "customer.subscription.updated":
+            // TODO    
+        break;
+        default: return response.status(400).end();
+    }
+
+    response.json({ received: true }).end();
 });
+
+const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>> =>
+{
+    const user = await db
+        .collection("users")
+        .where("stripe.customerId", "==", customerId)
+        .limit(1)
+        .get();
+
+    return user.docs[0];
+}
 
 export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(app);
 
@@ -532,7 +574,7 @@ const CreateCustomer = async (userId : string, userEmail : string, paymentMethod
     return customer;
 }
 
-const DeleteSubscription = async (userId : string) =>
+const CancelSubscription = async (userId : string) =>
 {
     const user = await db.collection("users").doc(userId).get();
 
