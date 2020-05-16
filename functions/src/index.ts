@@ -501,13 +501,18 @@ app.post("/", async (request, response) =>
     const signature : string = <string>request.headers["stripe-signature"];
   
     try { event = stripe.webhooks.constructEvent(request.body, signature, STRIPE_WEBHOOK_SECRET); }
-    catch (err) { response.status(400).send(`Webhook Error: ${err.message}`); }
+    catch (err)
+    {
+        response.status(400).send(`Webhook Error: ${err.message}`);
 
-    switch ((<Stripe.Event>event).type)
+        return;
+    }
+
+    switch (event.type)
     {
         case "customer.subscription.deleted":
         case "invoice.payment_failed":
-            const user = await GetUserByCustomerId(<string>(<Stripe.Invoice | Stripe.Subscription>(<Stripe.Event>event).data.object).customer);
+            const user = await GetUserByCustomerId(<string>(<Stripe.Invoice | Stripe.Subscription>event.data.object).customer);
 
             await user.ref.update({
                 "stripe.nextRenewal": "",
@@ -520,7 +525,10 @@ app.post("/", async (request, response) =>
         case "customer.subscription.updated":
             // TODO    
         break;
-        default: response.status(400).end();
+        default:
+            response.status(400).end();
+
+            return;
     }
 
     response.json({ received: true }).end();
