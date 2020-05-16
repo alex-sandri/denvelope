@@ -484,7 +484,9 @@ export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.o
 {
     if (!context.auth) return;
 
-    // TODO
+    const user = await db.collection("users").doc(context.auth.uid).get();
+
+    await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: false });
 });
 
 export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(async (request, response) =>
