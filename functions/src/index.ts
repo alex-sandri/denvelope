@@ -506,6 +506,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 maxStorage: FREE_STORAGE
             });
         break;
+        case "customer.subscription.created":
         case "customer.subscription.updated":
             const subscription : Stripe.Subscription = <Stripe.Subscription>event.data.object;
 
