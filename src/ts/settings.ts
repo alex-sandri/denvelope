@@ -630,8 +630,8 @@ window.addEventListener("userready", () =>
     {
         const plan = user.data().plan;
 
-        const userCanceledSubscription : boolean = !!user.data().stripe?.cancelAt;
-        const subscriptionNextRenewalOrEndDate = user.data().stripe?.cancelAt || user.data().stripe?.nextRenewal;
+        const userCanceledSubscription : boolean = !!user.data().stripe?.cancelAtPeriodEnd;
+        const subscriptionNextRenewalOrEndDate = user.data().stripe?.nextRenewal;
 
         UpdatePlan(plan);
 
