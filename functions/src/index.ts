@@ -100,7 +100,11 @@ export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDele
 
     await DeleteVault(userId);
 
-    await db.collection("users").doc(userId).delete();
+    const userDoc = await db.collection("users").doc(userId).get();
+
+    await stripe.customers.del((<FirebaseFirestore.DocumentData>userDoc.data()).stripe?.customerId);
+
+    await userDoc.ref.delete();
 });
 
 export const signOutUserFromAllDevices = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
