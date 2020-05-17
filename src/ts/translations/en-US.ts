@@ -171,6 +171,7 @@ export const en_US = {
         month: "Month",
         from: "From",
         to: "To",
+        add: "Add",
     },
     header: {
         storage: {
@@ -235,7 +236,7 @@ export const en_US = {
                 title: "Delete plan",
                 message: "The plan will be cancelled at the current period end",
             },
-            payment_method: "Payment method",
+            payment_methods: "Payment methods",
             next_renewal: "Next renewal",
             subscription_end: "Subscription end",
             no_payment_method: "You haven't added any payment method",

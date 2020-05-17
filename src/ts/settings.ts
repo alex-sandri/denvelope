@@ -37,9 +37,9 @@ const changePlan : HTMLButtonElement = document.querySelector("#change-plan .cha
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
 const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
-const changePaymentMethod : HTMLButtonElement = document.querySelector("#payment-method .edit");
+const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
 const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
-const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-method .no-payment-method");
+const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
@@ -293,7 +293,7 @@ window.addEventListener("userready", () =>
     resetDateFormat.addEventListener("click", () =>
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: "default" }, { merge: true }));
 
-    [ changePlan, changePaymentMethod ].forEach(button => button.addEventListener("click", () =>
+    [ changePlan, addPaymentMethod ].forEach(button => button.addEventListener("click", () =>
     {
         const modal = new Modal({
             title: button.closest(".setting").querySelector("h1").innerText,
@@ -303,7 +303,7 @@ window.addEventListener("userready", () =>
 
         let cardElement : any;
 
-        const showCreditCardInput : boolean = !userAlreadyHasCardInformation || button === changePaymentMethod;
+        const showCreditCardInput : boolean = !userAlreadyHasCardInformation || button === addPaymentMethod;
 
         if (button === changePlan)
             modal.AppendContent([
@@ -379,7 +379,7 @@ window.addEventListener("userready", () =>
                     currency: Translation.Get(`settings->plan->currency`),
                     paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
                 });
-            else functions.httpsCallable("changePaymentMethod")({ paymentMethod: result.paymentMethod.id });
+            else functions.httpsCallable("addPaymentMethod")({ paymentMethod: result.paymentMethod.id });
         }
 
         modal.Show(true);
@@ -677,7 +677,7 @@ window.addEventListener("userready", () =>
 
         userAlreadyHasCardInformation = !!paymentMethods;
 
-        const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-method .payment-methods-container");
+        const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 
         Utilities.HideElements([ paymentMethodsContainer, noPaymentMethod ]);
 

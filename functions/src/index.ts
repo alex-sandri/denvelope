@@ -504,13 +504,13 @@ export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     await CancelSubscription(context.auth.uid);
 });
 
-export const changePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+export const addPaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth || !data.paymentMethod) return;
 
     const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
 
-    await ChangePaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
+    await AddPaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
 export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
@@ -624,7 +624,7 @@ const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirest
     return user.docs[0];
 }
 
-const ChangePaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
+const AddPaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
 {
     const user = await db.collection("users").doc(userId).get();
 
@@ -645,7 +645,7 @@ const CreateCustomer = async (userId : string, userEmail : string, paymentMethod
 
     await db.collection("users").doc(userId).update("stripe.customerId", customer.id);
 
-    await ChangePaymentMethod(userId, userEmail, paymentMethod);
+    await AddPaymentMethod(userId, userEmail, paymentMethod);
 
     return customer;
 }

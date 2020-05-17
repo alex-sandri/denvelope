@@ -171,6 +171,7 @@ export const it_IT = {
         month: "Mese",
         from: "Da",
         to: "A",
+        add: "Aggiungi",
     },
     header: {
         storage: {
@@ -235,7 +236,7 @@ export const it_IT = {
                 title: "Cancella piano",
                 message: "Il piano verrà cancellato alla fine del periodo corrente",
             },
-            payment_method: "Metodo di pagamento",
+            payment_methods: "Metodi di pagamento",
             next_renewal: "Prossimo rinnovo",
             subscription_end: "Fine sottoscrizione",
             no_payment_method: "Non hai aggiunto nessun metodo di pagamento",
