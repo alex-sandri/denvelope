@@ -693,15 +693,22 @@ window.addEventListener("userready", () =>
 
             paymentMethods.forEach((paymentMethod : { id : string, brand : string, last4 : string, expirationMonth : string, expirationYear : string }) =>
             {
+                const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
+
                 paymentMethodsContainer.appendChild(new Component("div", {
-                    class: `cc-info ${paymentMethod.id === defaultPaymentMethod ? "default" : ""}`,
+                    class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
                     id: paymentMethod.id,
                     children: [
                         new Component("span", { innerHTML: `<i class="fab fa-cc-${paymentMethod.brand}"></i>` }).element,
                         new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${paymentMethod.last4}` }).element,
-                        new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element
+                        new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element,
+                        new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element,
+                        new Component("button", { class: "delete", innerText: Translation.Get("generic->delete") }).element,
                     ]
                 }).element);
+
+                if (isDefaultPaymentMethod)
+                    (<NodeListOf<HTMLButtonElement>>paymentMethodsContainer.querySelectorAll(".default .delete, .default .set-as-default")).forEach(button => button.disabled = true);
             });
         }
         else Utilities.ShowElement(noPaymentMethod);

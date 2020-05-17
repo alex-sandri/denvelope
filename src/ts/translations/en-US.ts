@@ -236,7 +236,10 @@ export const en_US = {
                 title: "Delete plan",
                 message: "The plan will be cancelled at the current period end",
             },
-            payment_methods: "Payment methods",
+            payment_methods: {
+                title: "Payment methods",
+                set_as_default: "Set as default",
+            },
             add_payment_method: "Add payment method",
             next_renewal: "Next renewal",
             subscription_end: "Subscription end",

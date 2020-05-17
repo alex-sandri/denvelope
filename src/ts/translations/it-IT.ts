@@ -236,7 +236,10 @@ export const it_IT = {
                 title: "Cancella piano",
                 message: "Il piano verrà cancellato alla fine del periodo corrente",
             },
-            payment_methods: "Metodi di pagamento",
+            payment_methods: {
+                title: "Metodi di pagamento",
+                set_as_default: "Imposta come predefinito",
+            },
             add_payment_method: "Aggiungi metodo di pagamento",
             next_renewal: "Prossimo rinnovo",
             subscription_end: "Fine sottoscrizione",
