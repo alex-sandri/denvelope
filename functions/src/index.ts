@@ -576,6 +576,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await (await GetUserByCustomerId(<string>paymentMethod.customer)).ref.update({
                 "stripe.paymentMethods": admin.firestore.FieldValue.arrayUnion({
+                    id: paymentMethod.id,
                     last4: paymentMethod.card?.last4,
                     brand: paymentMethod.card?.brand,
                     expirationMonth: paymentMethod.card?.exp_month,
@@ -586,15 +587,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "customer.updated":
             const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
 
-            const defaultPaymentMethod = await stripe.paymentMethods.retrieve(<string>customer.invoice_settings.default_payment_method);
-
             await (await GetUserByCustomerId(customer.id)).ref.update({
-                "stripe.defaultPaymentMethod": {
-                    last4: defaultPaymentMethod.card?.last4,
-                    brand: defaultPaymentMethod.card?.brand,
-                    expirationMonth: defaultPaymentMethod.card?.exp_month,
-                    expirationYear: defaultPaymentMethod.card?.exp_year,
-                },
+                "stripe.defaultPaymentMethod": <string>customer.invoice_settings.default_payment_method
             });
         break;
         default:
