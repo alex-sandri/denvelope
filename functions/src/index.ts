@@ -419,7 +419,6 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     const user = await db.collection("users").doc(userId).get();
 
     let customer : Stripe.Customer;
-    let subscription : Stripe.Subscription;
 
     if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.customerId)
     {
@@ -455,7 +454,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     {
         if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.subscriptionId) // The user currently does not have a subscription
         {
-            subscription = await stripe.subscriptions.create({
+            const subscription = await stripe.subscriptions.create({
                 customer: customer.id,
                 items: [ { plan: planId } ]
             });
@@ -463,9 +462,14 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             await user.ref.update("stripe.subscriptionId", subscription.id);
         }
         else
-            subscription = await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, {
-                items: [ { plan: planId } ]
+        {
+            const subscription = await stripe.subscriptions.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId);
+
+            await stripe.subscriptions.update(subscription.id, {
+                cancel_at_period_end: false,
+                items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
             });
+        }
 
         await user.ref.update("stripe.cancelAtPeriodEnd", false);
     }
