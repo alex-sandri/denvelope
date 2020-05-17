@@ -698,7 +698,8 @@ window.addEventListener("userready", () =>
                 const setAsDefaultButton : HTMLButtonElement =
                     <HTMLButtonElement>new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element;
 
-                const deleteButton : HTMLButtonElement = <HTMLButtonElement>new Component("button", { class: "delete", innerText: Translation.Get("generic->delete") }).element;
+                const deleteButton : HTMLButtonElement =
+                    <HTMLButtonElement>new Component("button", { class: "delete", innerHTML: `<i class="fas fa-trash"></i> ${Translation.Get("generic->delete")}` }).element;
 
                 paymentMethodsContainer.appendChild(new Component("div", {
                     class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
