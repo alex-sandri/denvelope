@@ -563,12 +563,10 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "customer.subscription.deleted":
         case "invoice.payment_failed":
             await (await GetUserByCustomerId(<string>(<Stripe.Subscription | Stripe.Invoice>event.data.object).customer))?.ref.update({
-                stripe: {
-                    nextRenewal: "",
-                    cancelAtPeriodEnd: false,
-                    subscriptionId: "",
-                    nextPeriodPlan: "",
-                },
+                "stripe.nextRenewal": "",
+                "stripe.cancelAtPeriodEnd": false,
+                "stripe.subscriptionId": "",
+                "stripe.nextPeriodPlan": "",
                 plan: "free",
                 maxStorage: FREE_STORAGE
             });
@@ -590,11 +588,9 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             }
 
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
-                stripe: {
-                    nextRenewal: subscription.current_period_end,
-                    cancelAtPeriodEnd: subscription.cancel_at_period_end,
-                    nextPeriodPlan: subscription.items.data[0].plan.metadata.plan,
-                },
+                "stripe.nextRenewal": subscription.current_period_end,
+                "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
+                "stripe.nextPeriodPlan": subscription.items.data[0].plan.metadata.plan,
                 plan,
                 maxStorage
             });
