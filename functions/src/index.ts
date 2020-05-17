@@ -609,7 +609,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "payment_method.detached":
             const detachedPaymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
 
-            await (await GetUserByCustomerId(<string>detachedPaymentMethod.customer))?.ref.update({
+            // The payment method is no longer attached to the customer so the customer id is in the previous_attributes object
+            await (await GetUserByCustomerId(<string>(<any>event.data.previous_attributes)?.customer))?.ref.update({
                 "stripe.paymentMethods": admin.firestore.FieldValue.arrayRemove({
                     id: detachedPaymentMethod.id,
                     last4: detachedPaymentMethod.card?.last4,
