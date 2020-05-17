@@ -322,7 +322,7 @@ window.addEventListener("userready", () =>
             const stripeElements = stripe.elements({
                 fonts: [ {
                     family: "Source Code Variable",
-                    src: "url(/assets/font/SourceCodePro/Variable.woff2)"
+                    src: "url(/assets/font/SourceCodeVariable.woff2)"
                 } ],
                 locale: Translation.Language
             });
