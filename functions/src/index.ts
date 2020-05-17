@@ -466,6 +466,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             const subscription = await stripe.subscriptions.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId);
 
             await stripe.subscriptions.update(subscription.id, {
+                // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
+                billing_cycle_anchor: IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan) ? "now" : "unchanged",
                 cancel_at_period_end: false,
                 items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
             });
@@ -475,6 +477,21 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     }
     else await CancelSubscription(userId); // The new selected plan is the free one
 });
+
+const IsPlanUpgrade = (oldPlan : string, newPlan : string) : boolean =>
+{
+    const GetPlanIndex = (plan : string) : number =>
+    {
+        switch (plan)
+        {
+            case "starter": return 1;
+            case "advanced": return 2;
+            default: return 0; // free plan
+        }
+    }
+
+    return GetPlanIndex(newPlan) > GetPlanIndex(oldPlan);
+}
 
 export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
