@@ -445,8 +445,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         case "advanced":
             switch (data.currency)
             {
-                case "USD": planId = ""; break;
-                case "EUR": planId = ""; break;
+                case "USD": planId = "plan_HIHxwVJ9kdvvga"; break;
+                case "EUR": planId = "plan_HIHxfRgWsdkUkv"; break;
             }
         break;
     }
