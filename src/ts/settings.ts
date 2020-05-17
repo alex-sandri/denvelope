@@ -295,8 +295,12 @@ window.addEventListener("userready", () =>
 
     [ changePlan, addPaymentMethod ].forEach(button => button.addEventListener("click", () =>
     {
+        const title = button === changePlan
+            ? button.closest(".setting").querySelector("h1").innerText
+            : Translation.Get("settings->plan->add_payment_method");
+
         const modal = new Modal({
-            title: button.closest(".setting").querySelector("h1").innerText,
+            title,
             allow: [ "close", "confirm" ],
             loading: false
         });

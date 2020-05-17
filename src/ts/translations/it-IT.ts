@@ -237,6 +237,7 @@ export const it_IT = {
                 message: "Il piano verrà cancellato alla fine del periodo corrente",
             },
             payment_methods: "Metodi di pagamento",
+            add_payment_method: "Aggiungi metodo di pagamento",
             next_renewal: "Prossimo rinnovo",
             subscription_end: "Fine sottoscrizione",
             no_payment_method: "Non hai aggiunto nessun metodo di pagamento",

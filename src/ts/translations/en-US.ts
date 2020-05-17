@@ -237,6 +237,7 @@ export const en_US = {
                 message: "The plan will be cancelled at the current period end",
             },
             payment_methods: "Payment methods",
+            add_payment_method: "Add payment method",
             next_renewal: "Next renewal",
             subscription_end: "Subscription end",
             no_payment_method: "You haven't added any payment method",
