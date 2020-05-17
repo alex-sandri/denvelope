@@ -513,6 +513,22 @@ export const addPaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(
     await AddPaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
 });
 
+export const deletePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.paymentMethod) return;
+
+    await stripe.paymentMethods.detach(data.paymentMethod);
+});
+
+export const setDefaultPaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.paymentMethod) return;
+
+    const user = await db.collection("users").doc(context.auth.uid).get();
+
+    await stripe.customers.update((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId, { invoice_settings: { default_payment_method: data.paymentMethod } });
+});
+
 export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
