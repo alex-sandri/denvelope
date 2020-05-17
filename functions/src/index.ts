@@ -26,7 +26,8 @@ const db = admin.firestore();
 const storage = admin.storage();
 
 const FREE_STORAGE : number = 100 * 1000 * 1000; // 100MB
-const PREMIUM_STORAGE : number = 1 * 1000 * 1000 * 1000; // 1GB
+const STARTER_STORAGE : number = 1 * 1000 * 1000 * 1000; // 1GB
+const ADVANCED_STORAGE : number = 10 * 1000 * 1000 * 1000; // 10GB
 
 const GetCurrentTimestamp = () : FirebaseFirestore.FieldValue => admin.firestore.FieldValue.serverTimestamp();
 
@@ -409,7 +410,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 {
     if (!context.auth || !data.plan || !data.currency) return;
 
-    if (![ "free", "premium" ].includes(data.plan)) return;
+    if (![ "free", "starter", "advanced" ].includes(data.plan)) return;
 
     if (![ "USD", "EUR" ].includes(data.currency)) return;
 
@@ -434,11 +435,18 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     switch (data.plan)
     {
-        case "premium":
+        case "starter":
             switch (data.currency)
             {
                 case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
                 case "EUR": planId = "plan_HGwqTN4yc8fUex"; break;
+            }
+        break;
+        case "advanced":
+            switch (data.currency)
+            {
+                case "USD": planId = ""; break;
+                case "EUR": planId = ""; break;
             }
         break;
     }
@@ -527,7 +535,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             switch (plan)
             {
-                case "premium": maxStorage = PREMIUM_STORAGE; break;
+                case "starter": maxStorage = STARTER_STORAGE; break;
+                case "advanced": maxStorage = ADVANCED_STORAGE; break;
             }
 
             await (await GetUserByCustomerId(<string>subscription.customer)).ref.update({

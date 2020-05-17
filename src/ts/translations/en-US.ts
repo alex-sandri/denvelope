@@ -248,10 +248,16 @@ export const en_US = {
                         month: "0"
                     },
                 },
-                premium: {
-                    name: "Premium",
+                starter: {
+                    name: "Starter",
                     price: {
                         month: "10"
+                    },
+                },
+                advanced: {
+                    name: "Advanced",
+                    price: {
+                        month: "20"
                     },
                 },
             },
