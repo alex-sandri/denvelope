@@ -587,6 +587,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 case "advanced": maxStorage = ADVANCED_STORAGE; break;
             }
 
+            if (subscription.ended_at) break; // Do not update the user if the subscription has ended
+
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
                 "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
