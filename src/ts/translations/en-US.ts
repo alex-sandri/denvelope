@@ -242,6 +242,7 @@ export const en_US = {
             },
             add_payment_method: "Add payment method",
             next_renewal: "Next renewal",
+            next_period_plan: "Your plan after this period",
             subscription_end: "Subscription end",
             no_payment_method: "You haven't added any payment method",
             reactivate_subscription: "Reactivate subscription",

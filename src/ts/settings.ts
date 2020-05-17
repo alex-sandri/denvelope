@@ -39,6 +39,8 @@ const reactivateSubscription : HTMLButtonElement = document.querySelector("#chan
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
 const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
+const nextPeriodPlan : HTMLParagraphElement = document.querySelector("#change-plan .next-period-plan");
+const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
@@ -652,6 +654,7 @@ window.addEventListener("userready", () =>
     db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
     {
         const plan = user.data().plan;
+        const userNextPeriodPlan = user.data().stripe?.nextPeriodPlan;
 
         const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
         const subscriptionNextRenewalOrEndDate = user.data().stripe?.nextRenewal;
@@ -660,8 +663,9 @@ window.addEventListener("userready", () =>
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
+        Utilities.HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod ]);
+
         if (userCanceledSubscription) Utilities.ShowElement(reactivateSubscription);
-        else Utilities.HideElement(reactivateSubscription);
 
         if (plan !== "free")
         {
@@ -673,17 +677,19 @@ window.addEventListener("userready", () =>
                 }</span>`;
 
             Utilities.ShowElement(nextRenewal);
+
+            if (userNextPeriodPlan !== plan)
+            {
+                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${Translation.Get(`settings->plan->${userNextPeriodPlan}->name`)}</span>`;
+
+                Utilities.ShowElement(nextPeriodPlan);
+            }
         }
-        else Utilities.HideElement(nextRenewal);
 
         const paymentMethods = user.data().stripe?.paymentMethods;
         const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
 
         userAlreadyHasCardInformation = !!paymentMethods;
-
-        const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
-
-        Utilities.HideElements([ paymentMethodsContainer, noPaymentMethod ]);
 
         if (userAlreadyHasCardInformation)
         {

@@ -242,6 +242,7 @@ export const it_IT = {
             },
             add_payment_method: "Aggiungi metodo di pagamento",
             next_renewal: "Prossimo rinnovo",
+            next_period_plan: "Il tuo piano dopo questo periodo",
             subscription_end: "Fine sottoscrizione",
             no_payment_method: "Non hai aggiunto nessun metodo di pagamento",
             reactivate_subscription: "Riattiva sottoscrizione",
