@@ -695,6 +695,11 @@ window.addEventListener("userready", () =>
             {
                 const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
 
+                const setAsDefaultButton : HTMLButtonElement =
+                    <HTMLButtonElement>new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element;
+
+                const deleteButton : HTMLButtonElement = <HTMLButtonElement>new Component("button", { class: "delete", innerText: Translation.Get("generic->delete") }).element;
+
                 paymentMethodsContainer.appendChild(new Component("div", {
                     class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
                     id: paymentMethod.id,
@@ -702,13 +707,30 @@ window.addEventListener("userready", () =>
                         new Component("span", { innerHTML: `<i class="fab fa-cc-${paymentMethod.brand}"></i>` }).element,
                         new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${paymentMethod.last4}` }).element,
                         new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element,
-                        new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element,
-                        new Component("button", { class: "delete", innerText: Translation.Get("generic->delete") }).element,
+                        setAsDefaultButton,
+                        deleteButton,
                     ]
                 }).element);
 
-                if (isDefaultPaymentMethod)
-                    (<NodeListOf<HTMLButtonElement>>paymentMethodsContainer.querySelectorAll(".default .delete, .default .set-as-default")).forEach(button => button.disabled = true);
+                [ setAsDefaultButton, deleteButton ].forEach(button => button.addEventListener("click", () =>
+                {
+                    const modal = new Modal({
+                        title: button.innerText,
+                        allow: [ "close", "confirm" ],
+                        loading: false
+                    });
+            
+                    modal.OnConfirm = () =>
+                    {
+                        functions.httpsCallable(button === setAsDefaultButton ? "setDefaultPaymentMethod" : "deletePaymentMethod")({ paymentMethod: paymentMethod.id });
+            
+                        modal.HideAndRemove();
+                    }
+            
+                    modal.Show(true);
+                }));
+
+                if (isDefaultPaymentMethod) setAsDefaultButton.disabled = deleteButton.disabled = true;
             });
         }
         else Utilities.ShowElement(noPaymentMethod);
