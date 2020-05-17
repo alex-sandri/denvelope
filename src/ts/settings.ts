@@ -691,14 +691,15 @@ window.addEventListener("userready", () =>
 
             Utilities.ShowElement(paymentMethodsContainer);
 
-            paymentMethods.forEach((paymentMethod : Map<string, string>) =>
+            paymentMethods.forEach((paymentMethod : { id : string, brand : string, last4 : string, expirationMonth : string, expirationYear : string }) =>
             {
                 paymentMethodsContainer.appendChild(new Component("div", {
-                    class: "cc-info",
+                    class: `cc-info ${paymentMethod.id === defaultPaymentMethod ? "default" : ""}`,
+                    id: paymentMethod.id,
                     children: [
-                        new Component("span", { innerHTML: `<i class="fab fa-cc-${defaultPaymentMethod.brand}"></i>` }).element,
-                        new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${defaultPaymentMethod.last4}` }).element,
-                        new Component("span", { innerText: `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}` }).element
+                        new Component("span", { innerHTML: `<i class="fab fa-cc-${paymentMethod.brand}"></i>` }).element,
+                        new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${paymentMethod.last4}` }).element,
+                        new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element
                     ]
                 }).element);
             });
