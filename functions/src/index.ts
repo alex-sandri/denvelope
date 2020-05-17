@@ -540,7 +540,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
     {
         case "customer.subscription.deleted":
         case "invoice.payment_failed":
-            await (await GetUserByCustomerId(<string>(<Stripe.Subscription | Stripe.Invoice>event.data.object).customer)).ref.update({
+            await (await GetUserByCustomerId(<string>(<Stripe.Subscription | Stripe.Invoice>event.data.object).customer))?.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
                 "stripe.subscriptionId": "",
@@ -564,7 +564,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 case "advanced": maxStorage = ADVANCED_STORAGE; break;
             }
 
-            await (await GetUserByCustomerId(<string>subscription.customer)).ref.update({
+            await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
                 "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
                 plan,
@@ -574,7 +574,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "payment_method.attached":
             const paymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
 
-            await (await GetUserByCustomerId(<string>paymentMethod.customer)).ref.update({
+            await (await GetUserByCustomerId(<string>paymentMethod.customer))?.ref.update({
                 "stripe.paymentMethods": admin.firestore.FieldValue.arrayUnion({
                     id: paymentMethod.id,
                     last4: paymentMethod.card?.last4,
@@ -587,7 +587,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "customer.updated":
             const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
 
-            await (await GetUserByCustomerId(customer.id)).ref.update({
+            await (await GetUserByCustomerId(customer.id))?.ref.update({
                 "stripe.defaultPaymentMethod": <string>customer.invoice_settings.default_payment_method
             });
         break;
@@ -600,7 +600,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
     response.json({ received: true }).end();
 });
 
-const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>> =>
+const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData> | undefined> =>
 {
     const user = await db
         .collection("users")
