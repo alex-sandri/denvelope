@@ -672,21 +672,32 @@ window.addEventListener("userready", () =>
         }
         else Utilities.HideElement(nextRenewal);
 
+        const paymentMethods = user.data().stripe?.paymentMethods;
         const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
 
-        userAlreadyHasCardInformation = !!defaultPaymentMethod;
+        userAlreadyHasCardInformation = !!paymentMethods;
 
-        const creditCardInfo : HTMLElement = document.querySelector("#payment-method .cc-info");
+        const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-method .payment-methods-container");
 
-        Utilities.HideElements([ creditCardInfo, noPaymentMethod ]);
+        Utilities.HideElements([ paymentMethodsContainer, noPaymentMethod ]);
 
         if (userAlreadyHasCardInformation)
         {
-            Utilities.ShowElement(creditCardInfo);
+            paymentMethodsContainer.innerHTML = "";
 
-            creditCardInfo.querySelector(".brand").innerHTML = `<i class="fab fa-cc-${defaultPaymentMethod.brand}"></i>`;
-            creditCardInfo.querySelector(".last4").innerHTML = `&bull;&bull;&bull;&bull;${defaultPaymentMethod.last4}`;
-            (<HTMLSpanElement>creditCardInfo.querySelector(".expiration")).innerText = `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}`;
+            Utilities.ShowElement(paymentMethodsContainer);
+
+            paymentMethods.forEach((paymentMethod : Map<string, string>) =>
+            {
+                paymentMethodsContainer.appendChild(new Component("div", {
+                    class: "cc-info",
+                    children: [
+                        new Component("span", { innerHTML: `<i class="fab fa-cc-${defaultPaymentMethod.brand}"></i>` }).element,
+                        new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${defaultPaymentMethod.last4}` }).element,
+                        new Component("span", { innerText: `${defaultPaymentMethod.expirationMonth}/${defaultPaymentMethod.expirationYear}` }).element
+                    ]
+                }).element);
+            });
         }
         else Utilities.ShowElement(noPaymentMethod);
     });
