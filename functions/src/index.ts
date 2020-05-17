@@ -517,6 +517,12 @@ export const deletePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
 {
     if (!context.auth || !data.paymentMethod) return;
 
+    const user = await db.collection("users").doc(context.auth.uid).get();
+
+    const customer : Stripe.Customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
+
+    if (customer.invoice_settings.default_payment_method === data.paymentMethod) return; // Cannot delete the default payment method
+
     await stripe.paymentMethods.detach(data.paymentMethod);
 });
 
