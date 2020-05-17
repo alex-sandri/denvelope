@@ -571,6 +571,32 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 maxStorage
             });
         break;
+        case "payment_method.attached":
+            const paymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
+
+            await (await GetUserByCustomerId(<string>paymentMethod.customer)).ref.update({
+                "stripe.paymentMethods": admin.firestore.FieldValue.arrayUnion({
+                    last4: paymentMethod.card?.last4,
+                    brand: paymentMethod.card?.brand,
+                    expirationMonth: paymentMethod.card?.exp_month,
+                    expirationYear: paymentMethod.card?.exp_year,
+                }),
+            });
+        break;
+        case "customer.updated":
+            const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
+
+            const defaultPaymentMethod = await stripe.paymentMethods.retrieve(<string>customer.invoice_settings.default_payment_method);
+
+            await (await GetUserByCustomerId(customer.id)).ref.update({
+                "stripe.defaultPaymentMethod": {
+                    last4: defaultPaymentMethod.card?.last4,
+                    brand: defaultPaymentMethod.card?.brand,
+                    expirationMonth: defaultPaymentMethod.card?.exp_month,
+                    expirationYear: defaultPaymentMethod.card?.exp_year,
+                },
+            });
+        break;
         default:
             response.status(400).end();
 
@@ -603,13 +629,6 @@ const ChangePaymentMethod = async (userId : string, userEmail : string, paymentM
         await stripe.paymentMethods.attach(paymentMethod.id, { customer: customerId });
 
         await stripe.customers.update(customerId, { invoice_settings: { default_payment_method: paymentMethod.id } });
-
-        await user.ref.update({
-            "stripe.defaultPaymentMethod.last4": paymentMethod.card?.last4,
-            "stripe.defaultPaymentMethod.brand": paymentMethod.card?.brand,
-            "stripe.defaultPaymentMethod.expirationMonth": paymentMethod.card?.exp_month,
-            "stripe.defaultPaymentMethod.expirationYear": paymentMethod.card?.exp_year,
-        });
     }
 }
 
