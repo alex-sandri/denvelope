@@ -572,6 +572,16 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             });
         break;
         case "customer.subscription.updated":
+            let updatedSubscription : Stripe.Subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
+
+            if (updatedSubscription.ended_at) break; // Do not update the user if the subscription has ended
+
+            await (await GetUserByCustomerId(<string>updatedSubscription.customer))?.ref.update({
+                "stripe.nextRenewal": updatedSubscription.current_period_end,
+                "stripe.cancelAtPeriodEnd": updatedSubscription.cancel_at_period_end,
+                "stripe.nextPeriodPlan": updatedSubscription.items.data[0].plan.metadata.plan
+            });
+        break;
         case "invoice.payment_succeeded":
             let subscription : Stripe.Subscription;
 
@@ -589,13 +599,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             if (subscription.ended_at) break; // Do not update the user if the subscription has ended
 
-            await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
-                "stripe.nextRenewal": subscription.current_period_end,
-                "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
-                "stripe.nextPeriodPlan": subscription.items.data[0].plan.metadata.plan,
-                plan,
-                maxStorage
-            });
+            await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({ plan, maxStorage });
         break;
         case "payment_method.attached":
             const attachedPaymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
