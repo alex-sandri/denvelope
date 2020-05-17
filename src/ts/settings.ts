@@ -730,7 +730,14 @@ window.addEventListener("userready", () =>
                     modal.Show(true);
                 }));
 
-                if (isDefaultPaymentMethod) setAsDefaultButton.disabled = deleteButton.disabled = true;
+                if (isDefaultPaymentMethod)
+                {
+                    setAsDefaultButton.disabled = deleteButton.disabled = true;
+
+                    paymentMethodsContainer
+                        .querySelector(`#${paymentMethod.id} span:last-of-type`)
+                        .insertAdjacentHTML("afterend", `<span>(${Translation.Get("generic->default")})</span>`);
+                }
             });
         }
         else Utilities.ShowElement(noPaymentMethod);
