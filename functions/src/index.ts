@@ -572,15 +572,28 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             });
         break;
         case "payment_method.attached":
-            const paymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
+            const attachedPaymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
 
-            await (await GetUserByCustomerId(<string>paymentMethod.customer))?.ref.update({
+            await (await GetUserByCustomerId(<string>attachedPaymentMethod.customer))?.ref.update({
                 "stripe.paymentMethods": admin.firestore.FieldValue.arrayUnion({
-                    id: paymentMethod.id,
-                    last4: paymentMethod.card?.last4,
-                    brand: paymentMethod.card?.brand,
-                    expirationMonth: paymentMethod.card?.exp_month,
-                    expirationYear: paymentMethod.card?.exp_year,
+                    id: attachedPaymentMethod.id,
+                    last4: attachedPaymentMethod.card?.last4,
+                    brand: attachedPaymentMethod.card?.brand,
+                    expirationMonth: attachedPaymentMethod.card?.exp_month,
+                    expirationYear: attachedPaymentMethod.card?.exp_year,
+                }),
+            });
+        break;
+        case "payment_method.detached":
+            const detachedPaymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
+
+            await (await GetUserByCustomerId(<string>detachedPaymentMethod.customer))?.ref.update({
+                "stripe.paymentMethods": admin.firestore.FieldValue.arrayRemove({
+                    id: detachedPaymentMethod.id,
+                    last4: detachedPaymentMethod.card?.last4,
+                    brand: detachedPaymentMethod.card?.brand,
+                    expirationMonth: detachedPaymentMethod.card?.exp_month,
+                    expirationYear: detachedPaymentMethod.card?.exp_year,
                 }),
             });
         break;
