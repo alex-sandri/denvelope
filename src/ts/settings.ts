@@ -678,7 +678,7 @@ window.addEventListener("userready", () =>
 
             Utilities.ShowElement(nextRenewal);
 
-            if (userNextPeriodPlan !== plan)
+            if (userNextPeriodPlan && userNextPeriodPlan !== plan)
             {
                 nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${Translation.Get(`settings->plan->${userNextPeriodPlan}->name`)}</span>`;
 
