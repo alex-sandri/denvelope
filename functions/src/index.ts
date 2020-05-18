@@ -572,7 +572,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             });
         break;
         case "customer.subscription.updated":
-            let updatedSubscription : Stripe.Subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
+            let updatedSubscription : Stripe.Subscription = <Stripe.Subscription>event.data.object;
 
             if (updatedSubscription.ended_at) break; // Do not update the user if the subscription has ended
 
@@ -582,10 +582,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             });
         break;
         case "invoice.payment_succeeded":
-            let subscription : Stripe.Subscription;
-
-            if (event.type.startsWith("customer.subscription.")) subscription = <Stripe.Subscription>event.data.object;
-            else subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
+            let subscription : Stripe.Subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
 
             const plan : string = subscription.items.data[0].plan.metadata.plan;
             let maxStorage : number = FREE_STORAGE;
