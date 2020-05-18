@@ -689,7 +689,7 @@ window.addEventListener("userready", () =>
         const paymentMethods = user.data().stripe?.paymentMethods;
         const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
 
-        userAlreadyHasCardInformation = !!paymentMethods;
+        userAlreadyHasCardInformation = !!paymentMethods && paymentMethods?.length > 0;
 
         if (userAlreadyHasCardInformation)
         {
