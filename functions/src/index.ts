@@ -469,9 +469,12 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         {
             const subscription = await stripe.subscriptions.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId);
 
+            const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan);
+
             await stripe.subscriptions.update(subscription.id, {
                 // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
-                billing_cycle_anchor: IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan) ? "now" : "unchanged",
+                billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
+                proration_behavior: isUpgrade ? "create_prorations" : "none",
                 cancel_at_period_end: false,
                 items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
             });
