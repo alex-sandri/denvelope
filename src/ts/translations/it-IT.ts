@@ -246,6 +246,7 @@ export const it_IT = {
             subscription_end: "Fine sottoscrizione",
             no_payment_method: "Non hai aggiunto nessun metodo di pagamento",
             reactivate_subscription: "Riattiva sottoscrizione",
+            complete_payment: "Completa pagamento",
             currency: "EUR",
             plans: {
                 free: {

@@ -40,6 +40,7 @@ const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
 const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
 const nextPeriodPlan : HTMLParagraphElement = document.querySelector("#change-plan .next-period-plan");
+const completePayment : HTMLAnchorElement = document.querySelector("#change-plan .complete-payment");
 const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
 
@@ -653,17 +654,19 @@ window.addEventListener("userready", () =>
 
     db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
     {
-        const plan = user.data().plan;
-        const userNextPeriodPlan = user.data().stripe?.nextPeriodPlan;
+        const plan : string = user.data().plan;
+        const userNextPeriodPlan : string = user.data().stripe?.nextPeriodPlan;
 
         const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
-        const subscriptionNextRenewalOrEndDate = user.data().stripe?.nextRenewal;
+        const subscriptionNextRenewalOrEndDate : number = user.data().stripe?.nextRenewal;
+
+        const invoiceUrl : string = user.data().stripe?.invoiceUrl;
 
         UpdatePlan(plan);
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
-        Utilities.HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod ]);
+        Utilities.HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment ]);
 
         if (userCanceledSubscription) Utilities.ShowElement(reactivateSubscription);
 
@@ -748,6 +751,13 @@ window.addEventListener("userready", () =>
             });
         }
         else Utilities.ShowElement(noPaymentMethod);
+
+        if (invoiceUrl)
+        {
+            Utilities.ShowElement(completePayment);
+
+            completePayment.href = invoiceUrl;
+        }
     });
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
