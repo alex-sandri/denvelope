@@ -13,6 +13,7 @@ loadEvents.Init();
 
 const db = (<any>window).firebase.firestore();
 const functions = (<any>window).firebase.app().functions("europe-west1");
+const analytics = (<any>window).firebase.analytics();
 
 const stripe = (<any>window).Stripe("pk_test_Rqpdq6Rg3NdyuTBGzzpkTeGw009ERd4wpw", { locale: Translation.Language });
 let userAlreadyHasCardInformation : boolean = false;
@@ -386,7 +387,12 @@ window.addEventListener("userready", () =>
                     currency: Translation.Get(`settings->plan->currency`),
                     paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
                 });
-            else functions.httpsCallable("addPaymentMethod")({ paymentMethod: result.paymentMethod.id });
+            else
+            {
+                functions.httpsCallable("addPaymentMethod")({ paymentMethod: result.paymentMethod.id });
+
+                analytics.logEvent("add_payment_info");
+            }
         }
 
         modal.Show(true);
