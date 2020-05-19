@@ -610,6 +610,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
+                "stripe.invoiceUrl": "",
                 plan,
                 maxStorage
             });
@@ -644,9 +645,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "customer.updated":
             const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
 
-            await (await GetUserByCustomerId(customer.id))?.ref.update({
-                "stripe.defaultPaymentMethod": <string>customer.invoice_settings.default_payment_method
-            });
+            await (await GetUserByCustomerId(customer.id))?.ref.update("stripe.defaultPaymentMethod", <string>customer.invoice_settings.default_payment_method);
         break;
         case "invoice.payment_action_required":
             const invoice : Stripe.Invoice = <Stripe.Invoice>event.data.object;
