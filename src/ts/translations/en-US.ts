@@ -247,6 +247,7 @@ export const en_US = {
             no_payment_method: "You haven't added any payment method",
             reactivate_subscription: "Reactivate subscription",
             complete_payment: "Complete payment",
+            cancel_downgrade: "Cancel downgrade",
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
                 free: {

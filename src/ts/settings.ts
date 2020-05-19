@@ -36,6 +36,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
+const cancelDowngrade : HTMLButtonElement = document.querySelector("#change-plan .cancel-downgrade");
 const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
@@ -418,6 +419,11 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
+    cancelDowngrade.addEventListener("click", () =>
+    {
+
+    });
+
     reactivateSubscription.addEventListener("click", () =>
     {
         const modal = new Modal({
@@ -672,7 +678,7 @@ window.addEventListener("userready", () =>
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
-        Utilities.HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment ]);
+        Utilities.HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment, cancelDowngrade ]);
 
         if (userCanceledSubscription) Utilities.ShowElement(reactivateSubscription);
 
@@ -691,7 +697,7 @@ window.addEventListener("userready", () =>
             {
                 nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${Translation.Get(`settings->plan->plans->${userNextPeriodPlan}->name`)}</span>`;
 
-                Utilities.ShowElement(nextPeriodPlan);
+                Utilities.ShowElements([ nextPeriodPlan, cancelDowngrade ]);
             }
         }
 
