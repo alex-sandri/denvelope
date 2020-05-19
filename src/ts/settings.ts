@@ -429,7 +429,11 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = () =>
         {
-            functions.httpsCallable(button === cancelDowngrade ? "cancelDowngrade" : "reactivateSubscription")({});
+            let params = {};
+
+            if (button === cancelDowngrade) params = { plan: plans.querySelector(".current").classList[1], currency: Translation.Get(`settings->plan->currency`) };
+
+            functions.httpsCallable(button === cancelDowngrade ? "createSubscription" : "reactivateSubscription")(params);
 
             modal.HideAndRemove();
         }
