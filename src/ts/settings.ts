@@ -419,28 +419,23 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
-    cancelDowngrade.addEventListener("click", () =>
-    {
-
-    });
-
-    reactivateSubscription.addEventListener("click", () =>
+    [ cancelDowngrade, reactivateSubscription ].forEach(button => button.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: Translation.Get("settings->plan->reactivate_subscription"),
+            title: button.innerText,
             allow: [ "close", "confirm" ],
             loading: false
         });
 
         modal.OnConfirm = () =>
         {
-            functions.httpsCallable("reactivateSubscription")({});
+            functions.httpsCallable(button === cancelDowngrade ? "cancelDowngrade" : "reactivateSubscription")({});
 
             modal.HideAndRemove();
         }
 
         modal.Show(true);
-    });
+    }));
 
     (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
     {
