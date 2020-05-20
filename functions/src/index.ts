@@ -573,10 +573,11 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             user = await GetUserByCustomerId(<string>subscription.customer);
 
+            if (event.type === "customer.subscription.deleted") await user?.ref.update("stripe.subscriptionId", "");
+
             await user?.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
-                "stripe.subscriptionId": "",
                 "stripe.nextPeriodPlan": "",
                 plan: "free",
                 maxStorage: FREE_STORAGE
