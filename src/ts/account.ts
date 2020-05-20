@@ -1487,7 +1487,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     if (globalSearch) Utilities.HideElement(folderNavigation);
 
-    if (parentId === "root" && navigator.onLine && !searchTerm && !globalSearch)
+    if (Auth.IsAuthenticated && parentId === "root" && navigator.onLine && !searchTerm && !globalSearch)
     {
         Utilities.ShowElement(vault, "flex");
 
