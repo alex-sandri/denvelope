@@ -93,12 +93,7 @@ export class Auth
             // Do not redirect if the user is alrady on the home page or is on a shared content page or one the 404 page
             if (location.pathname !== "/" && location.href.indexOf("/shared/") === -1 && !Utilities.IsSet(document.documentElement.querySelector("main.error")) &&
                 (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/settings") > -1)) location.href = "/";
-            else
-            {
-                Auth.LoadFirebaseUi();
-
-                if (location.pathname !== "/") Utilities.ShowElement(document.querySelector(".firebaseui-auth-container"), "flex");
-            }
+            else Auth.LoadFirebaseUi();
         }
 
         if (Auth.IsSignedIn)
