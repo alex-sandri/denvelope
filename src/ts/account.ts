@@ -542,13 +542,18 @@ window.addEventListener("userready", async () =>
 
             const name = data.name;
 
-            let dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
+            let dateFormatOptions;
 
-            for (const entry in dateFormatOptions)
-                if (dateFormatOptions[entry] === "undefined")
-                    dateFormatOptions[entry] = undefined;
+            if (Auth.IsAuthenticated)
+            {
+                dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
 
-            if (dateFormatOptions === "default") dateFormatOptions = null;
+                for (const entry in dateFormatOptions)
+                    if (dateFormatOptions[entry] === "undefined")
+                        dateFormatOptions[entry] = undefined;
+
+                if (dateFormatOptions === "default") dateFormatOptions = null;
+            }
 
             modal.AppendContent([
                 new Component("p", {
