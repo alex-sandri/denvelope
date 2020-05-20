@@ -104,7 +104,9 @@ export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDele
 
     const userDoc = await db.collection("users").doc(userId).get();
 
-    await stripe.customers.del((<FirebaseFirestore.DocumentData>userDoc.data()).stripe?.customerId);
+    const customerId : string | undefined = (<FirebaseFirestore.DocumentData>userDoc.data()).stripe?.customerId;
+
+    if (customerId) await stripe.customers.del(customerId);
 
     await userDoc.ref.delete();
 });
