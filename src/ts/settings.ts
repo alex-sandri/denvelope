@@ -190,11 +190,9 @@ window.addEventListener("userready", () =>
     {
         const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
 
-        const userDateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
-
         const dateFormatOptions : HTMLDivElement = <HTMLDivElement>document.querySelector("#date-format .date-format-options").cloneNode(true);
 
-        if (userDateFormatOptions !== "default")
+        if (userDateFormatOptions && userDateFormatOptions !== "default")
         {
             (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked = userDateFormatOptions.weekday !== "undefined";
 
@@ -234,11 +232,11 @@ window.addEventListener("userready", () =>
             if (userDateFormatOptions.timeZoneName !== "undefined")
                 (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedIndex =
                     <number><unknown>(<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.timeZoneName}"]`)).index;
-        }
 
-        for (const entry in userDateFormatOptions)
-            if (userDateFormatOptions[entry] === "undefined")
-                userDateFormatOptions[entry] = undefined;
+            for (const entry in userDateFormatOptions)
+                if ((<any>userDateFormatOptions)[entry] === "undefined")
+                    (<any>userDateFormatOptions)[entry] = undefined;
+        }
 
         modal.AppendContent([
             new Component("p", { children: [
