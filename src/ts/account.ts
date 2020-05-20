@@ -2392,6 +2392,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                 if (editorTabs.querySelector(".active").getAttribute("data-force-download") === "true")
                     ShowForceDownloadButton(editorTabs.querySelector(".active").id.split("-")[1]);
             });
+
+            if (!Auth.IsAuthenticated) Utilities.HideElement(tab.querySelector(".close"));
     
             editorTabs.appendChild(tab);
         }
