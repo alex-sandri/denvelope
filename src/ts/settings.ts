@@ -784,7 +784,7 @@ window.addEventListener("userready", () =>
         document.querySelectorAll("[data-date]").forEach(element =>
             (<HTMLElement>element).innerText = Utilities.FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions));
 
-        resetDateFormat.disabled = userDateFormatOptions === "default";
+        resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
     });
 
     db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
