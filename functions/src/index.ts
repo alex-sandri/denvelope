@@ -423,6 +423,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     const userId : string = context.auth.uid;
 
     const user = await db.collection("users").doc(userId).get();
+    const userPaymentMethods = (<FirebaseFirestore.DocumentData>user.data()).stripe?.paymentMethods;
 
     let customer : Stripe.Customer;
 
@@ -435,6 +436,15 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         customer = await CreateCustomer(userId, <string>context.auth.token.email, paymentMethod);
     }
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
+
+    if (!userPaymentMethods || userPaymentMethods.length === 0)
+    {
+        if (!data.paymentMethod) return;
+
+        const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
+
+        await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
+    }
 
     let planId : string = "";
 
