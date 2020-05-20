@@ -218,7 +218,7 @@ describe("OWNER:FALSE", () =>
                 {
                     const db = await setup({ uid: "test1" }, mockData);
             
-                    const ref = db.collection("users/test/files").doc("sharedFileId");
+                    const ref = db.collection("users/test/files").doc("sharedFile");
             
                     await expect(ref.get()).toAllow();
                 });
