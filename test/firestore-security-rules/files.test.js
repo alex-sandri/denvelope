@@ -203,3 +203,26 @@ describe("OWNER:TRUE", () =>
         });
     });
 });
+
+describe("OWNER:FALSE", () =>
+{
+    afterEach(async () => await teardown());
+
+    describe("SHARED:TRUE", () =>
+    {
+        describe("READ", () =>
+        {
+            describe("ALLOW", () =>
+            {
+                test("GENERIC", async () =>
+                {
+                    const db = await setup({ uid: "test1" }, mockData);
+            
+                    const ref = db.collection("users/test/files").doc("sharedFileId");
+            
+                    await expect(ref.get()).toAllow();
+                });
+            });
+        });
+    });
+});

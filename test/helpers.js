@@ -114,6 +114,18 @@ module.exports.mockData = {
         created: firebase.firestore.FieldValue.serverTimestamp(),
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+    },
+    "users/test/files/sharedFile": {
+        name: "inVaultFile",
+        parentId: "vault",
+        size: 0,
+        shared: true,
+        starred: false,
+        trashed: false,
+        inVault: false,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
     }
 }
 
