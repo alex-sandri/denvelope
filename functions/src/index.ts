@@ -561,16 +561,19 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         return;
     }
 
+    let user : FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData> | undefined;
+    let subscription : Stripe.Subscription;
+
     switch (event.type)
     {
         case "customer.subscription.deleted":
         case "invoice.payment_failed":
-            let deletedSubscription : Stripe.Subscription;
+            if (event.type.startsWith("customer.subscription.")) subscription = <Stripe.Subscription>event.data.object;
+            else subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
 
-            if (event.type.startsWith("customer.subscription.")) deletedSubscription = <Stripe.Subscription>event.data.object;
-            else deletedSubscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
+            user = await GetUserByCustomerId(<string>subscription.customer);
 
-            await (await GetUserByCustomerId(<string>deletedSubscription.customer))?.ref.update({
+            await user?.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
                 "stripe.subscriptionId": "",
@@ -580,21 +583,21 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             });
         break;
         case "customer.subscription.updated":
-            const updatedSubscription : Stripe.Subscription = <Stripe.Subscription>event.data.object;
+            subscription = <Stripe.Subscription>event.data.object;
 
-            const user = await GetUserByCustomerId(<string>updatedSubscription.customer);
+            user = await GetUserByCustomerId(<string>subscription.customer);
 
             await user?.ref.update("stripe.invoiceUrl", "");
 
-            if (updatedSubscription.ended_at) break; // Do not update the user if the subscription has ended
+            if (subscription.ended_at) break; // Do not update the user if the subscription has ended
 
             await user?.ref.update({
-                "stripe.cancelAtPeriodEnd": updatedSubscription.cancel_at_period_end,
-                "stripe.nextPeriodPlan": updatedSubscription.items.data[0].plan.metadata.plan
+                "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
+                "stripe.nextPeriodPlan": subscription.items.data[0].plan.metadata.plan
             });
         break;
         case "invoice.payment_succeeded":
-            const subscription : Stripe.Subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
+            subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
 
             const plan : string = subscription.items.data[0].plan.metadata.plan;
             let maxStorage : number = FREE_STORAGE;
