@@ -570,11 +570,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             if (event.type.startsWith("customer.subscription.")) deletedSubscription = <Stripe.Subscription>event.data.object;
             else deletedSubscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
 
-            const user = await GetUserByCustomerId(<string>deletedSubscription.customer);
-
-            if (!user || deletedSubscription.id !== (<FirebaseFirestore.DocumentData>user.data()).stripe?.subscriptionId) break;
-
-            await user.ref.update({
+            await (await GetUserByCustomerId(<string>deletedSubscription.customer))?.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
                 "stripe.subscriptionId": "",
