@@ -87,6 +87,8 @@ export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCrea
         maxStorage: FREE_STORAGE,
         plan: "free"
     });
+
+    await CreateCustomer(user.uid, <string>user.email);
 });
 
 export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDelete(async user =>
@@ -690,13 +692,13 @@ const AddPaymentMethod = async (userId : string, userEmail : string, paymentMeth
     }
 }
 
-const CreateCustomer = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) : Promise<Stripe.Customer> =>
+const CreateCustomer = async (userId : string, userEmail : string, paymentMethod ?: Stripe.PaymentMethod) : Promise<Stripe.Customer> =>
 {
     const customer = await stripe.customers.create({ email: userEmail });
 
     await db.collection("users").doc(userId).update("stripe.customerId", customer.id);
 
-    await AddPaymentMethod(userId, userEmail, paymentMethod);
+    if (paymentMethod) await AddPaymentMethod(userId, userEmail, paymentMethod);
 
     return customer;
 }
