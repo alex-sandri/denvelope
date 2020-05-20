@@ -582,9 +582,13 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "customer.subscription.updated":
             const updatedSubscription : Stripe.Subscription = <Stripe.Subscription>event.data.object;
 
+            const user = await GetUserByCustomerId(<string>updatedSubscription.customer);
+
+            await user?.ref.update("stripe.invoiceUrl", "");
+
             if (updatedSubscription.ended_at) break; // Do not update the user if the subscription has ended
 
-            await (await GetUserByCustomerId(<string>updatedSubscription.customer))?.ref.update({
+            await user?.ref.update({
                 "stripe.cancelAtPeriodEnd": updatedSubscription.cancel_at_period_end,
                 "stripe.nextPeriodPlan": updatedSubscription.items.data[0].plan.metadata.plan
             });
