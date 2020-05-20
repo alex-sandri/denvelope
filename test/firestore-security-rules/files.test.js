@@ -208,6 +208,56 @@ describe("OWNER:FALSE", () =>
 {
     afterEach(async () => await teardown());
 
+    describe("GENERIC", () =>
+    {
+        describe("CREATE", () =>
+        {
+            describe("DENY", () =>
+            {
+                test("GENERIC", async () =>
+                {
+                    const db = await setup({ uid: "test1" }, mockData);
+
+                    await expect(db.collection("users/test/files").add(newFileValidMockData)).toDeny();
+                });
+            });
+        });
+
+        describe("UPDATE", () =>
+        {
+            describe("DENY", () =>
+            {
+                test("GENERIC", async () =>
+                {
+                    const db = await setup({ uid: "test1" }, mockData);
+            
+                    const file = db.collection("users/test/files").doc("fileId");
+
+                    await expect(file.update({
+                        name: "aNewFileName",
+                        updated: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+                    })).toDeny();
+                });
+            });
+        });
+
+        describe("DELETE", () =>
+        {
+            describe("DENY", () =>
+            {
+                test("GENERIC", async () =>
+                {
+                    const db = await setup({ uid: "test1" }, mockData);
+            
+                    const file = db.collection("users/test/files").doc("fileId");
+
+                    await expect(file.delete()).toDeny();
+                });
+            });
+        });
+    });
+
     describe("SHARED:TRUE", () =>
     {
         describe("READ", () =>
@@ -221,6 +271,21 @@ describe("OWNER:FALSE", () =>
                     const ref = db.collection("users/test/files").doc("sharedFile");
             
                     await expect(ref.get()).toAllow();
+                });
+            });
+
+            describe("DENY", () =>
+            {
+                test("GENERIC", async () =>
+                {
+                    const db = await setup({ uid: "test1" }, mockData);
+            
+                    const files = [
+                        db.collection("users/test/files").doc("fileId"),
+                        db.collection("users/test/files").doc("inVaultFile"),
+                    ];
+
+                    for await (const file of files) expect(file.get()).toDeny();
                 });
             });
         });
