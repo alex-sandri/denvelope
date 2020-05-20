@@ -101,7 +101,7 @@ service cloud.firestore {
       function allowContentRead() {
         return (isVaultUnlocked() || existingData().inVault == false) &&
           (isOwner() ||
-          (existingData().shared && existingData().trashed == false) && existingData().inVault == false)
+          (existingData().shared && existingData().trashed == false) && existingData().inVault == false);
       }
 
       function allowContentCreate() {
