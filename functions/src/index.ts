@@ -174,8 +174,11 @@ export const fileDeleted = functions.region(FUNCTIONS_REGION).firestore.document
 
     const size = (<FirebaseFirestore.DocumentData>doc.data()).size;
 
+    const user = await db.collection("users").doc(userId).get();
+
     // Not executed if size is equal to 0 or if the file was deleted before adding its size because the storage space wasn't enough
-    if (size) await db.collection("users").doc(userId).update("usedStorage", admin.firestore.FieldValue.increment(-size));
+    // Or if the user does not exist (file deleted as a consequence of deleting a user)
+    if (user.exists && size) await user.ref.update("usedStorage", admin.firestore.FieldValue.increment(-size));
 });
 
 export const folderUpdated = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/folders/{folderId}").onUpdate(async (change, context) =>
