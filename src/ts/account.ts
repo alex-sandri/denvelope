@@ -355,12 +355,10 @@ window.addEventListener("userready", async () =>
     contextMenuMove.addEventListener("click", () =>
     {
         const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
-        const previousIds : string[] = [];
 
-        Utilities.HideElements([
-            contextMenuContent,
-            contextMenuGeneric
-        ]);
+        let currentId = Utilities.GetCurrentFolderId();
+
+        Utilities.HideElements([ contextMenuContent, contextMenuGeneric ]);
 
         Utilities.ShowElement(contextMenuMoveSelector);
 
@@ -393,7 +391,7 @@ window.addEventListener("userready", async () =>
                         element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
                         element.querySelector(".goto").addEventListener("click", () =>
                         {
-                            previousIds.push(id);
+                            currentId = doc.id;
 
                             ShowAvailableFoldersIn(doc.id);
                         });
@@ -407,9 +405,20 @@ window.addEventListener("userready", async () =>
             });
         }
 
-        contextMenuMoveSelector.querySelector(".back").addEventListener("click", () => ShowAvailableFoldersIn(previousIds.pop()));
+        contextMenuMoveSelector.querySelector(".back").addEventListener("click", async () =>
+        {
+            Utilities.HideElement(contextMenuMoveSelector.querySelector(".back"));
 
-        ShowAvailableFoldersIn(Utilities.GetCurrentFolderId());
+            Utilities.ShowElement(contextMenuMoveSelector.querySelector(".spinner"));
+
+            contextMenuMoveSelectorOptions.innerHTML = "";
+
+            const parentId = (await db.collection(`users/${Auth.UserId}/folders`).doc(currentId).get()).data().parentId;
+
+            ShowAvailableFoldersIn(parentId);
+        });
+
+        ShowAvailableFoldersIn(currentId);
     });
 
     [contextMenuAddToFavourites, contextMenuRemoveFromFavourites].forEach(element => element.addEventListener("click", () =>
