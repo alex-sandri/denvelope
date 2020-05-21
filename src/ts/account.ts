@@ -2035,7 +2035,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
 
         HideContextMenu();
 
-        const url = getUserContentURL(GetUserContentElement(target), IsShared());
+        const url = getUserContentURL(GetUserContentElement(target), !Auth.IsAuthenticated);
 
         if (openInNewWindow) open(url);
         else
