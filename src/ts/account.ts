@@ -1959,7 +1959,7 @@ const addUserContentEvents = () : void =>
 
     [ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", showContextMenu));
 
-    if (sharedOnly() || starredOnly() || trashedOnly()) return;
+    if (trashedOnly()) return;
 
     [...userContentElements, navigationBackButton, vault].forEach(element =>
     {
