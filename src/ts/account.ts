@@ -2490,9 +2490,9 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
     });
 }
 
-const GetFolderUrl = (id : string, isShared : boolean) : string => (id !== "root" && id !== "starred" && id !== "trash" && id !== "vault")
+const GetFolderUrl = (id : string, isShared : boolean) : string => (id !== "root" && id !== "shared" && id !== "starred" && id !== "trash" && id !== "vault")
     ? getUserContentURL(<HTMLElement><unknown>{classList: ["folder"], id: id}, isShared)
-    : location.origin + "/account" + (isShared ? "/shared" : (id === "starred" ? "/starred" : (id === "trash" ? "/trash" : (id === "vault" ? "/vault" : ""))));
+    : location.origin + `/account${id !== "root" ? `/${id}` : ""}`;
 
 const UploadFolder = async (files : File[], name : string, path : string, parentId : string, depth : number) : Promise<void> =>
 {
