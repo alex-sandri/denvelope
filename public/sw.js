@@ -1,9 +1,10 @@
 "use strict";
-const cacheName = "static-v2366";
+const cacheName = "static-v2367";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
     "/settings",
+    "/plans",
     "/terms",
     "/privacy",
     "/cookies",
