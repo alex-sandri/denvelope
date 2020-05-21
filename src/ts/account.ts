@@ -119,6 +119,8 @@ let folderShared : boolean = false;
 
 let preventWindowUnload : any = {};
 
+const IS_SHARED_FOLDER : boolean = location.pathname.startsWith("/folder/shared/");
+
 window.addEventListener("userready", async () =>
 {
     [addFiles, contextMenuAddFiles].forEach(element => element.addEventListener("click", () => fileInput.click()));
@@ -2393,7 +2395,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     ShowForceDownloadButton(editorTabs.querySelector(".active").id.split("-")[1]);
             });
 
-            if (!Auth.IsAuthenticated) Utilities.HideElement(tab.querySelector(".close"));
+            if (!Auth.IsAuthenticated && !IS_SHARED_FOLDER) Utilities.HideElement(tab.querySelector(".close"));
     
             editorTabs.appendChild(tab);
         }
