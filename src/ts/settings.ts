@@ -808,7 +808,7 @@ window.addEventListener("popstate", () =>
 
 const UpdateLanguage = () : void =>
 {
-    Translation.Init(null, languageSelect.selectedOptions[0].value);
+    Translation.Init(languageSelect.selectedOptions[0].value);
 
     changeLanguage.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}<span>${languageSelect.selectedOptions[0].text}</span>`;
 };

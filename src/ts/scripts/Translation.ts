@@ -9,10 +9,8 @@ export class Translation
 
     public static get Language () : string { return Translation.language; }
 
-    public static Init = (element ?: HTMLElement, language ?: string) : void =>
+    public static Init = (language ?: string) : void =>
     {
-        if (!IsSet(element)) (<any>element) = document;
-
         if (!IsSet(language)) language = localStorage.getItem("lang") ?? navigator.language;
 
         localStorage.setItem("lang", language);
@@ -20,7 +18,7 @@ export class Translation
         document.documentElement.lang = Translation.language = language;
 
         const ids = Array.from(new Set(
-            Array.from(element.querySelectorAll("*"))
+            Array.from(document.querySelectorAll("*"))
                 .filter(element =>
                     element.hasAttribute("data-translation") ||
                     element.hasAttribute("data-placeholder-translation") ||
@@ -37,20 +35,20 @@ export class Translation
                     element.getAttribute("data-only-translation"))
         ));
 
-        element.querySelectorAll("[data-use=translation]").forEach(element => element.remove());
+        document.querySelectorAll("[data-use=translation]").forEach(element => element.remove());
 
-        ids.forEach(id => element.querySelectorAll(`[data-translation="${id}"]`).forEach(element =>
+        ids.forEach(id => document.querySelectorAll(`[data-translation="${id}"]`).forEach(element =>
             element.innerHTML += ` <span data-use="translation">${Translation.Get(id)}</span>`));
-        ids.forEach(id => element.querySelectorAll(`[data-placeholder-translation="${id}"]`)
+        ids.forEach(id => document.querySelectorAll(`[data-placeholder-translation="${id}"]`)
             .forEach(element => (<HTMLInputElement>element).placeholder = Translation.Get(id)));
-        ids.forEach(id => element.querySelectorAll(`[data-content-translation="${id}"]`).forEach(element => (<HTMLMetaElement>element).content = Translation.Get(id)));
-        ids.forEach(id => element.querySelectorAll(`[data-aria-label-translation="${id}"]`).forEach(element =>
+        ids.forEach(id => document.querySelectorAll(`[data-content-translation="${id}"]`).forEach(element => (<HTMLMetaElement>element).content = Translation.Get(id)));
+        ids.forEach(id => document.querySelectorAll(`[data-aria-label-translation="${id}"]`).forEach(element =>
             (<HTMLMetaElement>element).setAttribute("aria-label", Translation.Get(id))));
-        ids.forEach(id => element.querySelectorAll(`[data-start-translation="${id}"]`).forEach(element =>
+        ids.forEach(id => document.querySelectorAll(`[data-start-translation="${id}"]`).forEach(element =>
             element.innerHTML = `<span data-use="translation">${Translation.Get(id)}</span>` + element.innerHTML));
-        ids.forEach(id => element.querySelectorAll(`[data-only-translation="${id}"]`).forEach(element => element.innerHTML = Translation.Get(id)));
+        ids.forEach(id => document.querySelectorAll(`[data-only-translation="${id}"]`).forEach(element => element.innerHTML = Translation.Get(id)));
 
-        Array.from(<NodeListOf<HTMLElement>>element.querySelectorAll("*"))
+        Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll("*"))
             .filter(element => element.hasAttribute("data-keyboard-shortcut"))
             .forEach(element => element.title = `${Translation.Get("generic->keyboard_shortcut")}: ${element.getAttribute("data-keyboard-shortcut").toUpperCase()}`);
     }
