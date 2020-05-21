@@ -2045,6 +2045,8 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
                 Utilities.SetCurrentFolderId(target.closest(folderSelector).id);
     
                 GetUserContent();
+
+                UpdateBottomSectionBar(viewMyAccount);
             }
             else ShowFile(closestFile.id, null, null, isMultipleFileEditor);
     
