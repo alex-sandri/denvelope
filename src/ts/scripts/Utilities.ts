@@ -31,21 +31,6 @@ export const PreventDragEvents = (): void =>
     document.addEventListener("drop", e => e.preventDefault());
 }
 
-export const SetCookie = (name: string, value: string, months: number) =>
-{
-    const d = new Date();
-
-    d.setTime(d.getTime() + months * 30 * 24 * 60 * 60 * 1000);
-
-    document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
-}
-
-export const GetCookie = (name: string) => document.cookie.substr(document.cookie.indexOf(name)).substr(name.length + 1).split(";")[0] || null;
-
-export const DeleteCookie = (name: string) => SetCookie(name, null, -1);
-
-export const IsSetCookie = (name: string): boolean => document.cookie.indexOf(name + "=") > -1;
-
 export const DispatchEvent = (name: string) => window.dispatchEvent(new Event(name));
 
 export const FormatStorage = (bytes: number): string =>
