@@ -5,17 +5,13 @@ import { it_IT } from "../translations/it-IT";
 
 export class Translation
 {
-    private static language : string;
-
-    public static get Language () : string { return Translation.language; }
+    public static get Language () : string { return localStorage.getItem("lang"); }
 
     public static Init = (language ?: string) : void =>
     {
-        if (!IsSet(language)) language = localStorage.getItem("lang") ?? navigator.language;
+        localStorage.setItem("lang", language ?? (localStorage.getItem("lang") ?? navigator.language));
 
-        localStorage.setItem("lang", language);
-
-        document.documentElement.lang = Translation.language = language;
+        document.documentElement.lang = Translation.Language;
 
         const ids = Array.from(new Set(
             Array.from(document.querySelectorAll("*"))
