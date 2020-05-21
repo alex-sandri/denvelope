@@ -1,7 +1,5 @@
 import { ClearCache, RemoveClass, AddClass, DispatchEvent, IsSet } from "./Utilities";
 import { userEmail, userName, userPhoto } from "./header";
-import { Modal } from "./Modal";
-import { Component } from "./Component";
 
 export class Auth
 {

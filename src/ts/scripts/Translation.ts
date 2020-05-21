@@ -1,5 +1,3 @@
-import { IsSet } from "./Utilities";
-
 import { en_US } from "../translations/en-US";
 import { it_IT } from "../translations/it-IT";
 
