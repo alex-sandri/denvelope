@@ -1,7 +1,7 @@
 import { Translation } from "./Translation";
 import { FileIcons } from "./FileIcons";
 import { FolderIcons } from "./FolderIcons";
-import { Utilities } from "./Utilities";
+import { IsSet } from "./Utilities";
 
 export class Linguist
 {
@@ -38,12 +38,12 @@ export class Linguist
             // First search by file name
             language = FileIcons.icons.filter(lang => lang.fileNames?.includes(name))[0];
 
-            if (!Utilities.IsSet(language))
+            if (!IsSet(language))
                 FileIcons.icons
                     .filter(lang => lang.fileExtensions?.filter(ext => name.endsWith(`.${ext}`)).length > 0)
                     .map(lang =>
                     {
-                        if (!Utilities.IsSet(language)) language = lang;
+                        if (!IsSet(language)) language = lang;
 
                         let maxExtensionSpecificity : number = -1;
 
@@ -70,6 +70,6 @@ export class Linguist
         }
         else FolderIcons.icons.forEach(lang => lang.folderNames?.includes(name) ? language = lang : null);
 
-        return Utilities.IsSet(language) ? language.name : (isFile ? FileIcons : FolderIcons).defaultIcon.name;
+        return IsSet(language) ? language.name : (isFile ? FileIcons : FolderIcons).defaultIcon.name;
     }
 }

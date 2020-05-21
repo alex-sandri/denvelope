@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { IsSet, ShowElement, HideElement } from "./Utilities";
 
 const genericMessage : HTMLDivElement = document.querySelector(".generic-message");
 const content : HTMLDivElement = genericMessage.querySelector("p");
@@ -11,15 +11,15 @@ export const Show = (message : string, actionButtonText ?: string, duration : nu
 {
     content.innerText = message;
 
-    if (Utilities.IsSet(actionButtonText))
+    if (IsSet(actionButtonText))
     {
         actionButton.innerText = actionButtonText;
 
-        Utilities.ShowElement(actionButton, "block");
+        ShowElement(actionButton, "block");
     }
-    else Utilities.HideElement(actionButton);
+    else HideElement(actionButton);
 
-    Utilities.ShowElement(genericMessage, "flex");
+    ShowElement(genericMessage, "flex");
 
     if (duration >= 0) timeout = setTimeout(Hide, duration);
 
@@ -44,9 +44,9 @@ export const ShowSpinner = () : void =>
 {
     Show("", null, -1);
 
-    Utilities.HideElement(dismiss);
+    HideElement(dismiss);
 
-    Utilities.ShowElement(genericMessage.querySelector(".spinner"), "block");
+    ShowElement(genericMessage.querySelector(".spinner"), "block");
 }
 
-const Hide = () : void => Utilities.HideElement(genericMessage);
+const Hide = () : void => HideElement(genericMessage);

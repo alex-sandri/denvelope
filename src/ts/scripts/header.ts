@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { HideElement, ShowElement } from "./Utilities";
 
 export const header : HTMLElement = document.querySelector("header");
 
@@ -15,9 +15,9 @@ export const userPhoto : NodeListOf<HTMLImageElement> = document.querySelectorAl
 export const userName : HTMLParagraphElement = document.querySelector("[data-update-field=name]");
 export const userEmail : HTMLParagraphElement = document.querySelector("[data-update-field=email]");
 
-export const HideHeaderMenu = () => Utilities.HideElement(accountMenuContainer);
+export const HideHeaderMenu = () => HideElement(accountMenuContainer);
 
-accountMenuToggle.addEventListener("click", () => (accountMenuContainer.style.display === "flex") ? HideHeaderMenu() : Utilities.ShowElement(accountMenuContainer, "flex"));
+accountMenuToggle.addEventListener("click", () => (accountMenuContainer.style.display === "flex") ? HideHeaderMenu() : ShowElement(accountMenuContainer, "flex"));
 
 document.addEventListener("click", e =>
 {

@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { IsSet, HasClass } from "./Utilities";
 
 export class Component
 {
@@ -8,7 +8,7 @@ export class Component
     {
         this.element = document.createElement(type);
 
-        if (Utilities.IsSet(options))
+        if (IsSet(options))
         {
             if (options.hasOwnProperty("aria"))
             {
@@ -46,7 +46,7 @@ export class Component
 
                     Array.from(Object.keys(hoverStyles)).forEach((option, i) =>
                     {
-                        this.element.addEventListener("mouseenter", () => !Utilities.HasClass(this.element, "no-hover") ? this.element.style[option as any] = Object.values(hoverStyles)[i] : null);
+                        this.element.addEventListener("mouseenter", () => !HasClass(this.element, "no-hover") ? this.element.style[option as any] = Object.values(hoverStyles)[i] : null);
                         this.element.addEventListener("mouseleave", () => this.element.style[option as any] = previousStyles[option] || "");
                     });
                 }
@@ -78,7 +78,7 @@ export class Input extends Component
     constructor (protected options : Object)
     {
         super("div", {
-            class: Utilities.IsSet((<any>options).class) ? (<any>options).class : "input",
+            class: IsSet((<any>options).class) ? (<any>options).class : "input",
             children: [
                 new Component("input", {
                     ...(<Component[]>(<any>options).attributes)

@@ -1,4 +1,4 @@
-import { Utilities } from "../scripts/Utilities";
+import { ShowElements, HideElements } from "../scripts/Utilities";
 import * as genericMessage from "../scripts/generic-message";
 import { Translation } from "../scripts/Translation";
 
@@ -60,7 +60,7 @@ export class ServiceWorkerController
 
             deferredPrompt = e;
 
-            Utilities.ShowElements([
+            ShowElements([
                 installPwaButton,
                 installPwaHr
             ], "block");
@@ -75,7 +75,7 @@ export class ServiceWorkerController
             deferredPrompt.userChoice.then((choiceResult : any) =>
             {
                 if (choiceResult.outcome === "accepted")
-                    Utilities.HideElements([
+                    HideElements([
                         installPwaButton,
                         installPwaHr
                     ]);

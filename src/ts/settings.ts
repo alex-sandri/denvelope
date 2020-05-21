@@ -2,7 +2,7 @@ export {};
 
 import * as loadEvents from './scripts/load-events';
 
-import { Utilities } from "./scripts/Utilities";
+import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElements } from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
@@ -70,7 +70,7 @@ if (location.pathname.indexOf("/settings/") > -1)
     if (![ "general", "plan", "security", "advanced", "privacy", "info" ].includes(section)) section = "general";
 }
 
-[ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => Utilities.AddClass(<HTMLElement>element, "selected"));
+[ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => AddClass(<HTMLElement>element, "selected"));
 
 document.querySelectorAll("#plan .plans .plan")
     .forEach(plan =>
@@ -96,15 +96,15 @@ settingsMenuButtons.forEach(element =>
         // Clicked element is the icon
         else button = (<HTMLButtonElement>(<HTMLElement>e.target).parentNode);
 
-        settingsMenuButtons.forEach(element => Utilities.RemoveClass(element, "selected"));
+        settingsMenuButtons.forEach(element => RemoveClass(element, "selected"));
 
-        settingsSections.forEach(element => Utilities.RemoveClass(element, "selected"));
+        settingsSections.forEach(element => RemoveClass(element, "selected"));
 
-        Utilities.AddClass(button, "selected");
+        AddClass(button, "selected");
 
         let section = button.getAttribute("data-sect");
 
-        Utilities.AddClass(document.querySelector("#" + section), "selected")
+        AddClass(document.querySelector("#" + section), "selected")
 
         history.pushState(null, "", location.origin + "/settings/" + section);
     });
@@ -169,9 +169,9 @@ window.addEventListener("userready", () =>
 
         modal.OnConfirm = () =>
         {
-            if (Utilities.HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
+            if (HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
 
-            Utilities.RemoveClass(input, "error");
+            RemoveClass(input, "error");
 
             modal.HideAndRemove();
 
@@ -251,7 +251,7 @@ window.addEventListener("userready", () =>
                 new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
                 new Component("span", {
                     id: "example-date",
-                    innerText: Utilities.FormatDate(Date.now(), userDateFormatOptions !== "default"
+                    innerText: FormatDate(Date.now(), userDateFormatOptions !== "default"
                         ? userDateFormatOptions
                         : null) }).element
             ] }).element,
@@ -281,7 +281,7 @@ window.addEventListener("userready", () =>
 
         [ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
             .forEach(element => element.addEventListener("change", () =>
-                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = Utilities.FormatDate(Date.now(), GetDateTimeFormatOptions(true))));
+                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions(true))));
 
         modal.OnConfirm = () =>
         {
@@ -446,7 +446,7 @@ window.addEventListener("userready", () =>
 
         previouslySelectedPlan?.classList.remove("selected");
 
-        if (previouslySelectedPlan !== plan) Utilities.AddClass(plan, "selected");
+        if (previouslySelectedPlan !== plan) AddClass(plan, "selected");
 
         changePlan.disabled = (plans.querySelector(".selected") ?? currentPlan) === currentPlan;
     }));
@@ -514,11 +514,11 @@ window.addEventListener("userready", () =>
             const currentPin = currentPinInput.value;
             const newPin = newPinInput.value;
 
-            if (Utilities.HasClass(currentPinInput, "error")) currentVaultPinInput.previousElementSibling.remove();
-            if (Utilities.HasClass(newPinInput, "error")) newVaultPinInput.previousElementSibling.remove();
+            if (HasClass(currentPinInput, "error")) currentVaultPinInput.previousElementSibling.remove();
+            if (HasClass(newPinInput, "error")) newVaultPinInput.previousElementSibling.remove();
 
-            Utilities.RemoveClass(currentPinInput, "error");
-            Utilities.RemoveClass(newPinInput, "error");
+            RemoveClass(currentPinInput, "error");
+            RemoveClass(newPinInput, "error");
 
             modal.Hide();
             
@@ -527,7 +527,7 @@ window.addEventListener("userready", () =>
                 if (result.data.success) modal.Remove();
                 else
                 {
-                    Utilities.AddClass(currentPinInput, "error");
+                    AddClass(currentPinInput, "error");
 
                     currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
                         class: "input-error",
@@ -574,9 +574,9 @@ window.addEventListener("userready", () =>
         {
             const pin = input.value;
 
-            if (Utilities.HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
+            if (HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
 
-            Utilities.RemoveClass(input, "error");
+            RemoveClass(input, "error");
 
             modal.Hide();
                 
@@ -585,7 +585,7 @@ window.addEventListener("userready", () =>
                 if (result.data.success) modal.Remove();
                 else
                 {
-                    Utilities.AddClass(input, "error");
+                    AddClass(input, "error");
 
                     vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
                         class: "input-error",
@@ -659,7 +659,7 @@ window.addEventListener("userready", () =>
         modal.Show(true);
     });
 
-    clearCache.addEventListener("click", Utilities.ClearFirestoreCache);
+    clearCache.addEventListener("click", ClearFirestoreCache);
 
     db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
     {
@@ -675,9 +675,9 @@ window.addEventListener("userready", () =>
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
-        Utilities.HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment, cancelDowngrade ]);
+        HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment, cancelDowngrade ]);
 
-        if (userCanceledSubscription) Utilities.ShowElement(reactivateSubscription);
+        if (userCanceledSubscription) ShowElement(reactivateSubscription);
 
         if (plan !== "free")
         {
@@ -685,16 +685,16 @@ window.addEventListener("userready", () =>
                 `${Translation.Get(`settings->plan->${
                     userCanceledSubscription ? "subscription_end" : "next_renewal"
                 }`)}<span data-date="${subscriptionNextRenewalOrEndDate}">${
-                    Utilities.FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
+                    FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
                 }</span>`;
 
-            Utilities.ShowElement(nextRenewal);
+            ShowElement(nextRenewal);
 
             if (userNextPeriodPlan && userNextPeriodPlan !== plan && !userCanceledSubscription)
             {
                 nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${Translation.Get(`settings->plan->plans->${userNextPeriodPlan}->name`)}</span>`;
 
-                Utilities.ShowElements([ nextPeriodPlan, cancelDowngrade ]);
+                ShowElements([ nextPeriodPlan, cancelDowngrade ]);
             }
         }
 
@@ -707,7 +707,7 @@ window.addEventListener("userready", () =>
         {
             paymentMethodsContainer.innerHTML = "";
 
-            Utilities.ShowElement(paymentMethodsContainer);
+            ShowElement(paymentMethodsContainer);
 
             paymentMethods.forEach((paymentMethod : { id : string, brand : string, last4 : string, expirationMonth : string, expirationYear : string }) =>
             {
@@ -759,11 +759,11 @@ window.addEventListener("userready", () =>
                 }
             });
         }
-        else Utilities.ShowElement(noPaymentMethod);
+        else ShowElement(noPaymentMethod);
 
         if (invoiceUrl)
         {
-            Utilities.ShowElement(completePayment);
+            ShowElement(completePayment);
 
             completePayment.href = invoiceUrl;
         }
@@ -782,7 +782,7 @@ window.addEventListener("userready", () =>
         if (userDateFormatOptions === "default") userDateFormatOptions = null;
 
         document.querySelectorAll("[data-date]").forEach(element =>
-            (<HTMLElement>element).innerText = Utilities.FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions));
+            (<HTMLElement>element).innerText = FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions));
 
         resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
     });
@@ -831,7 +831,7 @@ const UpdatePlan = (plan : string) : void =>
 
     plans.querySelector(".current")?.classList.remove("current");
 
-    Utilities.AddClass(plans.querySelector(`.${plan}`), "current");
+    AddClass(plans.querySelector(`.${plan}`), "current");
 
     plans.querySelector(".selected")?.classList.remove("selected");
 

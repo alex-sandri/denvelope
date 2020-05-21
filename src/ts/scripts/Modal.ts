@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { ShowElement, AddClass, IsSet, HideElement, HasClass, RemoveClass, FormatStorage } from "./Utilities";
 import { Component } from "./Component";
 import { Translation } from "./Translation";
 
@@ -21,31 +21,31 @@ export class Modal
 
     constructor (options ?: Object)
     {
-        if (Utilities.IsSet(options))
+        if (IsSet(options))
         {
             if (options.hasOwnProperty("title")) this.Title = (<any>options).title;
             if (options.hasOwnProperty("subtitle")) this.Subtitle = (<any>options).subtitle;
 
             if (options.hasOwnProperty("allow"))
             {
-                if ((<string[]>(<any>options).allow).includes("close")) Utilities.ShowElement(this.CloseButton, "block");
-                if ((<string[]>(<any>options).allow).includes("confirm")) Utilities.ShowElement(this.ConfirmButton, "block");
-                if ((<string[]>(<any>options).allow).includes("update")) Utilities.ShowElement(this.UpdateButton, "block");
+                if ((<string[]>(<any>options).allow).includes("close")) ShowElement(this.CloseButton, "block");
+                if ((<string[]>(<any>options).allow).includes("confirm")) ShowElement(this.ConfirmButton, "block");
+                if ((<string[]>(<any>options).allow).includes("update")) ShowElement(this.UpdateButton, "block");
             }
             
             if (options.hasOwnProperty("floating") && (<any>options).floating)
             {
-                Utilities.AddClass(this.element, "floating");
+                AddClass(this.element, "floating");
 
-                Utilities.AddClass(this.container, "no-background");
+                AddClass(this.container, "no-background");
             }
 
-            if (options.hasOwnProperty("animate") && !(<any>options).animate) Utilities.AddClass(this.element, "no-animate");
+            if (options.hasOwnProperty("animate") && !(<any>options).animate) AddClass(this.element, "no-animate");
 
-            if (options.hasOwnProperty("aside") && (<any>options).aside) Utilities.AddClass(this.element, "aside");
+            if (options.hasOwnProperty("aside") && (<any>options).aside) AddClass(this.element, "aside");
 
-            if (options.hasOwnProperty("loading") && !(<any>options).loading) Utilities.HideElement(this.spinner);
-            else Utilities.ShowElement(this.spinner, "block");
+            if (options.hasOwnProperty("loading") && !(<any>options).loading) HideElement(this.spinner);
+            else ShowElement(this.spinner, "block");
         }
 
         this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
@@ -67,16 +67,16 @@ export class Modal
         this.ConfirmButton.addEventListener("click", this.OnConfirm);
         this.UpdateButton.addEventListener("click", this.OnUpdate);
         
-        if (Utilities.IsSet(unique) && unique)
+        if (IsSet(unique) && unique)
             document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
-        else Utilities.AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
+        else AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
 
-        if (!Utilities.HasClass(this.element, "show"))
+        if (!HasClass(this.element, "show"))
         {
-            Utilities.ShowElement(this.container);
+            ShowElement(this.container);
 
-            Utilities.RemoveClass(this.element, "hide");
-            Utilities.AddClass(this.element, "show");
+            RemoveClass(this.element, "hide");
+            AddClass(this.element, "show");
         }
 
         document.addEventListener("mouseup", this.HideOnOuterClick);
@@ -93,10 +93,10 @@ export class Modal
 
     public Hide = () : void =>
     {
-        Utilities.RemoveClass(this.element, "show");
-        Utilities.AddClass(this.element, "hide");
+        RemoveClass(this.element, "show");
+        AddClass(this.element, "hide");
 
-        setTimeout(() => Utilities.HideElement(this.container), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
+        setTimeout(() => HideElement(this.container), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
     }
 
     public Remove = () : void =>
@@ -136,9 +136,9 @@ export class Modal
 
     public AppendContent = (data : any[]) : void =>
     {
-        Utilities.HideElement(this.spinner);
+        HideElement(this.spinner);
     
-        data.filter(Utilities.IsSet).forEach(element => this.Content.append(element));
+        data.filter(IsSet).forEach(element => this.Content.append(element));
 
         this.Content.querySelectorAll("input").forEach(element => element.addEventListener("keyup", e =>
         {
@@ -152,14 +152,14 @@ export class Modal
 
     public RemoveContent = () : void =>
     {
-        Utilities.ShowElement(this.spinner, "block");
+        ShowElement(this.spinner, "block");
 
         this.Content.innerHTML = "";
     }
 
     private HideOnOuterClick = (e : Event) : void =>
     {
-        if (!this.element.contains(<HTMLElement>e.target) && !Utilities.HasClass(this.element, "keep-alive")) this.HideAndRemove();
+        if (!this.element.contains(<HTMLElement>e.target) && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
     }
 }
 
@@ -203,7 +203,7 @@ export class UploadModal extends Modal
                             }).element,
                             new Component("span", {
                                 class: "tot-size",
-                                innerHTML: ` / ${Utilities.FormatStorage(size)}`
+                                innerHTML: ` / ${FormatStorage(size)}`
                             }).element
                         ]
                     }).element
@@ -249,16 +249,16 @@ export class UploadModal extends Modal
 
         pauseButton.addEventListener("click", () =>
         {
-            Utilities.HideElement(pauseButton);
-            Utilities.ShowElement(resumeButton, "block");
+            HideElement(pauseButton);
+            ShowElement(resumeButton, "block");
 
             this.OnPause();
         });
 
         resumeButton.addEventListener("click", () =>
         {
-            Utilities.HideElement(resumeButton);
-            Utilities.ShowElement(pauseButton, "block");
+            HideElement(resumeButton);
+            ShowElement(pauseButton, "block");
 
             this.OnResume();
         });
@@ -304,7 +304,7 @@ export class DownloadModal extends Modal
                             }).element,
                             new Component("span", {
                                 class: "tot-size",
-                                innerHTML: ` / ${Utilities.FormatStorage(size)}`
+                                innerHTML: ` / ${FormatStorage(size)}`
                             }).element
                         ]
                     }).element

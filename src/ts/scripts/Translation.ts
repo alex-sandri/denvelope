@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { IsSet } from "./Utilities";
 
 import { en_US } from "../translations/en-US";
 import { it_IT } from "../translations/it-IT";
@@ -11,9 +11,9 @@ export class Translation
 
     public static Init = (element ?: HTMLElement, language ?: string) : void =>
     {
-        if (!Utilities.IsSet(element)) (<any>element) = document;
+        if (!IsSet(element)) (<any>element) = document;
 
-        if (!Utilities.IsSet(language)) language = localStorage.getItem("lang") ?? navigator.language;
+        if (!IsSet(language)) language = localStorage.getItem("lang") ?? navigator.language;
 
         localStorage.setItem("lang", language);
 

@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage } from "./Utilities";
 import { Auth } from "./Auth";
 import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
@@ -20,7 +20,7 @@ export const Init = () : void =>
     Translation.Init();
 
     // This needs to wait for the translation to be completed
-    Utilities.LogPageViewEvent();
+    LogPageViewEvent();
 
     const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
 
@@ -28,14 +28,14 @@ export const Init = () : void =>
 
     if (!localStorage.getItem("cookie-consent"))
     {
-        Utilities.ShowElement(cookieBanner, "flex");
+        ShowElement(cookieBanner, "flex");
 
-        cookieBanner.querySelector("i:last-child").addEventListener("click", () => Utilities.HideElement(document.querySelector(".cookie-banner")));
+        cookieBanner.querySelector("i:last-child").addEventListener("click", () => HideElement(document.querySelector(".cookie-banner")));
     }
 
     localStorage.setItem("cookie-consent", "true");
 
-    Utilities.PreventDragEvents();
+    PreventDragEvents();
 
     document.addEventListener("contextmenu", e =>
     {
@@ -58,7 +58,7 @@ export const Init = () : void =>
 
     signOutButton.addEventListener("click", () => Auth.SignOut());
 
-    window.addEventListener("load", () => Utilities.RemoveClass(document.body, "preload"));
+    window.addEventListener("load", () => RemoveClass(document.body, "preload"));
 
     window.addEventListener("keydown", e =>
     {
@@ -91,21 +91,21 @@ export const Init = () : void =>
                 const usedStorageElement = document.querySelector("[data-update-field=used-storage]");
                 const maxStorageElement = document.querySelector("[data-update-field=max-storage]");
 
-                usedStorageElement.innerHTML = Utilities.FormatStorage(usedStorage);
+                usedStorageElement.innerHTML = FormatStorage(usedStorage);
                 usedStorageElement.setAttribute("data-bytes", usedStorage);
 
-                maxStorageElement.innerHTML = Utilities.FormatStorage(maxStorage);
+                maxStorageElement.innerHTML = FormatStorage(maxStorage);
                 maxStorageElement.setAttribute("data-bytes", maxStorage);
 
                 document.querySelector("[data-update-field=used-storage-percent]").innerHTML = `(${percent})`;
 
                 (<HTMLElement>document.querySelector(".storage .used")).style.width = percent;
 
-                if (usedStorage > 0) Utilities.ShowElement(whatIsTakingUpSpace);
-                else Utilities.HideElement(whatIsTakingUpSpace);
+                if (usedStorage > 0) ShowElement(whatIsTakingUpSpace);
+                else HideElement(whatIsTakingUpSpace);
 
-                if (doc.data().plan === "free") Utilities.ShowElement(upgradePlan);
-                else Utilities.HideElement(upgradePlan);
+                if (doc.data().plan === "free") ShowElement(upgradePlan);
+                else HideElement(upgradePlan);
             });
     });
 }

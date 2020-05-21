@@ -1,4 +1,4 @@
-import { Utilities } from "./Utilities";
+import { ClearCache, RemoveClass, AddClass, DispatchEvent, IsSet } from "./Utilities";
 import { userEmail, userName, userPhoto } from "./header";
 import { Modal } from "./Modal";
 import { Component } from "./Component";
@@ -25,7 +25,7 @@ export class Auth
     {
         Auth.auth.signOut();
 
-        Utilities.ClearCache();
+        ClearCache();
 
         location.href = "/";
     }
@@ -91,23 +91,23 @@ export class Auth
             Auth.IsSignedIn = false;
 
             // Do not redirect if the user is alrady on the home page or is on a shared content page or one the 404 page
-            if (location.pathname !== "/" && location.href.indexOf("/shared/") === -1 && !Utilities.IsSet(document.documentElement.querySelector("main.error")) &&
+            if (location.pathname !== "/" && location.href.indexOf("/shared/") === -1 && !IsSet(document.documentElement.querySelector("main.error")) &&
                 (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/settings") > -1)) location.href = "/";
             else Auth.LoadFirebaseUi();
         }
 
         if (Auth.IsSignedIn)
         {
-            Utilities.RemoveClass(document.documentElement, "signed-out");
-            Utilities.AddClass(document.documentElement, "signed-in");
+            RemoveClass(document.documentElement, "signed-out");
+            AddClass(document.documentElement, "signed-in");
         }
         else
         {
-            Utilities.RemoveClass(document.documentElement, "signed-in");
-            Utilities.AddClass(document.documentElement, "signed-out");
+            RemoveClass(document.documentElement, "signed-in");
+            AddClass(document.documentElement, "signed-out");
         }
 
-        Utilities.DispatchEvent("userready");
+        DispatchEvent("userready");
     }
 
     private static LoadFirebaseUi = () =>
