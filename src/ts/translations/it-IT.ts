@@ -172,6 +172,7 @@ export const it_IT = {
         from: "Da",
         to: "A",
         add: "Aggiungi",
+        plans: "Piani",
     },
     header: {
         storage: {

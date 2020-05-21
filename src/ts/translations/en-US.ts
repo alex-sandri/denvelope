@@ -172,6 +172,7 @@ export const en_US = {
         from: "From",
         to: "To",
         add: "Add",
+        plans: "Plans",
     },
     header: {
         storage: {
