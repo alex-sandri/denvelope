@@ -43,6 +43,13 @@ fs.writeFileSync("../../public/settings.html", handlebars.compile(fs.readFileSyn
     logoRedirectPath: "/account",
 }));
 
+fs.writeFileSync("../../public/plans.html", handlebars.compile(fs.readFileSync("../views/plans.hbs", "utf8"))({
+    cssversion: CssFileName,
+    jsversion: homeJsFileName,
+    year: new Date().getFullYear(),
+    logoRedirectPath: "/",
+}));
+
 fs.writeFileSync("../../public/terms.html", handlebars.compile(fs.readFileSync("../views/terms.hbs", "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
