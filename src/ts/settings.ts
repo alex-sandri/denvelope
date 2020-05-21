@@ -825,8 +825,6 @@ const UpdateCacheSize = (bytes : number) =>
 
 const UpdatePlan = (plan : string) : void =>
 {
-    Translation.Init(null, languageSelect.selectedOptions[0].value);
-
     changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}<span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
 
     plans.querySelector(".current")?.classList.remove("current");
