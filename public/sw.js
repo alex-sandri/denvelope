@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2372";
+const cacheName = "static-v2373";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",

@@ -8,32 +8,7 @@
             <a class="complete-payment" target="_blank" data-translation="settings->plan->complete_payment"></a>
             <button class="cancel-downgrade" data-translation="settings->plan->cancel_downgrade"><i class="fas fa-undo-alt"></i></button>
             <button class="reactivate" data-translation="settings->plan->reactivate_subscription"><i class="fas fa-undo-alt"></i></button>
-            <div class="plans">
-                <div class="plan free">
-                    <h1 class="name" data-translation="settings->plan->plans->free->name"></h1>
-                    <div>
-                        <span class="price"></span>
-                        <span class="billing-period"></span>
-                    </div>
-                    <p class="storage">100MB</p>
-                </div>
-                <div class="plan starter">
-                    <h1 class="name" data-translation="settings->plan->plans->starter->name"></h1>
-                    <div>
-                        <span class="price"></span>
-                        <span class="billing-period"></span>
-                    </div>
-                    <p class="storage">1GB</p>
-                </div>
-                <div class="plan advanced">
-                    <h1 class="name" data-translation="settings->plan->plans->advanced->name"></h1>
-                    <div>
-                        <span class="price"></span>
-                        <span class="billing-period"></span>
-                    </div>
-                    <p class="storage">10GB</p>
-                </div>
-            </div>
+            {{> plans}}
             <button class="change" data-translation="settings->plan->change_plan->change" disabled><i class="fas fa-cash-register"></i></button>
             <button class="delete" data-translation="generic->delete" disabled><i class="fas fa-trash"></i></button>
         </div>
