@@ -541,7 +541,7 @@ export const deletePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCa
     const customer : Stripe.Customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
 
     // Cannot delete the default payment method if a subscription is active
-    if (customer.subscriptions?.data && customer.invoice_settings.default_payment_method === data.paymentMethod) return;
+    if ((customer.subscriptions?.data || []).length > 0 && customer.invoice_settings.default_payment_method === data.paymentMethod) return;
 
     await stripe.paymentMethods.detach(data.paymentMethod);
 });
