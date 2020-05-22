@@ -9,7 +9,11 @@ export class Translation
     {
         if ([ "/en", "/it" ].includes(location.pathname)) language = location.pathname.substr(1);
 
-        localStorage.setItem("lang", language ?? (localStorage.getItem("lang") ?? navigator.language));
+        language = language ?? (localStorage.getItem("lang") ?? navigator.language);
+
+        if (!Translation.IsSupportedLanguage(language)) language = "en";
+
+        localStorage.setItem("lang", language);
 
         document.documentElement.lang = Translation.Language;
 
@@ -69,4 +73,6 @@ export class Translation
 
         return array[keys[keys.length - 1]];
     }
+
+    public static IsSupportedLanguage = (lang : string) => [ "en", "en-US", "it", "it-IT" ].includes(lang);
 }
