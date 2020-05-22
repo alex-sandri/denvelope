@@ -3,7 +3,7 @@ import { it_IT } from "../translations/it-IT";
 
 export class Translation
 {
-    public static get Language () : string { return localStorage.getItem("lang"); }
+    public static get Language () : string { return localStorage.getItem("lang").toLowerCase(); }
 
     public static Init = (language ?: string) : void =>
     {
@@ -58,7 +58,7 @@ export class Translation
         const keys = id.split("->");
         let array : any;
 
-        switch (Translation.Language.toLowerCase()) // Safari returns it in lower-case
+        switch (Translation.Language)
         {
             case "it-it":
             case "it":
