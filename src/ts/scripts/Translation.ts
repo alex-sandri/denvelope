@@ -74,5 +74,5 @@ export class Translation
         return array[keys[keys.length - 1]];
     }
 
-    public static IsSupportedLanguage = (lang : string) => [ "en", "en-US", "it", "it-IT" ].includes(lang);
+    public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
 }
