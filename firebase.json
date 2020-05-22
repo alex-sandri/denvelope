@@ -38,6 +38,10 @@
     ],
     "rewrites": [
       {
+        "source": "/@(en|it)",
+        "destination": "/index.html"
+      },
+      {
         "source": "/file/**",
         "destination": "/account.html"
       },
