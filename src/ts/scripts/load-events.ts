@@ -15,9 +15,9 @@ export const Init = () : void =>
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({ synchronizeTabs: true });
 
-    Auth.Init();
-
     Translation.Init();
+
+    Auth.Init();
 
     // This needs to wait for the translation to be completed
     LogPageViewEvent();
