@@ -740,7 +740,9 @@ window.addEventListener("userready", () =>
 
                 if (isDefaultPaymentMethod)
                 {
-                    setAsDefaultButton.disabled = deleteButton.disabled = true;
+                    if (plan !== "free") deleteButton.disabled = true;
+
+                    setAsDefaultButton.disabled = true;
 
                     paymentMethodsContainer
                         .querySelector(`#${paymentMethod.id} span:last-of-type`)
