@@ -1,4 +1,4 @@
-const cacheName : string = "static-v2376";
+const cacheName : string = "static-v2377";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -147,7 +147,13 @@ self.addEventListener("fetch", (e : any) =>
         return;
     }
 
-    if (url.origin === location.origin &&
+    if (url.origin === location.origin && [ "/en", "/it" ].includes(url.pathname))
+    {
+        e.respondWith(caches.open(cacheName).then(cache => cache.match("/").then(response => response)));
+
+        return;
+    }
+    else if (url.origin === location.origin &&
         (url.pathname.startsWith("/folder") ||
         url.pathname.startsWith("/file") ||
         url.pathname.startsWith("/account")))
