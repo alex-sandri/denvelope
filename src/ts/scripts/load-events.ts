@@ -37,6 +37,18 @@ export const Init = () : void =>
 
     PreventDragEvents();
 
+    // Used in plans page and in plan settings
+    document.querySelectorAll(".plans .plan")
+        .forEach(plan =>
+        {
+            (<HTMLSpanElement>plan.querySelector(".price")).innerText =
+            Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
+            .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`)))
+            .replace(/\s/, "");
+
+            (<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
+        });
+
     document.addEventListener("contextmenu", e =>
     {
         if ((<HTMLElement>e.target).closest(".allow-context-menu") === null) e.preventDefault();
