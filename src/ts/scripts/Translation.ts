@@ -7,6 +7,8 @@ export class Translation
 
     public static Init = (language ?: string) : void =>
     {
+        if ([ "/en", "/it" ].includes(location.pathname)) language = location.pathname.substr(1);
+
         localStorage.setItem("lang", language ?? (localStorage.getItem("lang") ?? navigator.language));
 
         document.documentElement.lang = Translation.Language;
