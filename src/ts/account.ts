@@ -2648,6 +2648,8 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
             format
         }).then((result : any) => timestamp = result.data.timestamp)
         .finally(() => modalCompressingFolder.HideAndRemove());
+
+        name += `.${format}`;
     }
 
     const fileRef = storage.ref(`${Auth.UserId}/${id}${isFolder ? `.${timestamp}.${format}` : ""}`);
