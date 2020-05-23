@@ -472,28 +472,38 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
     if (data.plan !== "free")
     {
-        if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.subscriptionId) // The user currently does not have a subscription
+        const CreateSubscription = async () =>
         {
             const subscription = await stripe.subscriptions.create({
                 customer: customer.id,
                 items: [ { plan: planId } ]
             });
 
-            await user.ref.update("stripe.subscriptionId", subscription.id);
+            await user.ref.update({
+                "stripe.subscriptionId": subscription.id,
+                "stripe.invoiceUrl": "" // Reset it because if the user has an incomplete subscription because of 3D Secure verification a new one is created
+            });
         }
+
+        // The user currently does not have a subscription
+        if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.subscriptionId) await CreateSubscription();
         else
         {
             const subscription = await stripe.subscriptions.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId);
 
-            const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan);
+            if (subscription.status === "incomplete") await CreateSubscription();
+            else
+            {
+                const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan);
 
-            await stripe.subscriptions.update(subscription.id, {
-                // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
-                billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
-                proration_behavior: isUpgrade ? "create_prorations" : "none",
-                cancel_at_period_end: false,
-                items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
-            });
+                await stripe.subscriptions.update(subscription.id, {
+                    // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
+                    billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
+                    proration_behavior: isUpgrade ? "create_prorations" : "none",
+                    cancel_at_period_end: false,
+                    items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
+                });
+            }
         }
 
         await user.ref.update("stripe.cancelAtPeriodEnd", false);
