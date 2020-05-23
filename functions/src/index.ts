@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as os from "os";
-import * as fs from "fs";
+import * as fs from "fs-extra";
 import * as path from "path";
 import Stripe from "stripe";
 
@@ -813,6 +813,8 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
             destination: `${userId}/${folderId}.${outputTimestamp}.${format}`,
             metadata: { /* Custom metadata */ metadata: { shared: `${folderData.shared}`, inVault: `${folderData.inVault}` } }
         });
+
+        await fs.remove(tmpPath); // Remove tmp content so that even if this function instance is used for multiple times no unnecessary files are kept
 
         resolve();
     });
