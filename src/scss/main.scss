@@ -43,7 +43,7 @@ html
         }
     }
 
-    &:not(.file-open)
+    &:not(.file-open):not(.signed-out)
     {
         body.account
         {
