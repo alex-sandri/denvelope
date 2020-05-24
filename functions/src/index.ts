@@ -482,7 +482,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                     // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
                     billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
                     trial_end: "now", // End any active trial (from a previously failed upgrade)
-                    proration_behavior: isUpgrade ? "create_prorations" : "none",
+                    proration_behavior: isUpgrade ? "always_invoice" : "none",
                     cancel_at_period_end: false,
                     items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
                 });
