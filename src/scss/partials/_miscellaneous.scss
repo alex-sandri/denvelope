@@ -521,13 +521,6 @@
         cursor: pointer;
         transition: $transition-time;
 
-        .name
-        {
-            margin: 0;
-            font-weight: $regular;
-            font-size: x-large;
-        }
-
         div
         {
             @include flex($align-items: baseline, $justify-content: unset);
