@@ -373,7 +373,7 @@ window.addEventListener("userready", () =>
 
             if (button === changePlan)
                 functions.httpsCallable("createSubscription")({
-                    plan: plans.querySelector(".selected").getAttribute("data-max-storage"),
+                    maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
                     currency: Translation.Get(`settings->plan->currency`),
                     paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
                 });
@@ -420,7 +420,11 @@ window.addEventListener("userready", () =>
         {
             let params = {};
 
-            if (button === cancelDowngrade) params = { plan: plans.querySelector(".current").getAttribute("data-max-storage"), currency: Translation.Get(`settings->plan->currency`) };
+            if (button === cancelDowngrade)
+                params = {
+                    maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
+                    currency: Translation.Get(`settings->plan->currency`)
+                };
 
             functions.httpsCallable(button === cancelDowngrade ? "createSubscription" : "reactivateSubscription")(params);
 
