@@ -685,7 +685,7 @@ window.addEventListener("userready", () =>
 
             if (userNextPeriodMaxStorage && userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
             {
-                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${userNextPeriodMaxStorage}</span>`;
+                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${FormatStorage(userNextPeriodMaxStorage)}</span>`;
 
                 ShowElements([ nextPeriodPlan, cancelDowngrade ]);
             }
