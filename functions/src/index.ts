@@ -598,6 +598,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                     items: [ { id: subscription.items.data[0].id, plan: GetStripePlanId(userData.plan, userData.stripe.currency) } ]
                 });
 
+                await user.ref.update("stripe.nextPeriodPlan", "");
+
                 break;
             }
 
