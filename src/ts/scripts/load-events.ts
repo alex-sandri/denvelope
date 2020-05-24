@@ -1,4 +1,4 @@
-import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage } from "./Utilities";
+import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan } from "./Utilities";
 import { Auth } from "./Auth";
 import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
@@ -116,7 +116,7 @@ export const Init = () : void =>
                 if (usedStorage > 0) ShowElement(whatIsTakingUpSpace);
                 else HideElement(whatIsTakingUpSpace);
 
-                if (doc.data().plan === "free") ShowElement(upgradePlan);
+                if (IsFreePlan(maxStorage)) ShowElement(upgradePlan);
                 else HideElement(upgradePlan);
             });
     });

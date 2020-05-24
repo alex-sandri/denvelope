@@ -157,3 +157,15 @@ export const ClearCache = () => // This method is to be used when signing out th
     // Clear localStorage, it contains all Firestore pending writes and its cache size
     localStorage.clear();
 }
+
+export const GetPlanIndex = (plan : string) : number =>
+{
+    switch (plan)
+    {
+        case "1GB": return 1;
+        case "10GB": return 2;
+        default: return 0;
+    }
+}
+
+export const IsFreePlan = (maxStorage : number) : boolean => GetPlanIndex(FormatStorage(maxStorage)) === 0;

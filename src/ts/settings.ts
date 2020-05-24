@@ -2,7 +2,7 @@ export {};
 
 import * as loadEvents from './scripts/load-events';
 
-import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElements, FormatStorage } from "./scripts/Utilities";
+import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElements, FormatStorage, IsFreePlan } from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
@@ -654,9 +654,8 @@ window.addEventListener("userready", () =>
 
     db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
     {
-        const plan : string = user.data().plan;
         const maxStorage : number = user.data().maxStorage;
-        const userNextPeriodPlan : string = user.data().stripe?.nextPeriodPlan;
+        const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
 
         const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
         const subscriptionNextRenewalOrEndDate : number = user.data().stripe?.nextRenewal;
@@ -665,13 +664,13 @@ window.addEventListener("userready", () =>
 
         UpdatePlan(maxStorage);
 
-        deletePlan.disabled = plan === "free" || userCanceledSubscription;
+        deletePlan.disabled = IsFreePlan(maxStorage) || userCanceledSubscription;
 
         HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment, cancelDowngrade ]);
 
         if (userCanceledSubscription) ShowElement(reactivateSubscription);
 
-        if (plan !== "free")
+        if (!IsFreePlan(maxStorage))
         {
             nextRenewal.innerHTML =
                 `${Translation.Get(`settings->plan->${
@@ -682,25 +681,9 @@ window.addEventListener("userready", () =>
 
             ShowElement(nextRenewal);
 
-            const IsPlanUpgrade = (oldPlan : string, newPlan : string) : boolean =>
+            if (userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
             {
-                const GetPlanIndex = (plan : string) : number =>
-                {
-                    switch (plan)
-                    {
-                        case "1GB": return 1;
-                        case "10GB": return 2;
-                        default: return 0;
-                    }
-                }
-
-                return GetPlanIndex(newPlan) > GetPlanIndex(oldPlan);
-            }
-
-            if (userNextPeriodPlan && userNextPeriodPlan !== plan && !userCanceledSubscription
-                && !IsPlanUpgrade(plan, userNextPeriodPlan)) // Fix a bug with failed upgrades
-            {
-                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${userNextPeriodPlan}</span>`;
+                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${userNextPeriodMaxStorage}</span>`;
 
                 ShowElements([ nextPeriodPlan, cancelDowngrade ]);
             }
@@ -759,7 +742,7 @@ window.addEventListener("userready", () =>
 
                 if (isDefaultPaymentMethod)
                 {
-                    if (plan !== "free") deleteButton.disabled = true;
+                    if (!IsFreePlan(maxStorage)) deleteButton.disabled = true;
 
                     setAsDefaultButton.disabled = true;
 
