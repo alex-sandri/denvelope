@@ -480,7 +480,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             if (subscription.status === "incomplete") await CreateSubscription();
             else
             {
-                const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan); // UPDATE
+                const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).maxStorage, maxStorage);
 
                 await stripe.subscriptions.update(subscription.id, {
                     // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
