@@ -591,16 +591,10 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             if (event.type === "customer.subscription.deleted") await user.ref.update("stripe.subscriptionId", "");
             else if (event.type === "invoice.payment_failed" && (<Stripe.Invoice>event.data.object).billing_reason === "subscription_update")
             {
-                const userData : FirebaseFirestore.DocumentData = <FirebaseFirestore.DocumentData>user.data();
-
-                // Reset subscription
-                await stripe.subscriptions.update(userData.stripe.subscriptionId, {
-                    trial_end: userData.stripe.nextRenewal, // Reset the subscription to its old billing cycle
-                    proration_behavior: "none",
-                    items: [ { id: subscription.items.data[0].id, plan: GetStripePlanId(userData.plan, userData.stripe.currency) } ]
+                await user.ref.update({
+                    "stripe.invoiceUrl": (<Stripe.Invoice>event.data.object).hosted_invoice_url,
+                    "stripe.nextPeriodPlan": ""
                 });
-
-                await user.ref.update("stripe.nextPeriodPlan", "");
 
                 break;
             }
