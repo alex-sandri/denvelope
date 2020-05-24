@@ -679,7 +679,23 @@ window.addEventListener("userready", () =>
 
             ShowElement(nextRenewal);
 
-            if (userNextPeriodPlan && userNextPeriodPlan !== plan && !userCanceledSubscription)
+            const IsPlanUpgrade = (oldPlan : string, newPlan : string) : boolean =>
+            {
+                const GetPlanIndex = (plan : string) : number =>
+                {
+                    switch (plan)
+                    {
+                        case "starter": return 1;
+                        case "advanced": return 2;
+                        default: return 0; // free plan
+                    }
+                }
+
+                return GetPlanIndex(newPlan) > GetPlanIndex(oldPlan);
+            }
+
+            if (userNextPeriodPlan && userNextPeriodPlan !== plan && !userCanceledSubscription
+                && !IsPlanUpgrade(plan, userNextPeriodPlan)) // Fix a bug with failed upgrades
             {
                 nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${Translation.Get(`settings->plan->plans->${userNextPeriodPlan}->name`)}</span>`;
 
