@@ -252,19 +252,16 @@ export const it_IT = {
             currency: "EUR",
             plans: {
                 free: {
-                    name: "Gratuito",
                     price: {
                         month: "0"
                     },
                 },
                 starter: {
-                    name: "Starter",
                     price: {
                         month: "10"
                     },
                 },
                 advanced: {
-                    name: "Advanced",
                     price: {
                         month: "20"
                     },

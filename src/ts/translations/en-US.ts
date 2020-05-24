@@ -252,19 +252,16 @@ export const en_US = {
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
                 free: {
-                    name: "Free",
                     price: {
                         month: "0"
                     },
                 },
                 starter: {
-                    name: "Starter",
                     price: {
                         month: "10"
                     },
                 },
                 advanced: {
-                    name: "Advanced",
                     price: {
                         month: "20"
                     },
