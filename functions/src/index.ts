@@ -25,9 +25,12 @@ const auth = admin.auth();
 const db = admin.firestore();
 const storage = admin.storage();
 
-const FREE_STORAGE : number = 100 * 1000 * 1000; // 100MB
-const STARTER_STORAGE : number = 1 * 1000 * 1000 * 1000; // 1GB
-const ADVANCED_STORAGE : number = 10 * 1000 * 1000 * 1000; // 10GB
+const MB = 1000 ** 2
+const GB = 1000 * MB;
+
+const FREE_STORAGE : number = 100 * MB; // 100MB
+
+const plansMaxStorage : string[] = [ "100MB", "1GB", "10GB" ];
 
 const GetCurrentTimestamp = () : FirebaseFirestore.FieldValue => admin.firestore.FieldValue.serverTimestamp();
 
@@ -84,8 +87,7 @@ export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCrea
     await db.collection("users").doc(user.uid).set({
         created: GetCurrentTimestamp(),
         usedStorage: 0,
-        maxStorage: FREE_STORAGE,
-        plan: "free"
+        maxStorage: FREE_STORAGE
     });
 
     await CreateCustomer(user.uid, <string>user.email);
@@ -419,13 +421,15 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
 
 export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
-    if (!context.auth || !data.plan || !data.currency) return;
+    if (!context.auth || !data.maxStorage || !data.currency) return;
 
-    if (![ "free", "starter", "advanced" ].includes(data.plan)) return;
+    if (!plansMaxStorage.includes(data.maxStorage)) return;
 
     if (![ "USD", "EUR" ].includes(data.currency)) return;
 
     const userId : string = context.auth.uid;
+
+    const maxStorage : number = GetPlanMaxStorageBytes(data.maxStorage);
 
     const user = await db.collection("users").doc(userId).get();
 
@@ -450,9 +454,9 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
     }
 
-    const planId : string = GetStripePlanId(data.plan, data.currency);
+    const planId : string = GetStripePlanId(maxStorage, data.currency);
 
-    if (data.plan !== "free")
+    if (maxStorage !== FREE_STORAGE)
     {
         const CreateSubscription = async () =>
         {
@@ -476,7 +480,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             if (subscription.status === "incomplete") await CreateSubscription();
             else
             {
-                const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan);
+                const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).plan, data.plan); // UPDATE
 
                 await stripe.subscriptions.update(subscription.id, {
                     // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
@@ -495,19 +499,19 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     await user.ref.update("stripe.currency", data.currency);
 });
 
-const IsPlanUpgrade = (oldPlan : string, newPlan : string) : boolean =>
+const IsPlanUpgrade = (currentMaxStorage : number, newMaxStorage : number) : boolean =>
 {
-    const GetPlanIndex = (plan : string) : number =>
+    const GetPlanIndex = (maxStorage : number) : number =>
     {
-        switch (plan)
+        switch (maxStorage)
         {
-            case "starter": return 1;
-            case "advanced": return 2;
+            case 1 * GB: return 1;
+            case 10 * GB: return 2;
             default: return 0; // free plan
         }
     }
 
-    return GetPlanIndex(newPlan) > GetPlanIndex(oldPlan);
+    return GetPlanIndex(newMaxStorage) > GetPlanIndex(currentMaxStorage);
 }
 
 export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
@@ -592,7 +596,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             {
                 await user.ref.update({
                     "stripe.invoiceUrl": (<Stripe.Invoice>event.data.object).hosted_invoice_url,
-                    "stripe.nextPeriodPlan": ""
+                    "stripe.nextPeriodMaxStorage": ""
                 });
 
                 break;
@@ -601,8 +605,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             await user.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
-                "stripe.nextPeriodPlan": "",
-                plan: "free",
+                "stripe.nextPeriodMaxStorage": "",
                 maxStorage: FREE_STORAGE
             });
         break;
@@ -617,27 +620,20 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await user?.ref.update({
                 "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
-                "stripe.nextPeriodPlan": subscription.items.data[0].plan.metadata.plan
+                "stripe.nextPeriodMaxStorage": GetPlanMaxStorageBytes(subscription.items.data[0].plan.metadata.maxStorage)
             });
         break;
         case "invoice.payment_succeeded":
             subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
 
-            const plan : string = subscription.items.data[0].plan.metadata.plan;
-            let maxStorage : number = FREE_STORAGE;
-
-            switch (plan)
-            {
-                case "starter": maxStorage = STARTER_STORAGE; break;
-                case "advanced": maxStorage = ADVANCED_STORAGE; break;
-            }
-
             if (subscription.ended_at) break; // Do not update the user if the subscription has ended
+
+            const maxStorageString : string = subscription.items.data[0].plan.metadata.maxStorage;
+            const maxStorage : number = GetPlanMaxStorageBytes(maxStorageString);
 
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
                 "stripe.invoiceUrl": "",
-                plan,
                 maxStorage
             });
         break;
@@ -703,20 +699,20 @@ const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirest
     return user.docs[0];
 }
 
-const GetStripePlanId = (plan : "free" | "starter" | "advanced", currency: "USD" | "EUR") : string =>
+const GetStripePlanId = (maxStorage : number, currency: "USD" | "EUR") : string =>
 {
     let planId : string = "";
 
-    switch (plan)
+    switch (maxStorage)
     {
-        case "starter":
+        case 1 * GB:
             switch (currency)
             {
                 case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
                 case "EUR": planId = "plan_HGwqTN4yc8fUex"; break;
             }
         break;
-        case "advanced":
+        case 10 * GB:
             switch (currency)
             {
                 case "USD": planId = "plan_HIHxwVJ9kdvvga"; break;
@@ -726,6 +722,20 @@ const GetStripePlanId = (plan : "free" | "starter" | "advanced", currency: "USD"
     }
 
     return planId;
+}
+
+const GetPlanMaxStorageBytes = (maxStorageString : string) : number =>
+{
+    let bytes : number;
+
+    switch (maxStorageString)
+    {
+        case "1GB": bytes = 1 * GB; break;
+        case "10GB": bytes = 10 * GB; break;
+        default: bytes = FREE_STORAGE; break;
+    }
+
+    return bytes;
 }
 
 const AddPaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
