@@ -226,22 +226,22 @@
                     <button class="cancel-downgrade" data-translation="settings->plan->cancel_downgrade"><i class="fas fa-undo-alt"></i></button>
                     <button class="reactivate" data-translation="settings->plan->reactivate_subscription"><i class="fas fa-undo-alt"></i></button>
                     <div class="plans">
-                        <div class="plan free">
-                            <p class="storage">100MB</p>
+                        <div class="plan" data-max-storage="100MB">
+                            <p class="storage"></p>
                             <div>
                                 <span class="price"></span>
                                 <span class="billing-period"></span>
                             </div>
                         </div>
-                        <div class="plan starter">
-                            <p class="storage">1GB</p>
+                        <div class="plan" data-max-storage="1GB">
+                            <p class="storage"></p>
                             <div>
                                 <span class="price"></span>
                                 <span class="billing-period"></span>
                             </div>
                         </div>
-                        <div class="plan advanced">
-                            <p class="storage">10GB</p>
+                        <div class="plan" data-max-storage="10GB">
+                            <p class="storage"></p>
                             <div>
                                 <span class="price"></span>
                                 <span class="billing-period"></span>
@@ -326,6 +326,6 @@
         const perf = firebase.performance();
     
         analytics.setAnalyticsCollectionEnabled(!navigator.doNotTrack && !window.doNotTrack); // Safari uses window.doNotTrack
-    </script>    <script src="assets/js/settings.68e90237d1ba70f72758.js"></script>
+    </script>    <script src="assets/js/settings.b6e8c301f50e7e201396.js"></script>
 </body>
 </html>

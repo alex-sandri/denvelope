@@ -43,7 +43,7 @@ export const Init = () : void =>
         {
             (<HTMLSpanElement>plan.querySelector(".price")).innerText =
             Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
-            .format(parseInt(Translation.Get(`settings->plan->plans->${plan.classList[1]}->price->month`)))
+            .format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->month`)))
             .replace(/\s/, "");
 
             (<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;

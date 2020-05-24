@@ -2,7 +2,7 @@ export {};
 
 import * as loadEvents from './scripts/load-events';
 
-import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElements } from "./scripts/Utilities";
+import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElements, FormatStorage } from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
@@ -71,6 +71,8 @@ if (location.pathname.indexOf("/settings/") > -1)
 }
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => AddClass(<HTMLElement>element, "selected"));
+
+plans.querySelectorAll(".plan").forEach(plan => (<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage"));
 
 const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
 
@@ -371,7 +373,7 @@ window.addEventListener("userready", () =>
 
             if (button === changePlan)
                 functions.httpsCallable("createSubscription")({
-                    plan: plans.querySelector(".selected").classList[1],
+                    plan: plans.querySelector(".selected").getAttribute("data-max-storage"),
                     currency: Translation.Get(`settings->plan->currency`),
                     paymentMethod: result?.paymentMethod.id // Not needed if the user already has a default payment method (aka the user is already a customer)
                 });
@@ -418,7 +420,7 @@ window.addEventListener("userready", () =>
         {
             let params = {};
 
-            if (button === cancelDowngrade) params = { plan: plans.querySelector(".current").classList[1], currency: Translation.Get(`settings->plan->currency`) };
+            if (button === cancelDowngrade) params = { plan: plans.querySelector(".current").getAttribute("data-max-storage"), currency: Translation.Get(`settings->plan->currency`) };
 
             functions.httpsCallable(button === cancelDowngrade ? "createSubscription" : "reactivateSubscription")(params);
 
@@ -653,6 +655,7 @@ window.addEventListener("userready", () =>
     db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
     {
         const plan : string = user.data().plan;
+        const maxStorage : number = user.data().maxStorage;
         const userNextPeriodPlan : string = user.data().stripe?.nextPeriodPlan;
 
         const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
@@ -660,7 +663,7 @@ window.addEventListener("userready", () =>
 
         const invoiceUrl : string = user.data().stripe?.invoiceUrl;
 
-        UpdatePlan(plan);
+        UpdatePlan(maxStorage);
 
         deletePlan.disabled = plan === "free" || userCanceledSubscription;
 
@@ -685,9 +688,9 @@ window.addEventListener("userready", () =>
                 {
                     switch (plan)
                     {
-                        case "starter": return 1;
-                        case "advanced": return 2;
-                        default: return 0; // free plan
+                        case "1GB": return 1;
+                        case "10GB": return 2;
+                        default: return 0;
                     }
                 }
 
@@ -697,7 +700,7 @@ window.addEventListener("userready", () =>
             if (userNextPeriodPlan && userNextPeriodPlan !== plan && !userCanceledSubscription
                 && !IsPlanUpgrade(plan, userNextPeriodPlan)) // Fix a bug with failed upgrades
             {
-                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${Translation.Get(`settings->plan->plans->${userNextPeriodPlan}->name`)}</span>`;
+                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${userNextPeriodPlan}</span>`;
 
                 ShowElements([ nextPeriodPlan, cancelDowngrade ]);
             }
@@ -830,13 +833,13 @@ const UpdateCacheSize = (bytes : number) =>
     resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 }
 
-const UpdatePlan = (plan : string) : void =>
+const UpdatePlan = (maxStorage : number) : void =>
 {
-    changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}<span>${Translation.Get(`settings->plan->plans->${plan}->name`)}</span>`;
+    changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}<span>${FormatStorage(maxStorage)}</span>`;
 
     plans.querySelector(".current")?.classList.remove("current");
 
-    AddClass(plans.querySelector(`.${plan}`), "current");
+    AddClass(plans.querySelector(`[data-max-storage="${FormatStorage(maxStorage)}"]`), "current");
 
     plans.querySelector(".selected")?.classList.remove("selected");
 

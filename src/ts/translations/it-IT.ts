@@ -251,17 +251,17 @@ export const it_IT = {
             cancel_downgrade: "Annulla downgrade",
             currency: "EUR",
             plans: {
-                free: {
+                "100MB": {
                     price: {
                         month: "0"
                     },
                 },
-                starter: {
+                "1GB": {
                     price: {
                         month: "10"
                     },
                 },
-                advanced: {
+                "10GB": {
                     price: {
                         month: "20"
                     },

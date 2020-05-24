@@ -251,17 +251,17 @@ export const en_US = {
             cancel_downgrade: "Cancel downgrade",
             currency: "USD", // Used in Intl.NumberFormat
             plans: {
-                free: {
+                "100MB": {
                     price: {
                         month: "0"
                     },
                 },
-                starter: {
+                "1GB": {
                     price: {
                         month: "10"
                     },
                 },
-                advanced: {
+                "10GB": {
                     price: {
                         month: "20"
                     },
