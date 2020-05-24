@@ -306,10 +306,10 @@ window.addEventListener("userready", () =>
         if (button === changePlan)
             modal.AppendContent([
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->from")}</span><span>${(<HTMLElement>plans.querySelector(".current > .name")).innerText}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->from")}</span><span>${(<HTMLElement>plans.querySelector(".current > .storage")).innerText}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->to")}</span><span>${(<HTMLElement>plans.querySelector(".selected > .name")).innerText}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->to")}</span><span>${(<HTMLElement>plans.querySelector(".selected > .storage")).innerText}</span>`
                 }).element
             ]);
 
