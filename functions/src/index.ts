@@ -575,6 +575,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
     let user : FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData> | undefined;
     let subscription : Stripe.Subscription;
+    let paymentMethod : Stripe.PaymentMethod;
 
     switch (event.type)
     {
@@ -648,31 +649,36 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             });
         break;
         case "payment_method.attached":
-            const attachedPaymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
+            paymentMethod = <Stripe.PaymentMethod>event.data.object;
 
-            await (await GetUserByCustomerId(<string>attachedPaymentMethod.customer))?.ref.update({
+            await (await GetUserByCustomerId(<string>paymentMethod.customer))?.ref.update({
                 "stripe.paymentMethods": admin.firestore.FieldValue.arrayUnion({
-                    id: attachedPaymentMethod.id,
-                    last4: attachedPaymentMethod.card?.last4,
-                    brand: attachedPaymentMethod.card?.brand,
-                    expirationMonth: attachedPaymentMethod.card?.exp_month,
-                    expirationYear: attachedPaymentMethod.card?.exp_year,
+                    id: paymentMethod.id,
+                    last4: paymentMethod.card?.last4,
+                    brand: paymentMethod.card?.brand,
+                    expirationMonth: paymentMethod.card?.exp_month,
+                    expirationYear: paymentMethod.card?.exp_year,
                 }),
             });
         break;
         case "payment_method.detached":
-            const detachedPaymentMethod : Stripe.PaymentMethod = <Stripe.PaymentMethod>event.data.object;
+            paymentMethod = <Stripe.PaymentMethod>event.data.object;
 
             // The payment method is no longer attached to the customer so the customer id is in the previous_attributes object
             await (await GetUserByCustomerId(<string>(<any>event.data.previous_attributes)?.customer))?.ref.update({
                 "stripe.paymentMethods": admin.firestore.FieldValue.arrayRemove({
-                    id: detachedPaymentMethod.id,
-                    last4: detachedPaymentMethod.card?.last4,
-                    brand: detachedPaymentMethod.card?.brand,
-                    expirationMonth: detachedPaymentMethod.card?.exp_month,
-                    expirationYear: detachedPaymentMethod.card?.exp_year,
+                    id: paymentMethod.id,
+                    last4: paymentMethod.card?.last4,
+                    brand: paymentMethod.card?.brand,
+                    expirationMonth: paymentMethod.card?.exp_month,
+                    expirationYear: paymentMethod.card?.exp_year,
                 }),
             });
+        break;
+        case "payment_method.card_automatically_updated":
+            paymentMethod = <Stripe.PaymentMethod>event.data.object;
+
+            // TODO
         break;
         case "customer.updated":
             const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
