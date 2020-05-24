@@ -683,7 +683,7 @@ window.addEventListener("userready", () =>
 
             ShowElement(nextRenewal);
 
-            if (userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
+            if (userNextPeriodMaxStorage && userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
             {
                 nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${userNextPeriodMaxStorage}</span>`;
 
