@@ -450,25 +450,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
     }
 
-    let planId : string = "";
-
-    switch (data.plan)
-    {
-        case "starter":
-            switch (data.currency)
-            {
-                case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
-                case "EUR": planId = "plan_HGwqTN4yc8fUex"; break;
-            }
-        break;
-        case "advanced":
-            switch (data.currency)
-            {
-                case "USD": planId = "plan_HIHxwVJ9kdvvga"; break;
-                case "EUR": planId = "plan_HIHxfRgWsdkUkv"; break;
-            }
-        break;
-    }
+    const planId : string = GetStripePlanId(data.plan, data.currency);
 
     if (data.plan !== "free")
     {
@@ -509,6 +491,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         await user.ref.update("stripe.cancelAtPeriodEnd", false);
     }
     else await CancelSubscription(userId); // The new selected plan is the free one
+
+    await user.ref.update("stripe.currency", data.currency);
 });
 
 const IsPlanUpgrade = (oldPlan : string, newPlan : string) : boolean =>
@@ -600,9 +584,24 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             user = await GetUserByCustomerId(<string>subscription.customer);
 
-            if (event.type === "customer.subscription.deleted") await user?.ref.update("stripe.subscriptionId", "");
+            if (!user) break;
 
-            await user?.ref.update({
+            if (event.type === "customer.subscription.deleted") await user.ref.update("stripe.subscriptionId", "");
+            else if (event.type === "invoice.payment_failed" && (<Stripe.Invoice>event.data.object).billing_reason === "subscription_update")
+            {
+                const userData : FirebaseFirestore.DocumentData = <FirebaseFirestore.DocumentData>user.data();
+
+                // Reset subscription
+                await stripe.subscriptions.update(userData.stripe.subscriptionId, {
+                    trial_end: userData.stripe.nextRenewal, // Reset the subscription to its old billing cycle
+                    proration_behavior: "none",
+                    items: [ { id: subscription.items.data[0].id, plan: GetStripePlanId(userData.plan, userData.stripe.currency) } ]
+                });
+
+                break;
+            }
+
+            await user.ref.update({
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
                 "stripe.nextPeriodPlan": "",
@@ -700,6 +699,31 @@ const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirest
         .get();
 
     return user.docs[0];
+}
+
+const GetStripePlanId = (plan : "free" | "starter" | "advanced", currency: "USD" | "EUR") : string =>
+{
+    let planId : string = "";
+
+    switch (plan)
+    {
+        case "starter":
+            switch (currency)
+            {
+                case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
+                case "EUR": planId = "plan_HGwqTN4yc8fUex"; break;
+            }
+        break;
+        case "advanced":
+            switch (currency)
+            {
+                case "USD": planId = "plan_HIHxwVJ9kdvvga"; break;
+                case "EUR": planId = "plan_HIHxfRgWsdkUkv"; break;
+            }
+        break;
+    }
+
+    return planId;
 }
 
 const AddPaymentMethod = async (userId : string, userEmail : string, paymentMethod : Stripe.PaymentMethod) =>
