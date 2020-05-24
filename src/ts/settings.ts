@@ -72,8 +72,6 @@ if (location.pathname.indexOf("/settings/") > -1)
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => AddClass(<HTMLElement>element, "selected"));
 
-plans.querySelectorAll(".plan").forEach(plan => (<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage"));
-
 const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
 
 settingsMenuButtons.forEach(element =>

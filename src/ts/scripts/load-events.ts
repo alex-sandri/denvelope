@@ -47,6 +47,8 @@ export const Init = () : void =>
             .replace(/\s/, "");
 
             (<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
+
+            (<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage");
         });
 
     document.addEventListener("contextmenu", e =>
