@@ -39,14 +39,6 @@
                 p
                 {
                     margin-bottom: 0;
-
-                    span
-                    {
-                        @include text-ellipsis-on-overflow;
-
-                        font-weight: $black;
-                        display: block;
-                    }
                 }
             
                 button,
