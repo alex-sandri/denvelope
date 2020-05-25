@@ -630,6 +630,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
                 "stripe.invoiceUrl": "",
+                "stripe.nextPeriodMaxStorage": "",
                 maxStorage
             });
         break;
