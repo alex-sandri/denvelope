@@ -482,6 +482,13 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
             {
                 const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).maxStorage, maxStorage);
 
+                if (subscription.status === "past_due") // Reset to previous plan before updating again to avoid the customer not being charged
+                    await stripe.subscriptions.update(subscription.id, {
+                        billing_cycle_anchor: "unchanged",
+                        proration_behavior: "none",
+                        items: [ { id: subscription.items.data[0].id, plan: GetStripePlanId((<FirebaseFirestore.DocumentData>user.data()).maxStorage, data.currency) } ]
+                    });
+
                 await stripe.subscriptions.update(subscription.id, {
                     // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
                     billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
