@@ -2,9 +2,18 @@
     <div class="setting" id="change-plan">
         <h1 data-translation="settings->plan->change_plan->title"></h1>
         <div>
-            <p class="current-plan"></p>
-            <p class="next-renewal"></p>
-            <p class="next-period-plan"></p>
+            <div class="setting-status current-plan">
+                <p data-only-translation="generic->current"></p>
+                <span class="value"></span>
+            </div>
+            <div class="setting-status next-renewal">
+                <p data-only-translation="settings->plan->next_renewal"></p>
+                <span class="value"></span>
+            </div>
+            <div class="setting-status next-period-plan">
+                <p data-only-translation="settings->plan->next_period_plan"></p>
+                <span class="value"></span>
+            </div>
             <a class="complete-payment" target="_blank" data-translation="settings->plan->complete_payment"></a>
             <button class="cancel-downgrade" data-translation="settings->plan->cancel_downgrade"><i class="fas fa-undo-alt"></i></button>
             <button class="reactivate" data-translation="settings->plan->reactivate_subscription"><i class="fas fa-undo-alt"></i></button>

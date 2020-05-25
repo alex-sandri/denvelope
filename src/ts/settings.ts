@@ -27,6 +27,7 @@ const settingsSections : NodeListOf<HTMLElement> = document.querySelectorAll(".s
 
 const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
 const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
+const currentLanguage : HTMLElement = document.querySelector("#change-language .current-language .value");
 
 const changeBackground : HTMLButtonElement = document.querySelector("#change-background .edit");
 const resetBackground : HTMLButtonElement = document.querySelector("#change-background .reset");
@@ -40,8 +41,9 @@ const cancelDowngrade : HTMLButtonElement = document.querySelector("#change-plan
 const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
-const nextRenewal : HTMLParagraphElement = document.querySelector("#change-plan .next-renewal");
-const nextPeriodPlan : HTMLParagraphElement = document.querySelector("#change-plan .next-period-plan");
+const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
+const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
+const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-period-plan .value");
 const completePayment : HTMLAnchorElement = document.querySelector("#change-plan .complete-payment");
 const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
@@ -52,6 +54,7 @@ const deleteVault : HTMLButtonElement = document.querySelector("#delete-vault .d
 
 const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
 const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .reset");
+const currentCacheSize : HTMLElement = document.querySelector("#cache-size .current-cache-size .value");
 
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
@@ -675,9 +678,7 @@ window.addEventListener("userready", () =>
         if (!IsFreePlan(maxStorage))
         {
             nextRenewal.innerHTML =
-                `${Translation.Get(`settings->plan->${
-                    userCanceledSubscription ? "subscription_end" : "next_renewal"
-                }`)}<span data-date="${subscriptionNextRenewalOrEndDate}">${
+                `<span data-date="${subscriptionNextRenewalOrEndDate}">${
                     FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
                 }</span>`;
 
@@ -685,7 +686,7 @@ window.addEventListener("userready", () =>
 
             if (userNextPeriodMaxStorage && userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
             {
-                nextPeriodPlan.innerHTML = `${Translation.Get("settings->plan->next_period_plan")}<span>${FormatStorage(userNextPeriodMaxStorage)}</span>`;
+                nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
                 ShowElements([ nextPeriodPlan, cancelDowngrade ]);
             }
@@ -805,22 +806,21 @@ const UpdateLanguage = () : void =>
 {
     Translation.Init(languageSelect.selectedOptions[0].value);
 
-    changeLanguage.parentElement.querySelector("p").innerHTML = `${Translation.Get("generic->current")}<span>${languageSelect.selectedOptions[0].text}</span>`;
+    currentLanguage.innerText = languageSelect.selectedOptions[0].text;
 };
 
 const UpdateCacheSize = (bytes : number) =>
 {
     localStorage.setItem("cache-size", bytes.toString());
 
-    changeCacheSize.parentElement.querySelector("p").innerHTML =
-        `${Translation.Get("generic->current")}<span>${bytes / 1000 / 1000}MB</span>`;
+    currentCacheSize.innerText = `${bytes / 1000 / 1000}MB`;
 
     resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 }
 
 const UpdatePlan = (maxStorage : number) : void =>
 {
-    changePlan.parentElement.querySelector(".current-plan").innerHTML = `${Translation.Get("generic->current")}<span>${FormatStorage(maxStorage)}</span>`;
+    currentPlan.innerText = FormatStorage(maxStorage);
 
     plans.querySelector(".current")?.classList.remove("current");
 

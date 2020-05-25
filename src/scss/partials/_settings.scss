@@ -20,6 +20,19 @@
                 font-weight: $bold;
                 font-size: xx-large;
             }
+
+            .setting-status
+            {
+                margin-bottom: 0;
+
+                .value
+                {
+                    @include text-ellipsis-on-overflow;
+
+                    font-weight: $black;
+                    display: block;
+                }
+            }
         
             & > div
             {
@@ -73,7 +86,9 @@
             .cache-size-options,
             &#change-plan .reactivate,
             .complete-payment,
-            .cancel-downgrade
+            .cancel-downgrade,
+            .next-renewal,
+            .next-period-plan
             {
                 display: none;
             }
