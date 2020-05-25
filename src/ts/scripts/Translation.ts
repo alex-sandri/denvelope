@@ -7,11 +7,14 @@ export class Translation
 
     public static Init = (language ?: string) : void =>
     {
-        if ([ "/en", "/it" ].includes(location.pathname)) language = location.pathname.substr(1);
-        else if (localStorage.getItem("lang")) language = localStorage.getItem("lang");
-        else if (navigator.languages) language = navigator.languages[0];
-        else if (navigator.language) language = navigator.language;
-        else language = "en";
+        if (!language)
+        {
+            if ([ "/en", "/it" ].includes(location.pathname)) language = location.pathname.substr(1);
+            else if (localStorage.getItem("lang")) language = localStorage.getItem("lang");
+            else if (navigator.languages) language = navigator.languages[0];
+            else if (navigator.language) language = navigator.language;
+            else language = "en";
+        }
 
         if (!Translation.IsSupportedLanguage(language)) language = "en";
 
