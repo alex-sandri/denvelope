@@ -1,5 +1,6 @@
 import { en_US } from "../translations/en-US";
 import { it_IT } from "../translations/it-IT";
+import { DispatchEvent } from "../scripts/Utilities";
 
 export class Translation
 {
@@ -56,6 +57,8 @@ export class Translation
         Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll("*"))
             .filter(element => element.hasAttribute("data-keyboard-shortcut"))
             .forEach(element => element.title = `${Translation.Get("generic->keyboard_shortcut")}: ${element.getAttribute("data-keyboard-shortcut").toUpperCase()}`);
+
+        DispatchEvent("translationlanguagechange");
     }
 
     public static Get = (id : string) : string =>

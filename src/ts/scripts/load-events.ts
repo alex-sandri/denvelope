@@ -15,6 +15,22 @@ export const Init = () : void =>
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({ synchronizeTabs: true });
 
+    window.addEventListener("translationlanguagechange", () =>
+        // Used in plans page and in plan settings
+        document
+            .querySelectorAll(".plans .plan")
+            .forEach(plan =>
+            {
+                (<HTMLSpanElement>plan.querySelector(".price")).innerText =
+                Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
+                .format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->month`)))
+                .replace(/\s/, "");
+
+                (<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
+
+                (<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage");
+            }));
+
     Translation.Init();
 
     Auth.Init();
@@ -36,20 +52,6 @@ export const Init = () : void =>
     localStorage.setItem("cookie-consent", "true");
 
     PreventDragEvents();
-
-    // Used in plans page and in plan settings
-    document.querySelectorAll(".plans .plan")
-        .forEach(plan =>
-        {
-            (<HTMLSpanElement>plan.querySelector(".price")).innerText =
-            Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get(`settings->plan->currency`), minimumFractionDigits: 0 })
-            .format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->month`)))
-            .replace(/\s/, "");
-
-            (<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
-
-            (<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage");
-        });
 
     document.addEventListener("contextmenu", e =>
     {
