@@ -583,26 +583,12 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
     switch (event.type)
     {
         case "customer.subscription.deleted":
-        case "invoice.payment_failed":
-            if (event.type.startsWith("customer.subscription.")) subscription = <Stripe.Subscription>event.data.object;
-            else subscription = await stripe.subscriptions.retrieve(<string>(<Stripe.Invoice>event.data.object).subscription);
+            subscription = <Stripe.Subscription>event.data.object;
 
             user = await GetUserByCustomerId(<string>subscription.customer);
 
-            if (!user) break;
-
-            if (event.type === "customer.subscription.deleted") await user.ref.update("stripe.subscriptionId", "");
-            else if (event.type === "invoice.payment_failed" && (<Stripe.Invoice>event.data.object).billing_reason === "subscription_update")
-            {
-                await user.ref.update({
-                    "stripe.invoiceUrl": (<Stripe.Invoice>event.data.object).hosted_invoice_url,
-                    "stripe.nextPeriodMaxStorage": ""
-                });
-
-                break;
-            }
-
-            await user.ref.update({
+            await user?.ref.update({
+                "stripe.subscriptionId": "",
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
                 "stripe.nextPeriodMaxStorage": "",
@@ -674,6 +660,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await (await GetUserByCustomerId(customer.id))?.ref.update("stripe.defaultPaymentMethod", <string>customer.invoice_settings.default_payment_method);
         break;
+        case "invoice.payment_failed":
         case "invoice.payment_action_required":
             const invoice : Stripe.Invoice = <Stripe.Invoice>event.data.object;
 
