@@ -2802,7 +2802,7 @@ const CloseEditor = () =>
 
     const url = GetFolderUrl(GetCurrentFolderId(true), IsShared());
 
-    HideElement(showFile);
+    HideElements([ showFile, filePreviewContainer ]);
 
     RemoveClass(document.documentElement, "wait");
     RemoveClass(document.documentElement, "file-loading");
