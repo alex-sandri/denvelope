@@ -671,7 +671,15 @@ window.addEventListener("userready", () =>
 
         deletePlan.disabled = IsFreePlan(maxStorage) || userCanceledSubscription;
 
-        HideElements([ reactivateSubscription, nextRenewal, nextPeriodPlan, paymentMethodsContainer, noPaymentMethod, completePayment, cancelDowngrade ]);
+        HideElements([
+            reactivateSubscription,
+            nextRenewal.parentElement,
+            nextPeriodPlan.parentElement,
+            paymentMethodsContainer,
+            noPaymentMethod,
+            completePayment,
+            cancelDowngrade
+        ]);
 
         if (userCanceledSubscription) ShowElement(reactivateSubscription);
 
@@ -682,13 +690,13 @@ window.addEventListener("userready", () =>
                     FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
                 }</span>`;
 
-            ShowElement(nextRenewal);
+            ShowElement(nextRenewal.parentElement);
 
             if (userNextPeriodMaxStorage && userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
             {
                 nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
-                ShowElements([ nextPeriodPlan, cancelDowngrade ]);
+                ShowElements([ nextPeriodPlan.parentElement, cancelDowngrade ]);
             }
         }
 
