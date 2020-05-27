@@ -585,6 +585,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
     let user : FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData> | undefined;
     let subscription : Stripe.Subscription;
+    let invoice : Stripe.Invoice;
     let paymentMethod : Stripe.PaymentMethod;
 
     switch (event.type)
@@ -673,9 +674,14 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         break;
         case "invoice.payment_failed":
         case "invoice.payment_action_required":
-            const invoice : Stripe.Invoice = <Stripe.Invoice>event.data.object;
+            invoice = <Stripe.Invoice>event.data.object;
 
-            await (await GetUserByCustomerId(<string>invoice.customer))?.ref.update("stripe.invoiceUrl", invoice.hosted_invoice_url);
+            user = await GetUserByCustomerId(<string>invoice.customer);
+
+            // If the payment fails on a subscription cycle reset the user to free space level
+            if (invoice.billing_reason === "subscription_cycle") await user?.ref.update("maxStorage", FREE_STORAGE);
+
+            await user?.ref.update("stripe.invoiceUrl", invoice.hosted_invoice_url);
         break;
         default:
             response.status(400).end();
