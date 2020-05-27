@@ -2293,8 +2293,7 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
     const model = (<any>window).monaco.editor.createModel(value, language);
 
-    // The first model is the active one by default
-    if (editorTabs.querySelector(".active").id.split("-")[1] === id && (editorModels.size === 0 || isActive)) editor.setModel(model);
+    if (isActive) editor.setModel(model);
 
     editorModels.set(id, model);
 
@@ -2504,7 +2503,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                     value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])));
                 }
 
-                CreateEditor(id, value, language, forceDownload);
+                CreateEditor(id, value, language, forceDownload || editorTabs.querySelector(".active").id.split("-")[1] === id);
 
                 // These are handled with the downloaded data, so they need to be put here and not in getMetadata()
                 if (name.endsWith(".xml")) ShowElement(contextMenuValidateXml);
