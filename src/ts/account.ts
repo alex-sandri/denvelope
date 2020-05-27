@@ -1945,6 +1945,8 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (!activeEditorTabName?.endsWith(".json")) HideElement(contextMenuValidateJson);
 
+    if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
+
     ShowElement(contextMenuContainer, "flex");
 
     let top : number = e.pageY - scrollY;
