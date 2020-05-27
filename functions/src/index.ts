@@ -665,7 +665,25 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
         case "payment_method.card_automatically_updated":
             paymentMethod = <Stripe.PaymentMethod>event.data.object;
 
-            // TODO
+            user = await GetUserByCustomerId(<string>paymentMethod.customer);
+
+            if (!user) break;
+
+            const paymentMethods : { id: string, last4: string, brand: string, expirationMonth: number, expirationYear: number }[] =
+                await (<FirebaseFirestore.DocumentData>user.data()).stripe?.paymentMethods;
+
+            if (!paymentMethods) break;
+
+            const paymentMethodToUpdate = paymentMethods.find(method => method.id === paymentMethod.id);
+
+            if (!paymentMethodToUpdate) break;
+
+            await user.ref.update("stripe.paymentMethods", admin.firestore.FieldValue.arrayRemove(paymentMethodToUpdate));
+
+            paymentMethodToUpdate.expirationMonth = (<Stripe.PaymentMethod.Card>paymentMethod.card).exp_month;
+            paymentMethodToUpdate.expirationYear = (<Stripe.PaymentMethod.Card>paymentMethod.card).exp_year;
+
+            await user.ref.update("stripe.paymentMethods", admin.firestore.FieldValue.arrayUnion(paymentMethodToUpdate));
         break;
         case "customer.updated":
             const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
