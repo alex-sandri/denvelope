@@ -611,9 +611,12 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             if (subscription.ended_at)
             {
-                await user?.ref.update("stripe.invoiceUrl", "");
+                await user?.ref.update({
+                    "stripe.invoiceUrl": "",
+                    "stripe.subscriptionId": "",
+                });
 
-                break; // Do not update the user if the subscription has ended
+                break;
             }
 
             await user?.ref.update({
