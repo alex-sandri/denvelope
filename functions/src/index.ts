@@ -893,10 +893,12 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
     });
 
     archive.on("warning", (err : Error) => reject(err));
-            
+    
     archive.on("error", (err : Error) => reject(err));
-            
+    
     archive.pipe(output);
+
+    const ReplaceNonAllowedChars = (name : string) : string => name.replace(/\//g, "_");
         
     const AddFilesToArchive = (parentFolderId : string, folderPath : string) => new Promise(async (addFilesResolve, addFilesReject) =>
     {
@@ -906,7 +908,7 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
 
             for (const file of files.docs)
             {
-                const fileName = file.data().name;
+                const fileName = ReplaceNonAllowedChars(<string>file.data().name);
                 
                 const fileTmpPath = path.join(tmpPath, fileName);
                 const filePath = path.join(folderPath, fileName);
@@ -923,7 +925,9 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
         {
             const folders = await db.collection(`users/${userId}/folders`).where("parentId", "==", parentFolderId).get();
 
-            for (const folder of folders.docs) await AddFilesToArchive(folder.id, path.join(folderPath, folder.data().name));
+            for (const folder of folders.docs)
+                // Replace all "/" chars with "_" to avoid wrong folder structure
+                await AddFilesToArchive(folder.id, path.join(folderPath, ReplaceNonAllowedChars(<string>folder.data().name)));
 
             retrieveFilesResolve();
         }).then(() => addFilesResolve()));
