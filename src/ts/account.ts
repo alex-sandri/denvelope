@@ -688,7 +688,7 @@ window.addEventListener("userready", async () =>
                 })));
             }
 
-            DownloadContent(id, UnescapeHtml((<HTMLParagraphElement>item.querySelector(".name p")).innerText) + (type === "folder" ? `.${folderFormat}` : ""), type === "folder");
+            DownloadContent(id, UnescapeHtml((<HTMLParagraphElement>item.querySelector(".name p")).innerText), type === "folder");
         }));
 
     [contextMenuDelete, contextMenuRestore].forEach(element => element.addEventListener("click", async () =>
