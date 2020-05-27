@@ -882,6 +882,7 @@ const CreateFolderArchive = async (userId : string, folderId : string, isUserAut
     output.on("close", async () =>
     {
         await storage.bucket().upload(path.join(tmpPath, `${folderId}.${format}`), {
+            resumable: false, // Fix: ResumableUploadError
             destination: `${userId}/${folderId}.${outputTimestamp}.${format}`,
             metadata: { /* Custom metadata */ metadata: { shared: `${folderData.shared}`, inVault: `${folderData.inVault}` } }
         });
