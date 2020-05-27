@@ -1934,16 +1934,16 @@ const showContextMenu = (e : MouseEvent) : void =>
             ShowElement(contextMenuView);
     }
 
-    const activeEditorTabContentType = editorTabs.querySelector(".active")?.getAttribute("content-type");
-    const activeEditorTabName = (<HTMLParagraphElement>editorTabs.querySelector(".active")?.querySelector(".name"))?.innerText;
+    const selectedEditorTabContentType = target.closest(".tab")?.getAttribute("content-type");
+    const selectedEditorTabName = (<HTMLParagraphElement>target.closest(".tab")?.querySelector(".name"))?.innerText;
 
-    if (!activeEditorTabContentType?.startsWith("image/")) HideElement(contextMenuDisplayImage);
+    if (!selectedEditorTabContentType?.startsWith("image/")) HideElement(contextMenuDisplayImage);
     
-    if (activeEditorTabContentType !== "application/pdf") HideElement(contextMenuDisplayPdf);
+    if (selectedEditorTabContentType !== "application/pdf") HideElement(contextMenuDisplayPdf);
 
-    if (!activeEditorTabName?.endsWith(".xml")) HideElement(contextMenuValidateXml);
+    if (!selectedEditorTabName?.endsWith(".xml")) HideElement(contextMenuValidateXml);
 
-    if (!activeEditorTabName?.endsWith(".json")) HideElement(contextMenuValidateJson);
+    if (!selectedEditorTabName?.endsWith(".json")) HideElement(contextMenuValidateJson);
 
     if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
 
