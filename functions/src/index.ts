@@ -600,6 +600,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 "stripe.nextRenewal": "",
                 "stripe.cancelAtPeriodEnd": false,
                 "stripe.nextPeriodMaxStorage": "",
+                "stripe.invoiceUrl": "",
                 maxStorage: FREE_STORAGE
             });
         break;
