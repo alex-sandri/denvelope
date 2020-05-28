@@ -598,7 +598,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             await user?.ref.update({
                 "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
                 "stripe.nextRenewal": admin.firestore.FieldValue.delete(),
-                "stripe.cancelAtPeriodEnd": false,
+                "stripe.cancelAtPeriodEnd": admin.firestore.FieldValue.delete(),
                 "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
                 "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                 maxStorage: FREE_STORAGE
