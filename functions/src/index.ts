@@ -609,9 +609,13 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             user = await GetUserByCustomerId(<string>subscription.customer);
 
-            if (subscription.ended_at)
+            if (!user) break;
+
+            const userCurrentSubscriptionId = (<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId;
+
+            if (subscription.ended_at && userCurrentSubscriptionId === subscription.id) // Only if the updated subscription is the current one
             {
-                await user?.ref.update({
+                await user.ref.update({
                     "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                     "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
                 });
@@ -619,7 +623,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 break;
             }
 
-            await user?.ref.update({
+            await user.ref.update({
                 "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
                 "stripe.nextPeriodMaxStorage": GetPlanMaxStorageBytes(subscription.items.data[0].plan.metadata.maxStorage)
             });
