@@ -477,6 +477,11 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         {
             const subscription = await stripe.subscriptions.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId);
 
+            // Delete useless subscriptions
+            for (const customerSubscription of (customer.subscriptions?.data || []))
+                if (subscription.status === "incomplete" || customerSubscription.id !== subscription.id)
+                    await stripe.subscriptions.del(customerSubscription.id);
+
             if (subscription.status === "incomplete") await CreateSubscription();
             else
             {
