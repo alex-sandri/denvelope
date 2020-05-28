@@ -701,67 +701,78 @@ window.addEventListener("userready", () =>
         }
 
         const paymentMethods = user.data().stripe?.paymentMethods;
-        const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
 
         userAlreadyHasCardInformation = !!paymentMethods && paymentMethods?.length > 0;
 
         if (userAlreadyHasCardInformation)
         {
+            const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
+            
             paymentMethodsContainer.innerHTML = "";
 
             ShowElement(paymentMethodsContainer);
 
-            paymentMethods.forEach((paymentMethod : { id : string, brand : string, last4 : string, expirationMonth : string, expirationYear : string }) =>
-            {
-                const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
-
-                const setAsDefaultButton : HTMLButtonElement =
-                    <HTMLButtonElement>new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element;
-
-                const deleteButton : HTMLButtonElement =
-                    <HTMLButtonElement>new Component("button", { class: "delete", innerHTML: `<i class="fas fa-trash"></i> ${Translation.Get("generic->delete")}` }).element;
-
-                paymentMethodsContainer.appendChild(new Component("div", {
-                    class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
-                    id: paymentMethod.id,
-                    children: [
-                        new Component("span", { innerHTML: `<i class="fab fa-cc-${paymentMethod.brand}"></i>` }).element,
-                        new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${paymentMethod.last4}` }).element,
-                        new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element,
-                        setAsDefaultButton,
-                        deleteButton,
-                    ]
-                }).element);
-
-                [ setAsDefaultButton, deleteButton ].forEach(button => button.addEventListener("click", () =>
-                {
-                    const modal = new Modal({
-                        title: button.innerText,
-                        allow: [ "close", "confirm" ],
-                        loading: false
-                    });
-            
-                    modal.OnConfirm = () =>
+            const ShowUserPaymentMethods =
+                (paymentMethods : { id : string, brand : string, last4 : string, expirationMonth : string, expirationYear : string }[], defaultPaymentMethod : string) =>
                     {
-                        functions.httpsCallable(button === setAsDefaultButton ? "setDefaultPaymentMethod" : "deletePaymentMethod")({ paymentMethod: paymentMethod.id });
-            
-                        modal.HideAndRemove();
+                        paymentMethodsContainer.innerHTML = "";
+
+                        paymentMethods.forEach(paymentMethod =>
+                        {
+                            const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
+
+                            const setAsDefaultButton : HTMLButtonElement =
+                                <HTMLButtonElement>new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element;
+
+                            const deleteButton : HTMLButtonElement =
+                                <HTMLButtonElement>new Component("button", { class: "delete", innerHTML: `<i class="fas fa-trash"></i> ${Translation.Get("generic->delete")}` }).element;
+
+                            paymentMethodsContainer.appendChild(new Component("div", {
+                                class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
+                                id: paymentMethod.id,
+                                children: [
+                                    new Component("span", { innerHTML: `<i class="fab fa-cc-${paymentMethod.brand}"></i>` }).element,
+                                    new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${paymentMethod.last4}` }).element,
+                                    new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element,
+                                    setAsDefaultButton,
+                                    deleteButton,
+                                ]
+                            }).element);
+
+                            [ setAsDefaultButton, deleteButton ].forEach(button => button.addEventListener("click", () =>
+                            {
+                                const modal = new Modal({
+                                    title: button.innerText,
+                                    allow: [ "close", "confirm" ],
+                                    loading: false
+                                });
+                        
+                                modal.OnConfirm = () =>
+                                {
+                                    functions.httpsCallable(button === setAsDefaultButton ? "setDefaultPaymentMethod" : "deletePaymentMethod")({ paymentMethod: paymentMethod.id });
+                        
+                                    modal.HideAndRemove();
+                                }
+                        
+                                modal.Show(true);
+                            }));
+
+                            if (isDefaultPaymentMethod)
+                            {
+                                if (!IsFreePlan(maxStorage)) deleteButton.disabled = true;
+
+                                setAsDefaultButton.disabled = true;
+
+                                paymentMethodsContainer
+                                    .querySelector(`#${paymentMethod.id} span:last-of-type`)
+                                    .insertAdjacentHTML("afterend", `<span>(${Translation.Get("generic->default")})</span>`);
+                            }
+                        });
                     }
-            
-                    modal.Show(true);
-                }));
 
-                if (isDefaultPaymentMethod)
-                {
-                    if (!IsFreePlan(maxStorage)) deleteButton.disabled = true;
+            ShowUserPaymentMethods(paymentMethods, defaultPaymentMethod);
 
-                    setAsDefaultButton.disabled = true;
-
-                    paymentMethodsContainer
-                        .querySelector(`#${paymentMethod.id} span:last-of-type`)
-                        .insertAdjacentHTML("afterend", `<span>(${Translation.Get("generic->default")})</span>`);
-                }
-            });
+            window.addEventListener("translationlanguagechange", () => ShowUserPaymentMethods(paymentMethods, defaultPaymentMethod));
         }
         else ShowElement(noPaymentMethod);
 
