@@ -258,12 +258,12 @@ export const it_IT = {
                 },
                 "1GB": {
                     price: {
-                        month: "1"
+                        month: "2"
                     },
                 },
                 "10GB": {
                     price: {
-                        month: "5"
+                        month: "10"
                     },
                 },
             },
