@@ -467,7 +467,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
             await user.ref.update({
                 "stripe.subscriptionId": subscription.id,
-                "stripe.invoiceUrl": "" // Reset it because if the user has an incomplete subscription because of 3D Secure verification a new one is created
+                "stripe.invoiceUrl": admin.firestore.FieldValue.delete() // Delete it because if the user has an incomplete subscription because of 3D Secure verification a new one is created
             });
         }
 
@@ -596,11 +596,11 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             user = await GetUserByCustomerId(<string>subscription.customer);
 
             await user?.ref.update({
-                "stripe.subscriptionId": "",
-                "stripe.nextRenewal": "",
+                "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
+                "stripe.nextRenewal": admin.firestore.FieldValue.delete(),
                 "stripe.cancelAtPeriodEnd": false,
-                "stripe.nextPeriodMaxStorage": "",
-                "stripe.invoiceUrl": "",
+                "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
+                "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                 maxStorage: FREE_STORAGE
             });
         break;
@@ -612,8 +612,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             if (subscription.ended_at)
             {
                 await user?.ref.update({
-                    "stripe.invoiceUrl": "",
-                    "stripe.subscriptionId": "",
+                    "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
+                    "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
                 });
 
                 break;
@@ -634,8 +634,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
-                "stripe.invoiceUrl": "",
-                "stripe.nextPeriodMaxStorage": "",
+                "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
+                "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
                 maxStorage
             });
         break;
