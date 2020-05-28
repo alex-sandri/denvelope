@@ -618,12 +618,13 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             const userCurrentSubscriptionId = (<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId;
 
-            if (subscription.ended_at && userCurrentSubscriptionId === subscription.id) // Only if the updated subscription is the current one
+            if (subscription.ended_at)
             {
-                await user.ref.update({
-                    "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
-                    "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
-                });
+                if (userCurrentSubscriptionId === subscription.id) // Only if the updated subscription is the current one
+                    await user.ref.update({
+                        "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
+                        "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
+                    });
 
                 break;
             }
