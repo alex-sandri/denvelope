@@ -589,6 +589,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
     }
 
     let user : FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData> | undefined;
+    let customer : Stripe.Customer | Stripe.DeletedCustomer;
     let subscription : Stripe.Subscription;
     let invoice : Stripe.Invoice;
     let paymentMethod : Stripe.PaymentMethod;
@@ -700,9 +701,14 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             await user.ref.update("stripe.paymentMethods", admin.firestore.FieldValue.arrayUnion(paymentMethodToUpdate));
         break;
         case "customer.updated":
-            const customer : Stripe.Customer = <Stripe.Customer>event.data.object;
+            customer = <Stripe.Customer>event.data.object;
 
             await (await GetUserByCustomerId(customer.id))?.ref.update("stripe.defaultPaymentMethod", <string>customer.invoice_settings.default_payment_method);
+        break;
+        case "customer.deleted":
+            customer = <Stripe.DeletedCustomer>event.data.object;
+
+            await (await GetUserByCustomerId(customer.id))?.ref.update("stripe", admin.firestore.FieldValue.delete());
         break;
         case "invoice.payment_failed":
         case "invoice.payment_action_required":
