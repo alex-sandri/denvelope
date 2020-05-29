@@ -345,7 +345,7 @@ window.addEventListener("userready", () =>
                         color: "red",
                     },
                 },
-                hidePostalCode: true
+                hidePostalCode: false
             });
 
             cardElement.on("change", (e : any) =>
