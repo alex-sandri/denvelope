@@ -79,11 +79,11 @@
   "lang": "en-US",
   "shortcuts": [
       {
-          "name": "Add file",
-          "url": "/add-file",
+          "name": "Create file",
+          "url": "/create-file",
           "icons": [
               {
-                  "src": "/assets/img/icons/shortcuts/add-file.png",
+                  "src": "/assets/img/icons/shortcuts/create-file.png",
                   "sizes": "1024x1024",
                   "type": "image/png",
                   "purpose": "any"
@@ -91,11 +91,11 @@
           ]
       },
       {
-        "name": "Add folder",
-        "url": "/add-folder",
+        "name": "Create folder",
+        "url": "/create-folder",
         "icons": [
             {
-                "src": "/assets/img/icons/shortcuts/add-folder.png",
+                "src": "/assets/img/icons/shortcuts/create-folder.png",
                 "sizes": "1024x1024",
                 "type": "image/png",
                 "purpose": "any"
