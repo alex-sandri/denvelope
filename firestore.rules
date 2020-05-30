@@ -36,10 +36,10 @@ service cloud.firestore {
 
       function validateDateFormatOptions() {
         return (incomingData().dateFormatOptions.keys().hasOnly([ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ]) &&
-          incomingData().dateFormatOptions.weekday is string &&
-          [ incomingData().dateFormatOptions.weekday ].hasAny([ "long", "short", "narrow", "undefined" ]) &&
-          incomingData().dateFormatOptions.era is string &&
-          [ incomingData().dateFormatOptions.era ].hasAny([ "long", "short", "narrow", "undefined" ]) &&
+          ((incomingData().dateFormatOptions.weekday is string &&
+          [ incomingData().dateFormatOptions.weekday ].hasAny([ "long", "short", "narrow" ])) || !("weekday" in incomingData().dateFormatOptions)) &&
+          ((incomingData().dateFormatOptions.era is string &&
+          [ incomingData().dateFormatOptions.era ].hasAny([ "long", "short", "narrow" ]) || !("era" in incomingData().dateFormatOptions))) &&
           incomingData().dateFormatOptions.year is string &&
           [ incomingData().dateFormatOptions.year ].hasAny([ "numeric", "2-digit" ]) &&
           incomingData().dateFormatOptions.month is string &&
@@ -50,10 +50,10 @@ service cloud.firestore {
           [ incomingData().dateFormatOptions.hour ].hasAny([ "numeric", "2-digit" ]) &&
           incomingData().dateFormatOptions.minute is string &&
           [ incomingData().dateFormatOptions.minute ].hasAny([ "numeric", "2-digit" ]) &&
-          incomingData().dateFormatOptions.second is string &&
-          [ incomingData().dateFormatOptions.second ].hasAny([ "numeric", "2-digit", "undefined" ]) &&
-          incomingData().dateFormatOptions.timeZoneName is string &&
-          [ incomingData().dateFormatOptions.timeZoneName ].hasAny([ "long", "short", "undefined" ])) ||
+          ((incomingData().dateFormatOptions.second is string &&
+          [ incomingData().dateFormatOptions.second ].hasAny([ "numeric", "2-digit" ])) || !("second" in incomingData().dateFormatOptions)) &&
+          ((incomingData().dateFormatOptions.timeZoneName is string &&
+          [ incomingData().dateFormatOptions.timeZoneName ].hasAny([ "long", "short", ])) || !("timeZoneName" in incomingData().dateFormatOptions))) ||
           incomingData().dateFormatOptions is string &&
           incomingData().dateFormatOptions == "default";
       }

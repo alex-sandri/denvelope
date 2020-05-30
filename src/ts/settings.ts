@@ -186,15 +186,15 @@ window.addEventListener("userready", () =>
 
         if (userDateFormatOptions && userDateFormatOptions !== "default")
         {
-            (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked = userDateFormatOptions.weekday !== "undefined";
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked = !!userDateFormatOptions.weekday;
 
-            if (userDateFormatOptions.weekday !== "undefined")
+            if (userDateFormatOptions.weekday)
                 (<HTMLSelectElement>dateFormatOptions.querySelector("#weekday")).selectedIndex =
                     (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.weekday}"]`)).index;
 
-            (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked = userDateFormatOptions.era !== "undefined";
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked = !!userDateFormatOptions.era;
             
-            if (userDateFormatOptions.era !== "undefined")
+            if (userDateFormatOptions.era)
                 (<HTMLSelectElement>dateFormatOptions.querySelector("#era")).selectedIndex =
                     (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.era}"]`)).index;
 
@@ -213,21 +213,17 @@ window.addEventListener("userready", () =>
             (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedIndex =
                 (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.minute}"]`)).index;
 
-            (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked = userDateFormatOptions.second !== "undefined";
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked = !!userDateFormatOptions.second;
             
-            if (userDateFormatOptions.second !== "undefined")
+            if (userDateFormatOptions.second)
                 (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedIndex =
                     (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.second}"]`)).index;
                 
-            (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked = userDateFormatOptions.timeZoneName !== "undefined";
+            (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked = !!userDateFormatOptions.timeZoneName;
             
-            if (userDateFormatOptions.timeZoneName !== "undefined")
+            if (userDateFormatOptions.timeZoneName)
                 (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedIndex =
                     (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${userDateFormatOptions.timeZoneName}"]`)).index;
-
-            for (const entry in userDateFormatOptions)
-                if ((<any>userDateFormatOptions)[entry] === "undefined")
-                    (<any>userDateFormatOptions)[entry] = undefined;
         }
 
         modal.AppendContent([
@@ -250,14 +246,14 @@ window.addEventListener("userready", () =>
             dateFormatOptions
         ]);
 
-        const GetDateTimeFormatOptions = (allowUndefinedFields : boolean) : Intl.DateTimeFormatOptions =>
+        const GetDateTimeFormatOptions = () : Intl.DateTimeFormatOptions =>
             ({
                 weekday: (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#weekday")).selectedOptions[0].value
-                    : (allowUndefinedFields ? undefined : "undefined"),
+                    : undefined,
                 era: (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#era")).selectedOptions[0].value
-                    : (allowUndefinedFields ? undefined : "undefined"),
+                    : undefined,
                 year: (<HTMLSelectElement>dateFormatOptions.querySelector("#year")).selectedOptions[0].value,
                 month: (<HTMLSelectElement>dateFormatOptions.querySelector("#month")).selectedOptions[0].value,
                 day: (<HTMLSelectElement>dateFormatOptions.querySelector("#day")).selectedOptions[0].value,
@@ -265,19 +261,19 @@ window.addEventListener("userready", () =>
                 minute: (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedOptions[0].value,
                 second: (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedOptions[0].value
-                    : (allowUndefinedFields ? undefined : "undefined"),
+                    : undefined,
                 timeZoneName: (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked
                     ? (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedOptions[0].value
-                    : (allowUndefinedFields ? undefined : "undefined"),
+                    : undefined,
             });
 
         [ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
             .forEach(element => element.addEventListener("change", () =>
-                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions(true))));
+                (<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions())));
 
         modal.OnConfirm = () =>
         {
-            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: GetDateTimeFormatOptions(false) }, { merge: true });
+            db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: GetDateTimeFormatOptions() }, { merge: true });
 
             modal.HideAndRemove();
         };

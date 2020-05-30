@@ -571,10 +571,6 @@ window.addEventListener("userready", async () =>
             {
                 dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
 
-                for (const entry in dateFormatOptions)
-                    if (dateFormatOptions[entry] === "undefined")
-                        dateFormatOptions[entry] = undefined;
-
                 if (dateFormatOptions === "default") dateFormatOptions = null;
             }
 
