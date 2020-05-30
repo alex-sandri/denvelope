@@ -5,11 +5,15 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   height="1024"
-   width="1024"
-   id="svg22"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 1024 1024"
    version="1.1"
-   viewBox="0 0 1024 1024">
+   id="svg22"
+   sodipodi:docname="create-file.svg"
+   width="1024"
+   height="1024"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <metadata
      id="metadata28">
     <rdf:RDF>
@@ -24,25 +28,54 @@
   </metadata>
   <defs
      id="defs26" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview24"
+     showgrid="false"
+     fit-margin-top="50"
+     fit-margin-left="50"
+     fit-margin-bottom="50"
+     fit-margin-right="50"
+     inkscape:showpageshadow="false"
+     inkscape:zoom="0.58695387"
+     inkscape:cx="244.90948"
+     inkscape:cy="464.62074"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
   <g
-     transform="translate(50,462)"
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Background"
      style="display:inline"
-     id="layer1">
-    <rect
-       y="-462"
-       x="-50"
-       height="1024"
-       width="1024"
-       id="rect4541"
-       style="display:inline;opacity:1;fill:#160c28;fill-opacity:1" />
+     transform="translate(50,462)">
+    <circle
+       style="opacity:1;fill:#160c28;fill-opacity:1"
+       id="path26"
+       cx="462"
+       cy="50"
+       r="512" />
   </g>
   <g
-     transform="translate(50,462)"
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Icon"
      style="display:inline"
-     id="layer2">
+     transform="translate(50,462)">
     <path
-       style="fill:#efcb68;fill-opacity:1;stroke-width:1.30588233"
+       d="M 500.4375,-94.14062 V -257.5 H 260.20312 c -15.97559,0 -28.82812,12.85253 -28.82812,28.82813 v 557.34374 c 0,15.9756 12.85253,28.82813 28.82812,28.82813 h 403.59375 c 15.9756,0 28.82813,-12.85253 28.82813,-28.82813 V -65.3125 H 529.26562 c -15.85547,0 -28.82812,-12.97265 -28.82812,-28.82812 z M 692.625,-111.07715 V -103.75 H 538.875 V -257.5 h 7.32714 c 7.68751,0 15.01466,3.00293 20.41992,8.40821 l 117.59474,117.71484 c 5.40527,5.40528 8.4082,12.73242 8.4082,20.2998 z"
        id="path20"
-       d="m 503.78824,-106.70588 v -177.6 H 242.61177 c -17.36824,0 -31.34118,13.97294 -31.34118,31.34117 V 352.9647 c 0,17.36824 13.97294,31.34118 31.34118,31.34118 h 438.77647 c 17.36823,0 31.34117,-13.97294 31.34117,-31.34118 V -75.364706 h -177.6 c -17.23764,0 -31.34117,-14.103529 -31.34117,-31.341174 z m 208.94117,-18.41294 v 7.96588 H 545.57647 v -167.15294 h 7.96588 c 8.35765,0 16.32353,3.2647 22.2,9.14117 l 127.84589,127.97648 c 5.87647,5.87647 9.14117,13.84235 9.14117,22.06941 z" />
+       inkscape:connector-curvature="0"
+       style="fill:#efcb68;fill-opacity:1;stroke-width:1.20117188" />
   </g>
 </svg>
