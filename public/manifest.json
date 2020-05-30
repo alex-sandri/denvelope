@@ -83,8 +83,9 @@
           "url": "/add-file",
           "icons": [
               {
-                  "src": "/assets/img/icons/shortcuts/add-file.svg",
-                  "type": "image/svg+xml",
+                  "src": "/assets/img/icons/shortcuts/add-file.png",
+                  "sizes": "1024x1024",
+                  "type": "image/png",
                   "purpose": "any"
               }
           ]
@@ -94,8 +95,9 @@
         "url": "/add-folder",
         "icons": [
             {
-                "src": "/assets/img/icons/shortcuts/add-folder.svg",
-                "type": "image/svg+xml",
+                "src": "/assets/img/icons/shortcuts/add-folder.png",
+                "sizes": "1024x1024",
+                "type": "image/png",
                 "purpose": "any"
             }
         ]
