@@ -83,7 +83,7 @@
           "url": "/create-file",
           "icons": [
               {
-                  "src": "/assets/img/icons/shortcuts/create-file.png",
+                  "src": "/assets/img/icons/shortcuts/create-file.png?v=1",
                   "sizes": "1024x1024",
                   "type": "image/png",
                   "purpose": "any"
@@ -95,7 +95,7 @@
         "url": "/create-folder",
         "icons": [
             {
-                "src": "/assets/img/icons/shortcuts/create-folder.png",
+                "src": "/assets/img/icons/shortcuts/create-folder.png?v=1",
                 "sizes": "1024x1024",
                 "type": "image/png",
                 "purpose": "any"
