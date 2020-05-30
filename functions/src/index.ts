@@ -750,15 +750,15 @@ const GetStripePlanId = (maxStorage : number, currency: "USD" | "EUR") : string 
         case 1 * GB:
             switch (currency)
             {
-                case "USD": planId = "plan_HGwqK8dcnqFKJf"; break;
-                case "EUR": planId = "plan_HGwqTN4yc8fUex"; break;
+                case "USD": planId = ""; break;
+                case "EUR": planId = ""; break;
             }
         break;
         case 10 * GB:
             switch (currency)
             {
-                case "USD": planId = "plan_HIHxwVJ9kdvvga"; break;
-                case "EUR": planId = "plan_HIHxfRgWsdkUkv"; break;
+                case "USD": planId = ""; break;
+                case "EUR": planId = ""; break;
             }
         break;
     }
