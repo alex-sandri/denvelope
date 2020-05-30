@@ -10,7 +10,7 @@ export const Init = () : void =>
 
     const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
 
-    if (cacheSizeBytes) db.settings({ cacheSizeBytes });
+    if (cacheSizeBytes) db.settings({ cacheSizeBytes, ignoreUndefinedProperties: true });
 
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({ synchronizeTabs: true });
