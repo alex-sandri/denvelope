@@ -333,11 +333,8 @@ window.addEventListener("userready", () =>
                         color: "#efcb68",
                         fontFamily: "Source Code Variable, monospace",
                         fontSize: "16px",
-                        ":-webkit-autofill": {
-                            color: '#fce883',
-                        },
                         "::placeholder": {
-                            color: '#efcb68',
+                            color: "#efcb68",
                         },
                     },
                     invalid: {
