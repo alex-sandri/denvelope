@@ -755,15 +755,15 @@ const GetStripePriceId = (maxStorage : number, currency: "USD" | "EUR") : string
         case 1 * GB:
             switch (currency)
             {
-                case "USD": priceId = "price_HNAerCaUER3JR0"; break;
-                case "EUR": priceId = "price_HNAeHkV00SeIyv"; break;
+                case "USD": priceId = "price_HNAYCgztn4lNRy"; break;
+                case "EUR": priceId = "price_HNAYubjD3l2adD"; break;
             }
         break;
         case 10 * GB:
             switch (currency)
             {
-                case "USD": priceId = "price_HNAfFg52MmvclT"; break;
-                case "EUR": priceId = "price_HNAf3NhN1kbI53"; break;
+                case "USD": priceId = "price_HNAzSbDQBxhsri"; break;
+                case "EUR": priceId = "price_HNAzAVDolqJcv6"; break;
             }
         break;
     }
