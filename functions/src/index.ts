@@ -593,6 +593,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
     let subscription : Stripe.Subscription;
     let invoice : Stripe.Invoice;
     let paymentMethod : Stripe.PaymentMethod;
+    let product : Stripe.Product;
 
     switch (event.type)
     {
@@ -630,9 +631,11 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 break;
             }
 
+            product = await stripe.products.retrieve(<string>subscription.items.data[0].price.product);
+
             await user.ref.update({
                 "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
-                "stripe.nextPeriodMaxStorage": GetPlanMaxStorageBytes(subscription.items.data[0].plan.metadata.maxStorage)
+                "stripe.nextPeriodMaxStorage": GetPlanMaxStorageBytes(product.metadata.maxStorage)
             });
         break;
         case "invoice.payment_succeeded":
@@ -640,7 +643,9 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             if (subscription.ended_at) break; // Do not update the user if the subscription has ended
 
-            const maxStorageString : string = subscription.items.data[0].plan.metadata.maxStorage;
+            product = await stripe.products.retrieve(<string>subscription.items.data[0].price.product);
+
+            const maxStorageString : string = product.metadata.maxStorage;
             const maxStorage : number = GetPlanMaxStorageBytes(maxStorageString);
 
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
