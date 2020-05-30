@@ -15,7 +15,7 @@ const db = (<any>window).firebase.firestore();
 const functions = (<any>window).firebase.app().functions("europe-west1");
 const analytics = (<any>window).firebase.analytics();
 
-const stripe = (<any>window).Stripe("pk_test_Rqpdq6Rg3NdyuTBGzzpkTeGw009ERd4wpw", { locale: Translation.Language });
+const stripe = (<any>window).Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
 let userAlreadyHasCardInformation : boolean = false;
 
 let userDateFormatOptions : Intl.DateTimeFormatOptions;
