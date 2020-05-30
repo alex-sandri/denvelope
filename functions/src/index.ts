@@ -454,7 +454,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
     }
 
-    const planId : string = GetStripePlanId(maxStorage, data.currency);
+    const priceId : string = GetStripePriceId(maxStorage, data.currency);
 
     if (maxStorage !== FREE_STORAGE)
     {
@@ -462,7 +462,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         {
             const subscription = await stripe.subscriptions.create({
                 customer: customer.id,
-                items: [ { plan: planId } ]
+                items: [ { price: priceId } ]
             });
 
             await user.ref.update({
@@ -491,7 +491,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                     await stripe.subscriptions.update(subscription.id, {
                         billing_cycle_anchor: "unchanged",
                         proration_behavior: "none",
-                        items: [ { id: subscription.items.data[0].id, plan: GetStripePlanId((<FirebaseFirestore.DocumentData>user.data()).maxStorage, data.currency) } ]
+                        items: [ { id: subscription.items.data[0].id, price: GetStripePriceId((<FirebaseFirestore.DocumentData>user.data()).maxStorage, data.currency) } ]
                     });
 
                 await stripe.subscriptions.update(subscription.id, {
@@ -499,7 +499,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                     billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
                     proration_behavior: isUpgrade ? "always_invoice" : "none",
                     cancel_at_period_end: false,
-                    items: [ { id: subscription.items.data[0].id, plan: planId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
+                    items: [ { id: subscription.items.data[0].id, price: priceId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
                 });
             }
         }
@@ -741,29 +741,29 @@ const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirest
     return user.docs[0];
 }
 
-const GetStripePlanId = (maxStorage : number, currency: "USD" | "EUR") : string =>
+const GetStripePriceId = (maxStorage : number, currency: "USD" | "EUR") : string =>
 {
-    let planId : string = "";
+    let priceId : string = "";
 
     switch (maxStorage)
     {
         case 1 * GB:
             switch (currency)
             {
-                case "USD": planId = ""; break;
-                case "EUR": planId = ""; break;
+                case "USD": priceId = "price_HNAerCaUER3JR0"; break;
+                case "EUR": priceId = "price_HNAeHkV00SeIyv"; break;
             }
         break;
         case 10 * GB:
             switch (currency)
             {
-                case "USD": planId = ""; break;
-                case "EUR": planId = ""; break;
+                case "USD": priceId = "price_HNAfFg52MmvclT"; break;
+                case "EUR": priceId = "price_HNAf3NhN1kbI53"; break;
             }
         break;
     }
 
-    return planId;
+    return priceId;
 }
 
 const GetPlanMaxStorageBytes = (maxStorageString : string) : number =>
