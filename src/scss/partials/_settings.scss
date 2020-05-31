@@ -90,7 +90,7 @@
                 border-radius: $border-radius;
                 margin-top: $standard-spacing;
 
-                span:not(:last-child)
+                span:not(:last-of-type)
                 {
                     margin-right: $standard-spacing;
                 }
