@@ -3,6 +3,7 @@
     @include flex($justify-content: unset);
 
     overflow: auto;
+    margin: 0 $standard-spacing;
 
     button
     {

@@ -1,13 +1,11 @@
 .settings main
 {
-    height: calc(100% - #{$header-height});
     padding: 0 $standard-spacing;
     background-color: rgba($primary-color, 0.5);
+    overflow: auto;
 
     .settings-section
     {
-        height: calc(100% - 49px);
-        overflow: auto;
         padding: $standard-spacing;
         margin: 0 #{-$standard-spacing};
         display: none;

@@ -8,6 +8,7 @@ import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
 import { Component, InputWithIcon } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
+import { header } from './scripts/header';
 
 loadEvents.Init();
 
@@ -20,7 +21,7 @@ let userAlreadyHasCardInformation : boolean = false;
 
 let userDateFormatOptions : Intl.DateTimeFormatOptions;
 
-const settingsMenu = document.querySelector(".settings-menu");
+const settingsMenu : HTMLElement = document.querySelector(".settings-menu");
 const settingsMenuButtons = settingsMenu.querySelectorAll("button");
 
 const settingsSections : NodeListOf<HTMLElement> = document.querySelectorAll(".settings-section");
@@ -101,6 +102,13 @@ settingsMenuButtons.forEach(element =>
         history.pushState(null, "", location.origin + "/settings/" + section);
     });
 });
+
+// TODO: Find a way to avoid this crap
+const SetMainHeight = () => settingsSections[0].parentElement.style.height = `${innerHeight - header.offsetHeight - settingsMenu.offsetHeight}px`;
+
+SetMainHeight();
+
+window.addEventListener("resize", SetMainHeight);
 
 window.addEventListener("userready", () =>
 {
