@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2456";
+const cacheName = "static-v2457";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -97,7 +97,7 @@ self.addEventListener("fetch", (e) => {
         }));
         return;
     }
-    if (url.origin === location.origin && url.pathname === "/add-file") {
+    if (url.origin === location.origin && url.pathname === "/create-file") {
         e.respondWith(Response.redirect("/account"));
         e.waitUntil(new Promise(async (resolve) => {
             await NextMessage("ready");
@@ -107,7 +107,7 @@ self.addEventListener("fetch", (e) => {
         }));
         return;
     }
-    else if (url.origin === location.origin && url.pathname === "/add-folder") {
+    else if (url.origin === location.origin && url.pathname === "/create-folder") {
         e.respondWith(Response.redirect("/account"));
         e.waitUntil(new Promise(async (resolve) => {
             await NextMessage("ready");

@@ -1,4 +1,4 @@
-const cacheName : string = "static-v2456";
+const cacheName : string = "static-v2457";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -112,7 +112,7 @@ self.addEventListener("fetch", (e : any) =>
         return;
     }
     
-    if (url.origin === location.origin && url.pathname === "/add-file")
+    if (url.origin === location.origin && url.pathname === "/create-file")
     {
         e.respondWith(Response.redirect("/account"));
 
@@ -129,7 +129,7 @@ self.addEventListener("fetch", (e : any) =>
 
         return;
     }
-    else if (url.origin === location.origin && url.pathname === "/add-folder")
+    else if (url.origin === location.origin && url.pathname === "/create-folder")
     {
         e.respondWith(Response.redirect("/account"));
 
