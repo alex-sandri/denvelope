@@ -84,7 +84,7 @@ const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-
 const paymentRequestButton = stripeElements.create("paymentRequestButton", { paymentRequest, style: {
     type: "default",
     theme: "dark",
-    height: `${changePlan.offsetHeight}px`,
+    height: changePlan.offsetHeight,
 } });
   
 (async () =>
