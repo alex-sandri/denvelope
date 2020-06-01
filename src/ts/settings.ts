@@ -2,7 +2,7 @@ export {};
 
 import * as loadEvents from './scripts/load-events';
 
-import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElements, FormatStorage, IsFreePlan } from "./scripts/Utilities";
+import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElement, HideElements, FormatStorage, IsFreePlan } from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
@@ -17,6 +17,20 @@ const functions = (<any>window).firebase.app().functions("europe-west1");
 const analytics = (<any>window).firebase.analytics();
 
 const stripe = (<any>window).Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
+const stripeElements = stripe.elements({
+    fonts: [ {
+        family: "Source Code Variable",
+        src: "url(/assets/font/SourceCodeVariable.woff2)"
+    } ],
+    locale: Translation.Language
+});
+
+const paymentRequest = stripe.paymentRequest({
+    country: "IT",
+    currency: Translation.Get("settings->plan->currency").toLowerCase(),
+    total: { label: "", amount: 0 }
+});
+
 let userAlreadyHasCardInformation : boolean = false;
 
 let userDateFormatOptions : Intl.DateTimeFormatOptions;
@@ -48,6 +62,18 @@ const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-
 const completePayment : HTMLAnchorElement = document.querySelector("#change-plan .complete-payment");
 const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
+
+const paymentRequestButton = stripeElements.create("paymentRequestButton", { paymentRequest, style: {
+    type: "default",
+    theme: "dark",
+    height: `${changePlan.offsetHeight}px`,
+} });
+  
+(async () =>
+{
+    if (await paymentRequest.canMakePayment()) paymentRequestButton.mount("#payment-request-button");
+    else HideElement(document.getElementById("payment-request-button"));
+})();
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
@@ -321,14 +347,6 @@ window.addEventListener("userready", () =>
         if (showCreditCardInput)
         {
             modal.ConfirmButton.disabled = true;
-
-            const stripeElements = stripe.elements({
-                fonts: [ {
-                    family: "Source Code Variable",
-                    src: "url(/assets/font/SourceCodeVariable.woff2)"
-                } ],
-                locale: Translation.Language
-            });
 
             cardElement = stripeElements.create("card", {
                 style: {
