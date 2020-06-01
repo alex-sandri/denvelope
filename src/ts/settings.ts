@@ -31,6 +31,23 @@ const paymentRequest = stripe.paymentRequest({
     total: { label: "", amount: 0 }
 });
 
+paymentRequest.on("paymentmethod", async (e : any) =>
+{
+    const paymentMethod = e.paymentMethod.id;
+
+    // TODO: Attach payment method to customer
+    // await
+    // TODO: Create subscription
+
+    functions.httpsCallable("createSubscription")({
+        maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
+        currency: Translation.Get(`settings->plan->currency`),
+        paymentMethod
+    });
+
+    e.complete("success");
+});
+
 let userAlreadyHasCardInformation : boolean = false;
 
 let userDateFormatOptions : Intl.DateTimeFormatOptions;
@@ -90,7 +107,7 @@ const paymentRequestButton = stripeElements.create("paymentRequestButton", { pay
 
         paymentRequest.update({ total: {
             label: `Denvelope ${selectedPlanMaxStorage}`,
-            amount: Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`)
+            amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`)) * 100
         } });
     }
 
