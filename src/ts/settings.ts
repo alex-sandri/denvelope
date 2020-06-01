@@ -31,11 +31,6 @@ const paymentRequest = stripe.paymentRequest({
     total: { label: "Denvelope", amount: 0 }
 });
 
-paymentRequest.on("click", (e : Event) =>
-{
-    if (changePlan.disabled) e.preventDefault();
-});
-
 paymentRequest.on("paymentmethod", async (e : any) =>
 {
     const paymentMethod = e.paymentMethod.id;
@@ -90,6 +85,11 @@ const paymentRequestButton = stripeElements.create("paymentRequestButton", {
             height: "49px",
         }
     }
+});
+
+paymentRequestButton.on("click", (e : Event) =>
+{
+    if (changePlan.disabled) e.preventDefault();
 });
   
 (async () =>
