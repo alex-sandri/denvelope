@@ -75,6 +75,28 @@ const paymentRequestButton = stripeElements.create("paymentRequestButton", { pay
     else HideElement(document.getElementById("payment-request-button"));
 })();
 
+(<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
+{
+    const currentPlan = plans.querySelector(".current");
+    const previouslySelectedPlan = plans.querySelector(".selected");
+
+    previouslySelectedPlan?.classList.remove("selected");
+
+    if (previouslySelectedPlan !== plan)
+    {
+        AddClass(plan, "selected");
+
+        const selectedPlanMaxStorage = plan.getAttribute("data-max-storage");
+
+        paymentRequest.update({ total: {
+            label: `Denvelope ${selectedPlanMaxStorage}`,
+            amount: Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`)
+        } });
+    }
+
+    changePlan.disabled = (plans.querySelector(".selected") ?? currentPlan) === currentPlan;
+}));
+
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
 const deleteVault : HTMLButtonElement = document.querySelector("#delete-vault .delete");
@@ -452,18 +474,6 @@ window.addEventListener("userready", () =>
         }
 
         modal.Show(true);
-    }));
-
-    (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan => plan.addEventListener("click", () =>
-    {
-        const currentPlan = plans.querySelector(".current");
-        const previouslySelectedPlan = plans.querySelector(".selected");
-
-        previouslySelectedPlan?.classList.remove("selected");
-
-        if (previouslySelectedPlan !== plan) AddClass(plan, "selected");
-
-        changePlan.disabled = (plans.querySelector(".selected") ?? currentPlan) === currentPlan;
     }));
 
     signOutFromAllDevices.addEventListener("click", () =>
