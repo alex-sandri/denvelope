@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import * as firestore from "@google-cloud/firestore"; // Used to backup the db
 import * as os from "os";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -81,6 +82,22 @@ const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
         end = querySnapshot.empty;
     }
 }
+
+export const scheduledFirestoreExport = functions.region(FUNCTIONS_REGION).pubsub.schedule("every 24 hours").onRun(async () =>
+{
+    const client = new firestore.v1.FirestoreAdminClient();
+
+    const projectId = admin.instanceId().app.options.projectId;
+    const databaseName = client.databasePath(projectId, "(default)");
+
+    const exportBucket = "gs://denvelope-firestore-export";
+
+    await client.exportDocuments({
+        name: databaseName,
+        outputUriPrefix: exportBucket,
+        collectionIds: [] // Export all collections
+    });
+});
 
 export const userCreated = functions.region(FUNCTIONS_REGION).auth.user().onCreate(async user =>
 {
