@@ -36,10 +36,8 @@ paymentRequest.on("paymentmethod", async (e : any) =>
     const paymentMethod = e.paymentMethod.id;
 
     // TODO: Attach payment method to customer
-    // await
-    // TODO: Create subscription
 
-    functions.httpsCallable("createSubscription")({
+    await functions.httpsCallable("createSubscription")({
         maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
         currency: Translation.Get(`settings->plan->currency`),
         paymentMethod
