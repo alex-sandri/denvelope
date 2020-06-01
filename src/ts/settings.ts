@@ -81,11 +81,16 @@ const completePayment : HTMLAnchorElement = document.querySelector("#change-plan
 const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
 
-const paymentRequestButton = stripeElements.create("paymentRequestButton", { paymentRequest, style: {
-    type: "default",
-    theme: "dark",
-    height: changePlan.offsetHeight,
-} });
+const paymentRequestButton = stripeElements.create("paymentRequestButton", {
+    paymentRequest,
+    style: {
+        paymentRequestButton: {
+            type: "default",
+            theme: "dark",
+            height: changePlan.offsetHeight,
+        }
+    } 
+});
   
 (async () =>
 {
