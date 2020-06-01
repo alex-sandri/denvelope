@@ -107,7 +107,7 @@ const paymentRequestButton = stripeElements.create("paymentRequestButton", { pay
 
         paymentRequest.update({ total: {
             label: `Denvelope ${selectedPlanMaxStorage}`,
-            amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`)) * 100
+            amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`)) * 100 // In cents
         } });
     }
 
