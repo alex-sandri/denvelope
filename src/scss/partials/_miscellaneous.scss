@@ -558,7 +558,7 @@
     }
 }
 
-.StripeElement
+.StripeElement:not(#payment-request-button)
 {
     padding: $standard-spacing;
     border: $border-width solid $primary-color;
