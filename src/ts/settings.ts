@@ -28,7 +28,7 @@ const stripeElements = stripe.elements({
 const paymentRequest = stripe.paymentRequest({
     country: "IT",
     currency: Translation.Get("settings->plan->currency").toLowerCase(),
-    total: { label: "", amount: 0 }
+    total: { label: "Denvelope", amount: 0 }
 });
 
 paymentRequest.on("click", (e : Event) =>
