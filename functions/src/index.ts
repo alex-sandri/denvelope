@@ -439,16 +439,14 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     {
         if (!data.paymentMethod) return;
 
-        const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
-
-        customer = await CreateCustomer(userId, <string>context.auth.token.email, paymentMethod);
+        customer = await CreateCustomer(userId, <string>context.auth.token.email);
     }
     else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
 
-    if (!customer.invoice_settings.default_payment_method)
-    {
-        if (!data.paymentMethod) return;
+    if (!customer.invoice_settings.default_payment_method && !data.paymentMethod) return;
 
+    if (data.paymentMethod)
+    {
         const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
 
         await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
