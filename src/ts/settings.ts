@@ -87,9 +87,9 @@ const paymentRequestButton = stripeElements.create("paymentRequestButton", {
         paymentRequestButton: {
             type: "default",
             theme: "dark",
-            height: `${changePlan.offsetHeight}px`,
+            height: "49px",
         }
-    } 
+    }
 });
   
 (async () =>
