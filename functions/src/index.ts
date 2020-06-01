@@ -21,6 +21,8 @@ admin.initializeApp({
 });
 
 const FUNCTIONS_REGION = "europe-west1";
+const PROJECT_ID = "denvelope-firebase";
+const FIRESTORE_EXPORT_BUCKET = "gs://denvelope-firestore-export"
 
 const auth = admin.auth();
 const db = admin.firestore();
@@ -87,14 +89,11 @@ export const scheduledFirestoreExport = functions.region(FUNCTIONS_REGION).pubsu
 {
     const client = new firestore.v1.FirestoreAdminClient();
 
-    const projectId = admin.instanceId().app.options.projectId;
-    const databaseName = client.databasePath(projectId, "(default)");
-
-    const exportBucket = "gs://denvelope-firestore-export";
+    const databaseName = client.databasePath(PROJECT_ID, "(default)");
 
     await client.exportDocuments({
         name: databaseName,
-        outputUriPrefix: exportBucket,
+        outputUriPrefix: FIRESTORE_EXPORT_BUCKET,
         collectionIds: [] // Export all collections
     });
 });
