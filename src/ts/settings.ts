@@ -31,6 +31,11 @@ const paymentRequest = stripe.paymentRequest({
     total: { label: "", amount: 0 }
 });
 
+paymentRequest.on("click", (e : Event) =>
+{
+    if (changePlan.disabled) e.preventDefault();
+});
+
 paymentRequest.on("paymentmethod", async (e : any) =>
 {
     const paymentMethod = e.paymentMethod.id;
