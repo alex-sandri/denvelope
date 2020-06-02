@@ -125,10 +125,5 @@ export const Init = () : void =>
             });
     });
 
-    (<any>window)?.trustedTypes.createPolicy("default", {
-        createHTML: (string: string) => EscapeHtml(string),
-        createScriptURL: (string: string) => EscapeHtml(string)
-    });
-
     window.addEventListener("securitypolicyviolation", e => console.error(e));
 }

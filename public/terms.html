@@ -24,6 +24,14 @@
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#160c28">
     <link rel="stylesheet" href="assets/css/bundle.12e63a48531a32fd5946c414f1f81719.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <script>
+        const escapeHtml = (string) => string.replace(/</g, "&lt;");
+    
+        window?.trustedTypes.createPolicy("default", {
+            createHTML: string => escapeHtml(string),
+            createScriptURL: string => escapeHtml(string)
+        });
+    </script>
     <script src="https://js.stripe.com/v3/"></script>    <title data-only-translation="generic->terms_of_service"></title>
 </head>
 <body class="preload">
@@ -153,6 +161,6 @@
         const perf = firebase.performance();
     
         analytics.setAnalyticsCollectionEnabled(!navigator.doNotTrack && !window.doNotTrack); // Safari uses window.doNotTrack
-    </script>    <script src="assets/js/home.0a8bee7d44b0d1781e2b.js"></script>
+    </script>    <script src="assets/js/home.f5df294dcc13b28f3b36.js"></script>
 </body>
 </html>
