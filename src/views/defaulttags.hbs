@@ -20,12 +20,5 @@
 <link rel="mask-icon" href="safari-pinned-tab.svg" color="#160c28">
 <link rel="stylesheet" href="assets/css/{{version}}">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-<script>
-    const escapeHtml = (string) => string.replace(/</g, "&lt;");
-
-    window.trustedTypes?.createPolicy("default", {
-        createHTML: string => string,
-        createScriptURL: string => string
-    });
-</script>
+<script>window.trustedTypes?.createPolicy("default", { createHTML: string => string, createScriptURL: string => string });</script>
 <script src="https://js.stripe.com/v3/"></script>
