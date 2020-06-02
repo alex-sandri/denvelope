@@ -29,8 +29,8 @@
         const escapeHtml = (string) => string.replace(/</g, "&lt;");
     
         window?.trustedTypes.createPolicy("default", {
-            createHTML: string => escapeHtml(string),
-            createScriptURL: string => escapeHtml(string)
+            createHTML: string => string,
+            createScriptURL: string => string
         });
     </script>
     <script src="https://js.stripe.com/v3/"></script>    <link rel="alternate" hreflang="en" href="https://denvelope.com"/>

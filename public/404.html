@@ -28,8 +28,8 @@
         const escapeHtml = (string) => string.replace(/</g, "&lt;");
     
         window?.trustedTypes.createPolicy("default", {
-            createHTML: string => escapeHtml(string),
-            createScriptURL: string => escapeHtml(string)
+            createHTML: string => string,
+            createScriptURL: string => string
         });
     </script>
     <script src="https://js.stripe.com/v3/"></script>    <title data-only-translation="page_not_found->title"></title>
