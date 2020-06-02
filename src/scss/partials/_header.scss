@@ -266,10 +266,14 @@ header
 
 @supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
 {
+    header + .menu-container .menu
+    {
+        background-color: $primary-color;
+    }
+
     body:not(.account):not(.settings)
     {
-        header,
-        header + .menu-container .menu
+        header
         {
             background-color: $primary-color;
         }
