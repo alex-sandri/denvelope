@@ -116,20 +116,20 @@ export class Modal
 
     public set Title (title : string)
     {
-        const titleElement = this.element.querySelector(".title") || document.createElement("h1");
+        const titleElement : HTMLElement = this.element.querySelector(".title") || document.createElement("h1");
 
         titleElement.className = "title";
-        titleElement.innerHTML = title;
+        titleElement.innerText = title;
 
         this.element.querySelector(".heading").insertAdjacentElement("afterbegin", titleElement);
     }
 
     public set Subtitle (subtitle : string)
     {
-        const subtitleElement = this.element.querySelector(".subtitle") || document.createElement("h4");
+        const subtitleElement : HTMLElement = this.element.querySelector(".subtitle") || document.createElement("h4");
 
         subtitleElement.className = "subtitle";
-        subtitleElement.innerHTML = subtitle;
+        subtitleElement.innerText = subtitle;
 
         this.element.querySelector(".heading").insertAdjacentElement("beforeend", subtitleElement);
     }
@@ -199,11 +199,11 @@ export class UploadModal extends Modal
                         children: [
                             this.TransferSize = new Component("span", {
                                 class: "transfer-size",
-                                innerHTML: 0
+                                innerText: 0
                             }).element,
                             new Component("span", {
                                 class: "tot-size",
-                                innerHTML: ` / ${FormatStorage(size)}`
+                                innerText: ` / ${FormatStorage(size)}`
                             }).element
                         ]
                     }).element
@@ -300,11 +300,11 @@ export class DownloadModal extends Modal
                         children: [
                             this.TransferSize = new Component("span", {
                                 class: "transfer-size",
-                                innerHTML: 0
+                                innerText: 0
                             }).element,
                             new Component("span", {
                                 class: "tot-size",
-                                innerHTML: ` / ${FormatStorage(size)}`
+                                innerText: ` / ${FormatStorage(size)}`
                             }).element
                         ]
                     }).element
