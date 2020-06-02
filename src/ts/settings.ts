@@ -2,7 +2,19 @@ export {};
 
 import * as loadEvents from './scripts/load-events';
 
-import { AddClass, RemoveClass, HasClass, FormatDate, ClearFirestoreCache, ShowElement, ShowElements, HideElement, HideElements, FormatStorage, IsFreePlan } from "./scripts/Utilities";
+import {
+    AddClass,
+    RemoveClass,
+    HasClass,
+    FormatDate,
+    ClearFirestoreCache,
+    ShowElement,
+    ShowElements,
+    HideElement,
+    HideElements,
+    FormatStorage,
+    IsFreePlan
+} from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
 import { Translation } from "./scripts/Translation";
