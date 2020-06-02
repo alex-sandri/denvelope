@@ -1283,7 +1283,12 @@ window.addEventListener("userready", async () =>
             {
                 const locked : boolean = snapshot.data().locked;
 
-                vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${locked ? "" : "-open"}"></i>`;
+                (<HTMLParagraphElement>vault.querySelector(".name p")).innerText = Translation.Get("generic->vault") + " ";
+
+                const icon = document.createElement("i");
+                icon.className = `fas fa-lock${locked ? "" : "-open"}`;
+
+                vault.querySelector(".name p").appendChild(icon);
 
                 vault.setAttribute("data-locked", `${locked}`);
 
