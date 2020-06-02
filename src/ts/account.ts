@@ -495,7 +495,7 @@ window.addEventListener("userready", async () =>
 
         modal.AppendContent([ nameInput ]);
 
-        input.value = UnescapeHtml(contextMenuItem.querySelector(".name p").innerHTML);
+        input.value = (<HTMLParagraphElement>contextMenuItem.querySelector(".name p")).innerText;
 
         modal.OnUpdate = async () =>
         {
@@ -2409,8 +2409,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                         ]
                     }).element,
                     new Component("p", { class: "name", innerText: name }).element,
-                    new Component("button", { class: "menu", innerHTML: `<i class="fas fa-ellipsis-v fa-fw"></i>` }).element,
-                    new Component("button", { class: "close", innerHTML: `<i class="fas fa-times fa-fw"></i>` }).element
+                    new Component("button", { class: "menu", children: [ new Component("i", { class: "fas fa-ellipsis-v fa-fw" }).element ] }).element,
+                    new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
                 ]
             }).element;
     
