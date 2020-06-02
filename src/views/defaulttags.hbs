@@ -23,7 +23,7 @@
 <script>
     const escapeHtml = (string) => string.replace(/</g, "&lt;");
 
-    window?.trustedTypes.createPolicy("default", {
+    window.trustedTypes?.createPolicy("default", {
         createHTML: string => string,
         createScriptURL: string => string
     });
