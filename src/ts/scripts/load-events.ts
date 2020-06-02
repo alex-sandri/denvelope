@@ -1,4 +1,4 @@
-import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan } from "./Utilities";
+import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, EscapeHtml } from "./Utilities";
 import { Auth } from "./Auth";
 import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
@@ -124,4 +124,11 @@ export const Init = () : void =>
                 else HideElement(upgradePlan);
             });
     });
+
+    (<any>window)?.trustedTypes.createPolicy("default", {
+        createHTML: (string: string) => EscapeHtml(string),
+        createScriptURL: (string: string) => EscapeHtml(string)
+    });
+
+    window.addEventListener("securitypolicyviolation", e => console.error(e));
 }

@@ -123,10 +123,12 @@ export const GetFirestoreUpdateTimestamp = (): Object =>
 
 export const IsTouchDevice = (): boolean => "ontouchstart" in window;
 
-export const EscapeHtml = (string: string) =>
+export const EscapeHtml = (string: string): string =>
     string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/\'/g, "&#039;").replace(/\//g, "&#x2F;");
 
-export const UnescapeHtml = (string: string) =>
+export const EscapeHtmlPolicy = (<any>window).trustedTypes?.createPolicy("escapePolicy", { createHTML: (string: string) => EscapeHtml(string) });
+
+export const UnescapeHtml = (string: string): string =>
     string.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&#039;/g, "'").replace(/&#x2F;/g, "/");
 
 export const CamelCaseToKebabCase = (string: string) => string.replace(/([a-zA-Z])(?=[A-Z])/g, "$1-").toLowerCase();

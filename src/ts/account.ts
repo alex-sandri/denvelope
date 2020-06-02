@@ -22,7 +22,8 @@ import {
     EscapeHtml,
     UnescapeHtml,
     IsTouchDevice,
-    AddClasses
+    AddClasses,
+    EscapeHtmlPolicy
 } from "./scripts/Utilities";
 import { Modal, UploadModal, DownloadModal } from "./scripts/Modal";
 import { Auth } from './scripts/Auth';
@@ -579,7 +580,7 @@ window.addEventListener("userready", async () =>
                     innerHTML: `<span>${Translation.Get("generic->id")}</span><span>${doc.id}</span>`
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->name")}</span><span>${EscapeHtml(name)}</span>`
+                    innerHTML: `<span>${Translation.Get("generic->name")}</span><span>${EscapeHtmlPolicy.createHTML(name) || EscapeHtml(name)}</span>`
                 }).element,
                 new Component("p", {
                     innerHTML: `<span>${Translation.Get("generic->type")}</span><span>${Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`)}</span>`
@@ -1551,7 +1552,9 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
                 {
                     const data = doc.data();
 
-                    document.querySelectorAll("[data-update-field=folder-name]").forEach(element => (<HTMLElement>element).innerHTML = EscapeHtml(data.name));
+                    document
+                        .querySelectorAll("[data-update-field=folder-name]")
+                        .forEach(element => (<HTMLElement>element).innerHTML = EscapeHtmlPolicy.createHTML(data.name) || EscapeHtml(data.name));
 
                     folderShared = data.shared;
 
@@ -2241,7 +2244,7 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
                 class: "name",
                 children: [
                     new Component("p", {
-                        innerHTML: EscapeHtml(name)
+                        innerHTML: EscapeHtmlPolicy.createHTML(name) || EscapeHtml(name)
                     }).element
                 ]
             }).element,
@@ -2422,7 +2425,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         if (!isMultipleFileEditor)
             // document.title acts like innerText so it displays the escaped characters and not what the user typed
-            document.head.querySelector("[data-update-field=folder-name]").innerHTML = EscapeHtml(name);
+            document.head.querySelector("[data-update-field=folder-name]").innerHTML = EscapeHtmlPolicy.createHTML(name) || EscapeHtml(name);
 
         LogPageViewEvent();
 
