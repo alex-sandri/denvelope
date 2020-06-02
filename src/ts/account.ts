@@ -2456,7 +2456,6 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
         }
 
         if (!isMultipleFileEditor)
-            // document.title acts like innerText so it displays the escaped characters and not what the user typed
             (<HTMLTitleElement>document.head.querySelector("[data-update-field=folder-name]")).innerText = name;
 
         LogPageViewEvent();
