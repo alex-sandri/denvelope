@@ -58,12 +58,7 @@
                 @include flex;
 
                 margin-right: $standard-spacing;
-
-                span::before
-                {
-                    content: " ";
-                    white-space: pre;
-                }
+                white-space: pre;
 
                 &.target
                 {
