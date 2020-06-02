@@ -577,23 +577,41 @@ window.addEventListener("userready", async () =>
 
             modal.AppendContent([
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->id")}</span><span>${doc.id}</span>`
+                    children: [
+                        new Component("span", { innerText: Translation.Get("generic->id") }).element,
+                        new Component("span", { innerText: doc.id }).element
+                    ]
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->name")}</span><span>${EscapeHtmlPolicy.createHTML(name) || EscapeHtml(name)}</span>`
+                    children: [
+                        new Component("span", { innerText: Translation.Get("generic->name") }).element,
+                        new Component("span", { innerText: name }).element
+                    ]
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->type")}</span><span>${Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`)}</span>`
+                    children: [
+                        new Component("span", { innerText: Translation.Get("generic->type") }).element,
+                        new Component("span", { innerText: Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`) }).element
+                    ]
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->created")}</span><span>${FormatDate(data.created.seconds * 1000, dateFormatOptions)}</span>`
+                    children: [
+                        new Component("span", { innerText: Translation.Get("generic->created") }).element,
+                        new Component("span", { innerText: FormatDate(data.created.seconds * 1000, dateFormatOptions) }).element
+                    ]
                 }).element,
                 new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->last_modified")}</span><span>${FormatDate(data.updated.seconds * 1000, dateFormatOptions)}</span>`
+                    children: [
+                        new Component("span", { innerText: Translation.Get("generic->last_modified") }).element,
+                        new Component("span", { innerText: FormatDate(data.updated.seconds * 1000, dateFormatOptions) }).element
+                    ]
                 }).element,
                 type === "file"
                     ? new Component("p", {
-                        innerHTML: `<span>${Translation.Get("generic->size")}</span><span>${FormatStorage(data.size || 0)}</span>`
+                        children: [
+                            new Component("span", { innerText: Translation.Get("generic->size") }).element,
+                            new Component("span", { innerText: FormatStorage(data.size || 0) }).element
+                        ]
                     }).element
                     : null,
             ]);
@@ -603,14 +621,18 @@ window.addEventListener("userready", async () =>
                 const parentFolderUrl = GetFolderUrl(data.parentId, false);
 
                 const contentPosition = new Component("p", {
-                    innerHTML: `<span>${Translation.Get("generic->position")}</span><a href="${parentFolderUrl}">${
-                        data.parentId === "root"
-                            ? Translation.Get("account->title")
-                            : (data.parentId === "vault"
-                                ? Translation.Get("generic->vault")
-                                : (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
-                            )
-                    }</a>`
+                    children: [
+                        new Component("span", { innerText: Translation.Get("generic->position") }).element,
+                        new Component("a", {
+                            href: parentFolderUrl,
+                            innerText: data.parentId === "root"
+                                ? Translation.Get("account->title")
+                                : (data.parentId === "vault"
+                                    ? Translation.Get("generic->vault")
+                                    : (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
+                                )
+                        }).element
+                    ]
                 }).element;
 
                 contentPosition.querySelector("a").addEventListener("click", e =>
@@ -630,10 +652,16 @@ window.addEventListener("userready", async () =>
 
                 modal.AppendContent([
                     new Component("p", {
-                        innerHTML: `<span>${Translation.Get("generic->shared")}</span><span>${Translation.Get(`generic->${data.shared ? "yes" : "no"}`)}</span>`
+                        children: [
+                            new Component("span", { innerText: Translation.Get("generic->shared") }).element,
+                            new Component("span", { innerText: Translation.Get(`generic->${data.shared ? "yes" : "no"}`) }).element
+                        ]
                     }).element,
                     new Component("p", {
-                        innerHTML: `<span>${Translation.Get("generic->starred")}</span><span>${Translation.Get(`generic->${data.starred ? "yes" : "no"}`)}</span>`
+                        children: [
+                            new Component("span", { innerText: Translation.Get("generic->starred") }).element,
+                            new Component("span", { innerText: Translation.Get(`generic->${data.starred ? "yes" : "no"}`) }).element
+                        ]
                     }).element,
                     contentPosition,
                 ]);
