@@ -310,7 +310,7 @@ window.addEventListener("userready", async () =>
         const value = editor.getValue();
         const id = editorTabs.querySelector(".active").id.split("-")[1];
 
-        UploadFile(value, editorTabs.querySelector(".active").querySelector(".name").innerHTML, value.length, GetCurrentFolderId(), id);
+        UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(), id);
 
         db.collection(`users/${Auth.UserId}/files`).doc(id).update({ ...GetFirestoreUpdateTimestamp() });
 
@@ -357,7 +357,7 @@ window.addEventListener("userready", async () =>
 
     contextMenuSharingOptions.addEventListener("click", () => (<any>navigator).share({
         title: "Denvelope",
-        text: `${Translation.Get("share->check_out")} ${contextMenuItem.querySelector(".name p").innerHTML} ${Translation.Get("share->on_denvelope")}`,
+        text: `${Translation.Get("share->check_out")} ${(<HTMLElement>contextMenuItem.querySelector(".name p")).innerText} ${Translation.Get("share->on_denvelope")}`,
         url: getUserContentURL(contextMenuItem, true),
     }));
 
@@ -405,9 +405,21 @@ window.addEventListener("userready", async () =>
                 {
                     if (tempArray.filter(element => element.id === doc.id).length === 0)
                     {
-                        const element = <HTMLButtonElement>new Component("div", {
-                            innerHTML: `<button class="select"><i class="fas fa-folder"></i><span>${doc.data().name}</span></button><button class="goto"><i class="fas fa-chevron-right fa-fw"></i></button>`,
-                            id: doc.id
+                        const element = new Component("div", {
+                            id: doc.id,
+                            children: [
+                                new Component("button", {
+                                    class: "select",
+                                    children: [
+                                        new Component("i", { class: "fas fa-folder" }).element,
+                                        new Component("span", { innerText: doc.data().name }).element,
+                                    ]
+                                }).element,
+                                new Component("button", {
+                                    class: "goto",
+                                    children: [ new Component("i", { class: "fas fa-chevron-right" }).element ]
+                                }).element,
+                            ]
                         }).element;
     
                         contextMenuMoveSelectorOptions.appendChild(element);
@@ -424,7 +436,7 @@ window.addEventListener("userready", async () =>
     
                 if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0)
                     contextMenuMoveSelectorOptions.appendChild(new Component("p", {
-                        innerHTML: Translation.Get("account->context_menu->move->impossible")
+                        innerText: Translation.Get("account->context_menu->move->impossible")
                     }).element);
             });
         }
