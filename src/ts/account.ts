@@ -19,11 +19,8 @@ import {
     HideElement,
     HideElements,
     HasClass,
-    EscapeHtml,
-    UnescapeHtml,
     IsTouchDevice,
-    AddClasses,
-    EscapeHtmlPolicy
+    AddClasses
 } from "./scripts/Utilities";
 import { Modal, UploadModal, DownloadModal } from "./scripts/Modal";
 import { Auth } from './scripts/Auth';
@@ -725,7 +722,7 @@ window.addEventListener("userready", async () =>
                 })));
             }
 
-            DownloadContent(id, UnescapeHtml((<HTMLParagraphElement>item.querySelector(".name p")).innerText), type === "folder");
+            DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder");
         }));
 
     [contextMenuDelete, contextMenuRestore].forEach(element => element.addEventListener("click", async () =>
@@ -1420,7 +1417,7 @@ window.addEventListener("keydown", e =>
     }
     else if (key === "delete") contextMenuDelete.click();
     else if (key === "backspace") contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null);
-    else if (key === "d") DownloadContent(GetCurrentFolderId(), UnescapeHtml(document.title), true);
+    else if (key === "d") DownloadContent(GetCurrentFolderId(), document.title, true);
 });
 
 window.addEventListener("beforeunload", e =>
@@ -2735,7 +2732,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
             const blobUrl = URL.createObjectURL(blob);
             const a = document.createElement("a");
 
-            a.download = UnescapeHtml(name);
+            a.download = name;
             a.href = blobUrl;
 
             document.body.appendChild(a); // If it isn't appended it won't work in Firefox
