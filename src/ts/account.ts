@@ -1264,7 +1264,7 @@ window.addEventListener("userready", async () =>
         });
     });
 
-    navigator.serviceWorker.addEventListener("message", e =>
+    navigator.serviceWorker?.addEventListener("message", e =>
     {
         if ("file" in e.data)
         {
@@ -1279,7 +1279,7 @@ window.addEventListener("userready", async () =>
         }
     });
 
-    navigator.serviceWorker.controller?.postMessage("ready");
+    navigator.serviceWorker?.controller?.postMessage("ready");
 
     if (location.href.indexOf("/file/") > -1)
     {
