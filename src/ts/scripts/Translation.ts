@@ -55,7 +55,7 @@ export class Translation
 
         ids
             .forEach(id => document.querySelectorAll(`[data-translation="${id}"]`)
-            .forEach(element => element.appendChild(createTranslationElement(Translation.Get(id)))));
+            .forEach(element => element.appendChild(createTranslationElement(" " + Translation.Get(id)))));
 
         ids
             .forEach(id => document.querySelectorAll(`[data-placeholder-translation="${id}"]`)
