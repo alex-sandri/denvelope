@@ -54,13 +54,6 @@ export class Component
                 delete (<any>options).style;
             }
 
-            if (options.hasOwnProperty("innerHTML"))
-            {
-                this.element.innerHTML = (<any>options).innerHTML;
-
-                delete (<any>options).innerHTML;
-            }
-
             if (options.hasOwnProperty("innerText"))
             {
                 this.element.innerText = (<any>options).innerText;
