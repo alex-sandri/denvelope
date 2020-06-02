@@ -1269,12 +1269,30 @@ window.addEventListener("userready", async () =>
     else GetUserContent();
 
     if (Auth.IsAuthenticated)
+    {
         db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
         {
             const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
             
             document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
         });
+
+        db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
+        {
+            if (snapshot.exists)
+            {
+                const locked : boolean = snapshot.data().locked;
+
+                vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${locked ? "" : "-open"}"></i>`;
+
+                vault.setAttribute("data-locked", `${locked}`);
+
+                locked ? AddClass(vault, "disabled") : RemoveClass(vault, "disabled");
+            }
+
+            Auth.RefreshToken();
+        });
+    }
 });
 
 window.addEventListener("resize", () => HideContextMenu());
@@ -1507,26 +1525,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
     if (globalSearch) HideElement(folderNavigation);
 
-    if (Auth.IsAuthenticated && parentId === "root" && navigator.onLine && !searchTerm && !globalSearch)
-    {
-        ShowElement(vault, "flex");
-
-        db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
-        {
-            if (snapshot.exists)
-            {
-                const locked : boolean = snapshot.data().locked;
-
-                vault.querySelector(".name p").innerHTML = `${Translation.Get("generic->vault")} <i class="fas fa-lock${locked ? "" : "-open"}"></i>`;
-
-                vault.setAttribute("data-locked", `${locked}`);
-
-                locked ? AddClass(vault, "disabled") : RemoveClass(vault, "disabled");
-            }
-
-            Auth.RefreshToken();
-        });
-    }
+    if (Auth.IsAuthenticated && parentId === "root" && navigator.onLine && !searchTerm && !globalSearch) ShowElement(vault, "flex");
     else HideElement(vault);
 
     HideElement(vaultInfo);
