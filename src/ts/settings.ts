@@ -743,10 +743,11 @@ window.addEventListener("userready", () =>
 
         if (!IsFreePlan(maxStorage))
         {
-            nextRenewal.innerHTML =
-                `<span data-date="${subscriptionNextRenewalOrEndDate}">${
-                    FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
-                }</span>`;
+            nextRenewal.innerHTML = "";
+            nextRenewal.appendChild(new Component("span", {
+                data: { date: subscriptionNextRenewalOrEndDate },
+                innerText: FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions)
+            }).element);
 
             ShowElement(nextRenewal.parentElement);
 
@@ -780,17 +781,26 @@ window.addEventListener("userready", () =>
                             const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
 
                             const setAsDefaultButton : HTMLButtonElement =
-                                <HTMLButtonElement>new Component("button", { class: "set-as-default", innerText: Translation.Get("settings->plan->payment_methods->set_as_default") }).element;
+                                <HTMLButtonElement>new Component("button", {
+                                    class: "set-as-default",
+                                    innerText: Translation.Get("settings->plan->payment_methods->set_as_default")
+                                }).element;
 
                             const deleteButton : HTMLButtonElement =
-                                <HTMLButtonElement>new Component("button", { class: "delete", innerHTML: `<i class="fas fa-trash"></i> ${Translation.Get("generic->delete")}` }).element;
+                                <HTMLButtonElement>new Component("button", {
+                                    class: "delete",
+                                    children: [
+                                        new Component("i", { class: "fas fa-trash" }).element,
+                                        new Component("span", { innerText: " " + Translation.Get("generic->delete") }).element
+                                    ]
+                                }).element;
 
                             paymentMethodsContainer.appendChild(new Component("div", {
                                 class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
                                 id: paymentMethod.id,
                                 children: [
-                                    new Component("span", { innerHTML: `<i class="fab fa-cc-${paymentMethod.brand}"></i>` }).element,
-                                    new Component("span", { innerHTML: `&bull;&bull;&bull;&bull;${paymentMethod.last4}` }).element,
+                                    new Component("span", { children: [ new Component("i", { class: `fab fa-cc-${paymentMethod.brand}` }).element ] }).element,
+                                    new Component("span", { innerText: `••••${paymentMethod.last4}` }).element,
                                     new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element,
                                     setAsDefaultButton,
                                     deleteButton,
@@ -823,7 +833,7 @@ window.addEventListener("userready", () =>
 
                                 paymentMethodsContainer
                                     .querySelector(`#${paymentMethod.id} span:last-of-type`)
-                                    .insertAdjacentHTML("afterend", `<span>(${Translation.Get("generic->default")})</span>`);
+                                    .insertAdjacentElement("afterend", new Component("span", { innerText: `(${Translation.Get("generic->default")})` }).element);
                             }
                         });
                     }
