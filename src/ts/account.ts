@@ -192,7 +192,7 @@ window.addEventListener("userready", async () =>
                 else
                 {
                     input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
-                        innerHTML: Translation.Get("errors->empty"),
+                        innerText: Translation.Get("errors->empty"),
                         class: "input-error"
                     }).element);
 
@@ -518,7 +518,7 @@ window.addEventListener("userready", async () =>
                 modal.Show(true);
 
                 input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
-                    innerHTML: Translation.Get(`errors->${name.length === 0 ? "empty" : "user_content->already_exists"}`),
+                    innerText: Translation.Get(`errors->${name.length === 0 ? "empty" : "user_content->already_exists"}`),
                     class: "input-error"
                 }).element);
 
@@ -1526,7 +1526,7 @@ const ShowFileUploadModal = async (uploadTask : any, name : string, size : numbe
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
             modal.ProgressBar.style.width = progress + "%";
-            modal.TransferSize.innerHTML = FormatStorage(snapshot.bytesTransferred);
+            modal.TransferSize.innerText = FormatStorage(snapshot.bytesTransferred);
         }, (error : any) =>
         {
             // Upload Error
@@ -1586,7 +1586,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
                     document
                         .querySelectorAll("[data-update-field=folder-name]")
-                        .forEach(element => (<HTMLElement>element).innerHTML = EscapeHtmlPolicy.createHTML(data.name) || EscapeHtml(data.name));
+                        .forEach(element => (<HTMLElement>element).innerText = data.name);
 
                     folderShared = data.shared;
 
@@ -1616,9 +1616,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
                 });
             }
             else
-            {
-                document.querySelectorAll("[data-update-field=folder-name]").forEach(element => element.innerHTML = Translation.Get("generic->vault"));
-            }
+                (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
+                    .forEach(element => element.innerText = Translation.Get("generic->vault"));
 
             if (await vaultOnly())
             {
@@ -1649,7 +1648,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
             else HideElement(folderNavigation);
 
             if (location.pathname.indexOf("file") === -1)
-                document.querySelectorAll("[data-update-field=folder-name]").forEach(element => element.innerHTML = Translation.Get("account->title"));
+                (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
+                    .forEach(element => element.innerText = Translation.Get("account->title"));
         }
     }
 
@@ -1669,7 +1669,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
         if (AreUserContentContainersEmpty() && (callCount === 2 || isUpdate || (callCount === 1 && !includeFolders)))
         {
-            emptyFolder.querySelector("h2").innerHTML = Translation.Get(`api->messages->folder->${
+            emptyFolder.querySelector("h2").innerText = Translation.Get(`api->messages->folder->${
                 !navigator.onLine
                     ? "offline"
                     : (searchTerm?.length > 0
@@ -2276,7 +2276,7 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
                 class: "name",
                 children: [
                     new Component("p", {
-                        innerHTML: EscapeHtmlPolicy.createHTML(name) || EscapeHtml(name)
+                        innerText: name
                     }).element
                 ]
             }).element,
@@ -2396,7 +2396,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
                             }).element
                         ]
                     }).element,
-                    new Component("p", { class: "name", innerHTML: UnescapeHtml(name) }).element,
+                    new Component("p", { class: "name", innerText: name }).element,
                     new Component("button", { class: "menu", innerHTML: `<i class="fas fa-ellipsis-v fa-fw"></i>` }).element,
                     new Component("button", { class: "close", innerHTML: `<i class="fas fa-times fa-fw"></i>` }).element
                 ]
@@ -2457,7 +2457,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         if (!isMultipleFileEditor)
             // document.title acts like innerText so it displays the escaped characters and not what the user typed
-            document.head.querySelector("[data-update-field=folder-name]").innerHTML = EscapeHtmlPolicy.createHTML(name) || EscapeHtml(name);
+            (<HTMLTitleElement>document.head.querySelector("[data-update-field=folder-name]")).innerText = name;
 
         LogPageViewEvent();
 
@@ -2638,7 +2638,7 @@ const GetFolderEntries = (folder : DataTransferItem, path : string, entries : Fi
 
 const AreUserContentContainersEmpty = () : boolean => foldersContainer.innerHTML.trim() === "" && filesContainer.innerHTML.trim() === "";
 
-const EmptyUserContentContainers = () : void => {foldersContainer.innerHTML = filesContainer.innerHTML = "";}
+const EmptyUserContentContainers = () : void => { foldersContainer.innerHTML = filesContainer.innerHTML = ""; }
 
 const IsShared = () : boolean => !Auth.IsAuthenticated || location.pathname.indexOf("/shared") > -1;
 
