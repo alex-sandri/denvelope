@@ -2494,7 +2494,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
         // If the user enabled the Data Saving option do not allow downloading files bigger than 1MB
         // If the size of the file to be downloaded is bigger than what the user can download in one second
-        if (((<any>navigator)?.connection.saveData && size > 1 * 1000 * 1000 || size > ((<any>navigator)?.connection.downlink / 8) * 1000 * 1000) && !forceDownload)
+        if (((<any>navigator).connection?.saveData && size > 1 * 1000 * 1000 || size > ((<any>navigator).connection?.downlink / 8) * 1000 * 1000) && !forceDownload)
         {
             ShowForceDownloadButton(id);
 
