@@ -2228,7 +2228,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         document.removeEventListener("touchstart", HandleUserContentMove);
     }
 
-    if (IsSet(element) && e.which !== 3) // Not on right click
+    if (IsSet(element) && (e.which !== 3 || IsTouchDevice())) // Not on right click
     {
         if (!ignoreMovement)
         {
