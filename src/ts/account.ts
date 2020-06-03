@@ -2062,10 +2062,7 @@ const addUserContentEvents = () : void =>
             if (IsTouchDevice())
             {
                 // Used on a touch device as a long press
-                element.addEventListener("contextmenu", e =>
-                {   
-                    AllowContentMoveTouchDevice = true;
-                });
+                element.addEventListener("contextmenu", e => AllowContentMoveTouchDevice = true);
 
                 document.addEventListener("touchstart", HandleUserContentMove);
             }
@@ -2114,121 +2111,24 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
     }
 }
 
+let moved : boolean = false;
+let placeholderElement : HTMLElement;
+let element : HTMLElement;
+
+let originalEvent : MouseEvent | TouchEvent;
+
+let tempArray : HTMLElement[];
+
 const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
 {
-    const placeholderElement : HTMLElement = GetUserContentElement(<HTMLElement>e.target);
-    let element : HTMLElement = <HTMLElement>placeholderElement?.cloneNode(true);
+    placeholderElement = GetUserContentElement(<HTMLElement>e.target);
+    element = <HTMLElement>placeholderElement?.cloneNode(true);
 
-    let moved : boolean = false;
+    originalEvent = e;
 
-    const tempArray = <HTMLElement[]>[ ...(contextMenuItems || []), element ].filter(Boolean);
+    tempArray = <HTMLElement[]>[ ...(contextMenuItems || []), element ].filter(Boolean);
 
-    const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
-    {
-        if (!IsSet(element)) return;
-
-        const top : number = (<MouseEvent>ev).pageY ?? (<TouchEvent>ev).touches[0].pageY;
-        const left : number = (<MouseEvent>ev).pageX ?? (<TouchEvent>ev).touches[0].pageX;
-
-        // If this was called by a touchmove event and the user didn't yet reached the context menu
-        if (!ignoreMovement && ev.type === "touchmove" && !AllowContentMoveTouchDevice)
-        {
-            moved = true;
-
-            return;
-        }
-
-        HideContextMenu();
-
-        if (Auth.IsAuthenticated)
-        {
-            if (IsTouchDevice()) moved = true;
-
-            if (!ignoreMovement)
-            {
-                // Set moved=true only if the mouse moved by at least 5px
-                if (Math.abs(left - (<MouseEvent>e).pageX ?? (<TouchEvent>e).touches[0].pageX) > 5 || Math.abs(top - (<MouseEvent>e).pageY ?? (<TouchEvent>e).touches[0].pageY) > 5)
-                    moved = true;
-
-                if (moved) ShowElement(element, "flex");
-            }
-            else if (IsTouchDevice()) ShowElement(element, "flex");
-
-            if (moved)
-            {
-                [foldersContainer, filesContainer].forEach(element =>
-                    (<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
-                        AddClasses(element, [ "no-hover", HasClass(element, "file") ? "disabled" : "" ])));
-    
-                Object.assign(element.style, {
-                    top: top + "px",
-                    left: left + "px"
-                });
-
-                AddClass(element, "dragging");
-
-                AddClass(placeholderElement, "placeholder");
-            
-                AddClass(document.documentElement, "grabbing");
-            }
-        }
-    }
-
-    const ResetElement = async (ev : MouseEvent | TouchEvent) =>
-    {
-        const target : HTMLElement = foldersContainer.querySelector(".target");
-
-        let parentId = null;
-
-        AllowContentMoveTouchDevice = false;
-
-        [foldersContainer, filesContainer].forEach(element =>
-            (<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
-            {
-                RemoveClass(element, "no-hover");
-
-                if (HasClass(element, "file")) RemoveClass(element, "disabled");
-            }));
-
-        RemoveClass(placeholderElement, "placeholder");
-
-        RemoveClass(document.documentElement, "grabbing");
-
-        element.remove();
-        element = null;
-
-        if (IsSet(target))
-        {
-            parentId = target.id;
-
-            RemoveClass(target, "target");
-        }
-        else if (HasClass(navigationBackButton, "target"))
-        {
-            parentId = await vaultOnly() ? "root" : (await db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get()).data().parentId;
-
-            RemoveClass(navigationBackButton, "target");
-        }
-        else if (HasClass(vault, "target"))
-        {
-            if (vault.getAttribute("data-locked") === "false") parentId = "vault";
-
-            RemoveClass(vault, "target");
-        }
-
-        if (!moved) HandlePageChangeAndLoadUserContent(ev);
-        else if (IsSet(parentId) && Auth.IsAuthenticated)
-            MoveElements(tempArray, parentId);
-
-        document.removeEventListener("mousemove", MoveElement);
-        document.removeEventListener("touchmove", MoveElement);
-        document.removeEventListener("mouseup", ResetElement);
-        document.removeEventListener("touchend", ResetElement);
-
-        document.removeEventListener("touchstart", HandleUserContentMove);
-    }
-
-    if (IsSet(element) && (e.which !== 3 || IsTouchDevice())) // Not on right click
+    if (IsSet(element) && e.which !== 3) // Not on right click
     {
         if (!ignoreMovement)
         {
@@ -2236,18 +2136,133 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
             document.body.appendChild(element);
 
-            document.removeEventListener("mousemove", MoveElement);
-            document.removeEventListener("touchmove", MoveElement);
-            document.removeEventListener("mouseup", ResetElement);
-            document.removeEventListener("touchend", ResetElement);
+            RemoveContentMoveEventListeners();
 
-            document.addEventListener("mousemove", MoveElement);
-            document.addEventListener("touchmove", MoveElement);
-            document.addEventListener("mouseup", ResetElement);
-            document.addEventListener("touchend", ResetElement);
+            AddContentMoveEventListeners();
         }
         else if (IsTouchDevice()) MoveElement(e, true);
     }
+}
+
+const ResetElement = async (ev : MouseEvent | TouchEvent) =>
+{
+    const target : HTMLElement = foldersContainer.querySelector(".target");
+
+    let parentId = null;
+
+    AllowContentMoveTouchDevice = moved = false;
+
+    [foldersContainer, filesContainer].forEach(element =>
+        (<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
+        {
+            RemoveClass(element, "no-hover");
+
+            if (HasClass(element, "file")) RemoveClass(element, "disabled");
+        }));
+
+    RemoveClass(placeholderElement, "placeholder");
+
+    RemoveClass(document.documentElement, "grabbing");
+
+    element.remove();
+    element = null;
+
+    if (IsSet(target))
+    {
+        parentId = target.id;
+
+        RemoveClass(target, "target");
+    }
+    else if (HasClass(navigationBackButton, "target"))
+    {
+        parentId = await vaultOnly() ? "root" : (await db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get()).data().parentId;
+
+        RemoveClass(navigationBackButton, "target");
+    }
+    else if (HasClass(vault, "target"))
+    {
+        if (vault.getAttribute("data-locked") === "false") parentId = "vault";
+
+        RemoveClass(vault, "target");
+    }
+
+    if (!moved) HandlePageChangeAndLoadUserContent(ev);
+    else if (IsSet(parentId) && Auth.IsAuthenticated)
+        MoveElements(tempArray, parentId);
+
+    RemoveContentMoveEventListeners();
+}
+
+const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
+{
+    if (!IsSet(element)) return;
+
+    const top : number = (<MouseEvent>ev).pageY ?? (<TouchEvent>ev).touches[0].pageY;
+    const left : number = (<MouseEvent>ev).pageX ?? (<TouchEvent>ev).touches[0].pageX;
+
+    // If this was called by a touchmove event and the user didn't yet reached the context menu
+    if (!ignoreMovement && ev.type === "touchmove" && !AllowContentMoveTouchDevice)
+    {
+        moved = true;
+
+        return;
+    }
+
+    HideContextMenu();
+
+    if (Auth.IsAuthenticated)
+    {
+        if (IsTouchDevice()) moved = true;
+
+        if (!ignoreMovement)
+        {
+            // Set moved=true only if the mouse moved by at least 5px
+            if (Math.abs(left - (<MouseEvent>originalEvent).pageX ?? (<TouchEvent>originalEvent).touches[0].pageX) > 5
+                || Math.abs(top - (<MouseEvent>originalEvent).pageY ?? (<TouchEvent>originalEvent).touches[0].pageY) > 5)
+                moved = true;
+
+            if (moved) ShowElement(element, "flex");
+        }
+        else if (IsTouchDevice()) ShowElement(element, "flex");
+
+        if (moved)
+        {
+            [foldersContainer, filesContainer].forEach(element =>
+                (<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
+                    AddClasses(element, [ "no-hover", HasClass(element, "file") ? "disabled" : "" ])));
+    
+            Object.assign(element.style, {
+                top: top + "px",
+                left: left + "px"
+            });
+
+            AddClass(element, "dragging");
+
+            AddClass(placeholderElement, "placeholder");
+            
+            AddClass(document.documentElement, "grabbing");
+        }
+    }
+}
+
+const AddContentMoveEventListeners = () =>
+{
+    document.addEventListener("mousemove", MoveElement);
+    document.addEventListener("touchmove", MoveElement);
+    document.addEventListener("mouseup", ResetElement);
+    document.addEventListener("touchend", ResetElement);
+
+    document.addEventListener("touchstart", HandleUserContentMove);
+}
+
+const RemoveContentMoveEventListeners = () =>
+{
+    document.removeEventListener("mousemove", MoveElement);
+    document.removeEventListener("touchmove", MoveElement);
+    document.removeEventListener("mouseup", ResetElement);
+    document.removeEventListener("touchend", ResetElement);
+
+    document.removeEventListener("touchstart", HandleUserContentMove);
 }
 
 const isUserContentElement = (element : HTMLElement) : boolean => IsSet(GetUserContentElement(element));
