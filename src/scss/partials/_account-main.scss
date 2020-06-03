@@ -359,18 +359,15 @@
 
 html:not(.touch)
 {
-    .user-content
+    .vault,
+    div.folder,
+    div.file
     {
-        .vault,
-        div.folder,
-        div.file
+        height: $default-button-height + $border-width * 2;
+        
+        .menu-button
         {
-            height: $default-button-height + $border-width * 2;
-
-            .menu-button
-            {
-                display: none;
-            }
+            display: none;
         }
     }
 }
