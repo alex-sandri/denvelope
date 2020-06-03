@@ -1,4 +1,4 @@
-import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, EscapeHtml } from "./Utilities";
+import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, EscapeHtml, AddClass, IsTouchDevice } from "./Utilities";
 import { Auth } from "./Auth";
 import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
@@ -52,6 +52,8 @@ export const Init = () : void =>
     localStorage.setItem("cookie-consent", "true");
 
     PreventDragEvents();
+
+    if (IsTouchDevice()) AddClass(document.documentElement, "touch");
 
     document.addEventListener("contextmenu", e =>
     {
