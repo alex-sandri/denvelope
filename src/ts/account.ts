@@ -2022,6 +2022,8 @@ const addUserContentEvents = () : void =>
 
     if (trashedOnly()) return;
 
+    AddContentMoveEventListeners();
+
     [...userContentElements, navigationBackButton, vault].forEach(element =>
     {
         const HandleTargetElement = (e : MouseEvent | TouchEvent) : void =>
@@ -2062,9 +2064,12 @@ const addUserContentEvents = () : void =>
             if (IsTouchDevice())
             {
                 // Used on a touch device as a long press
-                element.addEventListener("contextmenu", e => AllowContentMoveTouchDevice = true);
+                element.addEventListener("contextmenu", e =>
+                {
+                    AllowContentMoveTouchDevice = true
 
-                AddContentMoveEventListeners();
+                    originalEvent = <MouseEvent | TouchEvent>e;
+                });
             }
         }
     });
@@ -2247,22 +2252,22 @@ const AddContentMoveEventListeners = () =>
 {
     RemoveContentMoveEventListeners();
 
+    document.addEventListener("touchstart", HandleUserContentMove);
+
     document.addEventListener("mousemove", MoveElement);
     document.addEventListener("touchmove", MoveElement);
     document.addEventListener("mouseup", ResetElement);
     document.addEventListener("touchend", ResetElement);
-
-    document.addEventListener("touchstart", HandleUserContentMove);
 }
 
 const RemoveContentMoveEventListeners = () =>
 {
+    document.removeEventListener("touchstart", HandleUserContentMove);
+
     document.removeEventListener("mousemove", MoveElement);
     document.removeEventListener("touchmove", MoveElement);
     document.removeEventListener("mouseup", ResetElement);
     document.removeEventListener("touchend", ResetElement);
-
-    document.removeEventListener("touchstart", HandleUserContentMove);
 }
 
 const isUserContentElement = (element : HTMLElement) : boolean => IsSet(GetUserContentElement(element));
