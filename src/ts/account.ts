@@ -2136,8 +2136,6 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
             document.body.appendChild(element);
 
-            RemoveContentMoveEventListeners();
-
             AddContentMoveEventListeners();
         }
         else if (IsTouchDevice()) MoveElement(e, true);
@@ -2247,6 +2245,8 @@ const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : 
 
 const AddContentMoveEventListeners = () =>
 {
+    RemoveContentMoveEventListeners();
+
     document.addEventListener("mousemove", MoveElement);
     document.addEventListener("touchmove", MoveElement);
     document.addEventListener("mouseup", ResetElement);
