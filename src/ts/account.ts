@@ -2064,7 +2064,7 @@ const addUserContentEvents = () : void =>
                 // Used on a touch device as a long press
                 element.addEventListener("contextmenu", e => AllowContentMoveTouchDevice = true);
 
-                document.addEventListener("touchstart", HandleUserContentMove);
+                AddContentMoveEventListeners();
             }
         }
     });
