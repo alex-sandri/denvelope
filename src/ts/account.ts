@@ -182,7 +182,7 @@ window.addEventListener("userready", async () =>
 
                 if (name.length > 0)
                 {
-                    isFile ? UploadFile("", name, 0, GetCurrentFolderId()) : UploadFolder([], name, "/", GetCurrentFolderId(), 0);
+                    isFile ? UploadFile("", name, 0, GetCurrentFolderId(true)) : UploadFolder([], name, "/", GetCurrentFolderId(true), 0);
 
                     modal.HideAndRemove();
                 }
@@ -284,7 +284,7 @@ window.addEventListener("userready", async () =>
     {
         const files : FileList = (<HTMLInputElement>e.target).files;
 
-        UploadFiles(Array.from(files), GetCurrentFolderId());
+        UploadFiles(Array.from(files), GetCurrentFolderId(true));
 
         fileInput.value = null;
     });
@@ -294,7 +294,7 @@ window.addEventListener("userready", async () =>
         const files : FileList = (<HTMLInputElement>e.target).files;
         const folderName : string = (<any>files[0]).webkitRelativePath.split("/")[0];
 
-        UploadFolder(Array.from(files), folderName, folderName + "/", GetCurrentFolderId(), 0);
+        UploadFolder(Array.from(files), folderName, folderName + "/", GetCurrentFolderId(true), 0);
 
         folderInput.value = null;
     });
@@ -307,7 +307,7 @@ window.addEventListener("userready", async () =>
         const value = editor.getValue();
         const id = editorTabs.querySelector(".active").id.split("-")[1];
 
-        UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(), id);
+        UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
 
         db.collection(`users/${Auth.UserId}/files`).doc(id).update({ ...GetFirestoreUpdateTimestamp() });
 
@@ -1096,14 +1096,14 @@ window.addEventListener("userready", async () =>
 
         Array.from(items).map(item => item.webkitGetAsEntry()).forEach((item : any) =>
         {
-            if (item.isFile) item.file((file : File) => UploadFile(file, file.name, file.size, GetCurrentFolderId()));
+            if (item.isFile) item.file((file : File) => UploadFile(file, file.name, file.size, GetCurrentFolderId(true)));
             else if (item.isDirectory)
             {
                 const entries : File[] = [];
 
                 GetFolderEntries(item, item.name + "/", entries);
 
-                UploadFolder(entries, item.name, item.name + "/", GetCurrentFolderId(), 0);
+                UploadFolder(entries, item.name, item.name + "/", GetCurrentFolderId(true), 0);
             }
         });
     });
@@ -1487,9 +1487,7 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
             .catch(error => rejectUpload(error));
     else
     {
-        if (parentId === "starred" || parentId === "trash") parentId = "root";
-
-        if (await vaultOnly(false)) parentId = "vault";
+        if (parentId === "shared" || parentId === "starred" || parentId === "trash") parentId = "root";
 
         name = await CheckElementNameValidity(name, "file", parentId);
 
@@ -2560,7 +2558,7 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
     if (depth === 0) // Duplicate checks are only useful with the uploaded folder
         name = await CheckElementNameValidity(name, "folder", parentId);
 
-    if (await vaultOnly(false)) parentId = "vault";
+    if (parentId === "shared" || parentId === "starred" || parentId === "trash") parentId = "root";
 
     db.collection(`users/${Auth.UserId}/folders`).add({
         name,
