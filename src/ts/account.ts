@@ -2066,7 +2066,7 @@ const addUserContentEvents = () : void =>
                 {   
                     AllowContentMoveTouchDevice = true;
 
-                    HandleUserContentMove(<MouseEvent>e, true);
+                    HandleUserContentMove(<MouseEvent>e);
                 });
 
                 element.addEventListener("touchstart", <EventListener>HandleUserContentMove);
