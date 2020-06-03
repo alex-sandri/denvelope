@@ -185,10 +185,7 @@
                 margin: 0 0 0 $border-width;
                 width: 100%;
                 overflow: hidden;
-                transition: $transition-time;
-                border-radius: $border-radius;
                 padding: 10px;
-                border: $border-width solid $primary-color;
                 background-color: #444d56;
     
                 p
@@ -276,10 +273,7 @@
                         margin: 0 0 0 $border-width;
                         width: 100%;
                         overflow: hidden;
-                        transition: $transition-time;
-                        border-radius: $border-radius;
                         padding: 10px;
-                        border: $border-width solid $primary-color;
                         background-color: $secondary-color;
     
                         p
