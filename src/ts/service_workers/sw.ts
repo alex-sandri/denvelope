@@ -1,4 +1,4 @@
-const cacheName : string = "static-v2525";
+const cacheName : string = "static-v2526";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
