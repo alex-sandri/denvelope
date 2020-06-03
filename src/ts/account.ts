@@ -2293,7 +2293,7 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
                     new Component("button", {
                         children: [
                             new Component("i", {
-                                class: "fas fa-ellipsis-v"
+                                class: "fas fa-ellipsis-v fa-fw"
                             }).element
                         ]
                     }).element
