@@ -355,3 +355,21 @@
         }
     }
 }
+
+html:not(.touch)
+{
+    .user-content
+    {
+        .vault,
+        div.folder,
+        div.file
+        {
+            height: $default-button-height + $border-width * 2;
+
+            .menu-button
+            {
+                display: none;
+            }
+        }
+    }
+}
