@@ -2067,7 +2067,7 @@ const addUserContentEvents = () : void =>
                     AllowContentMoveTouchDevice = true;
                 });
 
-                element.addEventListener("touchstart", <EventListener>HandleUserContentMove);
+                document.addEventListener("touchstart", HandleUserContentMove);
             }
         }
     });
@@ -2224,6 +2224,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         document.removeEventListener("touchmove", MoveElement);
         document.removeEventListener("mouseup", ResetElement);
         document.removeEventListener("touchend", ResetElement);
+
+        document.removeEventListener("touchstart", HandleUserContentMove);
     }
 
     if (IsSet(element) && e.which !== 3) // Not on right click
