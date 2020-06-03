@@ -2065,8 +2065,6 @@ const addUserContentEvents = () : void =>
                 element.addEventListener("contextmenu", e =>
                 {   
                     AllowContentMoveTouchDevice = true;
-
-                    HandleUserContentMove(<MouseEvent>e);
                 });
 
                 element.addEventListener("touchstart", <EventListener>HandleUserContentMove);
