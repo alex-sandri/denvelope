@@ -1,4 +1,4 @@
-const cacheName : string = "static-v2539";
+const cacheName : string = "static-v2540";
 
 self.addEventListener("install", (e : any) =>
     e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -147,9 +147,20 @@ self.addEventListener("fetch", (e : any) =>
         return;
     }
 
+    const respondWith = (path: string) =>
+    {
+        e.respondWith(caches.open(cacheName).then(cache => cache.match(path)
+        .then(response => response || fetch(path).then(response =>
+        {
+            if (e.request.method === "GET" && !url.href.includes("googleapis")) cache.put(path, response.clone());
+
+            return response;
+        }))));
+    }
+
     if (url.origin === location.origin && [ "/en", "/it" ].includes(url.pathname))
     {
-        e.respondWith(caches.open(cacheName).then(cache => cache.match("/").then(response => response)));
+        respondWith("/");
 
         return;
     }
@@ -158,13 +169,13 @@ self.addEventListener("fetch", (e : any) =>
         url.pathname.startsWith("/file") ||
         url.pathname.startsWith("/account")))
     {
-        e.respondWith(caches.open(cacheName).then(cache => cache.match("/account").then(response => response)));
+        respondWith("/account");
 
         return;
     }
     else if (url.origin === location.origin && url.pathname.startsWith("/settings/"))
     {
-        e.respondWith(caches.open(cacheName).then(cache => cache.match("/settings").then(response => response)));
+        respondWith("/settings");
 
         return;
     }
@@ -179,13 +190,7 @@ self.addEventListener("fetch", (e : any) =>
         return;
     }
 
-    e.respondWith(caches.open(cacheName).then(cache => cache.match(e.request)
-        .then(response => response || fetch(e.request).then(response =>
-        {
-            if (e.request.method === "GET" && !url.href.includes("googleapis")) cache.put(e.request, response.clone());
-
-            return response;
-        }))));
+    respondWith(e.request);
 });
 
 self.addEventListener("message", e =>

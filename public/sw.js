@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2539";
+const cacheName = "static-v2540";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -117,19 +117,27 @@ self.addEventListener("fetch", (e) => {
         }));
         return;
     }
+    const respondWith = (path) => {
+        e.respondWith(caches.open(cacheName).then(cache => cache.match(path)
+            .then(response => response || fetch(path).then(response => {
+            if (e.request.method === "GET" && !url.href.includes("googleapis"))
+                cache.put(path, response.clone());
+            return response;
+        }))));
+    };
     if (url.origin === location.origin && ["/en", "/it"].includes(url.pathname)) {
-        e.respondWith(caches.open(cacheName).then(cache => cache.match("/").then(response => response)));
+        respondWith("/");
         return;
     }
     else if (url.origin === location.origin &&
         (url.pathname.startsWith("/folder") ||
             url.pathname.startsWith("/file") ||
             url.pathname.startsWith("/account"))) {
-        e.respondWith(caches.open(cacheName).then(cache => cache.match("/account").then(response => response)));
+        respondWith("/account");
         return;
     }
     else if (url.origin === location.origin && url.pathname.startsWith("/settings/")) {
-        e.respondWith(caches.open(cacheName).then(cache => cache.match("/settings").then(response => response)));
+        respondWith("/settings");
         return;
     }
     if (url.origin === location.origin && url.pathname.startsWith("/assets/img/icons/languages/") && !navigator.onLine) {
@@ -139,12 +147,7 @@ self.addEventListener("fetch", (e) => {
             .then(defaultResponse => defaultResponse))));
         return;
     }
-    e.respondWith(caches.open(cacheName).then(cache => cache.match(e.request)
-        .then(response => response || fetch(e.request).then(response => {
-        if (e.request.method === "GET" && !url.href.includes("googleapis"))
-            cache.put(e.request, response.clone());
-        return response;
-    }))));
+    respondWith(e.request);
 });
 self.addEventListener("message", e => {
     if (e.data.action === "skipWaiting")
