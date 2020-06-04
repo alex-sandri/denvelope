@@ -2137,7 +2137,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         console.log(top, left, moved, ignoreMovement, ev.type, AllowContentMoveTouchDevice);
 
         // If this was called by a touchmove event and the user didn't yet reached the context menu
-        if (!ignoreMovement && ev.type === "touchmove" && !AllowContentMoveTouchDevice)
+        // endsWith is required as Chrome (and hopefully all of the others use touchmove), Firefox on the other hand uses mousemove (WHY?)
+        if (!ignoreMovement && IsTouchDevice() && ev.type.endsWith("move") && !AllowContentMoveTouchDevice)
         {
             moved = true;
 
