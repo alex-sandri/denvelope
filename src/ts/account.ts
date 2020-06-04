@@ -2011,8 +2011,6 @@ const HideContextMenu = () : void =>
     contextMenuItem = null;
 }
 
-let AllowContentMoveTouchDevice : boolean = false;
-
 const addUserContentEvents = () : void =>
 {
     const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(folderSelector + " .menu-button button," + fileSelector + " .menu-button button"));
@@ -2024,18 +2022,12 @@ const addUserContentEvents = () : void =>
 
     [...userContentElements, navigationBackButton, vault].forEach(element =>
     {
-        const HandleTargetElement = (e : MouseEvent | TouchEvent) : void =>
+        const HandleTargetElement = (e : MouseEvent) : void =>
         {
-            const targetFromPoint = (<TouchEvent>e).touches && <HTMLElement>document.elementFromPoint((<TouchEvent>e).touches[0].clientX, (<TouchEvent>e).touches[0].clientY);
-
-            if (((e.type === "touchmove" &&
-                element.contains(targetFromPoint) && // Avoid making all the folders a target if the element is dragged over the back button or the vault
-                (IsSet(targetFromPoint?.closest(folderSelector)) || navigationBackButton.contains(targetFromPoint) || vault.contains(targetFromPoint))) ||
-                e.type === "mouseenter") &&
-                IsSet(document.querySelector(".dragging")) &&
-                (targetFromPoint?.id || element.id) !== document.querySelector(".dragging").id &&
-                !HasClass(targetFromPoint?.closest(folderSelector) || element, "placeholder"))
-                AddClass(targetFromPoint?.closest(folderSelector) || element, "target");
+            if (e.type === "mouseenter" && IsSet(document.querySelector(".dragging")) &&
+                (element.id) !== document.querySelector(".dragging").id &&
+                !HasClass( element, "placeholder"))
+                AddClass( element, "target");
             else RemoveClass(element, "target");
         }
 
@@ -2043,33 +2035,20 @@ const addUserContentEvents = () : void =>
         {
             element.removeEventListener("mouseenter", <EventListener>HandleTargetElement);
             element.removeEventListener("mouseleave", <EventListener>HandleTargetElement);
-            document.removeEventListener("touchmove", HandleTargetElement);
-            document.removeEventListener("touchmove", HandleTargetElement);
 
             element.addEventListener("mouseenter", <EventListener>HandleTargetElement);
             element.addEventListener("mouseleave", <EventListener>HandleTargetElement);
-            document.addEventListener("touchmove", HandleTargetElement);
-            document.addEventListener("touchmove", HandleTargetElement);
         }
 
         if (isUserContentElement(element))
         {
             element.removeEventListener("mousedown", <EventListener>HandleUserContentMove);
-            element.removeEventListener("touchstart", <EventListener>HandleUserContentMove);
-
             element.addEventListener("mousedown", <EventListener>HandleUserContentMove);
 
             if (IsTouchDevice())
             {
-                // Used on a touch device as a long press
-                element.addEventListener("contextmenu", e =>
-                {   
-                    AllowContentMoveTouchDevice = true;
-
-                    HandleUserContentMove(<MouseEvent>e, true);
-                });
-
-                element.addEventListener("touchstart", <EventListener>HandleUserContentMove);
+                element.removeEventListener("contextmenu", <EventListener>showContextMenu);
+                element.addEventListener("contextmenu", <EventListener>showContextMenu);
             }
         }
     });
@@ -2081,7 +2060,7 @@ const addUserContentEvents = () : void =>
  * @param e The event fired on user interaction (e.g.: MouseEvent)
  * @param targetElement Specified if an Event parameter is not available
  */
-const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetElement ?: HTMLElement, isMultipleFileEditor ?: boolean) =>
+const HandlePageChangeAndLoadUserContent = (e : MouseEvent, targetElement ?: HTMLElement, isMultipleFileEditor ?: boolean) =>
 {
     const target : HTMLElement = targetElement ?? <HTMLElement>e.target;
 
@@ -2092,7 +2071,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
     {
         const closestFile = target.closest(fileSelector);
 
-        const openInNewWindow = e instanceof MouseEvent && e.button === 1; // Mouse wheel
+        const openInNewWindow = e.button === 1; // Mouse wheel
 
         HideContextMenu();
 
@@ -2116,7 +2095,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
     }
 }
 
-const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
+const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void =>
 {
     const placeholderElement : HTMLElement = GetUserContentElement(<HTMLElement>e.target);
     let element : HTMLElement = <HTMLElement>placeholderElement?.cloneNode(true);
@@ -2125,36 +2104,25 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     const tempArray = <HTMLElement[]>[ ...(contextMenuItems || []), element ].filter(Boolean);
 
-    const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
+    const MoveElement = (ev : MouseEvent, ignoreMovement ?: boolean) : void =>
     {
         if (!IsSet(element)) return;
 
-        const top : number = (<MouseEvent>ev).pageY ?? (<TouchEvent>ev).touches[0].pageY;
-        const left : number = (<MouseEvent>ev).pageX ?? (<TouchEvent>ev).touches[0].pageX;
-
-        // If this was called by a touchmove event and the user didn't yet reached the context menu
-        if (!ignoreMovement && ev.type === "touchmove" && !AllowContentMoveTouchDevice)
-        {
-            moved = true;
-
-            return;
-        }
+        const top : number = ev.pageY;
+        const left : number = ev.pageX;
 
         HideContextMenu();
 
         if (Auth.IsAuthenticated)
         {
-            if (IsTouchDevice()) moved = true;
-
             if (!ignoreMovement)
             {
                 // Set moved=true only if the mouse moved by at least 5px
-                if (Math.abs(left - (<MouseEvent>e).pageX ?? (<TouchEvent>e).touches[0].pageX) > 5 || Math.abs(top - (<MouseEvent>e).pageY ?? (<TouchEvent>e).touches[0].pageY) > 5)
+                if (Math.abs(left - e.pageX) > 5 || Math.abs(top - e.pageY) > 5)
                     moved = true;
 
                 if (moved) ShowElement(element, "flex");
             }
-            else if (IsTouchDevice()) ShowElement(element, "flex");
 
             if (moved)
             {
@@ -2176,13 +2144,11 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         }
     }
 
-    const ResetElement = async (ev : MouseEvent | TouchEvent) =>
+    const ResetElement = async (ev : MouseEvent) =>
     {
         const target : HTMLElement = foldersContainer.querySelector(".target");
 
         let parentId = null;
-
-        AllowContentMoveTouchDevice = false;
 
         [foldersContainer, filesContainer].forEach(element =>
             (<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
@@ -2223,9 +2189,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
             MoveElements(tempArray, parentId);
 
         document.removeEventListener("mousemove", MoveElement);
-        document.removeEventListener("touchmove", MoveElement);
         document.removeEventListener("mouseup", ResetElement);
-        document.removeEventListener("touchend", ResetElement);
     }
 
     if (IsSet(element) && e.which !== 3) // Not on right click
@@ -2237,16 +2201,11 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
             document.body.appendChild(element);
 
             document.removeEventListener("mousemove", MoveElement);
-            document.removeEventListener("touchmove", MoveElement);
             document.removeEventListener("mouseup", ResetElement);
-            document.removeEventListener("touchend", ResetElement);
 
             document.addEventListener("mousemove", MoveElement);
-            document.addEventListener("touchmove", MoveElement);
             document.addEventListener("mouseup", ResetElement);
-            document.addEventListener("touchend", ResetElement);
         }
-        else if (IsTouchDevice()) MoveElement(e, true);
     }
 }
 
