@@ -16,6 +16,8 @@ export const Init = () : void =>
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({ synchronizeTabs: true });
 
+    document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
+
     window.addEventListener("translationlanguagechange", () =>
         // Used in plans page and in plan settings
         document
