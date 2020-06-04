@@ -113,7 +113,7 @@ export class Auth
     {
         const script = document.createElement("script");
 
-        script.src = `https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth__${Translation.Language.substr(0, 2)}.js`;
+        script.src = `https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth__${Translation.Language.substr(0, 2)}.js`;
                 
         script.onload = () => {
             const uiConfig = {

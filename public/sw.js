@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2537";
+const cacheName = "static-v2538";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -10,9 +10,9 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/cookies",
     "/accessibility",
     "/assets/css/bundle.256022146d95e36ac7dead7518dd2892.css",
-    "/assets/js/home.a21a8ab38d3279b1c338.js",
-    "/assets/js/account.271286fc4835d6c754af.js",
-    "/assets/js/settings.8deaa824513ff6a896cc.js",
+    "/assets/js/home.4b39c36fdaaadfafca2d.js",
+    "/assets/js/account.38fa49e5daa23c6e093e.js",
+    "/assets/js/settings.a6d676f3682b4457ed46.js",
     "/__/firebase/7.14.6/firebase-app.js",
     "/__/firebase/7.14.6/firebase-auth.js",
     "/__/firebase/7.14.6/firebase-firestore.js",
@@ -21,8 +21,8 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/__/firebase/7.14.6/firebase-analytics.js",
     "/__/firebase/7.14.6/firebase-performance.js",
     "/__/firebase/init.js",
-    "https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth__en.js",
-    "https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth__it.js",
+    "https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth__en.js",
+    "https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth__it.js",
     "/editor/0.20.0/min/vs/loader.js",
     "/editor/0.20.0/min/vs/editor/editor.main.nls.js",
     "/editor/0.20.0/min/vs/editor/editor.main.js",
