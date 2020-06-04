@@ -841,8 +841,6 @@ window.addEventListener("userready", () =>
     {
         const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
 
-        document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
-
         resetBackground.disabled = !backgroundImageUrl;
 
         userDateFormatOptions = preferences.data()?.dateFormatOptions;

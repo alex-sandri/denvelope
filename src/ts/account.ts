@@ -1306,14 +1306,6 @@ window.addEventListener("userready", async () =>
     else GetUserContent();
 
     if (Auth.IsAuthenticated)
-    {
-        db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
-        {
-            const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
-            
-            document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
-        });
-
         db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
         {
             if (snapshot.exists)
@@ -1334,7 +1326,6 @@ window.addEventListener("userready", async () =>
 
             Auth.RefreshToken();
         });
-    }
 });
 
 window.addEventListener("resize", () => HideContextMenu());

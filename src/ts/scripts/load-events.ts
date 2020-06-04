@@ -121,6 +121,19 @@ export const Init = () : void =>
     window.addEventListener("userready", () =>
     {
         if (Auth.IsAuthenticated)
+        {
+            db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
+            {
+                if (location.pathname.startsWith("/account") || location.pathname.startsWith("/settings"))
+                {
+                    const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
+                
+                    document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
+
+                    localStorage.setItem("background-image-url", backgroundImageUrl);
+                }
+            });
+
             db.collection("users").doc(Auth.UserId).onSnapshot((doc : any) =>
             {
                 // It could not exist if the user just signed up
@@ -150,6 +163,7 @@ export const Init = () : void =>
                 if (IsFreePlan(maxStorage)) ShowElement(upgradePlan);
                 else HideElement(upgradePlan);
             });
+        }
     });
 
     window.addEventListener("securitypolicyviolation", e => console.error(e));
