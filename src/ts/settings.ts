@@ -67,7 +67,6 @@ const settingsSections : NodeListOf<HTMLElement> = document.querySelectorAll(".s
 
 const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
 const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
-const currentLanguage : HTMLElement = document.querySelector("#change-language .current-language .value");
 
 const changeBackground : HTMLButtonElement = document.querySelector("#change-background .edit");
 const resetBackground : HTMLButtonElement = document.querySelector("#change-background .reset");
@@ -901,12 +900,7 @@ window.addEventListener("popstate", () =>
     (<HTMLButtonElement>document.querySelector("button[data-sect=" + (section === "settings" ? "general" : section) + "]")).click();
 });
 
-const UpdateLanguage = () : void =>
-{
-    Translation.Init(languageSelect.selectedOptions[0].value);
-
-    currentLanguage.innerText = languageSelect.selectedOptions[0].text;
-};
+const UpdateLanguage = () : void => Translation.Init(languageSelect.selectedOptions[0].value);
 
 const UpdateCacheSize = (bytes : number) =>
 {
