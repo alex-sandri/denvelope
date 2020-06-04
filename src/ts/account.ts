@@ -2134,6 +2134,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         const top : number = (<MouseEvent>ev).pageY ?? (<TouchEvent>ev).touches[0].pageY;
         const left : number = (<MouseEvent>ev).pageX ?? (<TouchEvent>ev).touches[0].pageX;
 
+        console.log(top, left, moved, ignoreMovement, ev.type, AllowContentMoveTouchDevice);
+
         // If this was called by a touchmove event and the user didn't yet reached the context menu
         if (!ignoreMovement && ev.type === "touchmove" && !AllowContentMoveTouchDevice)
         {
