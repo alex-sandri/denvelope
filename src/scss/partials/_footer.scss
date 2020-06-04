@@ -26,4 +26,10 @@ footer
             }
         }
     }
+
+    hr
+    {
+        margin: $standard-spacing 0;
+        border: #{$border-width / 4} solid $primary-color;
+    }
 }
