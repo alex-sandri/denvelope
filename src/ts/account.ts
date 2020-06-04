@@ -2248,13 +2248,13 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
             document.removeEventListener("mousemove", MoveElement);
             document.removeEventListener("touchmove", MoveElement);
-            element.removeEventListener("touchmove", MoveElement);
+            element.removeEventListener("mousemove", MoveElement);
             document.removeEventListener("mouseup", ResetElement);
             document.removeEventListener("touchend", ResetElement);
 
             document.addEventListener("mousemove", MoveElement);
             document.addEventListener("touchmove", MoveElement);
-            element.addEventListener("touchmove", MoveElement);
+            element.addEventListener("mousemove", MoveElement);
             document.addEventListener("mouseup", ResetElement);
             document.addEventListener("touchend", ResetElement);
         }
