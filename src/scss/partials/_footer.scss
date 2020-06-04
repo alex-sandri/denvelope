@@ -32,4 +32,11 @@ footer
         margin: $standard-spacing 0;
         border: #{$border-width / 4} solid $primary-color;
     }
+
+    .language .edit
+    {
+        @include button($bg-color: transparent, $color: $primary-color, $has-padding: false, $has-border: false, $hover-effect: underline);
+
+        font-size: medium;
+    }
 }
