@@ -156,10 +156,13 @@ export const ClearCache = () => // This method is to be used when signing out th
     // Firebase Auth DB to keep informations about the signed in user
     indexedDB.deleteDatabase("firebaseLocalStorageDb");
 
+    const lang = localStorage.getItem("lang");
+
     // Clear localStorage, it contains all Firestore pending writes and its cache size
     localStorage.clear();
 
     localStorage.setItem("cookie-consent", "true");
+    localStorage.setItem("lang", lang);
 }
 
 export const GetPlanIndex = (plan : string) : number =>
