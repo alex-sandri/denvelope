@@ -249,6 +249,7 @@
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         max-height: 100%;
+        max-width: calc(100% - #{$standard-spacing * 2});
         overflow: auto;
         width: fit-content;
 
