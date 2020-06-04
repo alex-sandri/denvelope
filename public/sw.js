@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2569";
+const cacheName = "static-v2570";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -10,9 +10,9 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/cookies",
     "/accessibility",
     "/assets/css/bundle.edb242f8ad42ec6506e8e3ca29aa77a5.css",
-    "/assets/js/home.081ac434c752290e07e9.js",
-    "/assets/js/account.dd6c7512871ffc0b56b6.js",
-    "/assets/js/settings.f3072982b6dfd261fcb6.js",
+    "/assets/js/home.86e50e1023cd8f52f139.js",
+    "/assets/js/account.b48fb2000bcc9dd3b832.js",
+    "/assets/js/settings.0875a41d2a6910be04d0.js",
     "/__/firebase/7.14.6/firebase-app.js",
     "/__/firebase/7.14.6/firebase-auth.js",
     "/__/firebase/7.14.6/firebase-firestore.js",

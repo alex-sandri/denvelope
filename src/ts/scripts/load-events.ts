@@ -37,7 +37,7 @@ export const Init = () : void =>
     const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
     const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
 
-    document.querySelector("#change-language .edit").addEventListener("click", () =>
+    document.querySelector("#change-language .edit")?.addEventListener("click", () =>
     {
         const modal = new Modal({
             title: Translation.Get("generic->language"),
