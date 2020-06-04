@@ -2127,14 +2127,10 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
     {
-        console.log("move");
-
         if (!IsSet(element)) return;
 
         const top : number = (<MouseEvent>ev).pageY ?? (<TouchEvent>ev).touches[0].pageY;
         const left : number = (<MouseEvent>ev).pageX ?? (<TouchEvent>ev).touches[0].pageX;
-
-        console.log(top, left, moved, ignoreMovement, ev.type, AllowContentMoveTouchDevice);
 
         // If this was called by a touchmove event and the user didn't yet reached the context menu
         if (!ignoreMovement && ev.type === "touchmove" && !AllowContentMoveTouchDevice)
@@ -2182,8 +2178,6 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     const ResetElement = async (ev : MouseEvent | TouchEvent) =>
     {
-        console.log("reset");
-
         const target : HTMLElement = foldersContainer.querySelector(".target");
 
         let parentId = null;
@@ -2234,14 +2228,10 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         document.removeEventListener("touchend", ResetElement);
     }
 
-    console.log(element, e.which);
-
-    if (IsSet(element) && (e.which !== 3 || IsTouchDevice())) // Not on right click, unless is a touch device (fix issue in Firefox)
+    if (IsSet(element) && e.which !== 3) // Not on right click
     {
         if (!ignoreMovement)
         {
-            console.log("add event listeners");
-
             HideElement(element);
 
             document.body.appendChild(element);
@@ -2256,12 +2246,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
             document.addEventListener("mouseup", ResetElement);
             document.addEventListener("touchend", ResetElement);
         }
-        else if (IsTouchDevice())
-        {
-            console.log("show element");
-
-            MoveElement(e, true);
-        }
+        else if (IsTouchDevice()) MoveElement(e, true);
     }
 }
 
