@@ -16,7 +16,8 @@ export const Init = () : void =>
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({ synchronizeTabs: true });
 
-    document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
+    if (location.pathname.startsWith("/account") || location.pathname.startsWith("/settings"))
+        document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
 
     window.addEventListener("translationlanguagechange", () =>
         // Used in plans page and in plan settings
@@ -39,7 +40,7 @@ export const Init = () : void =>
     const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
     const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
 
-    document.querySelector("#change-language .edit")?.addEventListener("click", () =>
+    changeLanguage?.addEventListener("click", () =>
     {
         const modal = new Modal({
             title: Translation.Get("generic->language"),
