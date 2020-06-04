@@ -3,6 +3,7 @@ import { Auth } from "./Auth";
 import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
 import { Translation } from "./Translation";
+import { Modal } from "./Modal";
 
 export const Init = () : void =>
 {
@@ -32,6 +33,30 @@ export const Init = () : void =>
             }));
 
     Translation.Init();
+
+    const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
+    const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
+
+    document.querySelector("#change-language .edit").addEventListener("click", () =>
+    {
+        const modal = new Modal({
+            title: Translation.Get("generic->language"),
+            allow: [ "close", "confirm" ]
+        });
+
+        modal.AppendContent([ languageSelect ]);
+
+        languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
+
+        modal.OnConfirm = () =>
+        {
+            Translation.Init(languageSelect.selectedOptions[0].value);
+
+            modal.HideAndRemove();
+        }
+
+        modal.Show(true);
+    });
 
     Auth.Init();
 

@@ -65,9 +65,6 @@ const settingsMenuButtons = settingsMenu.querySelectorAll("button");
 
 const settingsSections : NodeListOf<HTMLElement> = document.querySelectorAll(".settings-section");
 
-const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
-const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
-
 const changeBackground : HTMLButtonElement = document.querySelector("#change-background .edit");
 const resetBackground : HTMLButtonElement = document.querySelector("#change-background .reset");
 
@@ -143,8 +140,6 @@ const deleteAccount : HTMLButtonElement = document.querySelector("#delete-accoun
 
 const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
 
-languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
-
 let section : string = "general";
 
 if (location.pathname.indexOf("/settings/") > -1)
@@ -194,27 +189,6 @@ window.addEventListener("resize", SetMainHeight);
 
 window.addEventListener("userready", () =>
 {
-    changeLanguage.addEventListener("click", () =>
-    {
-        const modal = new Modal({
-            title: changeLanguage.closest(".setting").querySelector("h1").innerText,
-            allow: [ "close", "confirm" ]
-        });
-
-        modal.AppendContent([ languageSelect ]);
-
-        languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
-
-        modal.OnConfirm = () =>
-        {
-            UpdateLanguage();
-
-            modal.HideAndRemove();
-        }
-
-        modal.Show(true);
-    });
-
     changeBackground.addEventListener("click", () =>
     {
         const modal = new Modal({ title: changeBackground.closest(".setting").querySelector("h1").innerText, allow: [ "close", "confirm" ] });
@@ -900,8 +874,6 @@ window.addEventListener("popstate", () =>
     (<HTMLButtonElement>document.querySelector("button[data-sect=" + (section === "settings" ? "general" : section) + "]")).click();
 });
 
-const UpdateLanguage = () : void => Translation.Init(languageSelect.selectedOptions[0].value);
-
 const UpdateCacheSize = (bytes : number) =>
 {
     localStorage.setItem("cache-size", bytes.toString());
@@ -923,7 +895,5 @@ const UpdatePlan = (maxStorage : number) : void =>
 
     changePlan.disabled = true;
 }
-
-UpdateLanguage();
 
 UpdateCacheSize(parseInt(localStorage.getItem("cache-size")) || defaultCacheSize); // if cache-size is null parseInt returns NaN
