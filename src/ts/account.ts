@@ -2127,6 +2127,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     const MoveElement = (ev : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
     {
+        console.log("move");
+
         if (!IsSet(element)) return;
 
         const top : number = (<MouseEvent>ev).pageY ?? (<TouchEvent>ev).touches[0].pageY;
@@ -2178,6 +2180,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     const ResetElement = async (ev : MouseEvent | TouchEvent) =>
     {
+        console.log("reset");
+
         const target : HTMLElement = foldersContainer.querySelector(".target");
 
         let parentId = null;
@@ -2232,6 +2236,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
     {
         if (!ignoreMovement)
         {
+            console.log("add event listeners");
+
             HideElement(element);
 
             document.body.appendChild(element);
@@ -2246,7 +2252,12 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
             document.addEventListener("mouseup", ResetElement);
             document.addEventListener("touchend", ResetElement);
         }
-        else if (IsTouchDevice()) MoveElement(e, true);
+        else if (IsTouchDevice())
+        {
+            console.log("show element");
+
+            MoveElement(e, true);
+        }
     }
 }
 
