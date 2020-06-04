@@ -143,7 +143,7 @@ export class Auth
                     "microsoft.com",
                     //"apple.com",
                 ],
-                credentialHelper: (<any>window).firebaseui.auth.CredentialHelper.NONE,
+                credentialHelper: (<any>window).firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
                 tosUrl: "terms",
                 privacyPolicyUrl: () => window.location.assign("privacy")
             }
