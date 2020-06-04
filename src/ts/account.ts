@@ -2022,8 +2022,6 @@ const addUserContentEvents = () : void =>
 
     if (trashedOnly()) return;
 
-    if (IsTouchDevice()) HandleUserContentMove(null, true, true);
-
     [...userContentElements, navigationBackButton, vault].forEach(element =>
     {
         const HandleTargetElement = (e : MouseEvent | TouchEvent) : void =>
@@ -2118,7 +2116,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent | TouchEvent, targetE
     }
 }
 
-const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: boolean, addEventListeners ?: boolean) : void =>
+const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: boolean) : void =>
 {
     const placeholderElement : HTMLElement = GetUserContentElement(<HTMLElement>e.target);
     let element : HTMLElement = <HTMLElement>placeholderElement?.cloneNode(true);
@@ -2236,30 +2234,27 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         document.removeEventListener("touchend", ResetElement);
     }
 
-    if (addEventListeners)
-    {
-        document.removeEventListener("mousemove", MoveElement);
-        document.removeEventListener("touchmove", MoveElement);
-        document.removeEventListener("mouseup", ResetElement);
-        document.removeEventListener("touchend", ResetElement);
-
-        document.addEventListener("mousemove", MoveElement);
-        document.addEventListener("touchmove", MoveElement);
-        document.addEventListener("mouseup", ResetElement);
-        document.addEventListener("touchend", ResetElement);
-
-        return;
-    }
-
     console.log(element, e.which);
 
     if (IsSet(element) && (e.which !== 3 || IsTouchDevice())) // Not on right click, unless is a touch device (fix issue in Firefox)
     {
         if (!ignoreMovement)
         {
+            console.log("add event listeners");
+
             HideElement(element);
 
             document.body.appendChild(element);
+
+            document.removeEventListener("mousemove", MoveElement);
+            document.removeEventListener("touchmove", MoveElement);
+            document.removeEventListener("mouseup", ResetElement);
+            document.removeEventListener("touchend", ResetElement);
+
+            document.addEventListener("mousemove", MoveElement);
+            document.addEventListener("touchmove", MoveElement);
+            document.addEventListener("mouseup", ResetElement);
+            document.addEventListener("touchend", ResetElement);
         }
         else if (IsTouchDevice())
         {
