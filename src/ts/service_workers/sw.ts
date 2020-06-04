@@ -10,7 +10,7 @@ self.addEventListener("install", (e : any) =>
         "/privacy",
         "/cookies",
         "/accessibility",
-        "/assets/css/bundle.54194662285abbe8e1017603b9f3ef2e.css",
+        "/assets/css/bundle.b5f57768c01448fdd266247a1ef0e9a4.css",
         "/assets/js/home.bd41a9f7767d17e09c03.js",
         "/assets/js/account.3836128929f7290d6d91.js",
         "/assets/js/settings.704b6558a1f415f2b5f7.js",
