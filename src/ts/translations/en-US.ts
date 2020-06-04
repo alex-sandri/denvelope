@@ -1,4 +1,7 @@
 export const en_US = {
+    language: {
+        name: "English (United States)",
+    },
     accessibility: {
         keyboard_shortcuts: "Keyboard shortcuts",
         view_account_content: "View account content",

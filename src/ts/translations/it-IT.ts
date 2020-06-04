@@ -1,4 +1,7 @@
 export const it_IT = {
+    language: {
+        name: "Italiano",
+    },
     accessibility: {
         keyboard_shortcuts: "Scorciatoie da tastiera",
         view_account_content: "Vedi contenuti account",
