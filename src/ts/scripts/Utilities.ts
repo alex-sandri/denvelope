@@ -158,6 +158,8 @@ export const ClearCache = () => // This method is to be used when signing out th
 
     // Clear localStorage, it contains all Firestore pending writes and its cache size
     localStorage.clear();
+
+    localStorage.setItem("cookie-consent", "true");
 }
 
 export const GetPlanIndex = (plan : string) : number =>
