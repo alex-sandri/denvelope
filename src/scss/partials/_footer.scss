@@ -33,10 +33,18 @@ footer
         border: #{$border-width / 4} solid $primary-color;
     }
 
-    .language .edit
+    .language
     {
-        @include button($bg-color: transparent, $color: $primary-color, $has-padding: false, $has-border: false, $hover-effect: underline);
+        .edit
+        {
+            @include button($bg-color: transparent, $color: $primary-color, $has-padding: false, $has-border: false, $hover-effect: underline);
 
-        font-size: medium;
+            font-size: medium;
+        }
+
+        #language-select
+        {
+            display: none;
+        }
     }
 }
