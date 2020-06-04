@@ -2234,7 +2234,7 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
 
     console.log(element, e.which);
 
-    if (IsSet(element) && e.which !== 3) // Not on right click
+    if (IsSet(element) && (e.which !== 3 || IsTouchDevice())) // Not on right click, unless is a touch device (fix issue in Firefox)
     {
         if (!ignoreMovement)
         {
