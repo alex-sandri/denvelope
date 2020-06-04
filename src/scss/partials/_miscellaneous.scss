@@ -702,3 +702,11 @@
     backdrop-filter: opacity(0.8);
     display: none;
 }
+
+select
+{
+    @include select($border-color: $primary-color);
+
+    width: 100%;
+    margin-bottom: $standard-spacing;
+}
