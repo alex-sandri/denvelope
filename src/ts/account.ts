@@ -2232,6 +2232,8 @@ const HandleUserContentMove = (e : MouseEvent | TouchEvent, ignoreMovement ?: bo
         document.removeEventListener("touchend", ResetElement);
     }
 
+    console.log(element, e.which);
+
     if (IsSet(element) && e.which !== 3) // Not on right click
     {
         if (!ignoreMovement)
