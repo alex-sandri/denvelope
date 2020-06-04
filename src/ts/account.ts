@@ -1085,8 +1085,8 @@ window.addEventListener("userready", async () =>
     document.addEventListener("scroll", () => HideContextMenu());
 
     document.addEventListener("contextmenu", e =>
-        // Allow custom context menu only in non-touch devices, outside of any .allow-context-menu and inside .user-content
-        (!IsTouchDevice() && (<HTMLElement>e.target).closest(".allow-context-menu") === null && (<HTMLElement>e.target).closest(".user-content") !== null)
+        // Allow custom context menu only outside of any .allow-context-menu and inside .user-content
+        ((<HTMLElement>e.target).closest(".allow-context-menu") === null && (<HTMLElement>e.target).closest(".user-content") !== null)
             ? showContextMenu(e)
             : HideContextMenu());
 
@@ -2044,12 +2044,6 @@ const addUserContentEvents = () : void =>
         {
             element.removeEventListener("mousedown", <EventListener>HandleUserContentMove);
             element.addEventListener("mousedown", <EventListener>HandleUserContentMove);
-
-            if (IsTouchDevice())
-            {
-                element.removeEventListener("contextmenu", <EventListener>showContextMenu);
-                element.addEventListener("contextmenu", <EventListener>showContextMenu);
-            }
         }
     });
 }
