@@ -1112,7 +1112,7 @@ window.addEventListener("userready", async () =>
         if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected"))
             (<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element => RemoveClass(element, "selected"));
 
-        if (isUserContentElement(<HTMLElement>e.target)) return;
+        if (isUserContentElement(<HTMLElement>e.target) || contextMenuContainer.contains(<HTMLElement>e.target)) return;
         
         (<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element => RemoveClass(element, "selected"));
 
