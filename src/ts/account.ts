@@ -2041,7 +2041,7 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent, targetElement ?: HTM
     {
         const closestFile = target.closest(fileSelector);
 
-        const openInNewWindow = e.button === 1; // Mouse wheel
+        const openInNewWindow = e?.button === 1; // Mouse wheel
 
         HideContextMenu();
 
