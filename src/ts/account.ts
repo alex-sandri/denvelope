@@ -1977,22 +1977,6 @@ const showContextMenu = (e : MouseEvent) : void =>
     if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
 
     ShowElement(contextMenuContainer, "flex");
-
-    let top : number = e.pageY - scrollY;
-    let left : number = e.pageX;
-
-    if (e.pageX + contextMenu.offsetWidth > window.innerWidth) left -= contextMenu.offsetWidth;
-
-    if (e.pageY + contextMenu.offsetHeight - scrollY > window.innerHeight) top -= contextMenu.offsetHeight;
-
-    if (top < 0) top = 0;
-
-    if (left < 0) left = 0;
-
-    Object.assign(contextMenu.style, {
-        top: top + "px",
-        left: left + "px",
-    });
 }
 
 const HideContextMenu = () : void =>
