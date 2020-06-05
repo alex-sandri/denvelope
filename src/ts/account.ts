@@ -1085,7 +1085,9 @@ window.addEventListener("userready", async () =>
 
     document.addEventListener("contextmenu", e =>
         // Allow custom context menu only outside of any .allow-context-menu and inside .user-content
-        ((<HTMLElement>e.target).closest(".allow-context-menu") === null && (<HTMLElement>e.target).closest(".user-content") !== null)
+        ((<HTMLElement>e.target).closest(".allow-context-menu") === null
+        && (<HTMLElement>e.target).closest(".user-content") !== null
+        && !contextMenuContainer.contains(<HTMLElement>e.target))
             ? showContextMenu(e)
             : HideContextMenu());
 
