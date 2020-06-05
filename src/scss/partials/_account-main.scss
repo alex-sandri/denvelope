@@ -18,6 +18,11 @@
                 width: 100%;
                 transition: $transition-time;
 
+                input
+                {
+                    -webkit-appearance: textfield;
+                }
+
                 &:focus-within
                 {
                     // Make it appear above the header just during focus to avoid seeing the top box-shadow under it
