@@ -57,6 +57,12 @@
                     display: block;
                     text-align: center;
                     text-decoration: none;
+                    color: $secondary-color;
+                    border: $border-width solid $secondary-color;
+                    border-radius: $border-radius;
+                    padding: 10px;
+                    font-size: 20px;
+                    transition: $transition-time;
                 }
 
                 .delete:not(.blocked):not(:disabled)
