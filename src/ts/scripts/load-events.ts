@@ -1,4 +1,4 @@
-import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, EscapeHtml, AddClass, IsTouchDevice } from "./Utilities";
+import { LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, AddClass, IsTouchDevice } from "./Utilities";
 import { Auth } from "./Auth";
 import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
