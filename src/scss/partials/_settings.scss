@@ -44,8 +44,8 @@
                     width: 100%;
                     background-color: rgba($primary-color, 0.5);
                     
-                    &:focus,
-                    &:hover
+                    &:focus:not(:disabled),
+                    &:hover:not(:disabled)
                     {
                         background-color: $secondary-color;
                         color: $primary-color;

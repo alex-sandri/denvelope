@@ -63,14 +63,14 @@
             {
                 background-color: rgba($primary-color, 0.5);
 
-                &:focus,
-                &:hover
+                &:not(:disabled):focus,
+                &:not(:disabled):hover
                 {
                     background-color: $secondary-color;
                     color: $primary-color;
                 }
 
-                &:focus
+                &:not(:disabled):focus
                 {
                     box-shadow: 0 0 $box-shadow-blur-radius $secondary-color;
                 }
