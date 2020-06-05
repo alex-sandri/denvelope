@@ -19,7 +19,7 @@
         $has-padding: true,
         $has-border-radius: true)
 {
-    font-family: $font-family;
+    font-family: inherit;
     
     @if $has-border
     {
