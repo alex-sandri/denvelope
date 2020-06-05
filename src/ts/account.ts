@@ -19,7 +19,6 @@ import {
     HideElement,
     HideElements,
     HasClass,
-    IsTouchDevice,
     AddClasses
 } from "./scripts/Utilities";
 import { Modal, UploadModal, DownloadModal } from "./scripts/Modal";
