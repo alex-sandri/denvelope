@@ -7,90 +7,6 @@
     flex-wrap: $flex-wrap;
 }
 
-@mixin button (
-        $bg-color: $primary-color,
-        $color: $secondary-color,
-        $hover-bg-color: $color,
-        $hover-color: $bg-color,
-        $border-color: $secondary-color,
-        $hover-effect: invert-colors,
-        $focus-effect: same-hover,
-        $has-border: true,
-        $has-padding: true,
-        $has-border-radius: true)
-{
-    font-family: inherit;
-    
-    @if $has-border
-    {
-        border: $border-width solid $border-color;
-    }
-    @else
-    {
-        border: 0;
-    }
-
-    background-color: $bg-color;
-    color: $color;
-    
-    @if $has-border-radius
-    {
-        border-radius: $border-radius;
-    }
-    
-    @if $has-padding
-    {
-        padding: 10px;
-    }
-    @else
-    {
-        padding: 0;
-    }
-
-    font-size: 20px;
-    cursor: pointer;
-    transition: $transition-time;
-
-    &:not(:disabled)
-    {
-        &:focus,
-        &:hover
-        {
-            @if $hover-effect == invert-colors
-            {
-                background-color: $hover-bg-color;
-                color: $hover-color;
-            }
-            @else if $hover-effect == underline
-            {
-                text-decoration: underline;
-            }
-            @else if $hover-effect == no-text-decoration
-            {
-                text-decoration: none;
-            }
-        }
-
-        @if $focus-effect != same-hover
-        {
-            &:focus
-            {
-                @if $focus-effect == box-shadow
-                {
-                    box-shadow: 0 0 $box-shadow-blur-radius $border-color;
-                }
-            }
-        }
-    }
-
-    &:disabled
-    {
-        cursor: not-allowed;
-        opacity: 0.7;
-        transition: 0ms;
-    }
-}
-
 @mixin input-container ($bg-color: $primary-color, $color: $secondary-color, $has-icon: true)
 {
     border-radius: $border-radius;
@@ -169,24 +85,4 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-@mixin select ($bg-color: $primary-color, $color: $secondary-color, $border-color: $secondary-color)
-{
-    font-family: $font-family;
-    background-color: $bg-color;
-    color: $color;
-    font-size: 20px;
-    cursor: pointer;
-    transition: $transition-time;
-    padding: 9px; // Same height as a button
-    border: $border-width solid $border-color;
-    border-radius: $border-radius;
-
-    &:focus,
-    &:hover
-    {
-        background-color: $color;
-        color: $bg-color;
-    }
 }

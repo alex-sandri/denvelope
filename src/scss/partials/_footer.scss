@@ -37,9 +37,17 @@ footer
     {
         .edit
         {
-            @include button($bg-color: transparent, $color: $primary-color, $has-padding: false, $has-border: false, $hover-effect: underline);
-
             font-size: medium;
+            background-color: transparent;
+            color: $primary-color;
+            padding: 0;
+            border: none;
+
+            &:focus,
+            &:hover
+            {
+                text-decoration: underline;
+            }
         }
 
         #language-select

@@ -42,6 +42,14 @@
 
     .sign-in
     {
-        @include button($bg-color: $secondary-color, $color: $primary-color);
+        background-color: $secondary-color;
+        color: $primary-color;
+
+        &:focus,
+        &:hover
+        {
+            background-color: $primary-color;
+            color: $secondary-color;
+        }
     }
 }

@@ -13,14 +13,21 @@
     button
     {
         @include flex;
-        @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color);
 
         flex: 1 1 0;
+        background-color: rgba($primary-color, 0.5);
 
         i::after
         {
             content: " ";
             white-space: pre;
+        }
+
+        &:focus,
+        &:hover
+        {
+            background-color: $secondary-color;
+            color: $primary-color;
         }
         
         &:not(:first-child):not(:last-child)

@@ -38,9 +38,18 @@ header
 
     .sign-in
     {
-        @include button($bg-color: transparent, $has-border: false, $has-padding: false, $hover-effect: underline);
-
         font-size: 15px;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+
+        &:focus,
+        &:hover
+        {
+            text-decoration: underline;
+            background-color: unset;
+            color: currentColor;
+        }
     }
 
     .waiting-user .spinner
@@ -64,9 +73,11 @@ header
         button
         {
             @include flex;
-            @include button($bg-color: transparent, $color: unset, $has-border: false, $has-padding: false, $hover-effect: none);
 
             border-radius: 50%;
+            background-color: transparent;
+            border: none;
+            padding: 0;
 
             img
             {
@@ -114,9 +125,28 @@ header
             .upgrade-plan,
             button
             {
-                @include button($bg-color: transparent, $focus-effect: box-shadow, $hover-bg-color: $secondary-color, $hover-color: $primary-color);
-
                 width: 100%;
+                background-color: transparent;
+                font-family: inherit;
+                color: $secondary-color;
+                border: $border-width solid $secondary-color;
+                border-radius: $border-radius;
+                padding: 10px;
+                font-size: 20px;
+                cursor: pointer;
+                transition: $transition-time;
+
+                &:focus,
+                &:hover
+                {
+                    background-color: $secondary-color;
+                    color: $primary-color;
+                }
+
+                &:focus
+                {
+                    box-shadow: 0 0 $box-shadow-blur-radius $secondary-color;
+                }
             }
 
             .account,

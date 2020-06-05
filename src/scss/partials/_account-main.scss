@@ -33,9 +33,15 @@
             #add-content,
             .more-options
             {
-                @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color);
-
+                background-color: rgba($primary-color, 0.5);
                 margin-left: $standard-spacing;
+
+                &:focus,
+                &:hover
+                {
+                    background-color: $secondary-color;
+                    color: $primary-color;
+                }
             }
 
             .more-options
@@ -55,7 +61,19 @@
             .empty-trash-button,
             .lock-vault-button
             {
-                @include button($bg-color: rgba($primary-color, 0.5), $hover-color: $primary-color, $focus-effect: box-shadow);
+                background-color: rgba($primary-color, 0.5);
+
+                &:focus,
+                &:hover
+                {
+                    background-color: $secondary-color;
+                    color: $primary-color;
+                }
+
+                &:focus
+                {
+                    box-shadow: 0 0 $box-shadow-blur-radius $secondary-color;
+                }
             }
 
             .back-button
@@ -205,9 +223,16 @@
             {
                 button
                 {
-                    @include button($bg-color: #444d56, $border-color: $secondary-color);
-        
                     margin-left: $border-width;
+                    background-color: #444d56;
+                    border-color: $secondary-color;
+
+                    &:focus,
+                    &:hover
+                    {
+                        background-color: $secondary-color;
+                        color: #444d56;
+                    }
                 }
             }
     
@@ -291,9 +316,8 @@
                     {
                         button
                         {
-                            @include button($border-color: $primary-color);
-        
                             margin-left: $border-width;
+                            border-color: $primary-color;
                         }
                     }
     

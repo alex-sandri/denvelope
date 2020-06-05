@@ -72,7 +72,10 @@
 
             .upload-control
             {
-                @include button($bg-color: transparent, $color: $primary-color, $has-border: false, $has-padding: false, $hover-effect: none);
+                background-color: transparent;
+                color: $primary-color;
+                border: none;
+                padding: 0;
 
                 &.resume
                 {
@@ -130,9 +133,17 @@
     {
         &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.input-icon)
         {
-            @include button($bg-color: $secondary-color, $color: $primary-color, $border-color: $primary-color);
-
             width: 100%;
+            background-color: $secondary-color;
+            color: $primary-color;
+            border-color: $primary-color;
+
+            &:focus,
+            &:hover
+            {
+                background-color: $primary-color;
+                color: $secondary-color;
+            }
         }
 
         &:not(.close-button):not(.input-icon):not(.upload-control)
@@ -144,10 +155,9 @@
         &.update-button,
         &.confirm-button
         {
-            @include button($border-color: $primary-color);
-
             display: none;
             width: 100%;
+            border-color: $primary-color;
         }
     }
 
@@ -261,11 +271,19 @@
 
         button
         {
-            @include button($bg-color: transparent, $has-border: false, $has-border-radius: false, $hover-color: $primary-color);
-
             display: block;
             width: 100%;
             text-align: start;
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+
+            &:focus,
+            &:hover
+            {
+                background-color: $secondary-color;
+                color: $primary-color;
+            }
         }
 
         #move-selector
@@ -326,11 +344,10 @@
 
     button
     {
-        @include button($border-color: $primary-color);
-
         margin-left: $standard-spacing;
         padding: 5px;
         font-size: 15px;
+        border-color: $primary-color;
 
         &.dismiss
         {
@@ -400,10 +417,16 @@
             .menu,
             .close
             {
-                @include button($bg-color: transparent, $hover-color: #2d2d2d);
-
                 padding: 5px;
                 font-size: 15px;
+                background-color: transparent;
+
+                &:focus,
+                &:hover
+                {
+                    background-color: $secondary-color;
+                    color: #2d2d2d;
+                }
             }
 
             .close
@@ -446,11 +469,6 @@
         {
             margin: 0;
         }
-
-        .force-download
-        {
-            @include button;
-        }
     }
 }
 
@@ -471,11 +489,6 @@
 
         position: relative;
         z-index: inherit;
-
-        .close
-        {
-            @include button;
-        }
     }
 
     .file-preview
@@ -598,11 +611,20 @@
     .close
     {
         @include flex;
-        @include button($has-border: false, $has-padding: false, $hover-effect: none);
 
         position: absolute;
         top: $standard-spacing;
         right: $standard-spacing;
+        border: none;
+        padding: 0;
+        background-color: transparent;
+
+        &:focus,
+        &:hover
+        {
+            background-color: unset;
+            color: currentColor;
+        }
     }
 
     .firebaseui-container
@@ -628,12 +650,13 @@
                         .firebaseui-idp-button
                         {
                             @include flex($justify-content: start);
-                            @include button($bg-color: unset, $color: unset, $has-border: false, $hover-effect: none);
                             
                             border-radius: $border-radius;
                             color: #fff;
                             font-size: 15px;
                             width: 100%;
+                            background-color: unset;
+                            border: none;
 
                             .firebaseui-idp-icon-wrapper
                             {
@@ -708,12 +731,4 @@
     border-radius: $border-radius;
     backdrop-filter: opacity(0.8);
     display: none;
-}
-
-select
-{
-    @include select($border-color: $primary-color);
-
-    width: 100%;
-    margin-bottom: $standard-spacing;
 }

@@ -5,12 +5,18 @@ aside
     width: 100%;
     background-color: $primary-color;
 
-    button
+    #my-account,
+    #shared,
+    #starred,
+    #recents,
+    #trash
     {
-        @include button($bg-color: rgba($color: $secondary-color, $alpha: 0.1), $color: rgba($color: $secondary-color, $alpha: 0.5), $hover-effect: none, $has-border: false, $has-border-radius: false);
-
         padding: 5px;
         width: 20%;
+        background-color: rgba($secondary-color, 0.1);
+        color: rgba($secondary-color, 0.5);
+        border: none;
+        border-radius: 0;
 
         span
         {
@@ -33,7 +39,7 @@ aside
         &:focus,
         &:hover
         {
-            background-color: rgba($color: $secondary-color, $alpha: 0.2);
+            background-color: rgba($secondary-color, 0.2);
             color: $secondary-color;
         }
     }

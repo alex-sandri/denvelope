@@ -1,0 +1,52 @@
+button
+{
+    font-family: inherit;
+    margin: 0; // In Safari buttons have a 2px margin by default
+    background-color: $primary-color;
+    color: $secondary-color;
+    border: $border-width solid $secondary-color;
+    border-radius: $border-radius;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: $transition-time;
+
+    &:not(:disabled)
+    {
+        &:focus,
+        &:hover
+        {
+            background-color: $secondary-color;
+            color: $primary-color;
+        }
+    }
+
+    &:disabled
+    {
+        cursor: not-allowed;
+        opacity: 0.7;
+        transition: 0ms;
+    }
+}
+
+select
+{
+    width: 100%;
+    margin-bottom: $standard-spacing;
+    font-family: $font-family;
+    background-color: $primary-color;
+    color: $secondary-color;
+    font-size: 20px;
+    cursor: pointer;
+    transition: $transition-time;
+    padding: 9px; // Same height as a button
+    border: $border-width solid $primary-color;
+    border-radius: $border-radius;
+
+    &:focus,
+    &:hover
+    {
+        background-color: $secondary-color;
+        color: $primary-color;
+    }
+}
