@@ -426,7 +426,7 @@ window.addEventListener("userready", async () =>
                         {
                             currentId = doc.id;
 
-                            ShowAvailableFoldersIn(doc.id);
+                            ShowAvailableFoldersIn(currentId);
                         });
                     }
                 });
@@ -446,9 +446,9 @@ window.addEventListener("userready", async () =>
 
             contextMenuMoveSelectorOptions.innerHTML = "";
 
-            const parentId = (await db.collection(`users/${Auth.UserId}/folders`).doc(currentId).get()).data().parentId;
+            currentId = (await db.collection(`users/${Auth.UserId}/folders`).doc(currentId).get()).data().parentId;
 
-            ShowAvailableFoldersIn(parentId);
+            ShowAvailableFoldersIn(currentId);
         });
 
         ShowAvailableFoldersIn(currentId);
