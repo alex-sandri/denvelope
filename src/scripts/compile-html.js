@@ -12,6 +12,7 @@ handlebars.registerPartial("footer", handlebars.compile(fs.readFileSync(path.joi
 handlebars.registerPartial("general", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/general.hbs")).toString("utf-8")));
 handlebars.registerPartial("header", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/header.hbs")).toString("utf-8")));
 handlebars.registerPartial("info", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/info.hbs")).toString("utf-8")));
+handlebars.registerPartial("languageselect", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/components/language-select.hbs")).toString("utf-8")));
 handlebars.registerPartial("modal", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/modal.hbs")).toString("utf-8")));
 handlebars.registerPartial("plan", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/plan.hbs")).toString("utf-8")));
 handlebars.registerPartial("plans", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/components/plans.hbs")).toString("utf-8")));
