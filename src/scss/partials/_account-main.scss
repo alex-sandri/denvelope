@@ -255,10 +255,17 @@
             }
         }
 
+        .folders-container
+        {
+            margin-bottom: $standard-spacing;
+        }
+
         .folders-container,
         .files-container
         {
-            @include flex($justify-content: unset, $align-items: unset, $flex-wrap: wrap);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: $standard-spacing;
 
             @each $element in ("folder", "file")
             {
@@ -270,11 +277,9 @@
                     color: $primary-color;
                     border: $border-width solid $secondary-color;
                     border-radius: $border-radius;
-                    flex: 1 1 calc((100% / 3) - (#{$standard-spacing} * 2 / 3));
-                    min-width: calc((100% / 3) - (#{$standard-spacing} * 2 / 3));
                     cursor: pointer;
-                    margin-bottom: $standard-spacing;
                     transition: box-shadow $transition-time;
+                    overflow: auto;
     
                     .icon
                     {
@@ -342,17 +347,7 @@
                             }
                         }
                     }
-    
-                    &:nth-child(3n + 2)
-                    {
-                        margin-left: $standard-spacing;
-                    }
-    
-                    &:nth-child(3n + 2):not(:last-child)
-                    {
-                        margin-right: $standard-spacing;
-                    }
-    
+
                     &:hover:not(.no-hover),
                     &:focus,
                     &:focus-within,

@@ -29,27 +29,7 @@
             .folders-container,
             .files-container
             {
-                & > .folder,
-                & > .file
-                {
-                    flex: 1 1 calc(50% - #{$standard-spacing * 1 / 2});
-                    min-width: calc(50% - #{$standard-spacing * 1 / 2});
-
-                    &:nth-child(3n + 2)
-                    {
-                        margin-left: 0;
-                    }
-    
-                    &:nth-child(3n + 2):not(:last-child)
-                    {
-                        margin-right: 0;
-                    }
-
-                    &:nth-child(2n)
-                    {
-                        margin-left: $standard-spacing;
-                    }
-                }
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     }
@@ -168,17 +148,7 @@
             .folders-container,
             .files-container
             {
-                & > .folder,
-                & > .file
-                {
-                    flex: 1 1 100%;
-                    min-width: 100%;
-
-                    &:nth-child(2n)
-                    {
-                        margin-left: 0;
-                    }
-                }
+                grid-template-columns: repeat(1, 1fr);
             }
         }
     }
