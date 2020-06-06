@@ -121,8 +121,6 @@ export const GetFirestoreUpdateTimestamp = (): Object =>
     lastClientUpdateTime: new (<any>window).firebase.firestore.Timestamp.now()
 });
 
-export const IsTouchDevice = (): boolean => "ontouchstart" in window;
-
 export const EscapeHtml = (string: string): string =>
     string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/\'/g, "&#039;").replace(/\//g, "&#x2F;");
 

@@ -389,18 +389,3 @@ html:not(.signed-in):not(.signed-out)
         }
     }
 }
-
-html:not(.touch)
-{
-    .vault,
-    div.folder,
-    div.file
-    {
-        height: $default-button-height + $border-width * 2;
-
-        .menu-button
-        {
-            display: none;
-        }
-    }
-}
