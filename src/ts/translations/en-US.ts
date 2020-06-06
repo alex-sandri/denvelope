@@ -33,6 +33,7 @@ export const en_US = {
         image_address: "Image address",
         what_is_taking_up_space: "What's taking up space?",
         upgrade_plan: "Upgrade",
+        goto: "Go to your account",
         context_menu: {
             move: {
                 impossible: "Impossible to move this item, there are no folders to move this into",

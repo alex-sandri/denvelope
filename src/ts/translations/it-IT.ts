@@ -33,6 +33,7 @@ export const it_IT = {
         image_address: "Indirizzo dell'immagine",
         what_is_taking_up_space: "Cosa occupa spazio?",
         upgrade_plan: "Effettua l'upgrade",
+        goto: "Vai al tuo account",
         context_menu: {
             move: {
                 impossible: "Impossibile spostare questo elemento, non ci sono cartelle in cui spostarlo",

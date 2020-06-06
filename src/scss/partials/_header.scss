@@ -127,14 +127,7 @@ header
             {
                 width: 100%;
                 background-color: transparent;
-                font-family: inherit;
                 color: $secondary-color;
-                border: $border-width solid $secondary-color;
-                border-radius: $border-radius;
-                padding: 10px;
-                font-size: 20px;
-                cursor: pointer;
-                transition: $transition-time;
 
                 &:focus,
                 &:hover

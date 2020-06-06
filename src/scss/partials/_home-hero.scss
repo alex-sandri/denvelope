@@ -40,7 +40,8 @@
         margin: 0 auto;
     }
 
-    .sign-in
+    .sign-in,
+    .go-to-account
     {
         background-color: $secondary-color;
         color: $primary-color;
@@ -51,5 +52,11 @@
             background-color: $primary-color;
             color: $secondary-color;
         }
+    }
+
+    .go-to-account
+    {
+        text-decoration: none;
+        text-align: center;
     }
 }
