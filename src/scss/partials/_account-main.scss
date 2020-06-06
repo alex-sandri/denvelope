@@ -260,6 +260,11 @@
             margin-bottom: $standard-spacing;
         }
 
+        .folders-container:empty
+        {
+            margin-bottom: 0;
+        }
+
         .folders-container,
         .files-container
         {
