@@ -16,7 +16,7 @@ export const Init = () : void =>
     // Enable caching firestore queries for offline support and enable synchronization between tabs
     db.enablePersistence({ synchronizeTabs: true });
 
-    if (location.pathname.startsWith("/account") || location.pathname.startsWith("/settings"))
+    if (document.body.classList.contains("account") || document.body.classList.contains("settings"))
         document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
 
     window.addEventListener("translationlanguagechange", () =>
