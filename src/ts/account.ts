@@ -197,8 +197,6 @@ window.addEventListener("userready", async () =>
             }
 
             modal.Show(true);
-
-            input.focus();
         }));
 
     viewMyAccount.addEventListener("click", () =>
@@ -535,8 +533,6 @@ window.addEventListener("userready", async () =>
         }
 
         modal.Show(true);
-
-        input.focus();
     });
 
     contextMenuInfo.addEventListener("click", () =>
@@ -1253,15 +1249,11 @@ window.addEventListener("userready", async () =>
                         }).element);
 
                         modal.Show(true);
-
-                        input.focus();
                     }
                 });
             }
 
             modal.Show(true);
-
-            input.focus();
         });
     });
 

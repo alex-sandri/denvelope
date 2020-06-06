@@ -235,8 +235,6 @@ window.addEventListener("userready", () =>
         }
 
         modal.Show(true);
-
-        input.focus();
     });
 
     resetBackground.addEventListener("click", () =>
@@ -574,15 +572,11 @@ window.addEventListener("userready", () =>
                     }).element);
 
                     modal.Show(true);
-
-                    currentPinInput.focus();
                 }
             });
         }
 
         modal.Show(true);
-
-        currentPinInput.focus();
     });
 
     deleteVault.addEventListener("click", () =>
@@ -632,15 +626,11 @@ window.addEventListener("userready", () =>
                     }).element);
 
                     modal.Show(true);
-
-                    input.focus();
                 }
             });
         }
 
         modal.Show(true);
-
-        input.focus();
     });
 
     changeCacheSize.addEventListener("click", () =>

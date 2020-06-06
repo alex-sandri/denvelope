@@ -79,6 +79,8 @@ export class Modal
             AddClass(this.element, "show");
         }
 
+        (<HTMLInputElement | HTMLButtonElement | null>this.Content.querySelector("input, button"))?.focus();
+
         document.addEventListener("mouseup", this.HideOnOuterClick);
 
         window.addEventListener("keydown", e =>
