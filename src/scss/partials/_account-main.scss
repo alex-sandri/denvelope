@@ -45,7 +45,6 @@ html:not(.signed-in):not(.signed-out)
                 background-color: rgba($primary-color, 0.5);
                 margin-left: $standard-spacing;
 
-                &:focus,
                 &:hover
                 {
                     background-color: $secondary-color;
@@ -241,6 +240,7 @@ html:not(.signed-in):not(.signed-out)
                     {
                         background-color: $secondary-color;
                         color: #444d56;
+                        box-shadow: none;
                     }
                 }
             }
@@ -337,6 +337,11 @@ html:not(.signed-in):not(.signed-out)
                         {
                             margin-left: $border-width;
                             border-color: $primary-color;
+
+                            &:focus
+                            {
+                                box-shadow: none;
+                            }
                         }
                     }
     

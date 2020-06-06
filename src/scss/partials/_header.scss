@@ -129,16 +129,10 @@ header
                 background-color: transparent;
                 color: $secondary-color;
 
-                &:focus,
                 &:hover
                 {
                     background-color: $secondary-color;
                     color: $primary-color;
-                }
-
-                &:focus
-                {
-                    box-shadow: 0 0 $box-shadow-blur-radius $secondary-color;
                 }
             }
 

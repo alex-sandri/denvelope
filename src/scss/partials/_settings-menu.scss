@@ -28,6 +28,7 @@
         {
             background-color: $secondary-color;
             color: $primary-color;
+            box-shadow: none;
         }
         
         &:not(:first-child):not(:last-child)
