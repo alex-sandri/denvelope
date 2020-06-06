@@ -89,8 +89,7 @@ export class InputWithIcon extends Input
         super({
             class: "input-with-icon",
             children: [
-                new Component("button", {
-                    type: "button",
+                new Component("div", {
                     class: "input-icon",
                     aria: {
                         hidden: true
