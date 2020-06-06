@@ -39,8 +39,8 @@ select
     width: 100%;
     margin-bottom: $standard-spacing;
     font-family: $font-family;
-    background-color: $primary-color;
-    color: $secondary-color;
+    background-color: $secondary-color;
+    color: $primary-color;
     font-size: 20px;
     cursor: pointer;
     transition: $transition-time;
@@ -48,7 +48,11 @@ select
     border: $border-width solid $primary-color;
     border-radius: $border-radius;
 
-    &:focus,
+    &:focus
+    {
+        box-shadow: 0 0 0 $border-width * 2 $primary-color
+    }
+
     &:hover
     {
         background-color: $secondary-color;
