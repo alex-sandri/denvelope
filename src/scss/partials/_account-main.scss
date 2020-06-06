@@ -71,16 +71,10 @@ html:not(.signed-in):not(.signed-out)
             {
                 background-color: rgba($primary-color, 0.5);
 
-                &:not(:disabled):focus,
                 &:not(:disabled):hover
                 {
                     background-color: $secondary-color;
                     color: $primary-color;
-                }
-
-                &:not(:disabled):focus
-                {
-                    box-shadow: 0 0 $box-shadow-blur-radius $secondary-color;
                 }
             }
 
