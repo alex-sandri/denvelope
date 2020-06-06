@@ -79,6 +79,11 @@ export class Modal
             AddClass(this.element, "show");
         }
 
+        this.CloseButton.focus();
+
+        if (getComputedStyle(this.ConfirmButton).getPropertyValue("display") !== "none" && !this.ConfirmButton.disabled) this.ConfirmButton.focus();
+        else if (getComputedStyle(this.UpdateButton).getPropertyValue("display") !== "none" && !this.UpdateButton.disabled) this.UpdateButton.focus();
+
         (<HTMLInputElement | HTMLButtonElement | null>this.Content.querySelector("input, button"))?.focus();
 
         document.addEventListener("mouseup", this.HideOnOuterClick);
