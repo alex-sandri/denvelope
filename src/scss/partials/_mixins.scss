@@ -13,7 +13,7 @@
 
     &:focus-within
     {
-        box-shadow: 0 0 $box-shadow-blur-radius $color;
+        box-shadow: 0 0 0 $border-width * 2 $color;
     }
         
     input
