@@ -20,21 +20,6 @@
     }
 }
 
-@media only all and (max-width: 1000px)
-{
-    .account-main
-    {
-        .user-content
-        {
-            .folders-container,
-            .files-container
-            {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    }
-}
-
 @media only all and (max-width: 900px)
 {
     .home-hero
@@ -137,18 +122,6 @@
             img
             {
                 width: 90%;
-            }
-        }
-    }
-
-    .account-main
-    {
-        .user-content
-        {
-            .folders-container,
-            .files-container
-            {
-                grid-template-columns: repeat(1, 1fr);
             }
         }
     }

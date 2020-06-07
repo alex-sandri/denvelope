@@ -262,7 +262,7 @@ html:not(.signed-in):not(.signed-out)
         .files-container
         {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: $standard-spacing;
             margin-bottom: $standard-spacing;
 
@@ -284,6 +284,7 @@ html:not(.signed-in):not(.signed-out)
                     cursor: pointer;
                     transition: box-shadow $transition-time;
                     overflow: auto;
+                    max-width: calc(100vw - #{$standard-spacing * 2});
     
                     .icon
                     {
