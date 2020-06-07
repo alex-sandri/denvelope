@@ -139,7 +139,7 @@ body
     }
 }
 
-*:focus
+*:not([type=checkbox]):focus
 {
     outline: none;
 }
