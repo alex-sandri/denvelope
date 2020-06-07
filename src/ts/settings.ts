@@ -290,7 +290,7 @@ window.addEventListener("userready", () =>
 
         modal.AppendContent([
             new Component("p", { children: [
-                new Component("span", { innerText: Translation.Get("generic->reference") + ": " }).element,
+                new Component("span", { innerText: Translation.Get("generic->reference") }).element,
                 new Component("a", {
                     innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
                     href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
@@ -298,7 +298,7 @@ window.addEventListener("userready", () =>
                 }).element
             ] }).element,
             new Component("p", { children: [
-                new Component("span", { innerText: Translation.Get("generic->example") + ": " }).element,
+                new Component("span", { innerText: Translation.Get("generic->example") }).element,
                 new Component("span", {
                     id: "example-date",
                     innerText: FormatDate(Date.now(), userDateFormatOptions !== "default"
