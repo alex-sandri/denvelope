@@ -10,6 +10,7 @@
 @mixin input-container ($bg-color: $primary-color, $color: $secondary-color, $has-icon: true)
 {
     border-radius: $border-radius;
+    transition: $transition-time;
 
     &:focus-within
     {
