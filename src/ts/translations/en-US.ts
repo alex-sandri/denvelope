@@ -177,6 +177,8 @@ export const en_US = {
         to: "To",
         add: "Add",
         plans: "Plans",
+        disable: "Disable",
+        enable: "Enable",
     },
     header: {
         storage: {
@@ -293,6 +295,7 @@ export const en_US = {
                 title: "Clear cache",
                 clear: "Clear",
             },
+            tracking: "Tracking",
         },
         info: {
             title: "Info",

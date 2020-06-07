@@ -177,6 +177,8 @@ export const it_IT = {
         to: "A",
         add: "Aggiungi",
         plans: "Piani",
+        disable: "Disabilita",
+        enable: "Abilita",
     },
     header: {
         storage: {
@@ -293,6 +295,7 @@ export const it_IT = {
                 title: "Svuota cache",
                 clear: "Svuota",
             },
+            tracking: "Tracciamento",
         },
         info: {
             title: "Informazioni",
