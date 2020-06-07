@@ -25,6 +25,7 @@
 html
 {
     height: 100%;
+    scrollbar-color: $secondary-color $primary-color;
 
     &:not(.signed-out) .signed-out,
     &:not(.signed-in) .signed-in
