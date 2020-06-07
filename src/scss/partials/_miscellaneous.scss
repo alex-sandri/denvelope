@@ -360,6 +360,11 @@
             color: $primary-color;
             border-color: $secondary-color;
         }
+
+        &:focus
+        {
+            box-shadow: 0 0 0 $border-width * 2 $primary-color;
+        }
     }
 
     .spinner
