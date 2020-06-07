@@ -258,22 +258,18 @@ html:not(.signed-in):not(.signed-out)
             }
         }
 
-        .folders-container
-        {
-            margin-bottom: $standard-spacing;
-        }
-
-        .folders-container:empty
-        {
-            margin-bottom: 0;
-        }
-
         .folders-container,
         .files-container
         {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: $standard-spacing;
+            margin-bottom: $standard-spacing;
+
+            &:empty
+            {
+                margin-bottom: 0;
+            }
 
             @each $element in ("folder", "file")
             {
