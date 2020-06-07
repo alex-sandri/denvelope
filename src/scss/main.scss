@@ -125,6 +125,20 @@ body
     background-color: $secondary-color;
 }
 
+.modal
+{
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-corner
+    {
+        background-color: $secondary-color;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+        background-color: $primary-color;
+    }
+}
+
 *:focus
 {
     outline: none;
