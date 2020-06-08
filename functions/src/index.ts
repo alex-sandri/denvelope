@@ -872,7 +872,7 @@ const IsCorrectVaultPin = async (pin : string, userId : string) : Promise<boolea
         correct = await bcrypt.compare(pin, (<FirebaseFirestore.DocumentData>vaultConfig.data()).recoveryCode);
 
         if (correct)
-            vaultConfig.ref.update("recoveryCode", admin.firestore.FieldValue.delete()); // Delete recovery code if the user entered it (single use code)
+            await vaultConfig.ref.update("recoveryCode", admin.firestore.FieldValue.delete()); // Delete recovery code if the user entered it (single use code)
     }
 
     return correct;
