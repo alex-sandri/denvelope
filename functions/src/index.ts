@@ -5,11 +5,15 @@ import * as os from "os";
 import * as fs from "fs-extra";
 import * as path from "path";
 import Stripe from "stripe";
+import { randomBytes } from "crypto";
 
 import * as serviceAccount from "./service-account-key.json";
 
 const archiver = require("archiver");
+
 const bcrypt = require("bcrypt");
+const BCRYPT_SALT_ROUNDS = 15;
+const VAULT_RECOVERY_CODE_BYTE_NUM = 25;
 
 const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
 const STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
@@ -364,7 +368,7 @@ export const createVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
 
     if (success)
     {
-        await db.collection(`users/${userId}/vault`).doc("config").set({ pin: await bcrypt.hash(pin, 15) });
+        await db.collection(`users/${userId}/vault`).doc("config").set({ pin: await bcrypt.hash(pin, BCRYPT_SALT_ROUNDS) });
     
         await db.collection(`users/${userId}/vault`).doc("status").set({ locked: false });
 
@@ -416,7 +420,7 @@ export const changeVaultPin = functions.region(FUNCTIONS_REGION).runWith({ memor
 
     const success : boolean = (await IsCorrectVaultPin(currentPin, userId)) && IsValidVaultPin(newPin);
 
-    if (success) await vaultConfig.ref.set({ pin: await bcrypt.hash(newPin, 15) });
+    if (success) await vaultConfig.ref.set({ pin: await bcrypt.hash(newPin, BCRYPT_SALT_ROUNDS) });
 
     return { success };
 });
@@ -433,6 +437,29 @@ export const deleteVault = functions.region(FUNCTIONS_REGION).runWith({ memory: 
     if (success) await DeleteVault(userId);
 
     return { success };
+});
+
+export const generateVaultRecoveryCode = functions.region(FUNCTIONS_REGION).runWith({ memory: "2GB" }).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.pin) return;
+
+    const userId : string = context.auth.uid;
+    const pin : string = data.pin;
+
+    const success : boolean = await IsCorrectVaultPin(pin, userId);
+
+    let recoveryCode : string = "";
+
+    if (success)
+    {
+        const vaultConfig = await db.collection(`users/${userId}/vault`).doc("config").get();
+
+        recoveryCode = randomBytes(VAULT_RECOVERY_CODE_BYTE_NUM).toString("hex");
+
+        await vaultConfig.ref.set({ recoveryCode: await bcrypt.hash(recoveryCode, BCRYPT_SALT_ROUNDS) });
+    }
+
+    return { success, recoveryCode };
 });
 
 export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>

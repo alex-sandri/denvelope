@@ -648,16 +648,70 @@ window.addEventListener("userready", () =>
 
     generateVaultRecoveryCode.addEventListener("click", () =>
     {
-        const blobUrl = URL.createObjectURL(new Blob([ "someRandomString" ], { type: "text/plain" }));
-        const a = document.createElement("a");
+        const modal = new Modal({
+            title: deleteVault.closest(".setting").querySelector("h1").innerText,
+            allow: [ "confirm", "close" ]
+        });
 
-        a.download = "denvelope-vault-recovery-code.txt";
-        a.href = blobUrl;
+        const vaultPinInput = new InputWithIcon({
+            attributes: {
+                id: "vault-pin",
+                placeholder: "PIN",
+                type: "password"
+            },
+            iconClassName: "fas fa-key fa-fw"
+        }).element;
 
-        document.body.appendChild(a);
-                    
-        a.click();
-        a.remove();
+        const input = vaultPinInput.querySelector("input");
+
+        input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length < 4);
+
+        modal.ConfirmButton.disabled = true;
+
+        modal.AppendContent([ vaultPinInput ]);
+
+        modal.OnConfirm = async () =>
+        {
+            const pin = input.value;
+
+            if (HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
+
+            RemoveClass(input, "error");
+
+            modal.Hide();
+                
+            functions.httpsCallable("generateVaultRecoveryCode")({ pin }).then((result : any) =>
+            {
+                if (result.data.success)
+                {
+                    modal.Remove();
+
+                    const blobUrl = URL.createObjectURL(new Blob([ result.data.code ], { type: "text/plain" }));
+                    const a = document.createElement("a");
+
+                    a.download = "denvelope-vault-recovery-code.txt";
+                    a.href = blobUrl;
+
+                    document.body.appendChild(a);
+                                
+                    a.click();
+                    a.remove();
+                }
+                else
+                {
+                    AddClass(input, "error");
+
+                    vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+                        class: "input-error",
+                        innerText: Translation.Get("api->messages->vault->wrong_pin")
+                    }).element);
+
+                    modal.Show(true);
+                }
+            });
+        }
+
+        modal.Show(true);
     });
 
     changeCacheSize.addEventListener("click", () =>
@@ -896,7 +950,7 @@ window.addEventListener("userready", () =>
 
     db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
     {
-        changeVaultPin.disabled = deleteVault.disabled = !snapshot.exists;
+        changeVaultPin.disabled = deleteVault.disabled = generateVaultRecoveryCode.disabled = !snapshot.exists;
 
         Auth.RefreshToken();
     });
