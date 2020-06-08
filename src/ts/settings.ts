@@ -686,7 +686,7 @@ window.addEventListener("userready", () =>
                 {
                     modal.Remove();
 
-                    const blobUrl = URL.createObjectURL(new Blob([ result.data.code ], { type: "text/plain" }));
+                    const blobUrl = URL.createObjectURL(new Blob([ result.data.recoveryCode ], { type: "text/plain" }));
                     const a = document.createElement("a");
 
                     a.download = "denvelope-vault-recovery-code.txt";
