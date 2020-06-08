@@ -90,6 +90,11 @@ header
             {
                 box-shadow: 0 0 0 $border-width $secondary-color;
             }
+
+            &:hover
+            {
+                background-color: transparent;
+            }
         }
     }
 
