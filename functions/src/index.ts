@@ -26,7 +26,7 @@ admin.initializeApp({
 
 const FUNCTIONS_REGION = "europe-west1";
 const PROJECT_ID = "denvelope-firebase";
-const FIRESTORE_EXPORT_BUCKET = "gs://denvelope-firestore-export"
+const FIRESTORE_EXPORT_BUCKET = "gs://denvelope-firestore-export";
 
 const auth = admin.auth();
 const db = admin.firestore();
