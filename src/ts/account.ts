@@ -1366,10 +1366,8 @@ window.addEventListener("keydown", e =>
 
     if (["input", "textarea"].includes(document.activeElement.tagName.toLowerCase()) && !(IsShowFileVisible() && e.ctrlKey && key === "s")) return;
 
-    if ([ "s", "n", "f" ].includes(key)) e.preventDefault();
+    if ([ "s" ].includes(key)) e.preventDefault();
 
-    if (key === "o") { if (e.shiftKey) addFolder.click(); else addFiles.click(); }
-    else if (key === "n") { if (e.shiftKey) createFolder.click(); else createFile.click(); }
     else if (key === "s")
     {
         if (e.ctrlKey && IsShowFileVisible())
@@ -1377,27 +1375,6 @@ window.addEventListener("keydown", e =>
             if (Auth.IsAuthenticated) contextMenuSave.click();
             else if (Auth.IsSignedIn) contextMenuSaveToMyAccount.click();
         }
-    }
-    else if (key === "f")
-    {
-        if (!e.ctrlKey) viewMyAccount.click();
-        else if (!IsShowFileVisible()) searchBar.focus();
-    }
-    else if (key === "c")
-    {
-        if (!e.ctrlKey) viewSharedContent.click();
-    }
-    else if (key === "p")
-    {
-        if (!e.ctrlKey) viewStarredContent.click();
-    }
-    else if (key === "r")
-    {
-        if (!e.ctrlKey) viewRecentContent.click();
-    }
-    else if (key === "t")
-    {
-        if (!e.ctrlKey) viewTrashedContent.click();
     }
     else if (key === "delete") contextMenuDelete.click();
     else if (key === "backspace") contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null);

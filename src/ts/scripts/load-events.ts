@@ -4,6 +4,7 @@ import { signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan } fr
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
 import { Translation } from "./Translation";
 import { Modal } from "./Modal";
+import { Shortcuts } from "./Shortcuts";
 
 export const Init = () : void =>
 {
@@ -37,6 +38,8 @@ export const Init = () : void =>
             }));
 
     Translation.Init();
+
+    Shortcuts.Init();
 
     const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
     const languageSelect : HTMLSelectElement = document.querySelector("#language-select");

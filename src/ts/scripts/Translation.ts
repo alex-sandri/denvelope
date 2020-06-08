@@ -77,10 +77,6 @@ export class Translation
             .forEach(id => (<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-only-translation="${id}"]`))
             .forEach(element => element.innerText = Translation.Get(id)));
 
-        Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll("*"))
-            .filter(element => element.hasAttribute("data-keyboard-shortcut"))
-            .forEach(element => element.title = `${Translation.Get("generic->keyboard_shortcut")}: ${element.getAttribute("data-keyboard-shortcut").toUpperCase()}`);
-
         DispatchEvent("translationlanguagechange");
     }
 
