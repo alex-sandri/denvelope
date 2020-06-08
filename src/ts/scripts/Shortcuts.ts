@@ -34,7 +34,7 @@ export class Shortcuts
 
             e.preventDefault();
 
-            if (element instanceof HTMLButtonElement) element.click();
+            if (element instanceof HTMLButtonElement || element instanceof HTMLAnchorElement) element.click();
             else if (element instanceof HTMLInputElement) element.focus();
         });
     }

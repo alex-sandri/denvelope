@@ -108,20 +108,7 @@ export const Init = () : void =>
 
     window.addEventListener("load", () => RemoveClass(document.body, "preload"));
 
-    window.addEventListener("keydown", e =>
-    {
-        if (["input", "textarea"].includes(document.activeElement.tagName.toLowerCase())) return;
-
-        const key = e.key.toLowerCase();
-
-        if (["m", "a", "e", "h", "s"].includes(key)) e.preventDefault();
-
-        if (key === "m") accountMenuToggle.click();
-        else if (key === "a") location.href = "/account";
-        else if (key === "e") signOutButton.click();
-        else if (key === "h") location.href = "/";
-        else if (key === "s" && !e.ctrlKey) location.href = "/settings";
-    });
+    Shortcuts.Register("h", () => location.href = "/");
 
     window.addEventListener("userready", () =>
     {
