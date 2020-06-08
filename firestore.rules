@@ -21,9 +21,10 @@ service cloud.firestore {
         allow read: if isOwner();
 
         allow write: if incomingData().size() <= 2 &&
-          incomingData().keys().hasOnly([ "backgroundImageUrl", "dateFormatOptions" ]) &&
+          incomingData().keys().hasOnly([ "backgroundImageUrl", "dateFormatOptions", "trackingEnabled" ]) &&
           (validateBackgroundImageUrl() || !("backgroundImageUrl" in incomingData())) &&
-          (validateDateFormatOptions() || !("dateFormatOptions" in incomingData()));
+          (validateDateFormatOptions() || !("dateFormatOptions" in incomingData())) &&
+          (incomingData().trackingEnabled is bool || !("trackingEnabled" in incomingData()));
       }
 
       function validateBackgroundImageUrl() {
