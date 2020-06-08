@@ -581,6 +581,7 @@
             background-color: $secondary-color;
         }
 
+        &:focus,
         &:hover
         {
             box-shadow: 0 0 0 5px $secondary-color;
