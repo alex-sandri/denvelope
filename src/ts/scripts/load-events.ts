@@ -8,6 +8,7 @@ import { Modal } from "./Modal";
 export const Init = () : void =>
 {
     const db = (<any>window).firebase.firestore();
+    const analytics = (<any>window).firebase.analytics();
 
     const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
 
@@ -133,6 +134,12 @@ export const Init = () : void =>
 
                     localStorage.setItem("background-image-url", backgroundImageUrl);
                 }
+
+                const trackingEnabled : boolean = preferences.data().trackingEnabled ?? (!navigator.doNotTrack && !window.doNotTrack);
+
+                localStorage.setItem("tracking-enabled", `${trackingEnabled}`);
+
+                analytics.setAnalyticsCollectionEnabled(trackingEnabled);
             });
 
             db.collection("users").doc(Auth.UserId).onSnapshot((doc : any) =>
