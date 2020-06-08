@@ -18,5 +18,7 @@
     const analytics = firebase.analytics();
     const perf = firebase.performance();
 
-    analytics.setAnalyticsCollectionEnabled(!navigator.doNotTrack && !window.doNotTrack); // Safari uses window.doNotTrack
+    const trackingEnabled = !navigator.doNotTrack && !window.doNotTrack && (localStorage.getItem("tracking-enabled") ?? "true") === "true";
+
+    analytics.setAnalyticsCollectionEnabled(trackingEnabled);
 </script>
