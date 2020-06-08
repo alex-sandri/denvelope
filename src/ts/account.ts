@@ -1361,15 +1361,6 @@ window.addEventListener("popstate", async () =>
     }
 });
 
-window.addEventListener("keydown", e =>
-{
-    const key = e.key.toLowerCase();
-
-    if (key === "delete") contextMenuDelete.click();
-    else if (key === "backspace") contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null);
-    else if (key === "d") DownloadContent(GetCurrentFolderId(), document.title, true);
-});
-
 Shortcuts.Register("control+s", () =>
 {
     if (!IsShowFileVisible()) return;
@@ -1377,6 +1368,13 @@ Shortcuts.Register("control+s", () =>
     if (Auth.IsAuthenticated) contextMenuSave.click();
     else if (Auth.IsSignedIn) contextMenuSaveToMyAccount.click();
 }, { ignoreInInput: false });
+
+Shortcuts.Register("delete", () => contextMenuDelete.click);
+
+Shortcuts.Register("backspace", () =>
+    contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null));
+
+Shortcuts.Register("d", () => DownloadContent(GetCurrentFolderId(), document.title, true))
 
 window.addEventListener("beforeunload", e =>
 {
