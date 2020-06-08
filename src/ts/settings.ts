@@ -141,6 +141,7 @@ paymentRequestButton.on("click", (e : Event) =>
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
 const deleteVault : HTMLButtonElement = document.querySelector("#delete-vault .delete");
+const generateVaultRecoveryCode : HTMLButtonElement = document.querySelector("#vault .generate-recovery-code")
 
 const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
 const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .reset");
@@ -643,6 +644,20 @@ window.addEventListener("userready", () =>
         }
 
         modal.Show(true);
+    });
+
+    generateVaultRecoveryCode.addEventListener("click", () =>
+    {
+        const blobUrl = URL.createObjectURL(new Blob([ "someRandomString" ], { type: "text/plain" }));
+        const a = document.createElement("a");
+
+        a.download = "denvelope-vault-recovery-code.txt";
+        a.href = blobUrl;
+
+        document.body.appendChild(a);
+                    
+        a.click();
+        a.remove();
     });
 
     changeCacheSize.addEventListener("click", () =>

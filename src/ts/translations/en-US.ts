@@ -283,6 +283,9 @@ export const en_US = {
                 new: "New PIN",
             },
             delete_vault: "Delete vault",
+            vault: {
+                generate_recovery_code: "Generate recovery code",
+            },
         },
         advanced: {
             title: "Advanced",

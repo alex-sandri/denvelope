@@ -283,6 +283,9 @@ export const it_IT = {
                 new: "Nuovo PIN",
             },
             delete_vault: "Elimina cassaforte",
+            vault: {
+                generate_recovery_code: "Genera codice di recupero",
+            },
         },
         advanced: {
             title: "Avanzate",

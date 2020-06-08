@@ -290,6 +290,10 @@
                 <h1 data-translation="settings->security->delete_vault"></h1>
                 <div><button class="delete" data-translation="generic->delete" disabled><i class="fas fa-trash"></i></button></div>
             </div>
+            <div class="setting" id="vault">
+                <h1 data-translation="generic->vault"></h1>
+                <div><button class="generate-recovery-code" data-translation="settings->security->vault->generate_recovery_code" disabled><i class="fas fa-file-alt"></i></button></div>
+            </div>
         </section>        <section class="settings-section" id="advanced">
             <div class="setting" id="cache-size">
                 <h1 data-translation="settings->advanced->cache_size"></h1>
@@ -360,6 +364,6 @@
         const trackingEnabled = !navigator.doNotTrack && !window.doNotTrack && (localStorage.getItem("tracking-enabled") ?? "true") === "true";
     
         analytics.setAnalyticsCollectionEnabled(trackingEnabled);
-    </script>    <script src="assets/js/settings.e00e82cc3224ee92b3c2.js"></script>
+    </script>    <script src="assets/js/settings.3859e6b480e68d88ec5d.js"></script>
 </body>
 </html>
