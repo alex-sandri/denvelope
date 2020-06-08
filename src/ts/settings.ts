@@ -649,7 +649,8 @@ window.addEventListener("userready", () =>
     generateVaultRecoveryCode.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: deleteVault.closest(".setting").querySelector("h1").innerText,
+            title: generateVaultRecoveryCode.closest(".setting").querySelector("h1").innerText,
+            subtitle: generateVaultRecoveryCode.innerText,
             allow: [ "confirm", "close" ]
         });
 
