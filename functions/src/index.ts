@@ -420,7 +420,7 @@ export const changeVaultPin = functions.region(FUNCTIONS_REGION).runWith({ memor
 
     const success : boolean = (await IsCorrectVaultPin(currentPin, userId)) && IsValidVaultPin(newPin);
 
-    if (success) await vaultConfig.ref.set({ pin: await bcrypt.hash(newPin, BCRYPT_SALT_ROUNDS) });
+    if (success) await vaultConfig.ref.update({ pin: await bcrypt.hash(newPin, BCRYPT_SALT_ROUNDS) });
 
     return { success };
 });
@@ -456,7 +456,7 @@ export const generateVaultRecoveryCode = functions.region(FUNCTIONS_REGION).runW
 
         recoveryCode = randomBytes(VAULT_RECOVERY_CODE_BYTE_NUM).toString("hex");
 
-        await vaultConfig.ref.set({ recoveryCode: await bcrypt.hash(recoveryCode, BCRYPT_SALT_ROUNDS) });
+        await vaultConfig.ref.update({ recoveryCode: await bcrypt.hash(recoveryCode, BCRYPT_SALT_ROUNDS) });
     }
 
     return { success, recoveryCode };
