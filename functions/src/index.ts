@@ -164,8 +164,8 @@ export const fileUpdated = functions.region(FUNCTIONS_REGION).firestore.document
     const userId = context.params.userId;
     const fileId = context.params.fileId;
 
-    const afterData = <FirebaseFirestore.DocumentData>change.after.data();
-    const beforeData = <FirebaseFirestore.DocumentData>change.before.data();
+    const afterData = change.after.data();
+    const beforeData = change.before.data();
 
     if (afterData.shared !== beforeData.shared || afterData.inVault !== beforeData.inVault)
         await storage.bucket().file(`${userId}/${fileId}`).setMetadata({
@@ -190,7 +190,7 @@ export const fileDeleted = functions.region(FUNCTIONS_REGION).firestore.document
 
     await storage.bucket().file(`${userId}/${fileId}`).delete();
 
-    const size = (<FirebaseFirestore.DocumentData>doc.data()).size;
+    const size = doc.data().size;
 
     const user = await db.collection("users").doc(userId).get();
 
@@ -204,8 +204,8 @@ export const folderUpdated = functions.region(FUNCTIONS_REGION).firestore.docume
     const userId = context.params.userId;
     const folderId = context.params.folderId;
 
-    const afterData = <FirebaseFirestore.DocumentData>change.after.data();
-    const beforeData = <FirebaseFirestore.DocumentData>change.before.data();
+    const afterData = change.after.data();
+    const beforeData = change.before.data();
 
     const inVault = afterData.inVault;
 
