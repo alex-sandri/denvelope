@@ -98,13 +98,21 @@
         margin: 0;
         margin-bottom: $standard-spacing;
         user-select: none;
+
+        &:empty
+        {
+            display: none;
+        }
     }
 
     .subtitle
     {
         font-weight: $medium;
+    }
+
+    .title:not(:empty) + .subtitle:not(:empty)
+    {
         margin-top: -$standard-spacing;
-        margin-bottom: $standard-spacing;
     }
 
     p:not(.input-error):not(.status)

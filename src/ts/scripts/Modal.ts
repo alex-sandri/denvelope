@@ -123,22 +123,16 @@ export class Modal
 
     public set Title (title : string)
     {
-        const titleElement : HTMLElement = this.element.querySelector(".title") || document.createElement("h1");
+        const titleElement : HTMLElement = this.element.querySelector(".title");
 
-        titleElement.className = "title";
         titleElement.innerText = title;
-
-        this.element.querySelector(".heading").insertAdjacentElement("afterbegin", titleElement);
     }
 
     public set Subtitle (subtitle : string)
     {
-        const subtitleElement : HTMLElement = this.element.querySelector(".subtitle") || document.createElement("h4");
+        const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
 
-        subtitleElement.className = "subtitle";
         subtitleElement.innerText = subtitle;
-
-        this.element.querySelector(".heading").insertAdjacentElement("beforeend", subtitleElement);
     }
 
     public AppendContent = (data : any[]) : void =>
