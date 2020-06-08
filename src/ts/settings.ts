@@ -139,6 +139,8 @@ const currentCacheSize : HTMLElement = document.querySelector("#cache-size .curr
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
 const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
+const disableTracking : HTMLButtonElement = document.querySelector("#tracking .disable");
+const enableTracking : HTMLButtonElement = document.querySelector("#tracking .enable");
 
 let section : string = "general";
 
@@ -690,6 +692,24 @@ window.addEventListener("userready", () =>
 
     clearCache.addEventListener("click", ClearFirestoreCache);
 
+    [ disableTracking, enableTracking ].forEach(button => button.addEventListener("click", () =>
+    {
+        const modal = new Modal({
+            title: `${button.closest(".setting").querySelector("h1").innerText}: ${button.innerText}`,
+            allow: [ "close", "confirm" ],
+            loading: false
+        });
+
+        modal.OnConfirm = () =>
+        {
+            db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("trackingEnabled", button === enableTracking);
+
+            modal.HideAndRemove();
+        }
+
+        modal.Show(true);
+    }));
+
     db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
     {
         const maxStorage : number = user.data().maxStorage;
@@ -829,11 +849,13 @@ window.addEventListener("userready", () =>
 
     db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
     {
-        const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
+        if (!preferences.data()) return;
+
+        const backgroundImageUrl = preferences.data().backgroundImageUrl;
 
         resetBackground.disabled = !backgroundImageUrl;
 
-        userDateFormatOptions = preferences.data()?.dateFormatOptions;
+        userDateFormatOptions = preferences.data().dateFormatOptions;
 
         if (userDateFormatOptions === "default") userDateFormatOptions = null;
 
@@ -841,6 +863,9 @@ window.addEventListener("userready", () =>
             (<HTMLElement>element).innerText = FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions));
 
         resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
+
+        enableTracking.disabled = preferences.data().trackingEnabled ?? true;
+        disableTracking.disabled = !enableTracking.disabled;
     });
 
     db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
