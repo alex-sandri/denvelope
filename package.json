@@ -11,9 +11,9 @@
   "author": "Alex Sandri <me@alexsandri.com> (https://alexsandri.com)",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@firebase/testing": "^0.19.4",
+    "@firebase/testing": "^0.20.0",
     "css-loader": "^3.5.3",
-    "extract-loader": "^5.0.1",
+    "extract-loader": "^5.1.0",
     "file-loader": "^6.0.0",
     "glob": "^7.1.6",
     "handlebars": "^4.7.6",
@@ -23,8 +23,8 @@
     "jest-environment-uint8array": "^1.0.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
-    "ts-loader": "^7.0.4",
-    "typescript": "^3.9.2",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
