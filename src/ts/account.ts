@@ -27,6 +27,7 @@ import { Linguist } from './scripts/Linguist';
 import { Component, Input, Spinner, InputWithIcon } from './scripts/Component';
 import { Translation } from './scripts/Translation';
 import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
+import { Shortcuts } from "./scripts/Shortcuts";
 
 loadEvents.Init();
 
@@ -1364,22 +1365,18 @@ window.addEventListener("keydown", e =>
 {
     const key = e.key.toLowerCase();
 
-    if (["input", "textarea"].includes(document.activeElement.tagName.toLowerCase()) && !(IsShowFileVisible() && e.ctrlKey && key === "s")) return;
-
-    if ([ "s" ].includes(key)) e.preventDefault();
-
-    else if (key === "s")
-    {
-        if (e.ctrlKey && IsShowFileVisible())
-        {
-            if (Auth.IsAuthenticated) contextMenuSave.click();
-            else if (Auth.IsSignedIn) contextMenuSaveToMyAccount.click();
-        }
-    }
-    else if (key === "delete") contextMenuDelete.click();
+    if (key === "delete") contextMenuDelete.click();
     else if (key === "backspace") contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null);
     else if (key === "d") DownloadContent(GetCurrentFolderId(), document.title, true);
 });
+
+Shortcuts.Register("control+s", () =>
+{
+    if (!IsShowFileVisible()) return;
+
+    if (Auth.IsAuthenticated) contextMenuSave.click();
+    else if (Auth.IsSignedIn) contextMenuSaveToMyAccount.click();
+}, { ignoreInInput: false });
 
 window.addEventListener("beforeunload", e =>
 {

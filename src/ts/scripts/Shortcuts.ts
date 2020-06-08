@@ -38,4 +38,25 @@ export class Shortcuts
             else if (element instanceof HTMLInputElement) element.focus();
         });
     }
+
+    public static Register = (shortcut : string, callback : (e : KeyboardEvent) => void, options : { ignoreInInput ?: boolean } = { ignoreInInput: true }) : void =>
+    {
+        window.addEventListener("keydown", e =>
+        {
+            const key = e.key.toLowerCase();
+
+            if (options.ignoreInInput && [ "input", "textarea" ].includes(document.activeElement.tagName.toLowerCase())) return;
+
+            const keyCombination =
+                (e.ctrlKey && key !== "control" ? "control+" : "")
+                + (e.shiftKey && key !== "shift" ? "shift+" : "")
+                + key;
+
+            if (shortcut !== keyCombination) return;
+
+            e.preventDefault();
+
+            callback(e);
+        });
+    }
 }
