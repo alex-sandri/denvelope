@@ -24,14 +24,8 @@ export class Translation
         document.documentElement.lang = Translation.Language;
 
         const ids = Array.from(new Set(
-            Array.from(document.querySelectorAll("*"))
-                .filter(element =>
-                    element.hasAttribute("data-translation") ||
-                    element.hasAttribute("data-placeholder-translation") ||
-                    element.hasAttribute("data-content-translation") ||
-                    element.hasAttribute("data-aria-label-translation") ||
-                    element.hasAttribute("data-start-translation") ||
-                    element.hasAttribute("data-only-translation"))
+            Array
+                .from(document.querySelectorAll("[data-translation], [data-placeholder-translation], [data-content-translation], [data-aria-label-translation], [data-start-translation], [data-only-translation]"))
                 .map(element =>
                     element.getAttribute("data-translation") ||
                     element.getAttribute("data-placeholder-translation") ||
