@@ -95,9 +95,16 @@
     {
         @include text-ellipsis-on-overflow;
 
-        margin-top: 0;
+        margin: 0;
         margin-bottom: $standard-spacing;
         user-select: none;
+    }
+
+    .subtitle
+    {
+        font-weight: $medium;
+        margin-top: -$standard-spacing;
+        margin-bottom: $standard-spacing;
     }
 
     p:not(.input-error):not(.status)

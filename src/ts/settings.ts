@@ -705,7 +705,8 @@ window.addEventListener("userready", () =>
     [ disableTracking, enableTracking ].forEach(button => button.addEventListener("click", () =>
     {
         const modal = new Modal({
-            title: `${button.closest(".setting").querySelector("h1").innerText}: ${button.innerText}`,
+            title: button.closest(".setting").querySelector("h1").innerText,
+            subtitle: button.innerText,
             allow: [ "close", "confirm" ],
             loading: false
         });
