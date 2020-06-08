@@ -20,7 +20,7 @@ service cloud.firestore {
       match /config/preferences {
         allow read: if isOwner();
 
-        allow write: if incomingData().size() <= 2 &&
+        allow write: if incomingData().size() <= 3 &&
           incomingData().keys().hasOnly([ "backgroundImageUrl", "dateFormatOptions", "trackingEnabled" ]) &&
           (validateBackgroundImageUrl() || !("backgroundImageUrl" in incomingData())) &&
           (validateDateFormatOptions() || !("dateFormatOptions" in incomingData())) &&
