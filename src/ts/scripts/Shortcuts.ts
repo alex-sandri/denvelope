@@ -32,7 +32,7 @@ export class Shortcuts
 
             if (!element) return;
 
-            e.preventDefault();
+            if (keyCombination !== "enter") e.preventDefault(); // Do not prevent if the pressed key is ENTER, as this breaks keyboard navigation
 
             if (element instanceof HTMLButtonElement || element instanceof HTMLAnchorElement) element.click();
             else if (element instanceof HTMLInputElement) element.focus();
