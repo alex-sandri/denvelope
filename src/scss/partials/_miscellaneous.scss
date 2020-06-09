@@ -184,6 +184,7 @@
     {
         color: $primary-color;
 
+        &:focus,
         &:hover
         {
             text-decoration: none;
