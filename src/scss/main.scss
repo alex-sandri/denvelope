@@ -47,6 +47,18 @@ html
         }
     }
 
+    &.file-open
+    {
+        body.account
+        {
+            main,
+            aside
+            {
+                display: none; // Fix keyboard navigation issue
+            }
+        }
+    }
+
     &:not(.file-open):not(.signed-out)
     {
         body.account
