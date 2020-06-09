@@ -141,7 +141,7 @@ export class Modal
     
         data.filter(IsSet).forEach(element => this.Content.append(element));
 
-        (<NodeListOf<HTMLInputElement>>this.Content.querySelectorAll("input:not([type=checkbox])")).forEach(element => element.addEventListener("keyup", e =>
+        (<NodeListOf<HTMLInputElement>>this.Content.querySelectorAll("input:not([type=checkbox])")).forEach(element => element.addEventListener("keydown", e =>
         {
             if (e.key === "Enter")
             {
