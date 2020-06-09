@@ -142,13 +142,25 @@ const IS_SHARED_FOLDER : boolean = location.pathname.startsWith("/folder/shared/
 
 window.addEventListener("userready", async () =>
 {
-    [addFiles, contextMenuAddFiles].forEach(element => element.addEventListener("click", () => fileInput.click()));
+    [addFiles, contextMenuAddFiles].forEach(element => element.addEventListener("click", () =>
+    {
+        HideContextMenu();
 
-    [addFolder, contextMenuAddFolder].forEach(element => element.addEventListener("click", () => folderInput.click()));
+        fileInput.click();
+    }));
+
+    [addFolder, contextMenuAddFolder].forEach(element => element.addEventListener("click", () =>
+    {
+        HideContextMenu();
+
+        folderInput.click();
+    }));
 
     [createFile, contextMenuCreateFile, createFolder, contextMenuCreateFolder].forEach(element =>
         element.addEventListener("click", () =>
         {
+            HideContextMenu();
+
             const isFile = element.contains(createFile) || element.contains(contextMenuCreateFile);
 
             const modal = new Modal({
@@ -298,12 +310,18 @@ window.addEventListener("userready", async () =>
     });
 
     contextMenuView.addEventListener("click", () =>
-        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach((item, index, array) => HandlePageChangeAndLoadUserContent(null, item, array.length > 1)));
+    {
+        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach((item, index, array) => HandlePageChangeAndLoadUserContent(null, item, array.length > 1));
+
+        HideContextMenu();
+    });
 
     contextMenuSave.addEventListener("click", () =>
     {
         const value = editor.getValue();
         const id = editorTabs.querySelector(".active").id.split("-")[1];
+
+        HideContextMenu();
 
         UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
 
@@ -325,6 +343,8 @@ window.addEventListener("userready", async () =>
                 type: item.classList[0]
             }));
 
+        HideContextMenu();
+
         preventWindowUnload.editor = false;
     });
 
@@ -332,6 +352,8 @@ window.addEventListener("userready", async () =>
     {
         const id = contextMenuItem.id;
         const type = contextMenuItem.classList[0];
+
+        HideContextMenu();
 
         db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
             shared: true,
@@ -350,18 +372,30 @@ window.addEventListener("userready", async () =>
         });
     });
 
-    contextMenuSharingOptions.addEventListener("click", () => (<any>navigator).share({
-        title: "Denvelope",
-        text: `${Translation.Get("share->check_out")} ${(<HTMLElement>contextMenuItem.querySelector(".name p")).innerText} ${Translation.Get("share->on_denvelope")}`,
-        url: getUserContentURL(contextMenuItem, true),
-    }));
+    contextMenuSharingOptions.addEventListener("click", () =>
+    {
+        (<any>navigator).share({
+            title: "Denvelope",
+            text: `${Translation.Get("share->check_out")} ${(<HTMLElement>contextMenuItem.querySelector(".name p")).innerText} ${Translation.Get("share->on_denvelope")}`,
+            url: getUserContentURL(contextMenuItem, true),
+        });
 
-    contextMenuCopyShareableLink.addEventListener("click", () => navigator.clipboard.writeText(getUserContentURL(contextMenuItem, true)));
+        HideContextMenu();
+    });
+
+    contextMenuCopyShareableLink.addEventListener("click", () =>
+    {
+        navigator.clipboard.writeText(getUserContentURL(contextMenuItem, true));
+
+        HideContextMenu();
+    });
 
     contextMenuUnshare.addEventListener("click", () =>
     {
         const id = contextMenuItem.id;
         const type = contextMenuItem.classList[0];
+
+        HideContextMenu();
 
         db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
             shared: false,
@@ -462,6 +496,8 @@ window.addEventListener("userready", async () =>
                 ...GetFirestoreUpdateTimestamp()
             }));
 
+        HideContextMenu();
+
         batch.commit();
     }));
 
@@ -534,12 +570,16 @@ window.addEventListener("userready", async () =>
         }
 
         modal.Show(true);
+
+        HideContextMenu();
     });
 
     contextMenuInfo.addEventListener("click", () =>
     {
         const id = contextMenuItem.id;
         const type = contextMenuItem.classList[0];
+
+        HideContextMenu();
 
         const modal = new Modal({ allow: [ "close" ] });
 
@@ -677,53 +717,61 @@ window.addEventListener("userready", async () =>
     });
 
     contextMenuDownload.addEventListener("click", () =>
-        [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(async item =>
-        {
-            const id = item.id;
-            const type = item.classList[0];
+    {
+        const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
 
-            let folderFormat : string;
+        HideContextMenu();
 
-            if (type === "folder" && contextMenuItems?.length <= 1)
+        tempArray.forEach(async item =>
             {
-                const modal = new Modal({
-                    title: Translation.Get("api->messages->folder->choose_download_format"),
-                    allow: [ "close" ]
-                });
-    
-                modal.AppendContent([
-                    new Component("button", {
-                        id: "zip",
-                        innerText: ".zip"
-                    }).element,
-                    new Component("button", {
-                        id: "tar",
-                        innerText: ".tar"
-                    }).element,
-                    new Component("button", {
-                        id: "tar-gz",
-                        innerText: ".tar.gz"
-                    }).element
-                ]);
-    
-                modal.Show();
-    
-                await new Promise(resolve => modal.Content.querySelectorAll("#zip, #tar, #tar-gz").forEach(element => element.addEventListener("click", async () =>
+                const id = item.id;
+                const type = item.classList[0];
+
+                let folderFormat : string;
+
+                if (type === "folder" && contextMenuItems?.length <= 1)
                 {
-                    modal.HideAndRemove();
+                    const modal = new Modal({
+                        title: Translation.Get("api->messages->folder->choose_download_format"),
+                        allow: [ "close" ]
+                    });
+        
+                    modal.AppendContent([
+                        new Component("button", {
+                            id: "zip",
+                            innerText: ".zip"
+                        }).element,
+                        new Component("button", {
+                            id: "tar",
+                            innerText: ".tar"
+                        }).element,
+                        new Component("button", {
+                            id: "tar-gz",
+                            innerText: ".tar.gz"
+                        }).element
+                    ]);
+        
+                    modal.Show();
+        
+                    await new Promise(resolve => modal.Content.querySelectorAll("#zip, #tar, #tar-gz").forEach(element => element.addEventListener("click", async () =>
+                    {
+                        modal.HideAndRemove();
 
-                    folderFormat = element.id.replace("-",".")
-    
-                    resolve();
-                })));
-            }
+                        folderFormat = element.id.replace("-",".")
+        
+                        resolve();
+                    })));
+                }
 
-            DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder");
-        }));
+                DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder");
+            });
+    });
 
     [contextMenuDelete, contextMenuRestore].forEach(element => element.addEventListener("click", async () =>
     {
         const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean); // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
+
+        HideContextMenu();
 
         const batch = db.batch();
 
@@ -805,6 +853,8 @@ window.addEventListener("userready", async () =>
         img.onerror = () => filePreviewContainer.click();
 
         img.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
+
+        HideContextMenu();
 
         let scale = 1;
 
@@ -937,6 +987,8 @@ window.addEventListener("userready", async () =>
         iframe.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
         iframe.frameBorder = "0";
 
+        HideContextMenu();
+
         iframe.onload = () =>
         {
             HideElement(filePreviewSpinner);
@@ -994,9 +1046,19 @@ window.addEventListener("userready", async () =>
         genericMessage.Show(message);
     });
 
-    [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
+    [ contextMenuCreateVault, contextMenuUnlockVault ].forEach(element => element.addEventListener("click", () =>
+    {
+        HideContextMenu();
 
-    contextMenuLockVault.addEventListener("click", () => lockVaultButton.click());
+        vault.click();
+    }));
+
+    contextMenuLockVault.addEventListener("click", () =>
+    {
+        HideContextMenu();
+
+        lockVaultButton.click();
+    });
 
     navigationBackButton.addEventListener("click", async () =>
     {
@@ -1068,11 +1130,7 @@ window.addEventListener("userready", async () =>
 
     document.addEventListener("click", e =>
     {
-        const target = <HTMLElement>e.target;
-
-        if(target.closest(`${folderSelector} .menu-button, ${fileSelector} .menu-button, .vault .menu-button`) === null &&
-            target.closest(editorMenuSelector) === null && target.closest("#cm-move") === null && !moreOptions.contains(target) &&
-            target.closest(".goto, .back") === null) HideContextMenu();
+        if (e.target === contextMenuContainer) HideContextMenu();
 
         if ((<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => HasClass(element, "selected")).length === 0)
             contextMenuItems = [];
