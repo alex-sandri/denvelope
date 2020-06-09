@@ -122,6 +122,11 @@
         margin: 0;
         margin-bottom: $standard-spacing;
 
+        &.multiline
+        {
+            white-space: unset;
+        }
+
         & > span:first-child
         {
             font-weight: $bold;
