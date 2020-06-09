@@ -2417,6 +2417,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
             if (!Auth.IsAuthenticated && !IS_SHARED_FOLDER) HideElement(tab.querySelector(".close"));
     
             editorTabs.appendChild(tab);
+
+            if (editorTabs.children.length === 1) (<HTMLButtonElement>tab.querySelector(".menu")).focus(); // Focus the menu button of the first tab
         }
 
         if (!isMultipleFileEditor)
