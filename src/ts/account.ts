@@ -811,11 +811,11 @@ window.addEventListener("userready", async () =>
 
         batch.commit();
 
-        if (IsSet(contextMenuItem) || contextMenuItems?.length === 1)
-            genericMessage.Show(Translation.Get(`api->messages->${contextMenuItems[0]?.classList[0] ?? contextMenuItem.classList[0]}->${
+        if (tempArray.length === 1)
+            genericMessage.Show(Translation.Get(`api->messages->${tempArray[0].classList[0]}->${
                 inVault
                     ? "deleted"
-                    : document.getElementById(contextMenuItems[0]?.id ?? contextMenuItem.id).getAttribute("data-trashed") === "true"
+                    : document.getElementById(tempArray[0].id).getAttribute("data-trashed") === "true"
                         ? (contextMenuRestore.contains(element) ? "restored" : "deleted")
                         : "moved_to_trash"
             }`));
