@@ -2000,6 +2000,12 @@ const showContextMenu = (e : MouseEvent) : void =>
     if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
 
     ShowElement(contextMenuContainer, "flex");
+
+    Array
+        .from(contextMenu.querySelectorAll("button"))
+        .find(element =>
+            getComputedStyle(element).getPropertyValue("display") !== "none"
+            && getComputedStyle(element.parentElement).getPropertyValue("display") !== "none").focus(); // Focus first visible element in the context menu
 }
 
 const HideContextMenu = () : void =>
