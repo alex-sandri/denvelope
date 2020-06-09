@@ -1208,7 +1208,7 @@ window.addEventListener("userready", async () =>
             const vaultPinInput = new InputWithIcon({
                 attributes: {
                     id: "vault-pin",
-                    placeholder: "PIN",
+                    placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
                     type: "password"
                 },
                 iconClassName: "fas fa-key fa-fw"

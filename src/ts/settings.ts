@@ -533,7 +533,7 @@ window.addEventListener("userready", () =>
         const currentVaultPinInput = new InputWithIcon({
             attributes: {
                 id: "current-vault-pin",
-                placeholder: Translation.Get("settings->security->change_vault_pin->current"),
+                placeholder: Translation.Get("settings->security->change_vault_pin->current_or_recovery_code"),
                 type: "password"
             },
             iconClassName: "fas fa-key fa-fw"
@@ -602,7 +602,7 @@ window.addEventListener("userready", () =>
         const vaultPinInput = new InputWithIcon({
             attributes: {
                 id: "vault-pin",
-                placeholder: "PIN",
+                placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
                 type: "password"
             },
             iconClassName: "fas fa-key fa-fw"
@@ -657,7 +657,7 @@ window.addEventListener("userready", () =>
         const vaultPinInput = new InputWithIcon({
             attributes: {
                 id: "vault-pin",
-                placeholder: "PIN",
+                placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
                 type: "password"
             },
             iconClassName: "fas fa-key fa-fw"

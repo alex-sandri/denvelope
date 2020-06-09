@@ -67,6 +67,7 @@ export const en_US = {
                 set_pin: "Set PIN",
                 unlock: "Unlock vault",
                 wrong_pin: "The entered PIN is wrong",
+                pin_or_recovery_code: "PIN or Recovery Code",
             },
         },
         languages: {
@@ -279,7 +280,7 @@ export const en_US = {
             sign_out_from_all_devices: "Sign Out from all devices",
             change_vault_pin: {
                 title: "Change vault PIN",
-                current: "Current PIN",
+                current_or_recovery_code: "Current PIN or Recovery Code",
                 new: "New PIN",
             },
             delete_vault: "Delete vault",

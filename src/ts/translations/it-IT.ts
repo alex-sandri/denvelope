@@ -67,6 +67,7 @@ export const it_IT = {
                 set_pin: "Imposta PIN",
                 unlock: "Sblocca cassaforte",
                 wrong_pin: "Il PIN inserito non è corretto",
+                pin_or_recovery_code: "PIN o Codice di Recupero",
             },
         },
         languages: {
@@ -279,7 +280,7 @@ export const it_IT = {
             sign_out_from_all_devices: "Esci da tutti i dispositivi",
             change_vault_pin: {
                 title: "Cambia PIN cassaforte",
-                current: "PIN attuale",
+                current_or_recovery_code: "PIN attuale o Codice di Recupero",
                 new: "Nuovo PIN",
             },
             delete_vault: "Elimina cassaforte",
