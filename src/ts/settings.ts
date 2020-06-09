@@ -669,7 +669,10 @@ window.addEventListener("userready", () =>
 
         modal.ConfirmButton.disabled = true;
 
-        modal.AppendContent([ vaultPinInput ]);
+        modal.AppendContent([
+            new Component("p", { innerText: Translation.Get("settings->security->vault->recovery_code_info") }).element,
+            vaultPinInput
+        ]);
 
         modal.OnConfirm = async () =>
         {

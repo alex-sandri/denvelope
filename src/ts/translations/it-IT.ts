@@ -286,6 +286,7 @@ export const it_IT = {
             delete_vault: "Elimina cassaforte",
             vault: {
                 generate_recovery_code: "Genera codice di recupero",
+                recovery_code_info: "Il codice di recupero scade dopo il primo utilizzo",
             },
         },
         advanced: {

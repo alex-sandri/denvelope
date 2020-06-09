@@ -286,6 +286,7 @@ export const en_US = {
             delete_vault: "Delete vault",
             vault: {
                 generate_recovery_code: "Generate recovery code",
+                recovery_code_info: "The recovery code expires after the first use",
             },
         },
         advanced: {
