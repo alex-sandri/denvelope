@@ -139,8 +139,8 @@ paymentRequestButton.on("click", (e : Event) =>
 });
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
-const changeVaultPin : HTMLButtonElement = document.querySelector("#change-vault-pin .edit");
-const deleteVault : HTMLButtonElement = document.querySelector("#delete-vault .delete");
+const changeVaultPin : HTMLButtonElement = document.querySelector("#vault .change-pin");
+const deleteVault : HTMLButtonElement = document.querySelector("#vault .delete");
 const generateVaultRecoveryCode : HTMLButtonElement = document.querySelector("#vault .generate-recovery-code")
 
 const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
@@ -526,6 +526,7 @@ window.addEventListener("userready", () =>
     {
         const modal = new Modal({
             title: changeVaultPin.closest(".setting").querySelector("h1").innerText,
+            subtitle: changeVaultPin.innerText,
             allow: [ "close", "confirm" ],
             loading: false
         });
@@ -596,6 +597,7 @@ window.addEventListener("userready", () =>
     {
         const modal = new Modal({
             title: deleteVault.closest(".setting").querySelector("h1").innerText,
+            subtitle: deleteVault.innerText,
             allow: [ "confirm", "close" ]
         });
 

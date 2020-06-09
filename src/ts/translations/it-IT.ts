@@ -279,12 +279,12 @@ export const it_IT = {
             title: "Sicurezza",
             sign_out_from_all_devices: "Esci da tutti i dispositivi",
             change_vault_pin: {
-                title: "Cambia PIN cassaforte",
                 current_or_recovery_code: "PIN attuale o Codice di Recupero",
                 new: "Nuovo PIN",
             },
             delete_vault: "Elimina cassaforte",
             vault: {
+                change_pin: "Cambia PIN",
                 generate_recovery_code: "Genera codice di recupero",
                 recovery_code_info: "Il codice di recupero scade dopo il primo utilizzo",
             },

@@ -279,12 +279,12 @@ export const en_US = {
             title: "Security",
             sign_out_from_all_devices: "Sign Out from all devices",
             change_vault_pin: {
-                title: "Change vault PIN",
                 current_or_recovery_code: "Current PIN or Recovery Code",
                 new: "New PIN",
             },
             delete_vault: "Delete vault",
             vault: {
+                change_pin: "Change PIN",
                 generate_recovery_code: "Generate recovery code",
                 recovery_code_info: "The recovery code expires after the first use",
             },
