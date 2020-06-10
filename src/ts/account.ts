@@ -270,20 +270,7 @@ window.addEventListener("userready", async () =>
 
     searchBar.addEventListener("focusin", () => HideHeaderMenu());
 
-    addContent.addEventListener("click", () =>
-    {
-        const modal = new Modal();
-
-        modal.AppendContent([addContentOptions]);
-
-        ShowElement(modal.Content.querySelector(".add-content-options"));
-
-        addContent.blur();
-
-        addContentOptions.querySelectorAll("button").forEach(element => element.addEventListener("click", () => modal.HideAndRemove()));
-
-        modal.Show(true);
-    });
+    addContent.addEventListener("click", showContextMenu);
 
     moreOptions.addEventListener("click", showContextMenu);
 
