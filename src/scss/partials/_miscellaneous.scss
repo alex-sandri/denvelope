@@ -273,44 +273,7 @@
 
 .context-menu-container
 {
-    @include flex;
-
-    height: 100vh;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    padding: $standard-spacing;
     display: none;
-
-    .context-menu
-    {
-        border: $border-width solid $secondary-color;
-        border-radius: $border-radius;
-        background-color: rgba($primary-color, 0.5);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        overflow: auto;
-        width: fit-content;
-
-        button
-        {
-            display: block;
-            width: 100%;
-            text-align: start;
-            background-color: transparent;
-            border: none;
-            border-radius: 0;
-
-            &:focus,
-            &:hover
-            {
-                background-color: $secondary-color;
-                color: $primary-color;
-            }
-        }
 
         #move-selector
         {
@@ -335,15 +298,6 @@
                 margin: $standard-spacing;
             }
         }
-    }
-
-    @supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)))
-    {
-        .context-menu
-        {
-            background-color: $primary-color;
-        }
-    }
 }
 
 .generic-message

@@ -1999,7 +1999,13 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
 
-    ShowElement(contextMenuContainer, "flex");
+    const modal = new Modal({ allow: [ "close" ] });
+
+    modal.AppendContent([ contextMenuContainer ]);
+
+    ShowElement(contextMenuContainer);
+
+    modal.Show(true);
 
     Array
         .from(contextMenu.querySelectorAll("button"))
