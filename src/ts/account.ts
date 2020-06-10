@@ -94,8 +94,8 @@ const contextMenuSharingOptions : HTMLButtonElement = contextMenuContent.querySe
 const contextMenuCopyShareableLink : HTMLButtonElement = contextMenuContent.querySelector("#cm-copy-shareable-link");
 const contextMenuUnshare : HTMLButtonElement = contextMenuContent.querySelector("#cm-unshare");
 const contextMenuMove : HTMLButtonElement = contextMenuContent.querySelector("#cm-move");
-const contextMenuAddToFavorites : HTMLButtonElement = contextMenuContent.querySelector("#cm-add-to-favorites");
-const contextMenuRemoveFromFavorites : HTMLButtonElement = contextMenuContent.querySelector("#cm-remove-from-favorites");
+const contextMenuAddToStarred : HTMLButtonElement = contextMenuContent.querySelector("#cm-add-to-starred");
+const contextMenuRemoveFromStarred : HTMLButtonElement = contextMenuContent.querySelector("#cm-remove-from-starred");
 const contextMenuRename : HTMLButtonElement = contextMenuContent.querySelector("#cm-rename");
 const contextMenuInfo : HTMLButtonElement = contextMenuContent.querySelector("#cm-info");
 const contextMenuDownload : HTMLButtonElement = contextMenuContent.querySelector("#cm-download");
@@ -486,13 +486,13 @@ window.addEventListener("userready", async () =>
         ShowAvailableFoldersIn(currentId);
     });
 
-    [ contextMenuAddToFavorites, contextMenuRemoveFromFavorites ].forEach(element => element.addEventListener("click", () =>
+    [ contextMenuAddToStarred, contextMenuRemoveFromStarred ].forEach(element => element.addEventListener("click", () =>
     {
         const batch = db.batch();
 
         [...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
             batch.update(db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id), {
-                starred: contextMenuAddToFavorites.contains(element),
+                starred: contextMenuAddToStarred.contains(element),
                 ...GetFirestoreUpdateTimestamp()
             }));
 
@@ -1880,8 +1880,8 @@ const showContextMenu = (e : MouseEvent) : void =>
             contextMenuSharingOptions,
             contextMenuCopyShareableLink,
             contextMenuUnshare,
-            contextMenuAddToFavorites,
-            contextMenuRemoveFromFavorites,
+            contextMenuAddToStarred,
+            contextMenuRemoveFromStarred,
             contextMenuRestore,
             contextMenuDelete,
             contextMenuDownload
@@ -1910,8 +1910,8 @@ const showContextMenu = (e : MouseEvent) : void =>
             }
             else ShowElement(contextMenuShare);
 
-            if (contextMenuItem.getAttribute("data-starred") === "true" && Auth.IsAuthenticated) ShowElement(contextMenuRemoveFromFavorites);
-            else if (Auth.IsAuthenticated) ShowElement(contextMenuAddToFavorites);
+            if (contextMenuItem.getAttribute("data-starred") === "true" && Auth.IsAuthenticated) ShowElement(contextMenuRemoveFromStarred);
+            else if (Auth.IsAuthenticated) ShowElement(contextMenuAddToStarred);
 
             if (target.closest(editorMenuSelector) === null) ShowElement(contextMenuView);
             else if (Auth.IsAuthenticated && IsSet(editor)) ShowElement(contextMenuSave);
@@ -1972,8 +1972,8 @@ const showContextMenu = (e : MouseEvent) : void =>
         {
             if (Auth.IsAuthenticated)
             {
-                if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "false").length > 0) ShowElement(contextMenuAddToFavorites);
-                else if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "true").length > 0) ShowElement(contextMenuRemoveFromFavorites);
+                if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "false").length > 0) ShowElement(contextMenuAddToStarred);
+                else if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "true").length > 0) ShowElement(contextMenuRemoveFromStarred);
 
                 ShowElements([ contextMenuMove ]);
             }
