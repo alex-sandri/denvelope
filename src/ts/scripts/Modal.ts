@@ -28,7 +28,6 @@ export class Modal
 
             if (options.hasOwnProperty("allow"))
             {
-                if ((<string[]>(<any>options).allow).includes("close")) ShowElement(this.CloseButton, "block");
                 if ((<string[]>(<any>options).allow).includes("confirm")) ShowElement(this.ConfirmButton, "block");
                 if ((<string[]>(<any>options).allow).includes("update")) ShowElement(this.UpdateButton, "block");
             }

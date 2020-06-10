@@ -179,9 +179,14 @@
         &.update-button,
         &.confirm-button
         {
-            display: none;
             width: 100%;
             border-color: $primary-color;
+        }
+
+        &.update-button,
+        &.confirm-button
+        {
+            display: none;
         }
     }
 

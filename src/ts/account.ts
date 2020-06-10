@@ -165,10 +165,7 @@ window.addEventListener("userready", async () =>
 
             const modal = new Modal({
                 "title": Translation.Get(isFile ? "account->create_file" : "account->create_folder"),
-                "allow": [
-                    "close",
-                    "confirm"
-                ]
+                "allow": [ "confirm" ]
             });
 
             const input = <HTMLInputElement>new Input({
@@ -275,7 +272,7 @@ window.addEventListener("userready", async () =>
 
     addContent.addEventListener("click", () =>
     {
-        const modal = new Modal({ allow: [ "close" ] });
+        const modal = new Modal();
 
         modal.AppendContent([addContentOptions]);
 
@@ -506,12 +503,7 @@ window.addEventListener("userready", async () =>
         const id = contextMenuItem.id;
         const type = contextMenuItem.classList[0];
 
-        const modal = new Modal({
-            "allow": [
-                "close",
-                "update"
-            ]
-        });
+        const modal = new Modal({ "allow": [ "update" ] });
 
         const nameInput = new Input({
             attributes: {
@@ -581,7 +573,7 @@ window.addEventListener("userready", async () =>
 
         HideContextMenu();
 
-        const modal = new Modal({ allow: [ "close" ] });
+        const modal = new Modal();
 
         modal.Show(true);
 
@@ -731,10 +723,7 @@ window.addEventListener("userready", async () =>
 
                 if (type === "folder" && contextMenuItems?.length <= 1)
                 {
-                    const modal = new Modal({
-                        title: Translation.Get("api->messages->folder->choose_download_format"),
-                        allow: [ "close" ]
-                    });
+                    const modal = new Modal({ title: Translation.Get("api->messages->folder->choose_download_format") });
         
                     modal.AppendContent([
                         new Component("button", {
@@ -1260,7 +1249,7 @@ window.addEventListener("userready", async () =>
 
             const modal = new Modal({
                 title: Translation.Get(`api->messages->vault->${snapshot.exists ? "unlock" : "set_pin"}`),
-                allow: [ "confirm", "close" ]
+                allow: [ "confirm" ]
             });
 
             const vaultPinInput = new InputWithIcon({
@@ -1999,7 +1988,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 
     if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
 
-    const modal = new Modal({ allow: [ "close" ] });
+    const modal = new Modal();
 
     modal.AppendContent([ contextMenuContainer ]);
 
@@ -2638,7 +2627,6 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
     {
         const modalCompressingFolder = new Modal({
             subtitle: Translation.Get("api->messages->folder->compressing"),
-            allow: [ "close" ],
             floating: true,
             aside: true
         });
