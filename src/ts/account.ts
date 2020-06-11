@@ -168,22 +168,22 @@ window.addEventListener("userready", async () =>
 			const isFile = element.contains(createFile) || element.contains(contextMenuCreateFile);
 
 			const modal = new Modal({
-				"title": Translation.Get(isFile ? "account->create_file" : "account->create_folder"),
-				"allow": [ "confirm" ]
+				title: Translation.Get(isFile ? "account->create_file" : "account->create_folder"),
+				allow: [ "confirm" ],
 			});
 
-			const input = <HTMLInputElement>new Input({
+			const input = <HTMLInputElement> new Input({
 				attributes: {
 					id: "name",
-					placeholder: Translation.Get("generic->name")
-				}
+					placeholder: Translation.Get("generic->name"),
+				},
 			}).element.querySelector("input");
 
 			input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length === 0);
 
 			modal.ConfirmButton.disabled = true;
 
-			modal.AppendContent([input.parentElement]);
+			modal.AppendContent([ input.parentElement ]);
 
 			modal.OnConfirm = () =>
 			{
@@ -203,12 +203,12 @@ window.addEventListener("userready", async () =>
 				{
 					input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
 						innerText: Translation.Get("errors->empty"),
-						class: "input-error"
+						class: "input-error",
 					}).element);
 
 					AddClass(input, "error");
 				}
-			}
+			};
 
 			modal.Show(true);
 		}));
@@ -278,28 +278,28 @@ window.addEventListener("userready", async () =>
 
 	moreOptions.addEventListener("click", showContextMenu);
 
-	fileInput.addEventListener("change", (e) =>
+	fileInput.addEventListener("change", e =>
 	{
-		const files : FileList = (<HTMLInputElement>e.target).files;
+		const { files } = <HTMLInputElement>e.target;
 
 		UploadFiles(Array.from(files), GetCurrentFolderId(true));
 
 		fileInput.value = null;
 	});
 
-	folderInput.addEventListener("change", (e) =>
+	folderInput.addEventListener("change", e =>
 	{
-		const files : FileList = (<HTMLInputElement>e.target).files;
+		const { files } = <HTMLInputElement>e.target;
 		const folderName : string = (<any>files[0]).webkitRelativePath.split("/")[0];
 
-		UploadFolder(Array.from(files), folderName, folderName + "/", GetCurrentFolderId(true), 0);
+		UploadFolder(Array.from(files), folderName, `${folderName}/`, GetCurrentFolderId(true), 0);
 
 		folderInput.value = null;
 	});
 
 	contextMenuView.addEventListener("click", () =>
 	{
-		[...contextMenuItems, contextMenuItem].filter(Boolean).forEach((item, index, array) => HandlePageChangeAndLoadUserContent(null, item, array.length > 1));
+		[ ...contextMenuItems, contextMenuItem ].filter(Boolean).forEach((item, index, array) => HandlePageChangeAndLoadUserContent(null, item, array.length > 1));
 
 		HideContextMenu();
 	});
@@ -324,11 +324,11 @@ window.addEventListener("userready", async () =>
 
 	contextMenuSaveToMyAccount.addEventListener("click", () =>
 	{
-		[...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
+		[ ...contextMenuItems, contextMenuItem ].filter(Boolean).forEach(item =>
 			functions.httpsCallable("saveToMyAccount")({
 				userId: Auth.UserId,
 				id: item.id,
-				type: item.classList[0]
+				type: item.classList[0],
 			}));
 
 		HideContextMenu();
@@ -338,14 +338,14 @@ window.addEventListener("userready", async () =>
 
 	contextMenuShare.addEventListener("click", () =>
 	{
-		const id = contextMenuItem.id;
+		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
 
 		HideContextMenu();
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: true,
-			...GetFirestoreUpdateTimestamp()
+			...GetFirestoreUpdateTimestamp(),
 		});
 
 		if (type === "folder") functions.httpsCallable("shareFolder")({ id, shared: true });
@@ -380,14 +380,14 @@ window.addEventListener("userready", async () =>
 
 	contextMenuUnshare.addEventListener("click", () =>
 	{
-		const id = contextMenuItem.id;
+		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
 
 		HideContextMenu();
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: false,
-			...GetFirestoreUpdateTimestamp()
+			...GetFirestoreUpdateTimestamp(),
 		});
 
 		if (type === "folder") functions.httpsCallable("shareFolder")({ id, shared: false });
@@ -395,7 +395,7 @@ window.addEventListener("userready", async () =>
 
 	contextMenuMove.addEventListener("click", () =>
 	{
-		const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
+		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
 
 		let currentId = GetCurrentFolderId();
 
@@ -412,51 +412,51 @@ window.addEventListener("userready", async () =>
 
 			contextMenuMoveSelectorOptions.innerHTML = "";
 
-			db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get().then((docs : any) =>
-			{
-				HideElement(contextMenuMoveSelector.querySelector(".spinner"));
-
-				contextMenuMoveSelectorOptions.innerHTML = "";
-	
-				docs.forEach((doc : any) =>
+			db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get()
+				.then((docs : any) =>
 				{
-					if (tempArray.filter(element => element.id === doc.id).length === 0)
-					{
-						const element = new Component("div", {
-							id: doc.id,
-							children: [
-								new Component("button", {
-									class: "select",
-									children: [
-										new Component("i", { class: "fas fa-folder" }).element,
-										new Component("span", { innerText: doc.data().name }).element,
-									]
-								}).element,
-								new Component("button", {
-									class: "goto",
-									children: [ new Component("i", { class: "fas fa-chevron-right" }).element ]
-								}).element,
-							]
-						}).element;
-	
-						contextMenuMoveSelectorOptions.appendChild(element);
-		
-						element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
-						element.querySelector(".goto").addEventListener("click", () =>
-						{
-							currentId = doc.id;
+					HideElement(contextMenuMoveSelector.querySelector(".spinner"));
 
-							ShowAvailableFoldersIn(currentId);
-						});
-					}
-				});
-	
-				if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0)
-					contextMenuMoveSelectorOptions.appendChild(new Component("p", {
-						innerText: Translation.Get("account->context_menu->move->impossible")
+					contextMenuMoveSelectorOptions.innerHTML = "";
+
+					docs.forEach((doc : any) =>
+					{
+						if (tempArray.filter(element => element.id === doc.id).length === 0)
+						{
+							const { element } = new Component("div", {
+								id: doc.id,
+								children: [
+									new Component("button", {
+										class: "select",
+										children: [
+											new Component("i", { class: "fas fa-folder" }).element,
+											new Component("span", { innerText: doc.data().name }).element,
+										],
+									}).element,
+									new Component("button", {
+										class: "goto",
+										children: [ new Component("i", { class: "fas fa-chevron-right" }).element ],
+									}).element,
+								],
+							});
+
+							contextMenuMoveSelectorOptions.appendChild(element);
+
+							element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
+							element.querySelector(".goto").addEventListener("click", () =>
+							{
+								currentId = doc.id;
+
+								ShowAvailableFoldersIn(currentId);
+							});
+						}
+					});
+
+					if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0) contextMenuMoveSelectorOptions.appendChild(new Component("p", {
+						innerText: Translation.Get("account->context_menu->move->impossible"),
 					}).element);
-			});
-		}
+				});
+		};
 
 		contextMenuMoveSelector.querySelector(".back").addEventListener("click", async () =>
 		{
@@ -478,10 +478,10 @@ window.addEventListener("userready", async () =>
 	{
 		const batch = db.batch();
 
-		[...contextMenuItems, contextMenuItem].filter(Boolean).forEach(item =>
+		[ ...contextMenuItems, contextMenuItem ].filter(Boolean).forEach(item =>
 			batch.update(db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id), {
 				starred: contextMenuAddToStarred.contains(element),
-				...GetFirestoreUpdateTimestamp()
+				...GetFirestoreUpdateTimestamp(),
 			}));
 
 		HideContextMenu();
@@ -491,16 +491,16 @@ window.addEventListener("userready", async () =>
 
 	contextMenuRename.addEventListener("click", () =>
 	{
-		const id = contextMenuItem.id;
+		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
 
-		const modal = new Modal({ "allow": [ "update" ] });
+		const modal = new Modal({ allow: [ "update" ] });
 
 		const nameInput = new Input({
 			attributes: {
 				class: "name",
-				placeholder: Translation.Get("generic->name")
-			}
+				placeholder: Translation.Get("generic->name"),
+			},
 		}).element;
 
 		const input : HTMLInputElement = nameInput.querySelector(".name");
@@ -521,7 +521,7 @@ window.addEventListener("userready", async () =>
 
 			modal.Hide();
 
-			const parentId = (await db.collection(`users/${Auth.UserId}/${type}s`).doc(id).get()).data().parentId;
+			const { parentId } = (await db.collection(`users/${Auth.UserId}/${type}s`).doc(id).get()).data();
 
 			const tempSnapshot = await db
 				.collection(`users/${Auth.UserId}/${type}s`)
@@ -534,7 +534,7 @@ window.addEventListener("userready", async () =>
 			{
 				db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 					name,
-					...GetFirestoreUpdateTimestamp()
+					...GetFirestoreUpdateTimestamp(),
 				});
 
 				modal.HideAndRemove();
@@ -545,12 +545,12 @@ window.addEventListener("userready", async () =>
 
 				input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
 					innerText: Translation.Get(`errors->${name.length === 0 ? "empty" : "user_content->already_exists"}`),
-					class: "input-error"
+					class: "input-error",
 				}).element);
 
 				AddClass(input, "error");
 			}
-		}
+		};
 
 		modal.Show(true);
 
@@ -559,7 +559,7 @@ window.addEventListener("userready", async () =>
 
 	contextMenuInfo.addEventListener("click", () =>
 	{
-		const id = contextMenuItem.id;
+		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
 
 		HideContextMenu();
@@ -572,9 +572,9 @@ window.addEventListener("userready", async () =>
 			items: [
 				{
 					content_type: type,
-					content_id: id
-				}
-			]
+					content_id: id,
+				},
+			],
 		});
 
 		const unsubscribe = db.collection(`users/${Auth.UserId}/${type}s`).doc(id).onSnapshot(async (doc : any) =>
@@ -592,7 +592,7 @@ window.addEventListener("userready", async () =>
 
 			const data = doc.data();
 
-			const name = data.name;
+			const { name } = data;
 
 			let dateFormatOptions;
 
@@ -607,39 +607,39 @@ window.addEventListener("userready", async () =>
 				new Component("p", {
 					children: [
 						new Component("span", { innerText: Translation.Get("generic->id") }).element,
-						new Component("span", { innerText: doc.id }).element
-					]
+						new Component("span", { innerText: doc.id }).element,
+					],
 				}).element,
 				new Component("p", {
 					children: [
 						new Component("span", { innerText: Translation.Get("generic->name") }).element,
-						new Component("span", { innerText: name }).element
-					]
+						new Component("span", { innerText: name }).element,
+					],
 				}).element,
 				new Component("p", {
 					children: [
 						new Component("span", { innerText: Translation.Get("generic->type") }).element,
-						new Component("span", { innerText: Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`) }).element
-					]
+						new Component("span", { innerText: Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`) }).element,
+					],
 				}).element,
 				new Component("p", {
 					children: [
 						new Component("span", { innerText: Translation.Get("generic->created") }).element,
-						new Component("span", { innerText: FormatDate(data.created.seconds * 1000, dateFormatOptions) }).element
-					]
+						new Component("span", { innerText: FormatDate(data.created.seconds * 1000, dateFormatOptions) }).element,
+					],
 				}).element,
 				new Component("p", {
 					children: [
 						new Component("span", { innerText: Translation.Get("generic->last_modified") }).element,
-						new Component("span", { innerText: FormatDate(data.updated.seconds * 1000, dateFormatOptions) }).element
-					]
+						new Component("span", { innerText: FormatDate(data.updated.seconds * 1000, dateFormatOptions) }).element,
+					],
 				}).element,
 				type === "file"
 					? new Component("p", {
 						children: [
 							new Component("span", { innerText: Translation.Get("generic->size") }).element,
-							new Component("span", { innerText: FormatStorage(data.size || 0) }).element
-						]
+							new Component("span", { innerText: FormatStorage(data.size || 0) }).element,
+						],
 					}).element
 					: null,
 			]);
@@ -658,9 +658,9 @@ window.addEventListener("userready", async () =>
 								: (data.parentId === "vault"
 									? Translation.Get("generic->vault")
 									: (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
-								)
-						}).element
-					]
+								),
+						}).element,
+					],
 				}).element;
 
 				contentPosition.querySelector("a").addEventListener("click", e =>
@@ -682,14 +682,14 @@ window.addEventListener("userready", async () =>
 					new Component("p", {
 						children: [
 							new Component("span", { innerText: Translation.Get("generic->shared") }).element,
-							new Component("span", { innerText: Translation.Get(`generic->${data.shared ? "yes" : "no"}`) }).element
-						]
+							new Component("span", { innerText: Translation.Get(`generic->${data.shared ? "yes" : "no"}`) }).element,
+						],
 					}).element,
 					new Component("p", {
 						children: [
 							new Component("span", { innerText: Translation.Get("generic->starred") }).element,
-							new Component("span", { innerText: Translation.Get(`generic->${data.starred ? "yes" : "no"}`) }).element
-						]
+							new Component("span", { innerText: Translation.Get(`generic->${data.starred ? "yes" : "no"}`) }).element,
+						],
 					}).element,
 					contentPosition,
 				]);
@@ -701,55 +701,55 @@ window.addEventListener("userready", async () =>
 
 	contextMenuDownload.addEventListener("click", () =>
 	{
-		const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean);
+		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
 
 		HideContextMenu();
 
 		tempArray.forEach(async item =>
+		{
+			const { id } = item;
+			const type = item.classList[0];
+
+			let folderFormat : string;
+
+			if (type === "folder" && contextMenuItems?.length <= 1)
 			{
-				const id = item.id;
-				const type = item.classList[0];
+				const modal = new Modal({ title: Translation.Get("api->messages->folder->choose_download_format") });
 
-				let folderFormat : string;
+				modal.AppendContent([
+					new Component("button", {
+						id: "zip",
+						innerText: ".zip",
+					}).element,
+					new Component("button", {
+						id: "tar",
+						innerText: ".tar",
+					}).element,
+					new Component("button", {
+						id: "tar-gz",
+						innerText: ".tar.gz",
+					}).element,
+				]);
 
-				if (type === "folder" && contextMenuItems?.length <= 1)
+				modal.Show();
+
+				await new Promise(resolve => modal.Content.querySelectorAll("#zip, #tar, #tar-gz").forEach(element => element.addEventListener("click", async () =>
 				{
-					const modal = new Modal({ title: Translation.Get("api->messages->folder->choose_download_format") });
-		
-					modal.AppendContent([
-						new Component("button", {
-							id: "zip",
-							innerText: ".zip"
-						}).element,
-						new Component("button", {
-							id: "tar",
-							innerText: ".tar"
-						}).element,
-						new Component("button", {
-							id: "tar-gz",
-							innerText: ".tar.gz"
-						}).element
-					]);
-		
-					modal.Show();
-		
-					await new Promise(resolve => modal.Content.querySelectorAll("#zip, #tar, #tar-gz").forEach(element => element.addEventListener("click", async () =>
-					{
-						modal.HideAndRemove();
+					modal.HideAndRemove();
 
-						folderFormat = element.id.replace("-",".")
-		
-						resolve();
-					})));
-				}
+					folderFormat = element.id.replace("-", ".");
 
-				DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder");
-			});
+					resolve();
+				})));
+			}
+
+			DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder");
+		});
 	});
 
-	[contextMenuDelete, contextMenuRestore].forEach(element => element.addEventListener("click", async () =>
+	[ contextMenuDelete, contextMenuRestore ].forEach(element => element.addEventListener("click", async () =>
 	{
-		const tempArray = [...contextMenuItems, contextMenuItem].filter(Boolean); // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
+		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean); // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
 
 		HideContextMenu();
 
@@ -759,18 +759,18 @@ window.addEventListener("userready", async () =>
 
 		tempArray.forEach(item =>
 		{
-			const id = item.id;
+			const { id } = item;
 			const type = item.classList[0];
 
 			const trashed = document.getElementById(id).getAttribute("data-trashed") === "true";
 
 			const docRef = db.collection(`users/${Auth.UserId}/${type}s`).doc(id);
-	
+
 			if (!inVault && (!trashed || (trashed && contextMenuRestore.contains(element)))) // If the content is in the vault it is immediately deleted
 			{
 				batch.update(docRef, {
 					trashed: !trashed,
-					...GetFirestoreUpdateTimestamp()
+					...GetFirestoreUpdateTimestamp(),
 				});
 
 				analytics.logEvent(!trashed ? "trash" : "restore", {
@@ -784,22 +784,21 @@ window.addEventListener("userready", async () =>
 
 				analytics.logEvent("delete", {
 					content_type: type,
-					content_id: id
+					content_id: id,
 				});
 			}
 		});
 
 		batch.commit();
 
-		if (tempArray.length === 1)
-			genericMessage.Show(Translation.Get(`api->messages->${tempArray[0].classList[0]}->${
-				inVault
-					? "deleted"
-					: document.getElementById(tempArray[0].id).getAttribute("data-trashed") === "true"
-						? (contextMenuRestore.contains(element) ? "restored" : "deleted")
-						: "moved_to_trash"
-			}`));
-		
+		if (tempArray.length === 1) genericMessage.Show(Translation.Get(`api->messages->${tempArray[0].classList[0]}->${
+			inVault
+				? "deleted"
+				: document.getElementById(tempArray[0].id).getAttribute("data-trashed") === "true"
+					? (contextMenuRestore.contains(element) ? "restored" : "deleted")
+					: "moved_to_trash"
+		}`));
+
 		if (IsShowFileVisible())
 		{
 			preventWindowUnload.editor = false;
@@ -821,7 +820,7 @@ window.addEventListener("userready", async () =>
 		img.onload = () =>
 		{
 			HideElement(filePreviewSpinner);
-			
+
 			filePreview.appendChild(canvas);
 
 			canvas.width = img.width;
@@ -840,16 +839,16 @@ window.addEventListener("userready", async () =>
 
 		const ScaleImage = (e : WheelEvent) =>
 		{
-			scale += e.deltaY < 0 ? /* UP (zoom in) */ 0.1 : -0.1 ;
+			scale += e.deltaY < 0 ? /* UP (zoom in) */ 0.1 : -0.1;
 
 			if (scale < 0.1) return;
 
 			const scaleString = `scale(${scale})`;
 
-			canvas.style.transform = canvas.style.transform.split(" ").map(value => value.indexOf("scale") > -1 ? scaleString : value).join(" ");
-		
+			canvas.style.transform = canvas.style.transform.split(" ").map(value => (value.indexOf("scale") > -1 ? scaleString : value)).join(" ");
+
 			if (canvas.style.transform.indexOf("scale") === -1) canvas.style.transform += scaleString;
-		}
+		};
 
 		let rotateAngle = 0;
 
@@ -861,10 +860,10 @@ window.addEventListener("userready", async () =>
 
 			const rotateString = `rotate(${rotateAngle}deg)`;
 
-			canvas.style.transform = canvas.style.transform.split(" ").map(value => value.indexOf("rotate") > -1 ? rotateString : value).join(" ");
+			canvas.style.transform = canvas.style.transform.split(" ").map(value => (value.indexOf("rotate") > -1 ? rotateString : value)).join(" ");
 
 			if (canvas.style.transform.indexOf("rotate") === -1) canvas.style.transform += rotateString;
-		}
+		};
 
 		let translateX = 0;
 		let translateY = 0;
@@ -879,26 +878,26 @@ window.addEventListener("userready", async () =>
 
 			switch (key)
 			{
-				case "arrowleft": translateX += moveBy; break;
-				case "arrowup": translateY += moveBy; break;
-				case "arrowright": translateX -= moveBy; break;
-				case "arrowdown": translateY -= moveBy; break;
+			case "arrowleft": translateX += moveBy; break;
+			case "arrowup": translateY += moveBy; break;
+			case "arrowright": translateX -= moveBy; break;
+			case "arrowdown": translateY -= moveBy; break;
 			}
 
 			const translateString = `translateX(${translateX}px) translateY(${translateY}px)`;
 
 			canvas.style.transform = canvas.style.transform.split(" ").map(value =>
-				value.indexOf("translateX") > -1
+				(value.indexOf("translateX") > -1
 					? translateString.split(" ")[0]
 					: (value.indexOf("translateY") > -1
 						? translateString.split(" ")[1]
-						: value)
-			).join(" ");
+						: value))).join(" ");
 
 			if (canvas.style.transform.indexOf("translate") === -1) canvas.style.transform += translateString;
-		}
+		};
 
-		let offsetX : number, offsetY : number;
+		let offsetX : number; let
+			offsetY : number;
 
 		const MoveImageWithMouse = (e : MouseEvent) =>
 		{
@@ -913,11 +912,11 @@ window.addEventListener("userready", async () =>
 
 			const top : number = e.pageY - offsetY;
 			const left : number = e.pageX - offsetX;
-		
+
 			Object.assign(canvas.style, {
-				top: top + "px",
-				left: left + "px",
-				transformOrigin: `${offsetX}px ${offsetY}px`
+				top: `${top}px`,
+				left: `${left}px`,
+				transformOrigin: `${offsetX}px ${offsetY}px`,
 			});
 
 			document.addEventListener("mousemove", MoveImageWithMouse);
@@ -928,10 +927,10 @@ window.addEventListener("userready", async () =>
 
 				document.removeEventListener("mousemove", MoveImageWithMouse);
 				document.removeEventListener("mouseup", Reset);
-			}
+			};
 
 			document.addEventListener("mouseup", Reset);
-		}
+		};
 
 		const RemoveContent = (e : MouseEvent) =>
 		{
@@ -948,7 +947,7 @@ window.addEventListener("userready", async () =>
 
 				filePreviewContainer.removeEventListener("click", RemoveContent);
 			}
-		}
+		};
 
 		filePreviewContainer.addEventListener("click", RemoveContent);
 
@@ -992,7 +991,7 @@ window.addEventListener("userready", async () =>
 
 				filePreviewContainer.removeEventListener("click", RemoveContent);
 			}
-		}
+		};
 
 		filePreviewContainer.addEventListener("click", RemoveContent);
 	});
@@ -1002,7 +1001,7 @@ window.addEventListener("userready", async () =>
 		const dom = new DOMParser().parseFromString(editor.getValue(), "text/xml");
 
 		const message : string = dom.getElementsByTagName("parsererror").length > 0
-			? dom.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML
+			? dom.getElementsByTagName("parsererror")[0].getElementsByTagName("div")[0].innerHTML
 			: Translation.Get("generic->no_errors_found");
 
 		genericMessage.Show(message);
@@ -1054,13 +1053,13 @@ window.addEventListener("userready", async () =>
 		if (await vaultOnly(false))
 		{
 			viewMyAccount.click();
-			
+
 			return;
 		}
 
 		db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get().then((doc : any) =>
 		{
-			const parentId = doc.data().parentId;
+			const { parentId } = doc.data();
 
 			if (parentId === "vault")
 			{
@@ -1112,23 +1111,22 @@ window.addEventListener("userready", async () =>
 	{
 		if (e.target === contextMenuContainer) HideContextMenu();
 
-		if ((<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => HasClass(element, "selected")).length === 0)
-			contextMenuItems = [];
+		if ((<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected")).length === 0) contextMenuItems = [];
 	});
 
 	document.addEventListener("scroll", () => HideContextMenu());
 
 	document.addEventListener("contextmenu", e =>
 		// Allow custom context menu only outside of any .allow-context-menu and inside .user-content
-		((<HTMLElement>e.target).closest(".allow-context-menu") === null
+		(((<HTMLElement>e.target).closest(".allow-context-menu") === null
 		&& (<HTMLElement>e.target).closest(".user-content") !== null
 		&& !contextMenuContainer.contains(<HTMLElement>e.target))
 			? showContextMenu(e)
-			: HideContextMenu());
+			: HideContextMenu()));
 
 	document.addEventListener("drop", e =>
 	{
-		const items : DataTransferItemList = e.dataTransfer.items;
+		const { items } = e.dataTransfer;
 
 		Array.from(items).map(item => item.webkitGetAsEntry()).forEach((item : any) =>
 		{
@@ -1137,30 +1135,29 @@ window.addEventListener("userready", async () =>
 			{
 				const entries : File[] = [];
 
-				GetFolderEntries(item, item.name + "/", entries);
+				GetFolderEntries(item, `${item.name}/`, entries);
 
-				UploadFolder(entries, item.name, item.name + "/", GetCurrentFolderId(true), 0);
+				UploadFolder(entries, item.name, `${item.name}/`, GetCurrentFolderId(true), 0);
 			}
 		});
 	});
 
 	foldersContainer.parentElement.addEventListener("mousedown", e =>
 	{
-		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected"))
-			(<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element => RemoveClass(element, "selected"));
+		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected")) (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element => RemoveClass(element, "selected"));
 
 		if (isUserContentElement(<HTMLElement>e.target) || contextMenuContainer.contains(<HTMLElement>e.target)) return;
-		
-		(<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element => RemoveClass(element, "selected"));
+
+		(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element => RemoveClass(element, "selected"));
 
 		if (e.button === 2) return;
 
 		const multipleContentSelector = new Component("div", {
 			class: "multiple-content-selector",
 			style: {
-				top: e.pageY + "px",
-				left: e.pageX + "px",
-			}
+				top: `${e.pageY}px`,
+				left: `${e.pageX}px`,
+			},
 		}).element;
 
 		document.body.appendChild(multipleContentSelector);
@@ -1179,30 +1176,28 @@ window.addEventListener("userready", async () =>
 
 			if (Math.abs(width) + left > document.documentElement.scrollWidth) width = document.documentElement.scrollWidth - left;
 
-			if (Math.abs(height) + top + bottomMenu.clientHeight > document.documentElement.scrollHeight)
-				height = document.documentElement.scrollHeight - top - bottomMenu.clientHeight;
+			if (Math.abs(height) + top + bottomMenu.clientHeight > document.documentElement.scrollHeight) height = document.documentElement.scrollHeight - top - bottomMenu.clientHeight;
 
 			Object.assign(multipleContentSelector.style, {
-				top: top + "px",
-				left: left + "px",
-				width: Math.abs(width) + "px",
-				height: Math.abs(height) + "px"
+				top: `${top}px`,
+				left: `${left}px`,
+				width: `${Math.abs(width)}px`,
+				height: `${Math.abs(height)}px`,
 			});
 
 			// Highlight selected content
-			(<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).forEach(element =>
+			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element =>
 			{
 				const elementRect : DOMRect = element.getBoundingClientRect();
 				const selectedRect : DOMRect = multipleContentSelector.getBoundingClientRect();
-	
-				if (elementRect.top <= selectedRect.bottom && elementRect.bottom >= selectedRect.top && elementRect.left <= selectedRect.right && elementRect.right >= selectedRect.left)
-					AddClass(element, "selected");
+
+				if (elementRect.top <= selectedRect.bottom && elementRect.bottom >= selectedRect.top && elementRect.left <= selectedRect.right && elementRect.right >= selectedRect.left) AddClass(element, "selected");
 				else RemoveClass(element, "selected");
 			});
 
 			contextMenuItem = null;
-			contextMenuItems = (<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => HasClass(element, "selected"));
-		}
+			contextMenuItems = (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected"));
+		};
 
 		document.addEventListener("mousemove", UpdateContentSelectorSize);
 
@@ -1229,7 +1224,7 @@ window.addEventListener("userready", async () =>
 				GetUserContent();
 
 				Auth.RefreshToken();
-			}
+			};
 
 			if (snapshot.exists && !snapshot.data().locked)
 			{
@@ -1240,16 +1235,16 @@ window.addEventListener("userready", async () =>
 
 			const modal = new Modal({
 				title: Translation.Get(`api->messages->vault->${snapshot.exists ? "unlock" : "set_pin"}`),
-				allow: [ "confirm" ]
+				allow: [ "confirm" ],
 			});
 
 			const vaultPinInput = new InputWithIcon({
 				attributes: {
 					id: "vault-pin",
 					placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
-					type: "password"
+					type: "password",
 				},
-				iconClassName: "fas fa-key fa-fw"
+				iconClassName: "fas fa-key fa-fw",
 			}).element;
 
 			const input = vaultPinInput.querySelector("input");
@@ -1269,13 +1264,13 @@ window.addEventListener("userready", async () =>
 				RemoveClass(input, "error");
 
 				modal.Hide();
-				
+
 				functions.httpsCallable(snapshot.exists ? "unlockVault" : "createVault")({ pin }).then((result : any) =>
 				{
 					if (result.data.success)
 					{
 						modal.Remove();
-						
+
 						LoadVault();
 					}
 					else if (snapshot.exists)
@@ -1284,13 +1279,13 @@ window.addEventListener("userready", async () =>
 
 						vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
 							class: "input-error",
-							innerText: Translation.Get("api->messages->vault->wrong_pin")
+							innerText: Translation.Get("api->messages->vault->wrong_pin"),
 						}).element);
 
 						modal.Show(true);
 					}
 				});
-			}
+			};
 
 			modal.Show(true);
 		});
@@ -1300,15 +1295,12 @@ window.addEventListener("userready", async () =>
 	{
 		if ("file" in e.data)
 		{
-			const file : File = e.data.file;
+			const { file } = e.data;
 
 			UploadFile(file, file.name, file.size, "root");
 		}
-		else if ("add" in e.data)
-		{
-			if (e.data.add === "file") createFile.click();
-			else if (e.data.add === "folder") createFolder.click();
-		}
+		else if ("add" in e.data) if (e.data.add === "file") createFile.click();
+		else if (e.data.add === "folder") createFolder.click();
 	});
 
 	navigator.serviceWorker?.controller?.postMessage("ready");
@@ -1337,27 +1329,26 @@ window.addEventListener("userready", async () =>
 	else if (recentsOnly()) viewRecentContent.click();
 	else GetUserContent();
 
-	if (Auth.IsAuthenticated)
-		db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
+	if (Auth.IsAuthenticated) db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
+	{
+		if (snapshot.exists)
 		{
-			if (snapshot.exists)
-			{
-				const locked : boolean = snapshot.data().locked;
+			const { locked } = snapshot.data();
 
-				(<HTMLParagraphElement>vault.querySelector(".name p")).innerText = Translation.Get("generic->vault") + " ";
+			(<HTMLParagraphElement>vault.querySelector(".name p")).innerText = `${Translation.Get("generic->vault")} `;
 
-				const icon = document.createElement("i");
-				icon.className = `fas fa-lock${locked ? "" : "-open"}`;
+			const icon = document.createElement("i");
+			icon.className = `fas fa-lock${locked ? "" : "-open"}`;
 
-				vault.querySelector(".name p").appendChild(icon);
+			vault.querySelector(".name p").appendChild(icon);
 
-				vault.setAttribute("data-locked", `${locked}`);
+			vault.setAttribute("data-locked", `${locked}`);
 
-				locked ? AddClass(vault, "disabled") : RemoveClass(vault, "disabled");
-			}
+			locked ? AddClass(vault, "disabled") : RemoveClass(vault, "disabled");
+		}
 
-			Auth.RefreshToken();
-		});
+		Auth.RefreshToken();
+	});
 });
 
 window.addEventListener("resize", () => HideContextMenu());
@@ -1410,9 +1401,9 @@ Shortcuts.Register("control+s", () =>
 Shortcuts.Register("delete", () => contextMenuDelete.click);
 
 Shortcuts.Register("backspace", () =>
-	contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null));
+	(contextMenuItems?.length > 0 ? contextMenuDelete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null)));
 
-Shortcuts.Register("d", () => DownloadContent(GetCurrentFolderId(), document.title, true))
+Shortcuts.Register("d", () => DownloadContent(GetCurrentFolderId(), document.title, true));
 
 window.addEventListener("beforeunload", e =>
 {
@@ -1459,14 +1450,14 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 		preventWindowUnload.fileUpload = false;
 
 		resolve();
-	}
+	};
 
 	const rejectUpload = (error : string) =>
 	{
 		preventWindowUnload.fileUpload = false;
 
 		reject(error);
-	}
+	};
 
 	preventWindowUnload.fileUpload = true;
 
@@ -1475,10 +1466,9 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
 	const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
 
-	if (IsSet(id) && typeof file === "string")
-		ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
-			.then(() => resolveUpload())
-			.catch(error => rejectUpload(error));
+	if (IsSet(id) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
+		.then(() => resolveUpload())
+		.catch(error => rejectUpload(error));
 	else
 	{
 		if (parentId === "shared" || parentId === "starred" || parentId === "trash") parentId = "root";
@@ -1493,19 +1483,19 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 			trashed: false,
 			inVault,
 			created: GetFirestoreServerTimestamp(),
-			...GetFirestoreUpdateTimestamp()
+			...GetFirestoreUpdateTimestamp(),
 		}).then((ref : any) =>
 		{
-			const id = ref.id;
+			const { id } = ref;
 
 			analytics.logEvent("create", {
 				content_type: "file",
-				content_id: id
+				content_id: id,
 			});
-	
-			if (typeof file !== "string") ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).put(file, metadata), name, size, id)
+
+			if (typeof file !== "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).put(file, metadata), name, size, id)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
-			else ShowFileUploadModal(storage.ref(Auth.UserId + "/" + id).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
+			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
 		});
 	}
@@ -1526,7 +1516,7 @@ const ShowFileUploadModal = async (uploadTask : any, name : string, size : numbe
 		{
 			const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-			modal.ProgressBar.style.width = progress + "%";
+			modal.ProgressBar.style.width = `${progress}%`;
 			modal.TransferSize.innerText = FormatStorage(snapshot.bytesTransferred);
 		}, (error : any) =>
 		{
@@ -1542,7 +1532,7 @@ const ShowFileUploadModal = async (uploadTask : any, name : string, size : numbe
 			analytics.logEvent("upload", {
 				content_type: "file",
 				content_id: id,
-				size: size
+				size,
 			});
 
 			resolve();
@@ -1572,86 +1562,78 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	if (IsShowFileVisible() && location.pathname.indexOf("/file/") === -1) CloseEditor();
 
-	if ((searchTerm ?? "").length === 0 && !globalSearch)
+	if ((searchTerm ?? "").length === 0 && !globalSearch) if (parentId !== "root" && GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && location.pathname.indexOf("/file/") === -1)
 	{
-		if (parentId !== "root" && GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && location.pathname.indexOf("/file/") === -1)
+		if (!await vaultOnly(false)) // If this isn't the vault root directory
 		{
-			if (!await vaultOnly(false)) // If this isn't the vault root directory
+			folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
+			folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
+
+			await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then((doc : any) =>
 			{
-				folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
-				folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
+				const data = doc.data();
 
-				await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then((doc : any) =>
-				{
-					const data = doc.data();
+				document
+					.querySelectorAll("[data-update-field=folder-name]")
+					.forEach(element => (<HTMLElement>element).innerText = data.name);
 
-					document
-						.querySelectorAll("[data-update-field=folder-name]")
-						.forEach(element => (<HTMLElement>element).innerText = data.name);
+				folderShared = data.shared;
 
-					folderShared = data.shared;
-
-					ShowElement(folderNavigation, "flex");
-
-					ShowElement(folderNavigation.querySelector("[data-update-field=folder-name]"));
-
-					HideElements([
-						emptyTrashButton,
-						lockVaultButton
-					]);
-
-					if (Auth.IsAuthenticated) ShowElement(navigationBackButton, "flex");
-					else
-					{
-						const parentId : string = data.parentId;
-
-						// A user cannot access another user's root (even if only shared content is shown), only one folder (get operation) is allowed just to get the name
-						if (parentId === "root") HideElement(navigationBackButton);
-						else
-						{
-							db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get()
-								.then(() => ShowElement(navigationBackButton, "flex")) // If the query succeeds the folder is shared
-								.catch(() => HideElement(navigationBackButton)); // Otherwise hide the navigation
-						}
-					}
-				});
-			}
-			else
-				(<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-					.forEach(element => element.innerText = Translation.Get("generic->vault"));
-
-			if (await vaultOnly())
-			{
-				ShowElements([
-					folderNavigation,
-					navigationBackButton,
-					vaultInfo
-				], "flex");
-
-				ShowElement(lockVaultButton);
-
-				HideElement(emptyTrashButton);
-			}
-		}
-		else
-		{
-			if (trashedOnly())
-			{
 				ShowElement(folderNavigation, "flex");
-				ShowElement(emptyTrashButton);
+
+				ShowElement(folderNavigation.querySelector("[data-update-field=folder-name]"));
 
 				HideElements([
-					navigationBackButton,
+					emptyTrashButton,
 					lockVaultButton,
-					folderNavigation.querySelector("[data-update-field=folder-name]")
 				]);
-			}
-			else HideElement(folderNavigation);
 
-			if (location.pathname.indexOf("file") === -1)
-				(<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-					.forEach(element => element.innerText = Translation.Get("account->title"));
+				if (Auth.IsAuthenticated) ShowElement(navigationBackButton, "flex");
+				else
+				{
+					const { parentId } = data;
+
+					// A user cannot access another user's root (even if only shared content is shown), only one folder (get operation) is allowed just to get the name
+					if (parentId === "root") HideElement(navigationBackButton);
+					else db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get()
+						.then(() => ShowElement(navigationBackButton, "flex")) // If the query succeeds the folder is shared
+						.catch(() => HideElement(navigationBackButton)); // Otherwise hide the navigation
+				}
+			});
 		}
+		else (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
+			.forEach(element => element.innerText = Translation.Get("generic->vault"));
+
+		if (await vaultOnly())
+		{
+			ShowElements([
+				folderNavigation,
+				navigationBackButton,
+				vaultInfo,
+			], "flex");
+
+			ShowElement(lockVaultButton);
+
+			HideElement(emptyTrashButton);
+		}
+	}
+	else
+	{
+		if (trashedOnly())
+		{
+			ShowElement(folderNavigation, "flex");
+			ShowElement(emptyTrashButton);
+
+			HideElements([
+				navigationBackButton,
+				lockVaultButton,
+				folderNavigation.querySelector("[data-update-field=folder-name]"),
+			]);
+		}
+		else HideElement(folderNavigation);
+
+		if (location.pathname.indexOf("file") === -1) (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
+			.forEach(element => element.innerText = Translation.Get("account->title"));
 	}
 
 	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${document.querySelector(".top-section").clientHeight}px)`;
@@ -1711,7 +1693,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 		if (searchTerm?.length > 0)
 		{
-			(<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children])
+			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ])
 				.filter(element => element.getAttribute("data-search-term") !== searchTerm)
 				.forEach(element => element.remove());
 
@@ -1719,7 +1701,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		}
 
 		emptyTrashButton.disabled = trashedOnly() && AreUserContentContainersEmpty();
-	}
+	};
 
 	const collator = new Intl.Collator(undefined, { numeric: true });
 
@@ -1770,33 +1752,32 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	let foldersUpdateCount = 0;
 
-	if (includeFolders)
-		unsubscribeFoldersListener = foldersRef.onSnapshot((snapshot : any) =>
-		{
-			HideElement(userContentLoadingSpinner);
+	if (includeFolders) unsubscribeFoldersListener = foldersRef.onSnapshot((snapshot : any) =>
+	{
+		HideElement(userContentLoadingSpinner);
 
-			const elements = Array.from(<NodeListOf<HTMLElement>>foldersContainer.querySelectorAll(folderSelector));
+		const elements = Array.from(<NodeListOf<HTMLElement>>foldersContainer.querySelectorAll(folderSelector));
 
-			elements.forEach(element => AddClass(element, "old"));
+		elements.forEach(element => AddClass(element, "old"));
 
-			snapshot.docs
-				.sort((a : any, b : any) => !orderBy ? collator.compare(a.data().name, b.data().name) : 0 /* DO NOT SORT ON THE CLIENT IF ORDERBY IS SET */)
-				.forEach((doc : any) =>
-					CreateUserContent(
-						"folder",
-						doc.data().name,
-						doc.id,
-						doc.data().shared,
-						doc.data().starred,
-						doc.data().trashed
-					).setAttribute("data-search-term", searchTerm ?? ""));
+		snapshot.docs
+			.sort((a : any, b : any) => (!orderBy ? collator.compare(a.data().name, b.data().name) : 0) /* DO NOT SORT ON THE CLIENT IF ORDERBY IS SET */)
+			.forEach((doc : any) =>
+				CreateUserContent(
+					"folder",
+					doc.data().name,
+					doc.id,
+					doc.data().shared,
+					doc.data().starred,
+					doc.data().trashed,
+				).setAttribute("data-search-term", searchTerm ?? ""));
 
-			foldersContainer.querySelectorAll(".old").forEach(element => element.remove());
+		foldersContainer.querySelectorAll(".old").forEach(element => element.remove());
 
-			UserContentLoaded(foldersUpdateCount > 0);
+		UserContentLoaded(foldersUpdateCount > 0);
 
-			foldersUpdateCount++;
-		});
+		foldersUpdateCount++;
+	});
 
 	let filesUpdateCount = 0;
 
@@ -1809,7 +1790,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		elements.forEach(element => AddClass(element, "old"));
 
 		snapshot.docs
-			.sort((a : any, b : any) => !orderBy ? collator.compare(a.data().name, b.data().name) : 0)
+			.sort((a : any, b : any) => (!orderBy ? collator.compare(a.data().name, b.data().name) : 0))
 			.forEach((doc : any) =>
 				CreateUserContent(
 					"file",
@@ -1817,18 +1798,18 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 					doc.id,
 					doc.data().shared,
 					doc.data().starred,
-					doc.data().trashed
+					doc.data().trashed,
 				).setAttribute("data-search-term", searchTerm ?? ""));
 
 		filesContainer.querySelectorAll(".old").forEach(element => element.remove());
 
 		UserContentLoaded(filesUpdateCount > 0);
-	   
+
 		filesUpdateCount++;
 	});
 
 	LogPageViewEvent();
-}
+};
 
 const showContextMenu = (e : MouseEvent) : void =>
 {
@@ -1836,7 +1817,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 	const contentTarget = GetUserContentElement(<HTMLElement>e.target);
 
 	contextMenuItem = null;
-	contextMenuItems = (<HTMLElement[]>[...foldersContainer.children, ...filesContainer.children]).filter(element => HasClass(element, "selected"));
+	contextMenuItems = (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected"));
 
 	// Every event would have been fired twice because with length === 1 as contextMenuItem would have been the same element
 	if (contextMenuItems?.length === 1) contextMenuItems = [];
@@ -1845,7 +1826,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 
 	if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null) && contextMenuItems.length <= 1)
 	{
-		ShowElements(<HTMLElement[]>[contextMenuContent, ...contextMenuContent.children]);
+		ShowElements(<HTMLElement[]>[ contextMenuContent, ...contextMenuContent.children ]);
 
 		if (isUserContentElement(contentTarget)) contextMenuItem = contentTarget;
 		else contextMenuItem = document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]);
@@ -1864,26 +1845,24 @@ const showContextMenu = (e : MouseEvent) : void =>
 			contextMenuRemoveFromStarred,
 			contextMenuRestore,
 			contextMenuDelete,
-			contextMenuDownload
+			contextMenuDownload,
 		]);
 
-		if (!Auth.IsAuthenticated || contextMenuItem.getAttribute("data-trashed") === "true")
-			HideElements([
-				contextMenuMove,
-				contextMenuRename
-			]);
-		else if (Auth.IsAuthenticated)
-			ShowElements([
-				contextMenuMove,
-				contextMenuRename
-			]);
+		if (!Auth.IsAuthenticated || contextMenuItem.getAttribute("data-trashed") === "true") HideElements([
+			contextMenuMove,
+			contextMenuRename,
+		]);
+		else if (Auth.IsAuthenticated) ShowElements([
+			contextMenuMove,
+			contextMenuRename,
+		]);
 
 		if (contextMenuItem.getAttribute("data-trashed") === "false")
 		{
 			if (contextMenuItem.getAttribute("data-shared") === "true")
 			{
 				if ((<any>navigator).share) ShowElement(contextMenuSharingOptions);
-				
+
 				ShowElement(contextMenuCopyShareableLink);
 
 				if (Auth.IsAuthenticated) ShowElement(contextMenuUnshare);
@@ -1907,12 +1886,12 @@ const showContextMenu = (e : MouseEvent) : void =>
 		{
 			HideElements([
 				contextMenuInfo,
-				contextMenuDownload
+				contextMenuDownload,
 			]);
 
 			ShowElements([
 				contextMenuDelete,
-				contextMenuRestore
+				contextMenuRestore,
 			]);
 		}
 	}
@@ -1926,7 +1905,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 	{
 		HideElements([ contextMenuContent, contextMenuGeneric, contextMenuVault ]);
 
-		if (!vault.contains(target)) ShowElements(<HTMLElement[]>[contextMenuGeneric, ...contextMenuGeneric.children]);
+		if (!vault.contains(target)) ShowElements(<HTMLElement[]>[ contextMenuGeneric, ...contextMenuGeneric.children ]);
 		else
 		{
 			const vaultLocked = vault.getAttribute("data-locked");
@@ -1935,13 +1914,13 @@ const showContextMenu = (e : MouseEvent) : void =>
 
 			ShowElements([
 				contextMenuVault,
-				vaultLocked === "true" ? contextMenuUnlockVault : (vaultLocked === "false" ? contextMenuLockVault : contextMenuCreateVault)
+				vaultLocked === "true" ? contextMenuUnlockVault : (vaultLocked === "false" ? contextMenuLockVault : contextMenuCreateVault),
 			]);
 		}
 	}
 	else if (contextMenuItems.length > 1)
 	{
-		HideElements(<HTMLElement[]>[...contextMenuContent.children, contextMenuGeneric, contextMenuVault]);
+		HideElements(<HTMLElement[]>[ ...contextMenuContent.children, contextMenuGeneric, contextMenuVault ]);
 
 		ShowElement(contextMenuContent);
 
@@ -1962,15 +1941,14 @@ const showContextMenu = (e : MouseEvent) : void =>
 		}
 		else ShowElement(contextMenuRestore);
 
-		if (contextMenuItems.filter(element => HasClass(element, "file")).length === contextMenuItems.length)
-			ShowElement(contextMenuView);
+		if (contextMenuItems.filter(element => HasClass(element, "file")).length === contextMenuItems.length) ShowElement(contextMenuView);
 	}
 
 	const selectedEditorTabContentType = target.closest(".tab")?.getAttribute("content-type");
 	const selectedEditorTabName = (<HTMLParagraphElement>target.closest(".tab")?.querySelector(".name"))?.innerText;
 
 	if (!selectedEditorTabContentType?.startsWith("image/")) HideElement(contextMenuDisplayImage);
-	
+
 	if (selectedEditorTabContentType !== "application/pdf") HideElement(contextMenuDisplayPdf);
 
 	if (!selectedEditorTabName?.endsWith(".xml")) HideElement(contextMenuValidateXml);
@@ -1992,34 +1970,33 @@ const showContextMenu = (e : MouseEvent) : void =>
 		.find(element =>
 			getComputedStyle(element).getPropertyValue("display") !== "none"
 			&& getComputedStyle(element.parentElement).getPropertyValue("display") !== "none").focus(); // Focus first visible element in the context menu
-}
+};
 
 const HideContextMenu = () : void =>
 {
 	HideElement(contextMenuContainer);
 
 	contextMenuItem = null;
-}
+};
 
 const addUserContentEvents = () : void =>
 {
-	const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(folderSelector + " .menu-button button," + fileSelector + " .menu-button button"));
+	const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(`${folderSelector} .menu-button button,${fileSelector} .menu-button button`));
 	const userContentElements = (<NodeListOf<HTMLDivElement>>document.querySelectorAll(`${folderSelector}, ${fileSelector}`));
 
 	[ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", showContextMenu));
 
 	if (trashedOnly()) return;
 
-	[...userContentElements, navigationBackButton, vault].forEach(element =>
+	[ ...userContentElements, navigationBackButton, vault ].forEach(element =>
 	{
 		const HandleTargetElement = (e : MouseEvent) : void =>
 		{
-			if (e.type === "mouseenter" && IsSet(document.querySelector(".dragging")) &&
-				(element.id) !== document.querySelector(".dragging").id &&
-				!HasClass( element, "placeholder"))
-				AddClass( element, "target");
+			if (e.type === "mouseenter" && IsSet(document.querySelector(".dragging"))
+				&& (element.id) !== document.querySelector(".dragging").id
+				&& !HasClass(element, "placeholder")) AddClass(element, "target");
 			else RemoveClass(element, "target");
-		}
+		};
 
 		if (HasClass(element, "folder") || HasClass(element, "back-button") || HasClass(element, "vault"))
 		{
@@ -2036,11 +2013,11 @@ const addUserContentEvents = () : void =>
 			element.addEventListener("mousedown", <EventListener>HandleUserContentMove);
 		}
 	});
-}
+};
 
 /**
  * Changes the viewed folder or loads a file
- * 
+ *
  * @param e The event fired on user interaction (e.g.: MouseEvent)
  * @param targetElement Specified if an Event parameter is not available
  */
@@ -2048,10 +2025,10 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent, targetElement ?: HTM
 {
 	const target : HTMLElement = targetElement ?? <HTMLElement>e.target;
 
-	if (target.closest(".menu-button") === null &&
-		GetUserContentElement(target)?.getAttribute("data-trashed") === "false" &&
-		!HasClass(GetUserContentElement(target), "placeholder") &&
-		!HasClass(GetUserContentElement(target), "dragging"))
+	if (target.closest(".menu-button") === null
+		&& GetUserContentElement(target)?.getAttribute("data-trashed") === "false"
+		&& !HasClass(GetUserContentElement(target), "placeholder")
+		&& !HasClass(GetUserContentElement(target), "dragging"))
 	{
 		const closestFile = target.closest(fileSelector);
 
@@ -2067,17 +2044,17 @@ const HandlePageChangeAndLoadUserContent = (e : MouseEvent, targetElement ?: HTM
 			if (closestFile === null)
 			{
 				SetCurrentFolderId(target.closest(folderSelector).id);
-	
+
 				GetUserContent();
 
 				UpdateBottomSectionBar(viewMyAccount);
 			}
 			else ShowFile(closestFile.id, null, null, isMultipleFileEditor);
-	
+
 			if (!isMultipleFileEditor && location.href !== url) history.pushState(null, "", url);
 		}
 	}
-}
+};
 
 const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void =>
 {
@@ -2102,31 +2079,30 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 			if (!ignoreMovement)
 			{
 				// Set moved=true only if the mouse moved by at least 5px
-				if (Math.abs(left - e.pageX) > 5 || Math.abs(top - e.pageY) > 5)
-					moved = true;
+				if (Math.abs(left - e.pageX) > 5 || Math.abs(top - e.pageY) > 5) moved = true;
 
 				if (moved) ShowElement(element, "flex");
 			}
 
 			if (moved)
 			{
-				[foldersContainer, filesContainer].forEach(element =>
+				[ foldersContainer, filesContainer ].forEach(element =>
 					(<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
 						AddClasses(element, [ "no-hover", HasClass(element, "file") ? "disabled" : "" ])));
-	
+
 				Object.assign(element.style, {
-					top: top + "px",
-					left: left + "px"
+					top: `${top}px`,
+					left: `${left}px`,
 				});
 
 				AddClass(element, "dragging");
 
 				AddClass(placeholderElement, "placeholder");
-			
+
 				AddClass(document.documentElement, "grabbing");
 			}
 		}
-	}
+	};
 
 	const ResetElement = async (ev : MouseEvent) =>
 	{
@@ -2134,7 +2110,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 
 		let parentId = null;
 
-		[foldersContainer, filesContainer].forEach(element =>
+		[ foldersContainer, filesContainer ].forEach(element =>
 			(<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
 			{
 				RemoveClass(element, "no-hover");
@@ -2169,15 +2145,14 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 		}
 
 		if (!moved) HandlePageChangeAndLoadUserContent(ev);
-		else if (IsSet(parentId) && Auth.IsAuthenticated)
-			MoveElements(tempArray, parentId);
+		else if (IsSet(parentId) && Auth.IsAuthenticated) MoveElements(tempArray, parentId);
 
 		document.removeEventListener("mousemove", MoveElement);
 		document.removeEventListener("mouseup", ResetElement);
-	}
+	};
 
 	if (IsSet(element) && e.which !== 3) // Not on right click
-	{
+
 		if (!ignoreMovement)
 		{
 			HideElement(element);
@@ -2190,8 +2165,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 			document.addEventListener("mousemove", MoveElement);
 			document.addEventListener("mouseup", ResetElement);
 		}
-	}
-}
+};
 
 const isUserContentElement = (element : HTMLElement) : boolean => IsSet(GetUserContentElement(element));
 
@@ -2204,31 +2178,31 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
 
 	const language = Linguist.Get(<string>Linguist.Detect(name, type === "file"));
 
-	const element = new Component("div", {
+	const { element } = new Component("div", {
 		class: type,
 		id,
 		title: name,
 		data: {
 			shared,
 			starred,
-			trashed
+			trashed,
 		},
 		children: [
 			new Component("div", {
 				class: "icon",
 				children: [
 					new Component("i", {
-						style: { backgroundImage: `url("/assets/img/icons/languages/${language.iconName ?? language.name}.svg?v=2")` }
-					}).element
-				]
+						style: { backgroundImage: `url("/assets/img/icons/languages/${language.iconName ?? language.name}.svg?v=2")` },
+					}).element,
+				],
 			}).element,
 			new Component("div", {
 				class: "name",
 				children: [
 					new Component("p", {
-						innerText: name
-					}).element
-				]
+						innerText: name,
+					}).element,
+				],
 			}).element,
 			new Component("div", {
 				class: "menu-button",
@@ -2236,24 +2210,24 @@ const CreateUserContent = (type : string, name : string, id : string, shared : b
 					new Component("button", {
 						children: [
 							new Component("i", {
-								class: "fas fa-ellipsis-v fa-fw"
-							}).element
-						]
-					}).element
-				]
+								class: "fas fa-ellipsis-v fa-fw",
+							}).element,
+						],
+					}).element,
+				],
 			}).element,
-		]
-	}).element;
-		
+		],
+	});
+
 	if (type === "file") filesContainer.insertAdjacentElement("beforeend", element);
 	else foldersContainer.insertAdjacentElement("beforeend", element);
-		
+
 	addUserContentEvents();
-	
+
 	HideElement(emptyFolder);
 
 	return element;
-}
+};
 
 const CreateEditor = (id : string, value : string, language : string, isActive ?: boolean) : void =>
 {
@@ -2264,13 +2238,12 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
 	editorSavedValue = value;
 
-	if (!editor)
-		editor = (<any>window).monaco.editor.create(editorElement, {
-			model: null,
-			theme: "vs-dark",
-			automaticLayout: true,
-			readOnly: !Auth.IsSignedIn
-		});
+	if (!editor) editor = (<any>window).monaco.editor.create(editorElement, {
+		model: null,
+		theme: "vs-dark",
+		automaticLayout: true,
+		readOnly: !Auth.IsSignedIn,
+	});
 
 	const model = (<any>window).monaco.editor.createModel(value, language);
 
@@ -2285,7 +2258,7 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 		if (preventWindowUnload.editor) AddClass(editorTabs.querySelector(".active"), "modified");
 		else RemoveClass(editorTabs.querySelector(".active"), "modified");
 	});
-}
+};
 
 const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean, isMultipleFileEditor ?: boolean) : void =>
 {
@@ -2308,8 +2281,8 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 			class: "force-download",
 			children: [
 				new Component("i", { class: "fas fa-download" }).element,
-				new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element
-			]
+				new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element,
+			],
 		}).element);
 
 		editorElement.querySelector(".force-download").addEventListener("click", () =>
@@ -2321,13 +2294,13 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
 		RemoveClass(document.documentElement, "wait");
 		RemoveClass(document.documentElement, "file-loading");
-	}
+	};
 
 	db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
 	{
-		const name : string = doc.data().name;
+		const { name } = doc.data();
 		const language = <string>Linguist.Detect(name, true);
-		const size = doc.data().size;
+		const { size } = doc.data();
 
 		// If forceDownload the file tab has already been appended
 		if (!forceDownload)
@@ -2336,34 +2309,34 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
 			const tab = new Component("div", {
 				id: `tab-${id}`,
-				class: "tab" + (editorTabs.querySelector(".tab.active") === null ? " active" : ""),
+				class: `tab${editorTabs.querySelector(".tab.active") === null ? " active" : ""}`,
 				children: [
 					new Component("div", {
 						class: "icon",
 						children: [
 							new Component("i", {
-								style: { backgroundImage: `url("/assets/img/icons/languages/${language.iconName ?? language.name}.svg?v=2")` }
-							}).element
-						]
+								style: { backgroundImage: `url("/assets/img/icons/languages/${language.iconName ?? language.name}.svg?v=2")` },
+							}).element,
+						],
 					}).element,
 					new Component("p", { class: "name", innerText: name }).element,
 					new Component("button", { class: "menu", children: [ new Component("i", { class: "fas fa-ellipsis-v fa-fw" }).element ] }).element,
-					new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element
-				]
+					new Component("button", { class: "close", children: [ new Component("i", { class: "fas fa-times fa-fw" }).element ] }).element,
+				],
 			}).element;
-	
+
 			tab.addEventListener("click", e =>
 			{
 				const target = (<HTMLElement>e.target);
-	
+
 				if (target.closest(".close") !== null) return;
-	
-				const id = target.closest(".tab").id;
-	
+
+				const { id } = target.closest(".tab");
+
 				editor?.setModel(editorModels.get(id.split("-")[1]));
-	
+
 				RemoveClass(editorTabs.querySelector(".active"), "active");
-	
+
 				AddClass(editorTabs.querySelector(`#${id}`), "active");
 
 				editorElement.querySelector(".force-download")?.remove();
@@ -2372,43 +2345,41 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 			});
 
 			(<HTMLButtonElement>tab.querySelector(".menu")).addEventListener("click", showContextMenu);
-	
+
 			tab.querySelector(".close").addEventListener("click", () =>
 			{
 				editorModels.get(id)?.dispose();
-	
+
 				editorModels.delete(id);
-	
+
 				tab.remove();
-	
+
 				if (editorModels.size === 0 && editorTabs.childElementCount === 0)
 				{
 					CloseEditor();
-	
+
 					return;
 				}
-	
+
 				if (!HasClass(tab, "active")) return;
-	
+
 				editor?.setModel(Array.from(editorModels.values())[0]);
-	
+
 				AddClass(editorTabs.querySelector(`#tab-${Array.from(editorModels.keys())[0]}`) ?? <HTMLElement>editorTabs.children[0], "active");
 
 				editorElement.querySelector(".force-download")?.remove();
 
-				if (editorTabs.querySelector(".active").getAttribute("data-force-download") === "true")
-					ShowForceDownloadButton(editorTabs.querySelector(".active").id.split("-")[1]);
+				if (editorTabs.querySelector(".active").getAttribute("data-force-download") === "true") ShowForceDownloadButton(editorTabs.querySelector(".active").id.split("-")[1]);
 			});
 
 			if (!Auth.IsAuthenticated && !IS_SHARED_FOLDER) HideElement(tab.querySelector(".close"));
-	
+
 			editorTabs.appendChild(tab);
 
 			if (editorTabs.children.length === 1) (<HTMLButtonElement>tab.querySelector(".menu")).focus(); // Focus the menu button of the first tab
 		}
 
-		if (!isMultipleFileEditor)
-			(<HTMLTitleElement>document.head.querySelector("[data-update-field=folder-name]")).innerText = name;
+		if (!isMultipleFileEditor) (<HTMLTitleElement>document.head.querySelector("[data-update-field=folder-name]")).innerText = name;
 
 		LogPageViewEvent();
 
@@ -2427,7 +2398,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
 		fileRef.getMetadata().then((metadata : any) =>
 		{
-			const contentType = metadata.contentType;
+			const { contentType } = metadata;
 
 			editorTabs.querySelector(`#tab-${id}`).setAttribute("content-type", contentType);
 
@@ -2453,7 +2424,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 			{
 				const reader = response.body.getReader();
 
-				let chunks : Uint8Array[] = [];
+				const chunks : Uint8Array[] = [];
 
 				const downloadSize = parseInt(response.headers.get("Content-Length"));
 				let downloadedBytes = 0;
@@ -2463,26 +2434,26 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 				if (size > 0)
 				{
 					const modal = new DownloadModal(name, downloadSize);
-					
+
 					while (true)
 					{
 						const { done, value } = await reader.read();
-						
+
 						if (done) break;
 
 						downloadedBytes += value.length;
-						
+
 						chunks.push(value);
-						
+
 						const progress = (downloadedBytes / downloadSize) * 100;
-						
-						modal.ProgressBar.style.width = progress + "%";
+
+						modal.ProgressBar.style.width = `${progress}%`;
 						modal.TransferSize.innerText = FormatStorage(downloadedBytes);
 					}
-					
+
 					modal.Remove();
 
-					value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])));
+					value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [ ...previousValue, ...currentValue ], [])));
 				}
 
 				CreateEditor(id, value, language, forceDownload || editorTabs.querySelector(".active").id.split("-")[1] === id);
@@ -2492,11 +2463,11 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 				else if (name.endsWith(".json")) ShowElement(contextMenuValidateJson);
 			})).catch((err : any) => err);
 	});
-}
+};
 
-const GetFolderUrl = (id : string, isShared : boolean) : string => (id !== "root" && id !== "shared" && id !== "starred" && id !== "trash" && id !== "vault")
-	? getUserContentURL(<HTMLElement><unknown>{classList: ["folder"], id: id}, isShared)
-	: location.origin + `/account${id !== "root" ? `/${id}` : ""}`;
+const GetFolderUrl = (id : string, isShared : boolean) : string => ((id !== "root" && id !== "shared" && id !== "starred" && id !== "trash" && id !== "vault")
+	? getUserContentURL(<HTMLElement><unknown>{ classList: [ "folder" ], id }, isShared)
+	: `${location.origin}/account${id !== "root" ? `/${id}` : ""}`);
 
 const UploadFolder = async (files : File[], name : string, path : string, parentId : string, depth : number) : Promise<void> =>
 {
@@ -2513,16 +2484,16 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
 		trashed: false,
 		inVault: await vaultOnly(),
 		created: GetFirestoreServerTimestamp(),
-		...GetFirestoreUpdateTimestamp()
+		...GetFirestoreUpdateTimestamp(),
 	}).then((ref : any) =>
 	{
-		const id = ref.id;
+		const { id } = ref;
 
-		let folders : Set<string> = new Set();
+		const folders : Set<string> = new Set();
 
 		analytics.logEvent(depth === 0 ? "upload" : "create", {
 			content_type: "folder",
-			content_id: id
+			content_id: id,
 		});
 
 		depth++;
@@ -2536,13 +2507,13 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
 			.from(folders)
 			.filter(folder => folder.length > 0)
 			.forEach(folder => UploadFolder(files.filter((file : File) =>
-				(<any>file).webkitRelativePath.indexOf(path + folder + "/") === 0), folder, path + folder + "/", id, depth));
+				(<any>file).webkitRelativePath.indexOf(`${path + folder}/`) === 0), folder, `${path + folder}/`, id, depth));
 
 		UploadFiles(files.filter((file : File) => (<any>file).webkitRelativePath.substr(path.length) === file.name), id);
 	});
-}
+};
 
-const UploadFiles = async (files : File[], parentId : string) : Promise<void> => { for await (const file of files) UploadFile(file, file.name, file.size, parentId); }
+const UploadFiles = async (files : File[], parentId : string) : Promise<void> => { for await (const file of files) UploadFile(file, file.name, file.size, parentId); };
 
 const GetFolderEntries = (folder : DataTransferItem, path : string, entries : File[]) : File[] =>
 {
@@ -2558,38 +2529,35 @@ const GetFolderEntries = (folder : DataTransferItem, path : string, entries : Fi
 
 				items.forEach((entry : any) =>
 				{
-					if (entry.isDirectory) GetFolderEntries(entry, path + entry.name + "/", entries);
-					else if (entry.isFile)
+					if (entry.isDirectory) GetFolderEntries(entry, `${path + entry.name}/`, entries);
+					else if (entry.isFile) entry.file((file : File) =>
 					{
-						entry.file((file : File) =>
-						{
-							// Allow overwriting the webkitRelativePath property that by default is readonly
-							Object.defineProperties(file, {
-								"webkitRelativePath": {
-									"writable": true,
-								},
-							});
-
-							Object.assign(file, {
-								"webkitRelativePath": path + entry.name,
-							});
-
-							entries.push(file);
+						// Allow overwriting the webkitRelativePath property that by default is readonly
+						Object.defineProperties(file, {
+							webkitRelativePath: {
+								writable: true,
+							},
 						});
-					}
+
+						Object.assign(file, {
+							webkitRelativePath: path + entry.name,
+						});
+
+						entries.push(file);
+					});
 				});
 			}
 		});
-	}
+	};
 
 	ReadEntries();
 
 	return entries;
-}
+};
 
 const AreUserContentContainersEmpty = () : boolean => foldersContainer.innerHTML.trim() === "" && filesContainer.innerHTML.trim() === "";
 
-const EmptyUserContentContainers = () : void => { foldersContainer.innerHTML = filesContainer.innerHTML = ""; }
+const EmptyUserContentContainers = () : void => { foldersContainer.innerHTML = filesContainer.innerHTML = ""; };
 
 const IsShared = () : boolean => !Auth.IsAuthenticated || location.pathname.indexOf("/shared") > -1;
 
@@ -2604,7 +2572,7 @@ const UpdateBottomSectionBar = (selectedItem : HTMLElement) : void =>
 	AddClass(selectedItem, "selected");
 
 	searchBar.value = "";
-}
+};
 
 const GetUserContentElement = (target : HTMLElement) : HTMLElement => target?.closest(`${folderSelector}, ${fileSelector}`);
 
@@ -2612,24 +2580,24 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 {
 	let timestamp : number;
 
-	if (isFolder && (!IsSet(format) || !["zip", "tar", "tar.gz"].includes(format))) format = "zip";
+	if (isFolder && (!IsSet(format) || ![ "zip", "tar", "tar.gz" ].includes(format))) format = "zip";
 
 	if (isFolder)
 	{
 		const modalCompressingFolder = new Modal({
 			subtitle: Translation.Get("api->messages->folder->compressing"),
 			floating: true,
-			aside: true
+			aside: true,
 		});
-	
+
 		modalCompressingFolder.Show();
-	
+
 		await functions.httpsCallable("createFolderArchive")({
 			id,
 			userId: Auth.UserId,
-			format
+			format,
 		}).then((result : any) => timestamp = result.data.timestamp)
-		.finally(() => modalCompressingFolder.HideAndRemove());
+			.finally(() => modalCompressingFolder.HideAndRemove());
 
 		name += `.${format}`;
 	}
@@ -2641,7 +2609,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 		{
 			const reader = response.body.getReader();
 
-			let chunks : Uint8Array[] = [];
+			const chunks : Uint8Array[] = [];
 
 			const downloadSize = parseInt(response.headers.get("Content-Length"));
 			let downloadedBytes = 0;
@@ -2662,7 +2630,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 				const progress = (downloadedBytes / downloadSize) * 100;
 
-				modal.ProgressBar.style.width = progress + "%";
+				modal.ProgressBar.style.width = `${progress}%`;
 				modal.TransferSize.innerText = FormatStorage(downloadedBytes);
 			}
 
@@ -2678,7 +2646,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 			a.href = blobUrl;
 
 			document.body.appendChild(a); // If it isn't appended it won't work in Firefox
-					
+
 			a.click();
 			a.remove();
 
@@ -2686,17 +2654,17 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 			if (isFolder) fileRef.delete();
 		}));
-}
+};
 
 const sharedOnly = () : boolean => location.pathname === "/account/shared" || !Auth.IsAuthenticated;
 const starredOnly = () : boolean => location.pathname === "/account/starred";
 const recentsOnly = () : boolean => location.pathname === "/account/recents";
 const trashedOnly = () : boolean => location.pathname === "/account/trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
-	(location.pathname === "/account/vault" && GetCurrentFolderId(true) === "vault") ||
-	(((!IsSet(checkCurrentFolder) || checkCurrentFolder) &&
-	await GetCurrentFolderIdAsync() !== "root" &&
-	(await db.collection(`users/${Auth.UserId}/folders`).doc(await GetCurrentFolderIdAsync()).get()).data().inVault));
+	(location.pathname === "/account/vault" && GetCurrentFolderId(true) === "vault")
+	|| (((!IsSet(checkCurrentFolder) || checkCurrentFolder)
+	&& await GetCurrentFolderIdAsync() !== "root"
+	&& (await db.collection(`users/${Auth.UserId}/folders`).doc(await GetCurrentFolderIdAsync()).get()).data().inVault));
 
 /**
  * @returns string The new name for the element
@@ -2714,27 +2682,25 @@ const CheckElementNameValidity = async (name : string, type : string, parentId :
 		.where("name", ">=", nameWithNoExt)
 		.where("name", "<", end)
 		.get();
-	
+
 	// Same name, different extension
 	if (tempSnapshot.size > 0 && tempSnapshot.docs.filter((doc : any) => doc.data().name === name).length > 0)
 	{
 		let i = 1;
 		let tempName : string;
 
-		do
-			if (type === "file")
-				tempName = (name.substring(0, name.lastIndexOf(".") > -1 ? name.lastIndexOf(".") : undefined) +
-					` (${i++})` +
-					(name.indexOf(".") > -1 ? "." : "") +
-					(name.indexOf(".") > -1 ? name.split(".").pop() : "")).trim();
-			else tempName = name + ` (${i++})`;
+		do if (type === "file") tempName = (`${name.substring(0, name.lastIndexOf(".") > -1 ? name.lastIndexOf(".") : undefined)
+		} (${i++})${
+			name.indexOf(".") > -1 ? "." : ""
+		}${name.indexOf(".") > -1 ? name.split(".").pop() : ""}`).trim();
+		else tempName = `${name} (${i++})`;
 		while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
-					
+
 		name = tempName;
 	}
 
 	return name;
-}
+};
 
 const MoveElements = async (elements: HTMLElement[], parentId : string) : Promise<void> =>
 {
@@ -2743,11 +2709,11 @@ const MoveElements = async (elements: HTMLElement[], parentId : string) : Promis
 	for (const item of elements)
 	{
 		const type = item.classList[0];
-		const id = item.id;
+		const { id } = item;
 
 		const docRef = db.collection(`users/${Auth.UserId}/${type}s`).doc(id);
 
-		let name = (await docRef.get()).data().name;
+		let { name } = (await docRef.get()).data();
 
 		name = await CheckElementNameValidity(name, type, parentId);
 
@@ -2755,12 +2721,12 @@ const MoveElements = async (elements: HTMLElement[], parentId : string) : Promis
 			name,
 			parentId,
 			inVault: parentId === "vault",
-			...GetFirestoreUpdateTimestamp()
+			...GetFirestoreUpdateTimestamp(),
 		});
 	}
 
 	batch.commit();
-}
+};
 
 const IsShowFileVisible = () : boolean => getComputedStyle(showFile).getPropertyValue("display") !== "none";
 
@@ -2797,7 +2763,7 @@ const CloseEditor = () =>
 		GetUserContent();
 	}
 	else viewRecentContent.click();
-}
+};
 
 if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/folder/") > -1 || location.pathname.indexOf("/file/") > -1)
 {
@@ -2846,10 +2812,8 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
 
 		AddClass(viewStarredContent, "selected");
 	}
-	else if (location.pathname === "/account/recents")
-	{
-		AddClass(viewRecentContent, "selected");
-	}
+	else if (location.pathname === "/account/recents") AddClass(viewRecentContent, "selected");
+
 	else if (location.pathname === "/account/trash")
 	{
 		currentFolderId = "trash";
@@ -2862,10 +2826,8 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
 
 		AddClass(viewMyAccount, "selected");
 	}
-	else if (location.pathname === "/account/storage/info")
-	{
-		AddClass(viewMyAccount, "selected");
-	}
+	else if (location.pathname === "/account/storage/info") AddClass(viewMyAccount, "selected");
+
 	else AddClass(viewMyAccount, "selected");
 
 	SetCurrentFolderId(currentFolderId);
