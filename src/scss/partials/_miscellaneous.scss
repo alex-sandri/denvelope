@@ -291,10 +291,18 @@
                     margin-left: $standard-spacing;
                 }
 
+                .select
+                {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+
                 .goto
                 {
-                    display: inline-block;
                     width: unset;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                    border-left: none;
                 }
             }
 
