@@ -160,12 +160,12 @@ window.addEventListener("userready", async () =>
 		folderInput.click();
 	}));
 
-	[ createFile, contextMenuCreateFile, createFolder, contextMenuCreateFolder ].forEach(element =>
-		element.addEventListener("click", () =>
+	[ createFile, contextMenuCreateFile, createFolder, contextMenuCreateFolder ].forEach(button =>
+		button.addEventListener("click", () =>
 		{
 			HideContextMenu();
 
-			const isFile = element.contains(createFile) || element.contains(contextMenuCreateFile);
+			const isFile = button.contains(createFile) || button.contains(contextMenuCreateFile);
 
 			const modal = new Modal({
 				title: Translation.Get(isFile ? "account->create_file" : "account->create_folder"),
@@ -179,7 +179,7 @@ window.addEventListener("userready", async () =>
 				},
 			}).element.querySelector("input");
 
-			input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length === 0);
+			input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length === 0; });
 
 			modal.ConfirmButton.disabled = true;
 
