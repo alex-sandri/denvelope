@@ -1,5 +1,4 @@
 const path = require('path');
-//const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = [
     {
@@ -69,46 +68,5 @@ module.exports = [
             ]
         },
         mode: "production"
-    },
-    /*
-    {
-        entry: {
-            index: "./public/index.html",
-            account: "./public/account.html",
-            settings: "./public/settings.html",
-            privacy: "./public/privacy.html",
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.html$/,
-                    use: [
-                        {
-                            loader: "html-loader",
-                            options: {
-                                minimize: true
-                            }
-                        }
-                    ]
-                },
-                {
-                    test: /\.svg$/,
-                    use: [
-                        "file-loader"
-                    ]
-                }
-            ]
-        },
-        plugins: [
-            new HtmlWebpackPlugin({
-                filename: "index.html",
-                template: path.resolve(__dirname, "public/index.html")
-            })
-        ].concat(["account", "settings", "privacy"].map(entry => new HtmlWebpackPlugin({
-            filename: `${entry}.html`,
-            template: path.resolve(__dirname, `public/${entry}.html`)
-        }))),
-        mode: "production"
     }
-    */
 ];
