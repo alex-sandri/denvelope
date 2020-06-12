@@ -42,5 +42,8 @@ module.exports = {
     "no-nested-ternary": [ "off" ],
     "no-shadow": [ "off" ],
     "no-await-in-loop": [ "off" ],
+    "nonblock-statement-body-position": [ "error", "any" ],
+    "no-restricted-syntax": [ "off" ],
+    "no-loop-func": [ "off" ],
   },
 };

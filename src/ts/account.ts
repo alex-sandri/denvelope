@@ -2531,32 +2531,47 @@ const ShowFile = (
 
 					modal.Remove();
 
-					value = new TextDecoder().decode(Uint8Array.from(chunks.reduce((previousValue, currentValue) => [ ...previousValue, ...currentValue ], [])));
+					value = new TextDecoder().decode(Uint8Array
+						.from(chunks.reduce((previousValue, currentValue) =>
+							[ ...previousValue, ...currentValue ], [])));
 				}
 
 				CreateEditor(id, value, language, forceDownload || editorTabs.querySelector(".active").id.split("-")[1] === id);
 
-				// These are handled with the downloaded data, so they need to be put here and not in getMetadata()
+				// These are handled with the downloaded data,
+				// so they need to be put here and not in getMetadata()
 				if (name.endsWith(".xml")) ShowElement(contextMenuValidateXml);
 				else if (name.endsWith(".json")) ShowElement(contextMenuValidateJson);
 			})).catch((err : any) => err);
 	});
 };
 
-const GetFolderUrl = (id : string, isShared : boolean) : string => ((id !== "root" && id !== "shared" && id !== "starred" && id !== "trash" && id !== "vault")
-	? getUserContentURL(<HTMLElement><unknown>{ classList: [ "folder" ], id }, isShared)
-	: `${location.origin}/account${id !== "root" ? `/${id}` : ""}`);
+const GetFolderUrl = (id : string, isShared : boolean) : string =>
+	((id !== "root" && id !== "shared" && id !== "starred" && id !== "trash" && id !== "vault")
+		? getUserContentURL(<HTMLElement><unknown>{ classList: [ "folder" ], id }, isShared)
+		: `${location.origin}/account${id !== "root" ? `/${id}` : ""}`);
 
-const UploadFolder = async (files : File[], name : string, path : string, parentId : string, depth : number) : Promise<void> =>
+const UploadFolder = async (
+	files : File[],
+	name : string,
+	path : string,
+	parentId : string,
+	depth : number,
+) : Promise<void> =>
 {
-	if (depth === 0) // Duplicate checks are only useful with the uploaded folder
-		name = await CheckElementNameValidity(name, "folder", parentId);
+	let finalName = name;
+	let finalParentId = parentId;
 
-	if (parentId === "shared" || parentId === "starred" || parentId === "trash") parentId = "root";
+	// Duplicate checks are only useful with the uploaded folder
+	if (depth === 0) finalName = await CheckElementNameValidity(finalName, "folder", parentId);
+
+	if (finalParentId === "shared"
+		|| finalParentId === "starred"
+		|| finalParentId === "trash") finalParentId = "root";
 
 	db.collection(`users/${Auth.UserId}/folders`).add({
-		name,
-		parentId,
+		name: finalName,
+		parentId: finalParentId,
 		shared: false,
 		starred: false,
 		trashed: false,
@@ -2574,24 +2589,32 @@ const UploadFolder = async (files : File[], name : string, path : string, parent
 			content_id: id,
 		});
 
-		depth++;
+		const nextDepth = depth + 1;
 
 		files.forEach((file : File) =>
 		{
-			if (depth < (<any>file).webkitRelativePath.split("/").length - 1) folders.add((<any>file).webkitRelativePath.split("/")[depth]);
+			if (nextDepth < (<any>file).webkitRelativePath.split("/").length - 1)
+				folders.add((<any>file).webkitRelativePath.split("/")[nextDepth]);
 		});
 
 		Array
 			.from(folders)
 			.filter(folder => folder.length > 0)
 			.forEach(folder => UploadFolder(files.filter((file : File) =>
-				(<any>file).webkitRelativePath.indexOf(`${path + folder}/`) === 0), folder, `${path + folder}/`, id, depth));
+				(<any>file).webkitRelativePath.indexOf(`${path + folder}/`) === 0), folder, `${path + folder}/`, id, nextDepth));
 
-		UploadFiles(files.filter((file : File) => (<any>file).webkitRelativePath.substr(path.length) === file.name), id);
+		UploadFiles(
+			files
+				.filter((file : File) => (<any>file).webkitRelativePath.substr(path.length) === file.name),
+			id,
+		);
 	});
 };
 
-const UploadFiles = async (files : File[], parentId : string) : Promise<void> => { for await (const file of files) UploadFile(file, file.name, file.size, parentId); };
+const UploadFiles = async (files : File[], parentId : string) : Promise<void> =>
+{
+	for await (const file of files) UploadFile(file, file.name, file.size, parentId);
+};
 
 const GetFolderEntries = (folder : DataTransferItem, path : string, entries : File[]) : File[] =>
 {
@@ -2658,7 +2681,11 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 {
 	let timestamp : number;
 
-	if (isFolder && (!IsSet(format) || ![ "zip", "tar", "tar.gz" ].includes(format))) format = "zip";
+	let finalContentName = name;
+	let finalFolderFormat = format;
+
+	if (isFolder && (!IsSet(finalFolderFormat) || ![ "zip", "tar", "tar.gz" ].includes(finalFolderFormat)))
+		finalFolderFormat = "zip";
 
 	if (isFolder)
 	{
@@ -2673,14 +2700,14 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 		await functions.httpsCallable("createFolderArchive")({
 			id,
 			userId: Auth.UserId,
-			format,
-		}).then((result : any) => timestamp = result.data.timestamp)
+			finalFolderFormat,
+		}).then((result : any) => { timestamp = result.data.timestamp; })
 			.finally(() => modalCompressingFolder.HideAndRemove());
 
-		name += `.${format}`;
+		finalContentName += `.${finalFolderFormat}`;
 	}
 
-	const fileRef = storage.ref(`${Auth.UserId}/${id}${isFolder ? `.${timestamp}.${format}` : ""}`);
+	const fileRef = storage.ref(`${Auth.UserId}/${id}${isFolder ? `.${timestamp}.${finalFolderFormat}` : ""}`);
 
 	fileRef.getDownloadURL().then((url : string) =>
 		fetch(url).then(async response =>
@@ -2689,10 +2716,10 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 			const chunks : Uint8Array[] = [];
 
-			const downloadSize = parseInt(response.headers.get("Content-Length"));
+			const downloadSize = parseInt(response.headers.get("Content-Length"), 10);
 			let downloadedBytes = 0;
 
-			const modal = new DownloadModal(name, downloadSize);
+			const modal = new DownloadModal(finalContentName, downloadSize);
 
 			preventWindowUnload.fileDownload = true;
 
@@ -2720,7 +2747,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 			const blobUrl = URL.createObjectURL(blob);
 			const a = document.createElement("a");
 
-			a.download = name;
+			a.download = finalContentName;
 			a.href = blobUrl;
 
 			document.body.appendChild(a); // If it isn't appended it won't work in Firefox
@@ -2747,9 +2774,17 @@ const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
 /**
  * @returns string The new name for the element
  */
-const CheckElementNameValidity = async (name : string, type : string, parentId : string) : Promise<string> =>
+const CheckElementNameValidity = async (
+	name : string,
+	type : string,
+	parentId : string,
+) : Promise<string> =>
 {
-	const nameWithNoExt = name.indexOf(".") > -1 && type === "file" ? name.substr(0, name.lastIndexOf(".")) : name;
+	let finalName = name;
+
+	const nameWithNoExt = name.indexOf(".") > -1 && type === "file"
+		? name.substr(0, name.lastIndexOf("."))
+		: name;
 
 	const end = nameWithNoExt.replace(/.$/, (c : string) => String.fromCharCode(c.charCodeAt(0) + 1));
 
@@ -2762,7 +2797,8 @@ const CheckElementNameValidity = async (name : string, type : string, parentId :
 		.get();
 
 	// Same name, different extension
-	if (tempSnapshot.size > 0 && tempSnapshot.docs.filter((doc : any) => doc.data().name === name).length > 0)
+	if (tempSnapshot.size > 0
+		&& tempSnapshot.docs.filter((doc : any) => doc.data().name === name).length > 0)
 	{
 		let i = 1;
 		let tempName : string;
@@ -2774,10 +2810,10 @@ const CheckElementNameValidity = async (name : string, type : string, parentId :
 		else tempName = `${name} (${i++})`;
 		while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
 
-		name = tempName;
+		finalName = tempName;
 	}
 
-	return name;
+	return finalName;
 };
 
 const MoveElements = async (elements: HTMLElement[], parentId : string) : Promise<void> =>
