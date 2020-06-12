@@ -1,20 +1,23 @@
 import Translation from "./Translation";
 
-export class Shortcuts
+export default class Shortcuts
 {
 	public static Init = () : void =>
 	{
 		const elementsWithShortcuts : HTMLElement[] = Array.from(document.querySelectorAll("[data-keyboard-shortcut]"));
 
 		elementsWithShortcuts
-			.forEach(element => element.title = `${Translation.Get("generic->keyboard_shortcut")}: ${
-				element
-					.getAttribute("data-keyboard-shortcut")
-					.replace("control", "ctrl")
-					.split("+")
-					.join(" + ")
-					.toUpperCase()
-			}`);
+			.forEach(element =>
+			{
+				element.title = `${Translation.Get("generic->keyboard_shortcut")}: ${
+					element
+						.getAttribute("data-keyboard-shortcut")
+						.replace("control", "ctrl")
+						.split("+")
+						.join(" + ")
+						.toUpperCase()
+				}`;
+			});
 
 		window.addEventListener("keydown", e =>
 		{
@@ -26,18 +29,26 @@ export class Shortcuts
 				+ (e.shiftKey && key !== "shift" ? "shift+" : "")
 				+ key;
 
-			const element : HTMLElement = elementsWithShortcuts.find(element => element.getAttribute("data-keyboard-shortcut") === keyCombination);
+			const element : HTMLElement = elementsWithShortcuts
+				.find(elementWithShortcut =>
+					elementWithShortcut.getAttribute("data-keyboard-shortcut") === keyCombination);
 
 			if (!element) return;
 
-			if (keyCombination !== "enter") e.preventDefault(); // Do not prevent if the pressed key is ENTER, as this breaks keyboard navigation
+			// Do not prevent if the pressed key is ENTER, as this breaks keyboard navigation
+			if (keyCombination !== "enter") e.preventDefault();
 
-			if (element instanceof HTMLButtonElement || element instanceof HTMLAnchorElement) element.click();
+			if (element instanceof HTMLButtonElement
+				|| element instanceof HTMLAnchorElement) element.click();
 			else if (element instanceof HTMLInputElement) element.focus();
 		});
 	}
 
-	public static Register = (shortcut : string, callback : (e : KeyboardEvent) => void, options : { ignoreInInput ?: boolean } = { ignoreInInput: true }) : void =>
+	public static Register = (
+		shortcut : string,
+		callback : (e : KeyboardEvent) => void,
+		options : { ignoreInInput ?: boolean } = { ignoreInInput: true },
+	) : void =>
 	{
 		window.addEventListener("keydown", e =>
 		{

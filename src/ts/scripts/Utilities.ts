@@ -1,21 +1,29 @@
 export const ShowElement = (element: HTMLElement, displayType?: string): void => { element.style.display = displayType ?? "block"; };
 
-export const ShowElements = (elements: Array<HTMLElement>, displayType?: string): void => elements.forEach(element => ShowElement(element, displayType));
+export const ShowElements = (elements: Array<HTMLElement>, displayType?: string): void =>
+	elements.forEach(element => ShowElement(element, displayType));
 
 export const HideElement = (element: HTMLElement): void => { element.style.display = "none"; };
 
-export const HideElements = (elements: HTMLElement[] | NodeListOf<HTMLElement>): void => elements.forEach((element: HTMLElement) => HideElement(element));
+export const HideElements = (elements: HTMLElement[] | NodeListOf<HTMLElement>): void =>
+	elements.forEach((element: HTMLElement) => HideElement(element));
 
-export const RemoveAllElements = (selector: string): void => document.querySelectorAll(selector).forEach(element => element.remove());
+export const RemoveAllElements = (selector: string): void =>
+	document.querySelectorAll(selector).forEach(element => element.remove());
 
-export const AddClass = (element: HTMLElement, className: string): void => element.classList.add(className);
+export const AddClass = (element: HTMLElement, className: string): void =>
+	element.classList.add(className);
 
-export const AddClasses = (element: HTMLElement, classes: string[]): void => classes.filter(element => element.length > 0)
-	.forEach(className => AddClass(element, className));
+export const AddClasses = (element: HTMLElement, classes: string[]): void =>
+	classes
+		.filter(className => className.length > 0)
+		.forEach(className => AddClass(element, className));
 
-export const RemoveClass = (element: HTMLElement, className: string): void => element.classList.remove(className);
+export const RemoveClass = (element: HTMLElement, className: string): void =>
+	element.classList.remove(className);
 
-export const HasClass = (element: HTMLElement, className: string): boolean => element.classList.contains(className);
+export const HasClass = (element: HTMLElement, className: string): boolean =>
+	element.classList.contains(className);
 
 export const IsSet = (object: any): boolean => object !== null && object !== undefined;
 
@@ -35,9 +43,12 @@ export const DispatchEvent = (name: string) => window.dispatchEvent(new Event(na
 
 export const FormatStorage = (bytes: number): string =>
 {
-	let unit = "";
+	let unit : string = "";
 
-	for (var i = 0; bytes >= 1000; i++) bytes /= 1000;
+	let i : number = 0;
+	let tempBytes : number = bytes;
+
+	for (i = 0; tempBytes >= 1000; i++) tempBytes /= 1000;
 
 	switch (i)
 	{
@@ -73,7 +84,7 @@ export const FormatStorage = (bytes: number): string =>
 	}
 
 	// The plus is needed to remove any useless zeros (0.00 -> 0)
-	return +bytes.toFixed(2) + unit;
+	return +tempBytes.toFixed(2) + unit;
 };
 
 /**
@@ -100,20 +111,22 @@ export const GetCurrentFolderId = (allowFakeFolderIds?: boolean): string =>
 	return folderId;
 };
 
-export const GetCurrentFolderIdAsync = async (allowFakeFolderIds?: boolean): Promise<string> => new Promise<string>(resolve =>
-{
-	if (GetCurrentFolderId(allowFakeFolderIds).trim() !== "") resolve(GetCurrentFolderId(allowFakeFolderIds));
+export const GetCurrentFolderIdAsync = async (allowFakeFolderIds?: boolean): Promise<string> =>
+	new Promise<string>(resolve =>
+	{
+		if (GetCurrentFolderId(allowFakeFolderIds).trim() !== "") resolve(GetCurrentFolderId(allowFakeFolderIds));
 
-	(<HTMLInputElement>document.querySelector("input[name=folder-id]")).addEventListener(
-		"change",
-		() => resolve(GetCurrentFolderId(allowFakeFolderIds)),
-		{ once: true },
-	);
-});
+		(<HTMLInputElement>document.querySelector("input[name=folder-id]")).addEventListener(
+			"change",
+			() => resolve(GetCurrentFolderId(allowFakeFolderIds)),
+			{ once: true },
+		);
+	});
 
 export const SetCurrentFolderId = (id: string): void => { (<HTMLInputElement>document.querySelector("input[name=folder-id]")).value = id; };
 
-export const GetFirestoreServerTimestamp = (): any => (<any>window).firebase.firestore.FieldValue.serverTimestamp();
+export const GetFirestoreServerTimestamp = (): any =>
+	(<any>window).firebase.firestore.FieldValue.serverTimestamp();
 
 export const GetFirestoreUpdateTimestamp = (): Object =>
 	({
@@ -122,8 +135,8 @@ export const GetFirestoreUpdateTimestamp = (): Object =>
 	});
 
 export const EscapeHtml = (string: string): string =>
-	string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
-		.replace(/\'/g, "&#039;")
+	string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;")
 		.replace(/\//g, "&#x2F;");
 
 export const EscapeHtmlPolicy = (<any>window).trustedTypes?.createPolicy("escapePolicy", { createHTML: (string: string) => EscapeHtml(string) });
@@ -177,4 +190,5 @@ export const GetPlanIndex = (plan : string) : number =>
 	}
 };
 
-export const IsFreePlan = (maxStorage : number) : boolean => GetPlanIndex(FormatStorage(maxStorage)) === 0;
+export const IsFreePlan = (maxStorage : number) : boolean =>
+	GetPlanIndex(FormatStorage(maxStorage)) === 0;

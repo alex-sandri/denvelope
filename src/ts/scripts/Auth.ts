@@ -89,17 +89,17 @@ export default class Auth
 
 			if (user.displayName) userName.innerText = user.displayName;
 
-			if (user.photoURL)
-				await fetch(user.photoURL)
-					.then(() => userPhoto.forEach(element => { element.src = user.photoURL; }))
-					.catch(err => err);
+			if (user.photoURL) await fetch(user.photoURL)
+				.then(() => userPhoto.forEach(element => { element.src = user.photoURL; }))
+				.catch(err => err);
 		}
 		else
 		{
 			Auth.IsAuthenticated = false;
 			Auth.IsSignedIn = false;
 
-			// Do not redirect if the user is alrady on the home page or is on a shared content page or one the 404 page
+			// Do not redirect if the user is already on the home page
+			// or if it is on a shared content page or one the 404 page
 			if (location.pathname !== "/" && location.href.indexOf("/shared/") === -1 && !IsSet(document.documentElement.querySelector("main.error"))
 				&& (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/settings") > -1)) location.href = "/";
 			else Auth.LoadFirebaseUi();

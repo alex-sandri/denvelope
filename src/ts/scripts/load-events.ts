@@ -12,9 +12,9 @@ import { signOutButton, whatIsTakingUpSpace, upgradePlan } from "./header";
 import ServiceWorkerController from "../service_workers/ServiceWorkerController";
 import Translation from "./Translation";
 import { Modal } from "./Modal";
-import { Shortcuts } from "./Shortcuts";
+import Shortcuts from "./Shortcuts";
 
-export const Init = () : void =>
+export default () : void =>
 {
 	const db = (<any>window).firebase.firestore();
 	const analytics = (<any>window).firebase.analytics();
@@ -131,7 +131,8 @@ export const Init = () : void =>
 					localStorage.setItem("background-image-url", backgroundImageUrl);
 				}
 
-				const trackingEnabled : boolean = preferences.data().trackingEnabled ?? (!navigator.doNotTrack && !window.doNotTrack);
+				const trackingEnabled : boolean = preferences.data().trackingEnabled
+					?? (!navigator.doNotTrack && !window.doNotTrack);
 
 				localStorage.setItem("tracking-enabled", `${trackingEnabled}`);
 

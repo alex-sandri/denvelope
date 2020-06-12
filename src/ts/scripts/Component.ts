@@ -4,64 +4,75 @@ export class Component
 {
 	public element : HTMLElement;
 
-	constructor(protected type : string, protected options ?: Object)
+	constructor(protected type : string, protected options ?: any)
 	{
 		this.element = document.createElement(type);
 
 		if (IsSet(options))
 		{
-			if (options.hasOwnProperty("aria"))
+			if (options.aria)
 			{
-				Array.from(Object.keys((<any>options).aria)).forEach((option, i) =>
-					this.element.setAttribute(`aria-${option}`, Object.values(<Object>(<any>options).aria)[i]));
+				Array.from(Object.keys(options.aria)).forEach((option, i) =>
+					this.element.setAttribute(`aria-${option}`, Object.values(<Object>options.aria)[i]));
 
-				delete (<any>options).aria;
+				delete options.aria;
 			}
 
-			if (options.hasOwnProperty("children"))
+			if (options.children)
 			{
-				(<HTMLElement[]>(<any>options).children).forEach(element => this.element.appendChild(element));
+				(<HTMLElement[]>options.children).forEach(element => this.element.appendChild(element));
 
-				delete (<any>options).children;
+				delete options.children;
 			}
 
-			if (options.hasOwnProperty("data"))
+			if (options.data)
 			{
-				Array.from(Object.keys((<any>options).data)).forEach((option, i) =>
-					this.element.setAttribute(`data-${option}`, Object.values(<Object>(<any>options).data)[i]));
+				Array.from(Object.keys(options.data)).forEach((option, i) =>
+					this.element.setAttribute(`data-${option}`, Object.values(<Object>options.data)[i]));
 
-				delete (<any>options).data;
+				delete options.data;
 			}
 
-			if (options.hasOwnProperty("style"))
+			if (options.style)
 			{
 				const previousStyles : any = {};
 
-				Array.from(Object.keys((<any>options).style)).filter(option => ![ ":hover", ":focus" ].includes(option)).forEach((option, i) =>
-					this.element.style[option as any] = previousStyles[option] = Object.values(<Object>(<any>options).style)[i]);
-
-				if ((<any>options).style.hasOwnProperty(":hover"))
+				Array.from(Object.keys(options.style)).filter(option => ![ ":hover", ":focus" ].includes(option)).forEach((option, i) =>
 				{
-					const hoverStyles : Object = (<any>options).style[":hover"];
+					this.element.style[option as any]
+						= previousStyles[option]
+						= Object.values(<Object>options.style)[i];
+				});
+
+				if (options.style[":hover"])
+				{
+					const hoverStyles : Object = options.style[":hover"];
 
 					Array.from(Object.keys(hoverStyles)).forEach((option, i) =>
 					{
-						this.element.addEventListener("mouseenter", () => (!HasClass(this.element, "no-hover") ? this.element.style[option as any] = Object.values(hoverStyles)[i] : null));
-						this.element.addEventListener("mouseleave", () => this.element.style[option as any] = previousStyles[option] || "");
+						this.element.addEventListener("mouseenter", () =>
+						{
+							if (!HasClass(this.element, "no-hover")) this.element.style[option as any] = Object.values(hoverStyles)[i];
+						});
+
+						this.element.addEventListener("mouseleave", () => { this.element.style[option as any] = previousStyles[option] || ""; });
 					});
 				}
 
-				delete (<any>options).style;
+				delete options.style;
 			}
 
-			if (options.hasOwnProperty("innerText"))
+			if (options.innerText)
 			{
-				this.element.innerText = (<any>options).innerText;
+				this.element.innerText = options.innerText;
 
-				delete (<any>options).innerText;
+				delete options.innerText;
 			}
 
-			Array.from(Object.keys(options)).forEach((option, i) => this.element.setAttribute(option, Object.values(options)[i]));
+			Array
+				.from(Object.keys(options))
+				.forEach((option, i) =>
+					this.element.setAttribute(option, Object.values(<Object>options)[i]));
 		}
 	}
 }

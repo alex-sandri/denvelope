@@ -1,4 +1,4 @@
-import * as loadEvents from "./scripts/load-events";
+import Init from "./scripts/load-events";
 
 import {
 	AddClass,
@@ -20,7 +20,7 @@ import { Component, InputWithIcon } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
 import { header } from "./scripts/header";
 
-loadEvents.Init();
+Init();
 
 const db = (<any>window).firebase.firestore();
 const functions = (<any>window).firebase.app().functions("europe-west1");

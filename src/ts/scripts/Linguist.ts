@@ -3,10 +3,15 @@ import FileIcons from "./FileIcons";
 import FolderIcons from "./FolderIcons";
 import { IsSet } from "./Utilities";
 
-export class Linguist
+export default class Linguist
 {
 	public static Get = (lang : string) : any =>
-		[ ...FileIcons.icons, FileIcons.defaultIcon, ...FolderIcons.icons, FolderIcons.defaultIcon ].filter(icon => icon.name === lang)[0];
+		[
+			...FileIcons.icons,
+			FileIcons.defaultIcon,
+			...FolderIcons.icons,
+			FolderIcons.defaultIcon,
+		].filter(icon => icon.name === lang)[0];
 
 	public static GetDisplayName = (lang : string) : string =>
 	{
@@ -36,28 +41,30 @@ export class Linguist
 		if (isFile)
 		{
 			// First search by file name
-			language = FileIcons.icons.filter(lang => lang.fileNames?.includes(name))[0];
+			[ language ] = FileIcons.icons.filter(lang => lang.fileNames?.includes(name));
 
 			if (!IsSet(language)) FileIcons.icons
 				.filter(lang => lang.fileExtensions?.filter(ext => name.endsWith(`.${ext}`)).length > 0)
-				.map(lang =>
+				.forEach(lang =>
 				{
 					if (!IsSet(language)) language = lang;
 
 					let maxExtensionSpecificity : number = -1;
 
-					lang.fileExtensions.map(ext =>
+					lang.fileExtensions.forEach(ext =>
 					{
 						const extensionSpecificity = ext.match(/\./g)?.length;
 
-						if (extensionSpecificity > maxExtensionSpecificity) maxExtensionSpecificity = extensionSpecificity;
+						if (extensionSpecificity > maxExtensionSpecificity) maxExtensionSpecificity
+							= extensionSpecificity;
 					});
 
-					language.fileExtensions.map((ext : string) =>
+					language.fileExtensions.forEach((ext : string) =>
 					{
 						const extensionSpecificity = ext.match(/\./g)?.length;
 
-						if (extensionSpecificity > maxExtensionSpecificity) maxExtensionSpecificity = extensionSpecificity;
+						if (extensionSpecificity > maxExtensionSpecificity) maxExtensionSpecificity
+							= extensionSpecificity;
 					});
 
 					if (maxExtensionSpecificity > languageSpecificity)
@@ -67,7 +74,11 @@ export class Linguist
 					}
 				});
 		}
-		else FolderIcons.icons.forEach(lang => (lang.folderNames?.includes(name) ? language = lang : null));
+		else FolderIcons.icons
+			.forEach(lang =>
+			{
+				if (lang.folderNames?.includes(name)) language = lang;
+			});
 
 		return IsSet(language) ? language.name : (isFile ? FileIcons : FolderIcons).defaultIcon.name;
 	}

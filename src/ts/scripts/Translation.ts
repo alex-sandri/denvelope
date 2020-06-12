@@ -12,7 +12,8 @@ export default class Translation
 
 		if (!translationLanguage) if ([ "/en", "/it" ].includes(location.pathname)) translationLanguage = location.pathname.substr(1);
 		else if (localStorage.getItem("lang")) translationLanguage = localStorage.getItem("lang");
-		else if (navigator.languages) [ translationLanguage ] = navigator.languages; // Takes the first item, equivalent to: language = navigator.languages[0]
+		// Takes the first item, equivalent to: language = navigator.languages[0]
+		else if (navigator.languages) [ translationLanguage ] = navigator.languages;
 		else if (navigator.language) translationLanguage = navigator.language;
 		else translationLanguage = "en";
 
@@ -52,11 +53,11 @@ export default class Translation
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-placeholder-translation="${id}"]`)
-				.forEach(element => (<HTMLInputElement>element).placeholder = Translation.Get(id)));
+				.forEach(element => { (<HTMLInputElement>element).placeholder = Translation.Get(id); }));
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-content-translation="${id}"]`)
-				.forEach(element => (<HTMLMetaElement>element).content = Translation.Get(id)));
+				.forEach(element => { (<HTMLMetaElement>element).content = Translation.Get(id); }));
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-aria-label-translation="${id}"]`)
@@ -68,7 +69,7 @@ export default class Translation
 
 		ids
 			.forEach(id => (<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-only-translation="${id}"]`))
-				.forEach(element => element.innerText = Translation.Get(id)));
+				.forEach(element => { element.innerText = Translation.Get(id); }));
 
 		DispatchEvent("translationlanguagechange");
 	}

@@ -26,31 +26,31 @@ export class Modal
 
 	public OnUpdate : () => any;
 
-	constructor(options ?: Object)
+	constructor(options ?: any)
 	{
 		if (IsSet(options))
 		{
-			if (options.hasOwnProperty("title")) this.Title = (<any>options).title;
-			if (options.hasOwnProperty("subtitle")) this.Subtitle = (<any>options).subtitle;
+			if (options.title) this.Title = (<any>options).title;
+			if (options.subtitle) this.Subtitle = (<any>options).subtitle;
 
-			if (options.hasOwnProperty("allow"))
+			if (options.allow)
 			{
 				if ((<string[]>(<any>options).allow).includes("confirm")) ShowElement(this.ConfirmButton, "block");
 				if ((<string[]>(<any>options).allow).includes("update")) ShowElement(this.UpdateButton, "block");
 			}
 
-			if (options.hasOwnProperty("floating") && (<any>options).floating)
+			if (options.floating)
 			{
 				AddClass(this.element, "floating");
 
 				AddClass(this.container, "no-background");
 			}
 
-			if (options.hasOwnProperty("animate") && !(<any>options).animate) AddClass(this.element, "no-animate");
+			if (options.animate === false) AddClass(this.element, "no-animate");
 
-			if (options.hasOwnProperty("aside") && (<any>options).aside) AddClass(this.element, "aside");
+			if (options.aside) AddClass(this.element, "aside");
 
-			if (options.hasOwnProperty("loading") && !(<any>options).loading) HideElement(this.spinner);
+			if (options.loading === false) HideElement(this.spinner);
 			else ShowElement(this.spinner, "block");
 		}
 
@@ -59,9 +59,6 @@ export class Modal
 		document.body.appendChild(this.container);
 	}
 
-	/**
-	 * @param unique If set to true all other modals currently shown will be removed, except non-unique ones
-	 */
 	public Show = (unique ?: boolean) : void =>
 	{
 		this.CloseButton.addEventListener("click", () =>

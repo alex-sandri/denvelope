@@ -1,4 +1,4 @@
-import * as loadEvents from "./scripts/load-events";
+import Init from "./scripts/load-events";
 import * as genericMessage from "./scripts/generic-message";
 import {
 	GetCurrentFolderId,
@@ -21,7 +21,7 @@ import {
 } from "./scripts/Utilities";
 import { Modal, UploadModal, DownloadModal } from "./scripts/Modal";
 import Auth from "./scripts/Auth";
-import { Linguist } from "./scripts/Linguist";
+import Linguist from "./scripts/Linguist";
 import {
 	Component,
 	Input,
@@ -30,9 +30,9 @@ import {
 } from "./scripts/Component";
 import Translation from "./scripts/Translation";
 import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
-import { Shortcuts } from "./scripts/Shortcuts";
+import Shortcuts from "./scripts/Shortcuts";
 
-loadEvents.Init();
+Init();
 
 const db = (<any>window).firebase.firestore();
 const storage = (<any>window).firebase.storage();

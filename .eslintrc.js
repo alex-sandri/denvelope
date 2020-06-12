@@ -35,5 +35,9 @@ module.exports = {
     "default-case": [ "off" ],
     "no-unused-expressions": [ "off" ],
     "no-param-reassign": [ "error", { props: false } ],
+    "new-cap": [ "off" ],
+    "no-multi-assign": [ "off" ],
+    "max-classes-per-file": [ "off" ],
+    "operator-linebreak": [ "error", "before" ],
   },
 };

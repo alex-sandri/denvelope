@@ -1,3 +1,3 @@
-import * as loadEvents from "./scripts/load-events";
+import Init from "./scripts/load-events";
 
-loadEvents.Init();
+Init();
