@@ -11,6 +11,7 @@ module.exports = [
             rules: [
                 {
                     test: /\.ts$/,
+                    include: path.resolve(__dirname, "src/ts"),
                     loader: "ts-loader",
                     exclude: /node_modules/,
                 },
@@ -40,6 +41,7 @@ module.exports = [
             rules: [
                 {
                     test: /\.scss$/,
+                    include: path.resolve(__dirname, "src/scss"),
                     use: [
                         {
                             loader: "file-loader",
