@@ -89,6 +89,8 @@ const editorModels : Map<string, any> = new Map<string, any>();
 const contextMenuContainer : HTMLDivElement = document.querySelector(".context-menu-container");
 const contextMenu : HTMLDivElement = contextMenuContainer.querySelector(".context-menu");
 
+let contextMenuModal : Modal | undefined;
+
 const contextMenuContent : HTMLDivElement = contextMenu.querySelector("#cm-content");
 const contextMenuView : HTMLButtonElement = contextMenuContent.querySelector("#cm-view");
 const contextMenuSave : HTMLButtonElement = contextMenuContent.querySelector("#cm-save");
@@ -2019,13 +2021,13 @@ const showContextMenu = (e : MouseEvent) : void =>
 		contextMenuValidateJson,
 	]);
 
-	const modal = new Modal();
+	contextMenuModal = new Modal();
 
-	modal.AppendContent([ contextMenuContainer ]);
+	contextMenuModal.AppendContent([ contextMenuContainer ]);
 
 	ShowElement(contextMenuContainer);
 
-	modal.Show(true);
+	contextMenuModal.Show(true);
 
 	Array
 		.from(contextMenu.querySelectorAll("button"))
@@ -2036,7 +2038,9 @@ const showContextMenu = (e : MouseEvent) : void =>
 
 const HideContextMenu = () : void =>
 {
-	HideElement(contextMenuContainer);
+	contextMenuModal?.HideAndRemove();
+
+	contextMenuModal = undefined;
 
 	contextMenuItem = null;
 };
