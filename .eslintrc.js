@@ -18,7 +18,7 @@ module.exports = {
     "import/resolver": "webpack"
   },
   rules: {
-    indent: [ "error", "tab" ],
+    indent: [ "error", "tab", { SwitchCase: 1 } ],
     quotes: [ "error", "double" ],
     "no-tabs": [ "error", { allowIndentationTabs: true } ],
     "no-restricted-globals": [ "off" ],
@@ -32,5 +32,8 @@ module.exports = {
     "curly": [ "error", "multi" ],
     "eol-last": [ "error", "never" ],
     "no-async-promise-executor": [ "off" ],
+    "default-case": [ "off" ],
+    "no-unused-expressions": [ "off" ],
+    "no-param-reassign": [ "error", { props: false } ],
   },
 };

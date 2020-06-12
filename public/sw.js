@@ -82,7 +82,9 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/mstile-310x310.png",
     "/safari-pinned-tab.svg",
 ]))));
-self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then(cacheNames => Promise.all(cacheNames.filter(cache => cache !== cacheName).map(cache => caches.delete(cache))))));
+self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then(cacheNames => Promise.all(cacheNames
+    .filter(cache => cache !== cacheName)
+    .map(cache => caches.delete(cache))))));
 self.addEventListener("fetch", (e) => {
     const url = new URL(e.request.url);
     if (url.origin === location.origin && url.pathname === "/account" && e.request.method === "POST") {
@@ -119,10 +121,10 @@ self.addEventListener("fetch", (e) => {
     }
     const respondWith = (path) => {
         e.respondWith(caches.open(cacheName).then(cache => cache.match(path)
-            .then(response => response || fetch(path).then(response => {
+            .then(cacheResponse => cacheResponse || fetch(path).then(fetchResponse => {
             if (e.request.method === "GET" && !url.href.includes("googleapis"))
-                cache.put(path, response.clone());
-            return response;
+                cache.put(path, fetchResponse.clone());
+            return fetchResponse;
         }))));
     };
     if (url.origin === location.origin && ["/en", "/it"].includes(url.pathname)) {
@@ -165,6 +167,5 @@ self.addEventListener("message", event => {
     if (!resolvers)
         return;
     nextMessageResolveMap.delete(event.data);
-    for (const resolve of resolvers)
-        resolve();
+    resolvers.forEach(resolve => resolve());
 });

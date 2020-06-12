@@ -20,7 +20,7 @@ import {
 	AddClasses,
 } from "./scripts/Utilities";
 import { Modal, UploadModal, DownloadModal } from "./scripts/Modal";
-import { Auth } from "./scripts/Auth";
+import Auth from "./scripts/Auth";
 import { Linguist } from "./scripts/Linguist";
 import {
 	Component,
@@ -878,10 +878,10 @@ window.addEventListener("userready", async () =>
 
 			switch (key)
 			{
-			case "arrowleft": translateX += moveBy; break;
-			case "arrowup": translateY += moveBy; break;
-			case "arrowright": translateX -= moveBy; break;
-			case "arrowdown": translateY -= moveBy; break;
+				case "arrowleft": translateX += moveBy; break;
+				case "arrowup": translateY += moveBy; break;
+				case "arrowright": translateX -= moveBy; break;
+				case "arrowdown": translateY -= moveBy; break;
 			}
 
 			const translateString = `translateX(${translateX}px) translateY(${translateY}px)`;

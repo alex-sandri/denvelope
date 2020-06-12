@@ -80,13 +80,13 @@ export default class Translation
 
 		switch (Translation.Language)
 		{
-		case "it-it":
-		case "it":
-			array = itIT;
-			break;
-		default:
-			array = enUS;
-			break;
+			case "it-it":
+			case "it":
+				array = itIT;
+				break;
+			default:
+				array = enUS;
+				break;
 		}
 
 		for (let i = 0; i < keys.length - 1; i++) array = array[keys[i]];

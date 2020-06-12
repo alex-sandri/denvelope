@@ -1,9 +1,15 @@
 import {
-	LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, AddClass,
+	LogPageViewEvent,
+	ShowElement,
+	HideElement,
+	PreventDragEvents,
+	RemoveClass,
+	FormatStorage,
+	IsFreePlan,
 } from "./Utilities";
-import { Auth } from "./Auth";
-import { signOutButton, whatIsTakingUpSpace, upgradePlan, } from "./header";
-import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
+import Auth from "./Auth";
+import { signOutButton, whatIsTakingUpSpace, upgradePlan } from "./header";
+import ServiceWorkerController from "../service_workers/ServiceWorkerController";
 import Translation from "./Translation";
 import { Modal } from "./Modal";
 import { Shortcuts } from "./Shortcuts";
@@ -13,7 +19,7 @@ export const Init = () : void =>
 	const db = (<any>window).firebase.firestore();
 	const analytics = (<any>window).firebase.analytics();
 
-	const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
+	const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
 
 	if (cacheSizeBytes) db.settings({ cacheSizeBytes, ignoreUndefinedProperties: true });
 
@@ -29,7 +35,7 @@ export const Init = () : void =>
 			.forEach(plan =>
 			{
 				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get("settings->plan->currency"), minimumFractionDigits: 0 })
-					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->month`)))
+					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->month`), 10))
 					.replace(/\s/, "");
 
 				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
@@ -70,9 +76,9 @@ export const Init = () : void =>
 	// This needs to wait for the translation to be completed
 	LogPageViewEvent();
 
-	const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
+	ServiceWorkerController.Register();
 
-	new ServiceWorkerController();
+	const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
 
 	if (!localStorage.getItem("cookie-consent"))
 	{
@@ -108,7 +114,7 @@ export const Init = () : void =>
 
 	window.addEventListener("load", () => RemoveClass(document.body, "preload"));
 
-	Shortcuts.Register("h", () => location.href = "/");
+	Shortcuts.Register("h", () => { location.href = "/"; });
 
 	window.addEventListener("userready", () =>
 	{

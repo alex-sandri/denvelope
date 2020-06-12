@@ -14,7 +14,7 @@ import {
 	IsFreePlan,
 } from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
-import { Auth } from "./scripts/Auth";
+import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
 import { Component, InputWithIcon } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";

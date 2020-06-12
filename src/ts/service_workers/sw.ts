@@ -86,7 +86,9 @@ self.addEventListener("install", (e : any) =>
 
 self.addEventListener("activate", (e : any) =>
 	e.waitUntil(caches.keys().then(cacheNames =>
-		Promise.all(cacheNames.filter(cache => cache !== cacheName).map(cache => caches.delete(cache))))));
+		Promise.all(cacheNames
+			.filter(cache => cache !== cacheName)
+			.map(cache => caches.delete(cache))))));
 
 self.addEventListener("fetch", (e : any) =>
 {
@@ -151,11 +153,11 @@ self.addEventListener("fetch", (e : any) =>
 	const respondWith = (path: string) =>
 	{
 		e.respondWith(caches.open(cacheName).then(cache => cache.match(path)
-			.then(response => response || fetch(path).then(response =>
+			.then(cacheResponse => cacheResponse || fetch(path).then(fetchResponse =>
 			{
-				if (e.request.method === "GET" && !url.href.includes("googleapis")) cache.put(path, response.clone());
+				if (e.request.method === "GET" && !url.href.includes("googleapis")) cache.put(path, fetchResponse.clone());
 
-				return response;
+				return fetchResponse;
 			}))));
 	};
 
@@ -199,7 +201,7 @@ self.addEventListener("message", e =>
 	if (e.data.action === "skipWaiting") (<any>self).skipWaiting();
 });
 
-const nextMessageResolveMap = new Map<string, (() => void)[]>();
+const nextMessageResolveMap: Map<string, (() => void)[]> = new Map();
 
 const NextMessage = (dataVal: string) : Promise<void> => new Promise(resolve =>
 {
@@ -216,5 +218,5 @@ self.addEventListener("message", event =>
 
 	nextMessageResolveMap.delete(event.data);
 
-	for (const resolve of resolvers) resolve();
+	resolvers.forEach(resolve => resolve());
 });

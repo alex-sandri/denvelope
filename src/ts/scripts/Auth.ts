@@ -4,7 +4,7 @@ import {
 import { userEmail, userName, userPhoto } from "./header";
 import Translation from "./Translation";
 
-export class Auth
+export default class Auth
 {
 	private static readonly auth = (<any>window).firebase.auth();
 
@@ -39,9 +39,10 @@ export class Auth
 
 		switch (Auth.auth.currentUser.providerData[0].providerId)
 		{
-		case (<any>window).firebase.auth.GoogleAuthProvider.PROVIDER_ID:
-			provider = new (<any>window).firebase.auth.GoogleAuthProvider();
-			break;
+			case (<any>window).firebase.auth.GoogleAuthProvider.PROVIDER_ID:
+				provider = new (<any>window).firebase.auth.GoogleAuthProvider();
+				break;
+			// TODO: Add other providers
 		}
 
 		Auth.auth.signInWithPopup(provider)
@@ -77,16 +78,21 @@ export class Auth
 
 		if (user)
 		{
-			Auth.IsAuthenticated = Auth.sharedContentUserId === null || user.uid === Auth.sharedContentUserId;
+			Auth.IsAuthenticated = Auth.sharedContentUserId === null
+				|| user.uid === Auth.sharedContentUserId;
+
 			Auth.IsSignedIn = true;
 
 			userEmail.innerText = user.email;
 
-			userPhoto.forEach(element => element.src = "/assets/img/icons/user.svg");
+			userPhoto.forEach(element => { element.src = "/assets/img/icons/user.svg"; });
 
 			if (user.displayName) userName.innerText = user.displayName;
 
-			if (user.photoURL) await fetch(user.photoURL).then(() => userPhoto.forEach(element => element.src = user.photoURL)).catch(err => err);
+			if (user.photoURL)
+				await fetch(user.photoURL)
+					.then(() => userPhoto.forEach(element => { element.src = user.photoURL; }))
+					.catch(err => err);
 		}
 		else
 		{

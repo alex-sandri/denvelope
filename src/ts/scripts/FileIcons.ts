@@ -1,4 +1,4 @@
-export const FileIcons = {
+export default {
 	defaultIcon: { name: "file" },
 	icons: [
 		{ name: "html", fileExtensions: [ "html", "htm", "xhtml", "html_vm", "asp" ], displayName: "HTML" },

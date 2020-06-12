@@ -41,35 +41,35 @@ export const FormatStorage = (bytes: number): string =>
 
 	switch (i)
 	{
-	case 0:
-		unit = "B"; // Byte
-		break;
-	case 1:
-		unit = "KB"; // KiloByte
-		break;
-	case 2:
-		unit = "MB"; // MegaByte
-		break;
-	case 3:
-		unit = "GB"; // GigaByte
-		break;
-	case 4:
-		unit = "TB"; // TeraByte
-		break;
-	case 5:
-		unit = "PB"; // PetaByte
-		break;
-	case 6:
-		unit = "EB"; // ExaByte
-		break;
-	case 7:
-		unit = "ZB"; // ZettaByte
-		break;
-	case 8:
-		unit = "YB"; // YottaByte
-		break;
-	default:
-		break;
+		case 0:
+			unit = "B";
+			break;
+		case 1:
+			unit = "KB";
+			break;
+		case 2:
+			unit = "MB";
+			break;
+		case 3:
+			unit = "GB";
+			break;
+		case 4:
+			unit = "TB";
+			break;
+		case 5:
+			unit = "PB";
+			break;
+		case 6:
+			unit = "EB";
+			break;
+		case 7:
+			unit = "ZB";
+			break;
+		case 8:
+			unit = "YB";
+			break;
+		default:
+			break;
 	}
 
 	// The plus is needed to remove any useless zeros (0.00 -> 0)
@@ -171,9 +171,9 @@ export const GetPlanIndex = (plan : string) : number =>
 {
 	switch (plan)
 	{
-	case "1GB": return 1;
-	case "10GB": return 2;
-	default: return 0;
+		case "1GB": return 1;
+		case "10GB": return 2;
+		default: return 0;
 	}
 };
 

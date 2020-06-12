@@ -1,4 +1,4 @@
-export const FolderIcons = {
+export default {
 	defaultIcon: { name: "folder" },
 	rootFolder: { name: "folder-root" },
 	icons: [

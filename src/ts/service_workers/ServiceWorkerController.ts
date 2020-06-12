@@ -2,38 +2,33 @@ import { ShowElements, HideElements } from "../scripts/Utilities";
 import * as genericMessage from "../scripts/generic-message";
 import Translation from "../scripts/Translation";
 
-export class ServiceWorkerController
+export default class ServiceWorkerController
 {
 	private static readonly analytics : any = (<any>window).firebase.analytics();
 
-	constructor()
+	public static Register = () : void =>
 	{
-		if (this.IsSupported()) this.Register();
-	}
+		if (!navigator.serviceWorker) return;
 
-	IsSupported = () : boolean => "serviceWorker" in navigator;
-
-	Register = () : void =>
-	{
 		window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").then(reg =>
 		{
 			if (!navigator.serviceWorker.controller) return;
 
 			if (reg.waiting)
 			{
-				this.UpdateReady(reg.waiting);
+				ServiceWorkerController.UpdateReady(reg.waiting);
 
 				return;
 			}
 
 			if (reg.installing)
 			{
-				this.TrackInstalling(reg.installing);
+				ServiceWorkerController.TrackInstalling(reg.installing);
 
 				return;
 			}
 
-			reg.addEventListener("updatefound", () => this.TrackInstalling(reg.installing));
+			reg.addEventListener("updatefound", () => ServiceWorkerController.TrackInstalling(reg.installing));
 		}));
 
 		// Ensure refresh is only called once.
@@ -84,14 +79,14 @@ export class ServiceWorkerController
 		});
 	}
 
-	TrackInstalling = (sw : ServiceWorker) : void =>
+	private static TrackInstalling = (sw : ServiceWorker) : void =>
 		sw.addEventListener("statechange", () =>
 		{
-			if (sw.state === "installed") this.UpdateReady(sw);
+			if (sw.state === "installed") ServiceWorkerController.UpdateReady(sw);
 		});
 
-	UpdateReady = (sw : ServiceWorker) : void =>
-		void genericMessage.Show(Translation.Get("pwa->update_available"), Translation.Get("generic->update"), -1).then(() =>
+	private static UpdateReady = (sw : ServiceWorker) : Promise<void> =>
+		genericMessage.Show(Translation.Get("pwa->update_available"), Translation.Get("generic->update"), -1).then(() =>
 		{
 			genericMessage.ShowSpinner();
 

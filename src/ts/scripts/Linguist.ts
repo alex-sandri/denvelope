@@ -1,6 +1,6 @@
 import Translation from "./Translation";
-import { FileIcons } from "./FileIcons";
-import { FolderIcons } from "./FolderIcons";
+import FileIcons from "./FileIcons";
+import FolderIcons from "./FolderIcons";
 import { IsSet } from "./Utilities";
 
 export class Linguist
@@ -14,15 +14,15 @@ export class Linguist
 
 		switch (lang)
 		{
-		case "cloud_firestore_indexes":
-		case "cloud_firestore_security_rules":
-		case "document":
-		case "file":
-		case "folder":
-		case "image":
-			displayName = Translation.Get(`api->languages->${lang}`);
-			break;
-		default: displayName = Linguist.Get(lang).displayName; break;
+			case "cloud_firestore_indexes":
+			case "cloud_firestore_security_rules":
+			case "document":
+			case "file":
+			case "folder":
+			case "image":
+				displayName = Translation.Get(`api->languages->${lang}`);
+				break;
+			default: displayName = Linguist.Get(lang).displayName; break;
 		}
 
 		return displayName;
