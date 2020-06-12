@@ -2,7 +2,7 @@ import {
 	ShowElement, AddClass, IsSet, HideElement, HasClass, RemoveClass, FormatStorage,
 } from "./Utilities";
 import { Component } from "./Component";
-import { Translation } from "./Translation";
+import Translation from "./Translation";
 
 export class Modal
 {

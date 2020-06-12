@@ -31,5 +31,6 @@ module.exports = {
     "implicit-arrow-linebreak": [ "off" ],
     "curly": [ "error", "multi" ],
     "eol-last": [ "error", "never" ],
+    "no-async-promise-executor": [ "off" ],
   },
 };

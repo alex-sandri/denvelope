@@ -1,6 +1,6 @@
 import { ShowElements, HideElements } from "../scripts/Utilities";
 import * as genericMessage from "../scripts/generic-message";
-import { Translation } from "../scripts/Translation";
+import Translation from "../scripts/Translation";
 
 export class ServiceWorkerController
 {

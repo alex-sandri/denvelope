@@ -2,11 +2,9 @@ import {
 	LogPageViewEvent, ShowElement, HideElement, PreventDragEvents, RemoveClass, FormatStorage, IsFreePlan, AddClass,
 } from "./Utilities";
 import { Auth } from "./Auth";
-import {
-	signOutButton, accountMenuToggle, whatIsTakingUpSpace, upgradePlan,
-} from "./header";
+import { signOutButton, whatIsTakingUpSpace, upgradePlan, } from "./header";
 import { ServiceWorkerController } from "../service_workers/ServiceWorkerController";
-import { Translation } from "./Translation";
+import Translation from "./Translation";
 import { Modal } from "./Modal";
 import { Shortcuts } from "./Shortcuts";
 
@@ -165,6 +163,4 @@ export const Init = () : void =>
 			});
 		}
 	});
-
-	window.addEventListener("securitypolicyviolation", e => console.error(e));
 };

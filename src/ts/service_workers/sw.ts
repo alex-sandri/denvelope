@@ -1,4 +1,4 @@
-const cacheName : string = "static-v2776";
+const cacheName : string = "static-v2778";
 
 self.addEventListener("install", (e : any) =>
 	e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
@@ -11,9 +11,9 @@ self.addEventListener("install", (e : any) =>
 		"/cookies",
 		"/accessibility",
 		"/assets/css/bundle.1c5f7ecc31c77ba00f2f3bd685eda1ec.css",
-		"/assets/js/home.b6ef13314e1520f6b440.js",
-		"/assets/js/account.4535dd24c82b777e7c6b.js",
-		"/assets/js/settings.d3e6928db34a6d917bed.js",
+		"/assets/js/home.30ff0c5770569e119c73.js",
+		"/assets/js/account.87a2b29d7769383ae3fe.js",
+		"/assets/js/settings.e799820544cf328b088d.js",
 		"/__/firebase/7.15.0/firebase-app.js",
 		"/__/firebase/7.15.0/firebase-auth.js",
 		"/__/firebase/7.15.0/firebase-firestore.js",
@@ -85,7 +85,8 @@ self.addEventListener("install", (e : any) =>
 	]))));
 
 self.addEventListener("activate", (e : any) =>
-	e.waitUntil(caches.keys().then(cacheNames => Promise.all(cacheNames.filter(cache => cache !== cacheName).map(cache => caches.delete(cache))))));
+	e.waitUntil(caches.keys().then(cacheNames =>
+		Promise.all(cacheNames.filter(cache => cache !== cacheName).map(cache => caches.delete(cache))))));
 
 self.addEventListener("fetch", (e : any) =>
 {

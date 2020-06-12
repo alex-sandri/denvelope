@@ -2,7 +2,7 @@ import {
 	ClearCache, RemoveClass, AddClass, DispatchEvent, IsSet,
 } from "./Utilities";
 import { userEmail, userName, userPhoto } from "./header";
-import { Translation } from "./Translation";
+import Translation from "./Translation";
 
 export class Auth
 {

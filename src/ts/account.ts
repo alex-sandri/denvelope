@@ -28,7 +28,7 @@ import {
 	Spinner,
 	InputWithIcon,
 } from "./scripts/Component";
-import { Translation } from "./scripts/Translation";
+import Translation from "./scripts/Translation";
 import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
 import { Shortcuts } from "./scripts/Shortcuts";
 

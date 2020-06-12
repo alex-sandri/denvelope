@@ -17,9 +17,14 @@ export const userEmail : HTMLParagraphElement = document.querySelector("[data-up
 
 export const HideHeaderMenu = () => HideElement(accountMenuContainer);
 
-accountMenuToggle.addEventListener("click", () => ((accountMenuContainer.style.display === "flex") ? HideHeaderMenu() : ShowElement(accountMenuContainer, "flex")));
+accountMenuToggle.addEventListener("click", () =>
+	((accountMenuContainer.style.display === "flex")
+		? HideHeaderMenu()
+		: ShowElement(accountMenuContainer, "flex")));
 
 document.addEventListener("click", e =>
 {
-	if (!accountMenu.contains(<HTMLElement>e.target) && !accountMenuToggle.contains(<HTMLElement>e.target)) HideHeaderMenu();
+	const target : HTMLElement = <HTMLElement>e.target;
+
+	if (!accountMenu.contains(target) && !accountMenuToggle.contains(target)) HideHeaderMenu();
 });

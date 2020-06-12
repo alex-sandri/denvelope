@@ -7,38 +7,39 @@ const dismiss : HTMLButtonElement = genericMessage.querySelector(".dismiss");
 
 let timeout : NodeJS.Timeout;
 
-export const Show = (message : string, actionButtonText ?: string, duration : number = 2000) : Promise<void> => new Promise((resolve, reject) =>
-{
-	content.innerText = message;
-
-	if (IsSet(actionButtonText))
+export const Show = (message : string, actionButtonText ?: string, duration : number = 2000) : Promise<void> =>
+	new Promise(resolve =>
 	{
-		actionButton.innerText = actionButtonText;
+		content.innerText = message;
 
-		ShowElement(actionButton, "block");
-	}
-	else HideElement(actionButton);
+		if (IsSet(actionButtonText))
+		{
+			actionButton.innerText = actionButtonText;
 
-	ShowElement(genericMessage, "flex");
+			ShowElement(actionButton, "block");
+		}
+		else HideElement(actionButton);
 
-	if (duration >= 0) timeout = setTimeout(Hide, duration);
+		ShowElement(genericMessage, "flex");
 
-	dismiss.addEventListener("click", () =>
-	{
-		clearTimeout(timeout);
+		if (duration >= 0) timeout = setTimeout(Hide, duration);
 
-		Hide();
+		dismiss.addEventListener("click", () =>
+		{
+			clearTimeout(timeout);
+
+			Hide();
+		});
+
+		actionButton.addEventListener("click", () =>
+		{
+			resolve();
+
+			clearTimeout(timeout);
+
+			Hide();
+		});
 	});
-
-	actionButton.addEventListener("click", () =>
-	{
-		resolve();
-
-		clearTimeout(timeout);
-
-		Hide();
-	});
-});
 
 export const ShowSpinner = () : void =>
 {

@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2776";
+const cacheName = "static-v2778";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -10,9 +10,9 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/cookies",
     "/accessibility",
     "/assets/css/bundle.1c5f7ecc31c77ba00f2f3bd685eda1ec.css",
-    "/assets/js/home.b6ef13314e1520f6b440.js",
-    "/assets/js/account.4535dd24c82b777e7c6b.js",
-    "/assets/js/settings.d3e6928db34a6d917bed.js",
+    "/assets/js/home.30ff0c5770569e119c73.js",
+    "/assets/js/account.87a2b29d7769383ae3fe.js",
+    "/assets/js/settings.e799820544cf328b088d.js",
     "/__/firebase/7.15.0/firebase-app.js",
     "/__/firebase/7.15.0/firebase-auth.js",
     "/__/firebase/7.15.0/firebase-firestore.js",
@@ -107,7 +107,7 @@ self.addEventListener("fetch", (e) => {
         }));
         return;
     }
-    else if (url.origin === location.origin && url.pathname === "/create-folder") {
+    if (url.origin === location.origin && url.pathname === "/create-folder") {
         e.respondWith(Response.redirect("/account"));
         e.waitUntil(new Promise(async (resolve) => {
             await NextMessage("ready");
@@ -129,14 +129,14 @@ self.addEventListener("fetch", (e) => {
         respondWith("/");
         return;
     }
-    else if (url.origin === location.origin &&
-        (url.pathname.startsWith("/folder") ||
-            url.pathname.startsWith("/file") ||
-            url.pathname.startsWith("/account"))) {
+    if (url.origin === location.origin
+        && (url.pathname.startsWith("/folder")
+            || url.pathname.startsWith("/file")
+            || url.pathname.startsWith("/account"))) {
         respondWith("/account");
         return;
     }
-    else if (url.origin === location.origin && url.pathname.startsWith("/settings/")) {
+    if (url.origin === location.origin && url.pathname.startsWith("/settings/")) {
         respondWith("/settings");
         return;
     }
@@ -154,13 +154,13 @@ self.addEventListener("message", e => {
         self.skipWaiting();
 });
 const nextMessageResolveMap = new Map();
-const NextMessage = (dataVal) => new Promise((resolve) => {
+const NextMessage = (dataVal) => new Promise(resolve => {
     var _a;
     if (!nextMessageResolveMap.has(dataVal))
         nextMessageResolveMap.set(dataVal, []);
     (_a = nextMessageResolveMap.get(dataVal)) === null || _a === void 0 ? void 0 : _a.push(resolve);
 });
-self.addEventListener("message", (event) => {
+self.addEventListener("message", event => {
     const resolvers = nextMessageResolveMap.get(event.data);
     if (!resolvers)
         return;

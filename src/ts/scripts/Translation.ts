@@ -2,21 +2,23 @@ import enUS from "../translations/en-US";
 import itIT from "../translations/it-IT";
 import { DispatchEvent } from "./Utilities";
 
-export class Translation
+export default class Translation
 {
 	public static get Language() : string { return localStorage.getItem("lang").toLowerCase(); }
 
 	public static Init = (language ?: string) : void =>
 	{
-		if (!language) if ([ "/en", "/it" ].includes(location.pathname)) language = location.pathname.substr(1);
-		else if (localStorage.getItem("lang")) language = localStorage.getItem("lang");
-		else if (navigator.languages) language = navigator.languages[0];
-		else if (navigator.language) language = navigator.language;
-		else language = "en";
+		let translationLanguage : string = language;
 
-		if (!Translation.IsSupportedLanguage(language)) language = "en";
+		if (!translationLanguage) if ([ "/en", "/it" ].includes(location.pathname)) translationLanguage = location.pathname.substr(1);
+		else if (localStorage.getItem("lang")) translationLanguage = localStorage.getItem("lang");
+		else if (navigator.languages) [ translationLanguage ] = navigator.languages; // Takes the first item, equivalent to: language = navigator.languages[0]
+		else if (navigator.language) translationLanguage = navigator.language;
+		else translationLanguage = "en";
 
-		localStorage.setItem("lang", language);
+		if (!Translation.IsSupportedLanguage(translationLanguage)) translationLanguage = "en";
+
+		localStorage.setItem("lang", translationLanguage);
 
 		document.documentElement.lang = Translation.Language;
 

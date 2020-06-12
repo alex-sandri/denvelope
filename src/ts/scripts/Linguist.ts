@@ -1,4 +1,4 @@
-import { Translation } from "./Translation";
+import Translation from "./Translation";
 import { FileIcons } from "./FileIcons";
 import { FolderIcons } from "./FolderIcons";
 import { IsSet } from "./Utilities";

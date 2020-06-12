@@ -15,7 +15,7 @@ import {
 } from "./scripts/Utilities";
 import { Modal } from "./scripts/Modal";
 import { Auth } from "./scripts/Auth";
-import { Translation } from "./scripts/Translation";
+import Translation from "./scripts/Translation";
 import { Component, InputWithIcon } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
 import { header } from "./scripts/header";

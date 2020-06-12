@@ -1,4 +1,4 @@
-import { Translation } from "./Translation";
+import Translation from "./Translation";
 
 export class Shortcuts
 {
