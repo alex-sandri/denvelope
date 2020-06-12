@@ -45,5 +45,6 @@ module.exports = {
     "nonblock-statement-body-position": [ "error", "any" ],
     "no-restricted-syntax": [ "off" ],
     "no-loop-func": [ "off" ],
+    "linebreak-style": [ "off" ],
   },
 };
