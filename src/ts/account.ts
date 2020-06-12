@@ -299,7 +299,10 @@ window.addEventListener("userready", async () =>
 
 	contextMenuView.addEventListener("click", () =>
 	{
-		[ ...contextMenuItems, contextMenuItem ].filter(Boolean).forEach((item, index, array) => HandlePageChangeAndLoadUserContent(null, item, array.length > 1));
+		[ ...contextMenuItems, contextMenuItem ]
+			.filter(Boolean)
+			.forEach((item, index, array) =>
+				HandlePageChangeAndLoadUserContent(null, item, array.length > 1));
 
 		HideContextMenu();
 	});
@@ -505,7 +508,7 @@ window.addEventListener("userready", async () =>
 
 		const input : HTMLInputElement = nameInput.querySelector(".name");
 
-		input.addEventListener("input", () => modal.UpdateButton.disabled = input.value.length === 0);
+		input.addEventListener("input", () => { modal.UpdateButton.disabled = input.value.length === 0; });
 
 		modal.AppendContent([ nameInput ]);
 
@@ -743,13 +746,14 @@ window.addEventListener("userready", async () =>
 				})));
 			}
 
-			DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder");
+			DownloadContent(id, (<HTMLParagraphElement>item.querySelector(".name p")).innerText, type === "folder", folderFormat);
 		});
 	});
 
 	[ contextMenuDelete, contextMenuRestore ].forEach(element => element.addEventListener("click", async () =>
 	{
-		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean); // waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
+		// Waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
+		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
 
 		HideContextMenu();
 
@@ -766,7 +770,8 @@ window.addEventListener("userready", async () =>
 
 			const docRef = db.collection(`users/${Auth.UserId}/${type}s`).doc(id);
 
-			if (!inVault && (!trashed || (trashed && contextMenuRestore.contains(element)))) // If the content is in the vault it is immediately deleted
+			// If the content is in the vault it is immediately deleted
+			if (!inVault && (!trashed || (trashed && contextMenuRestore.contains(element))))
 			{
 				batch.update(docRef, {
 					trashed: !trashed,
@@ -1130,7 +1135,8 @@ window.addEventListener("userready", async () =>
 
 		Array.from(items).map(item => item.webkitGetAsEntry()).forEach((item : any) =>
 		{
-			if (item.isFile) item.file((file : File) => UploadFile(file, file.name, file.size, GetCurrentFolderId(true)));
+			if (item.isFile) item.file((file : File) =>
+				UploadFile(file, file.name, file.size, GetCurrentFolderId(true)));
 			else if (item.isDirectory)
 			{
 				const entries : File[] = [];
@@ -1146,7 +1152,8 @@ window.addEventListener("userready", async () =>
 	{
 		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected")) (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element => RemoveClass(element, "selected"));
 
-		if (isUserContentElement(<HTMLElement>e.target) || contextMenuContainer.contains(<HTMLElement>e.target)) return;
+		if (isUserContentElement(<HTMLElement>e.target)
+			|| contextMenuContainer.contains(<HTMLElement>e.target)) return;
 
 		(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element => RemoveClass(element, "selected"));
 
@@ -1174,9 +1181,13 @@ window.addEventListener("userready", async () =>
 			const top = e.pageY - Math.max(height, 0);
 			const left = e.pageX - Math.max(width, 0);
 
-			if (Math.abs(width) + left > document.documentElement.scrollWidth) width = document.documentElement.scrollWidth - left;
+			if (Math.abs(width) + left > document.documentElement.scrollWidth) width
+				= document.documentElement.scrollWidth - left;
 
-			if (Math.abs(height) + top + bottomMenu.clientHeight > document.documentElement.scrollHeight) height = document.documentElement.scrollHeight - top - bottomMenu.clientHeight;
+			if (Math.abs(height) + top + bottomMenu.clientHeight
+				> document.documentElement.scrollHeight
+			) height
+				= document.documentElement.scrollHeight - top - bottomMenu.clientHeight;
 
 			Object.assign(multipleContentSelector.style, {
 				top: `${top}px`,
@@ -1186,12 +1197,18 @@ window.addEventListener("userready", async () =>
 			});
 
 			// Highlight selected content
-			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element =>
+			(<HTMLElement[]>[
+				...foldersContainer.children,
+				...filesContainer.children,
+			]).forEach(element =>
 			{
 				const elementRect : DOMRect = element.getBoundingClientRect();
 				const selectedRect : DOMRect = multipleContentSelector.getBoundingClientRect();
 
-				if (elementRect.top <= selectedRect.bottom && elementRect.bottom >= selectedRect.top && elementRect.left <= selectedRect.right && elementRect.right >= selectedRect.left) AddClass(element, "selected");
+				if (elementRect.top <= selectedRect.bottom
+					&& elementRect.bottom >= selectedRect.top
+					&& elementRect.left <= selectedRect.right
+					&& elementRect.right >= selectedRect.left) AddClass(element, "selected");
 				else RemoveClass(element, "selected");
 			});
 
@@ -1249,7 +1266,7 @@ window.addEventListener("userready", async () =>
 
 			const input = vaultPinInput.querySelector("input");
 
-			input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length < 4);
+			input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
 
 			modal.ConfirmButton.disabled = true;
 
@@ -1431,10 +1448,16 @@ window.addEventListener("blur", async () =>
 
 window.addEventListener("focus", async () => HideElement(hideVaultContent));
 
-const UploadFile = async (file : File | string, name : string, size : number, parentId : string, id ?: string) : Promise<void> => new Promise(async (resolve, reject) =>
+const UploadFile = async (
+	file : File | string,
+	name : string,
+	size : number,
+	parentId : string,
+	fileId ?: string,
+) : Promise<void> => new Promise(async (resolve, reject) =>
 {
-	const usedStorage = parseInt((<HTMLInputElement>document.querySelector("[data-update-field=used-storage]")).getAttribute("data-bytes"));
-	const maxStorage = parseInt((<HTMLInputElement>document.querySelector("[data-update-field=max-storage]")).getAttribute("data-bytes"));
+	const usedStorage = parseInt((<HTMLInputElement>document.querySelector("[data-update-field=used-storage]")).getAttribute("data-bytes"), 10);
+	const maxStorage = parseInt((<HTMLInputElement>document.querySelector("[data-update-field=max-storage]")).getAttribute("data-bytes"), 10);
 
 	if (usedStorage + size > maxStorage)
 	{
@@ -1466,18 +1489,22 @@ const UploadFile = async (file : File | string, name : string, size : number, pa
 
 	const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
 
-	if (IsSet(id) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
+	if (IsSet(fileId) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${fileId}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, fileId)
 		.then(() => resolveUpload())
 		.catch(error => rejectUpload(error));
 	else
 	{
-		if (parentId === "shared" || parentId === "starred" || parentId === "trash") parentId = "root";
+		let finalParentId = parentId;
 
-		name = await CheckElementNameValidity(name, "file", parentId);
+		if (finalParentId === "shared"
+			|| finalParentId === "starred"
+			|| finalParentId === "trash") finalParentId = "root";
+
+		name = await CheckElementNameValidity(name, "file", finalParentId);
 
 		db.collection(`users/${Auth.UserId}/files`).add({
 			name,
-			parentId,
+			finalParentId,
 			shared,
 			starred: false,
 			trashed: false,

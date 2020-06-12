@@ -39,5 +39,6 @@ module.exports = {
     "no-multi-assign": [ "off" ],
     "max-classes-per-file": [ "off" ],
     "operator-linebreak": [ "error", "before" ],
+    "no-nested-ternary": [ "off" ],
   },
 };

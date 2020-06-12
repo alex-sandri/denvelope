@@ -1004,4 +1004,4 @@ const UpdatePlan = (maxStorage : number) : void =>
 	changePlan.disabled = true;
 };
 
-UpdateCacheSize(parseInt(localStorage.getItem("cache-size"), 10) || defaultCacheSize); // if cache-size is null parseInt returns NaN
+UpdateCacheSize(parseInt(localStorage.getItem("cache-size"), 10) || defaultCacheSize); // If cache-size is null parseInt returns NaN
