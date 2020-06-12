@@ -108,12 +108,12 @@ paymentRequestButton.on("click", (e : Event) =>
 {
 	const SelectPlan = () =>
 	{
-		const currentPlan = plans.querySelector(".current");
-		const previouslySelectedPlan = plans.querySelector(".selected");
+		const currentPlanElement = plans.querySelector(".current");
+		const previouslySelectedPlanElement = plans.querySelector(".selected");
 
-		previouslySelectedPlan?.classList.remove("selected");
+		previouslySelectedPlanElement?.classList.remove("selected");
 
-		if (previouslySelectedPlan !== plan)
+		if (previouslySelectedPlanElement !== plan)
 		{
 			AddClass(plan, "selected");
 
@@ -122,12 +122,12 @@ paymentRequestButton.on("click", (e : Event) =>
 			paymentRequest.update({
 				total: {
 					label: `Denvelope ${selectedPlanMaxStorage}`,
-					amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`)) * 100, // In cents
+					amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`), 10) * 100, // In cents
 				},
 			});
 		}
 
-		changePlan.disabled = (plans.querySelector(".selected") ?? currentPlan) === currentPlan;
+		changePlan.disabled = (plans.querySelector(".selected") ?? currentPlanElement) === currentPlanElement;
 	};
 
 	plan.addEventListener("click", SelectPlan);
@@ -166,7 +166,7 @@ if (location.pathname.indexOf("/settings/") > -1)
 
 [ document.querySelector(`[data-sect=${section}]`), document.querySelector(`#${section}`) ].forEach(element => AddClass(<HTMLElement>element, "selected"));
 
-const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value) * 1000 * 1000;
+const defaultCacheSize : number = parseInt((<HTMLOptionElement>document.querySelector("#cache-size .cache-size-options .default")).value, 10) * 1000 * 1000;
 
 settingsMenuButtons.forEach(element =>
 {
@@ -179,22 +179,22 @@ settingsMenuButtons.forEach(element =>
 		// Clicked element is the icon
 		else button = (<HTMLButtonElement>(<HTMLElement>e.target).parentNode);
 
-		settingsMenuButtons.forEach(element => RemoveClass(element, "selected"));
+		settingsMenuButtons.forEach(menuButton => RemoveClass(menuButton, "selected"));
 
-		settingsSections.forEach(element => RemoveClass(element, "selected"));
+		settingsSections.forEach(settingSection => RemoveClass(settingSection, "selected"));
 
 		AddClass(button, "selected");
 
-		const section = button.getAttribute("data-sect");
+		const selectedSection = button.getAttribute("data-sect");
 
-		AddClass(document.querySelector(`#${section}`), "selected");
+		AddClass(document.querySelector(`#${selectedSection}`), "selected");
 
-		history.pushState(null, "", `${location.origin}/settings/${section}`);
+		history.pushState(null, "", `${location.origin}/settings/${selectedSection}`);
 	});
 });
 
 // TODO: Find a way to avoid this crap
-const SetMainHeight = () => settingsSections[0].parentElement.style.height = `${innerHeight - header.offsetHeight - settingsMenu.offsetHeight}px`;
+const SetMainHeight = () => { settingsSections[0].parentElement.style.height = `${innerHeight - header.offsetHeight - settingsMenu.offsetHeight}px`; };
 
 SetMainHeight();
 
@@ -336,7 +336,9 @@ window.addEventListener("userready", () =>
 
 		[ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
 			.forEach(element => element.addEventListener("change", () =>
-				(<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions())));
+			{
+				(<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions());
+			}));
 
 		modal.OnConfirm = () =>
 		{
@@ -365,7 +367,8 @@ window.addEventListener("userready", () =>
 
 		let cardElement : any;
 
-		const showCreditCardInput : boolean = !userAlreadyHasCardInformation || button === addPaymentMethod;
+		const showCreditCardInput : boolean = !userAlreadyHasCardInformation
+			|| button === addPaymentMethod;
 
 		if (button === changePlan) modal.AppendContent([
 			new Component("p", {
@@ -432,7 +435,8 @@ window.addEventListener("userready", () =>
 			if (button === changePlan) functions.httpsCallable("createSubscription")({
 				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
 				currency: Translation.Get("settings->plan->currency"),
-				paymentMethod: result?.paymentMethod.id, // Not needed if the user already has a default payment method (aka the user is already a customer)
+				// Not needed if the user already has a default payment method
+				paymentMethod: result?.paymentMethod.id,
 			});
 			else
 			{
@@ -502,7 +506,6 @@ window.addEventListener("userready", () =>
 		{
 			functions.httpsCallable("signOutUserFromAllDevices")({});
 
-			// Use the SignOut() method to sign out immediately and not wait for the user to refresh the page
 			Auth.SignOut();
 
 			modal.HideAndRemove();
@@ -543,7 +546,10 @@ window.addEventListener("userready", () =>
 
 		[ currentPinInput, newPinInput ].forEach(input =>
 			input.addEventListener("input", () =>
-				modal.ConfirmButton.disabled = currentPinInput.value.length < 4 || newPinInput.value.length < 4));
+			{
+				modal.ConfirmButton.disabled = currentPinInput.value.length < 4
+					|| newPinInput.value.length < 4;
+			}));
 
 		modal.ConfirmButton.disabled = true;
 
@@ -601,7 +607,7 @@ window.addEventListener("userready", () =>
 
 		const input = vaultPinInput.querySelector("input");
 
-		input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length < 4);
+		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
 
 		modal.ConfirmButton.disabled = true;
 
@@ -656,7 +662,7 @@ window.addEventListener("userready", () =>
 
 		const input = vaultPinInput.querySelector("input");
 
-		input.addEventListener("input", () => modal.ConfirmButton.disabled = input.value.length < 4);
+		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
 
 		modal.ConfirmButton.disabled = true;
 
@@ -721,7 +727,7 @@ window.addEventListener("userready", () =>
 
 		(<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText += ` (${Translation.Get("generic->default")})`;
 
-		const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"));
+		const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
 
 		if (cacheSizeBytes) cacheSizeOptions.selectedIndex = (<HTMLOptionElement>cacheSizeOptions.querySelector(`[value="${cacheSizeBytes / 1000 / 1000}"]`)).index;
 
@@ -731,7 +737,7 @@ window.addEventListener("userready", () =>
 		{
 			modal.HideAndRemove();
 
-			UpdateCacheSize(parseInt(cacheSizeOptions.selectedOptions[0].value) * 1000 * 1000);
+			UpdateCacheSize(parseInt(cacheSizeOptions.selectedOptions[0].value, 10) * 1000 * 1000);
 
 			genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
 		};
@@ -821,7 +827,10 @@ window.addEventListener("userready", () =>
 
 			ShowElement(nextRenewal.parentElement);
 
-			if (userNextPeriodMaxStorage && userNextPeriodMaxStorage < maxStorage && !userCanceledSubscription)
+			if (userNextPeriodMaxStorage
+				&& userNextPeriodMaxStorage < maxStorage
+				&& !userCanceledSubscription
+			)
 			{
 				nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
@@ -829,19 +838,28 @@ window.addEventListener("userready", () =>
 			}
 		}
 
-		const paymentMethods = user.data().stripe?.paymentMethods;
+		const userPaymentMethods = user.data().stripe?.paymentMethods;
 
-		userAlreadyHasCardInformation = !!paymentMethods && paymentMethods?.length > 0;
+		userAlreadyHasCardInformation = !!userPaymentMethods && userPaymentMethods?.length > 0;
 
 		if (userAlreadyHasCardInformation)
 		{
-			const defaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
+			const userDefaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
 
 			paymentMethodsContainer.innerHTML = "";
 
 			ShowElement(paymentMethodsContainer);
 
-			const ShowUserPaymentMethods = (paymentMethods : { id : string, brand : string, last4 : string, expirationMonth : string, expirationYear : string }[], defaultPaymentMethod : string) =>
+			const ShowUserPaymentMethods = (
+				paymentMethods : {
+					id : string,
+					brand : string,
+					last4 : string,
+					expirationMonth : string,
+					expirationYear : string,
+				}[],
+				defaultPaymentMethod : string,
+			) =>
 			{
 				paymentMethodsContainer.innerHTML = "";
 
@@ -905,9 +923,9 @@ window.addEventListener("userready", () =>
 				});
 			};
 
-			ShowUserPaymentMethods(paymentMethods, defaultPaymentMethod);
+			ShowUserPaymentMethods(userPaymentMethods, userDefaultPaymentMethod);
 
-			window.addEventListener("translationlanguagechange", () => ShowUserPaymentMethods(paymentMethods, defaultPaymentMethod));
+			window.addEventListener("translationlanguagechange", () => ShowUserPaymentMethods(userPaymentMethods, userDefaultPaymentMethod));
 		}
 		else ShowElement(noPaymentMethod);
 
@@ -932,7 +950,9 @@ window.addEventListener("userready", () =>
 		if (userDateFormatOptions === "default") userDateFormatOptions = null;
 
 		document.querySelectorAll("[data-date]").forEach(element =>
-			(<HTMLElement>element).innerText = FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions));
+		{
+			(<HTMLElement>element).innerText = FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions);
+		});
 
 		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
 
@@ -942,7 +962,10 @@ window.addEventListener("userready", () =>
 
 	db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
 	{
-		changeVaultPin.disabled = deleteVault.disabled = generateVaultRecoveryCode.disabled = !snapshot.exists;
+		changeVaultPin.disabled
+			= deleteVault.disabled
+			= generateVaultRecoveryCode.disabled
+			= !snapshot.exists;
 
 		Auth.RefreshToken();
 	});
@@ -952,7 +975,7 @@ window.addEventListener("popstate", () =>
 {
 	let url = window.location.href;
 
-	const section = url[url.length - 1] === "/"
+	section = url[url.length - 1] === "/"
 		? (url = url.substr(0, url.length - 1)).substr(url.lastIndexOf("/") + 1)
 		: url.substr(url.lastIndexOf("/") + 1);
 
@@ -981,4 +1004,4 @@ const UpdatePlan = (maxStorage : number) : void =>
 	changePlan.disabled = true;
 };
 
-UpdateCacheSize(parseInt(localStorage.getItem("cache-size")) || defaultCacheSize); // if cache-size is null parseInt returns NaN
+UpdateCacheSize(parseInt(localStorage.getItem("cache-size"), 10) || defaultCacheSize); // if cache-size is null parseInt returns NaN
