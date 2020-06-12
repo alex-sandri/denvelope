@@ -9,44 +9,44 @@ let timeout : NodeJS.Timeout;
 
 export const Show = (message : string, actionButtonText ?: string, duration : number = 2000) : Promise<void> => new Promise((resolve, reject) =>
 {
-    content.innerText = message;
+	content.innerText = message;
 
-    if (IsSet(actionButtonText))
-    {
-        actionButton.innerText = actionButtonText;
+	if (IsSet(actionButtonText))
+	{
+		actionButton.innerText = actionButtonText;
 
-        ShowElement(actionButton, "block");
-    }
-    else HideElement(actionButton);
+		ShowElement(actionButton, "block");
+	}
+	else HideElement(actionButton);
 
-    ShowElement(genericMessage, "flex");
+	ShowElement(genericMessage, "flex");
 
-    if (duration >= 0) timeout = setTimeout(Hide, duration);
+	if (duration >= 0) timeout = setTimeout(Hide, duration);
 
-    dismiss.addEventListener("click", () =>
-    {
-        clearTimeout(timeout);
+	dismiss.addEventListener("click", () =>
+	{
+		clearTimeout(timeout);
 
-        Hide();
-    });
+		Hide();
+	});
 
-    actionButton.addEventListener("click", () =>
-    {
-        resolve();
+	actionButton.addEventListener("click", () =>
+	{
+		resolve();
 
-        clearTimeout(timeout);
+		clearTimeout(timeout);
 
-        Hide();
-    });
+		Hide();
+	});
 });
 
 export const ShowSpinner = () : void =>
 {
-    Show("", null, -1);
+	Show("", null, -1);
 
-    HideElement(dismiss);
+	HideElement(dismiss);
 
-    ShowElement(genericMessage.querySelector(".spinner"), "block");
-}
+	ShowElement(genericMessage.querySelector(".spinner"), "block");
+};
 
 const Hide = () : void => HideElement(genericMessage);

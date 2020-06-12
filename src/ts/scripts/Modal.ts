@@ -1,317 +1,326 @@
-import { ShowElement, AddClass, IsSet, HideElement, HasClass, RemoveClass, FormatStorage } from "./Utilities";
+import {
+	ShowElement, AddClass, IsSet, HideElement, HasClass, RemoveClass, FormatStorage,
+} from "./Utilities";
 import { Component } from "./Component";
 import { Translation } from "./Translation";
 
 export class Modal
 {
-    private readonly container : HTMLDivElement = <HTMLDivElement>document.querySelector(".modal-container").cloneNode(true);
-    public readonly element : HTMLDivElement = this.container.querySelector(".modal");
+	private readonly container : HTMLDivElement = <HTMLDivElement>document.querySelector(".modal-container").cloneNode(true);
 
-    private readonly spinner : HTMLSpanElement = this.element.querySelector(".spinner");
+	public readonly element : HTMLDivElement = this.container.querySelector(".modal");
 
-    public readonly Content : HTMLDivElement = this.element.querySelector(".content");
+	private readonly spinner : HTMLSpanElement = this.element.querySelector(".spinner");
 
-    public readonly CloseButton : HTMLButtonElement = this.element.querySelector(".close");
-    public readonly ConfirmButton : HTMLButtonElement = this.element.querySelector(".confirm");
-    public readonly UpdateButton : HTMLButtonElement = this.element.querySelector(".update");
+	public readonly Content : HTMLDivElement = this.element.querySelector(".content");
 
-    public OnClose : () => any;
-    public OnConfirm : () => any;
-    public OnUpdate : () => any;
+	public readonly CloseButton : HTMLButtonElement = this.element.querySelector(".close");
 
-    constructor (options ?: Object)
-    {
-        if (IsSet(options))
-        {
-            if (options.hasOwnProperty("title")) this.Title = (<any>options).title;
-            if (options.hasOwnProperty("subtitle")) this.Subtitle = (<any>options).subtitle;
+	public readonly ConfirmButton : HTMLButtonElement = this.element.querySelector(".confirm");
 
-            if (options.hasOwnProperty("allow"))
-            {
-                if ((<string[]>(<any>options).allow).includes("confirm")) ShowElement(this.ConfirmButton, "block");
-                if ((<string[]>(<any>options).allow).includes("update")) ShowElement(this.UpdateButton, "block");
-            }
-            
-            if (options.hasOwnProperty("floating") && (<any>options).floating)
-            {
-                AddClass(this.element, "floating");
+	public readonly UpdateButton : HTMLButtonElement = this.element.querySelector(".update");
 
-                AddClass(this.container, "no-background");
-            }
+	public OnClose : () => any;
 
-            if (options.hasOwnProperty("animate") && !(<any>options).animate) AddClass(this.element, "no-animate");
+	public OnConfirm : () => any;
 
-            if (options.hasOwnProperty("aside") && (<any>options).aside) AddClass(this.element, "aside");
+	public OnUpdate : () => any;
 
-            if (options.hasOwnProperty("loading") && !(<any>options).loading) HideElement(this.spinner);
-            else ShowElement(this.spinner, "block");
-        }
+	constructor(options ?: Object)
+	{
+		if (IsSet(options))
+		{
+			if (options.hasOwnProperty("title")) this.Title = (<any>options).title;
+			if (options.hasOwnProperty("subtitle")) this.Subtitle = (<any>options).subtitle;
 
-        this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
+			if (options.hasOwnProperty("allow"))
+			{
+				if ((<string[]>(<any>options).allow).includes("confirm")) ShowElement(this.ConfirmButton, "block");
+				if ((<string[]>(<any>options).allow).includes("update")) ShowElement(this.UpdateButton, "block");
+			}
 
-        document.body.appendChild(this.container);
-    }
+			if (options.hasOwnProperty("floating") && (<any>options).floating)
+			{
+				AddClass(this.element, "floating");
 
-    /**
-     * @param unique If set to true all other modals currently shown will be removed, except non-unique ones
-     */
-    public Show = (unique ?: boolean) : void =>
-    {
-        this.CloseButton.addEventListener("click", () =>
-        {
-            this.Hide();
-            this.Remove();
-        });
+				AddClass(this.container, "no-background");
+			}
 
-        this.ConfirmButton.addEventListener("click", this.OnConfirm);
-        this.UpdateButton.addEventListener("click", this.OnUpdate);
-        
-        if (IsSet(unique) && unique)
-            document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
-        else AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
+			if (options.hasOwnProperty("animate") && !(<any>options).animate) AddClass(this.element, "no-animate");
 
-        if (!HasClass(this.element, "show"))
-        {
-            ShowElement(this.container);
+			if (options.hasOwnProperty("aside") && (<any>options).aside) AddClass(this.element, "aside");
 
-            RemoveClass(this.element, "hide");
-            AddClass(this.element, "show");
-        }
+			if (options.hasOwnProperty("loading") && !(<any>options).loading) HideElement(this.spinner);
+			else ShowElement(this.spinner, "block");
+		}
 
-        this.CloseButton.focus();
+		this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
 
-        if (getComputedStyle(this.ConfirmButton).getPropertyValue("display") !== "none" && !this.ConfirmButton.disabled) this.ConfirmButton.focus();
-        else if (getComputedStyle(this.UpdateButton).getPropertyValue("display") !== "none" && !this.UpdateButton.disabled) this.UpdateButton.focus();
+		document.body.appendChild(this.container);
+	}
 
-        (<HTMLInputElement | HTMLButtonElement | null>this.Content.querySelector("input, select, button"))?.focus();
+	/**
+	 * @param unique If set to true all other modals currently shown will be removed, except non-unique ones
+	 */
+	public Show = (unique ?: boolean) : void =>
+	{
+		this.CloseButton.addEventListener("click", () =>
+		{
+			this.Hide();
+			this.Remove();
+		});
 
-        document.addEventListener("mouseup", this.HideOnOuterClick);
+		this.ConfirmButton.addEventListener("click", this.OnConfirm);
+		this.UpdateButton.addEventListener("click", this.OnUpdate);
 
-        window.addEventListener("keydown", e =>
-        {
-            const key = e.key.toLowerCase();
+		if (IsSet(unique) && unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
+		else AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
 
-            if (["escape"].includes(key)) e.preventDefault();
+		if (!HasClass(this.element, "show"))
+		{
+			ShowElement(this.container);
 
-            if (key === "escape") this.HideAndRemove();
-        });
-    }
+			RemoveClass(this.element, "hide");
+			AddClass(this.element, "show");
+		}
 
-    public Hide = () : void =>
-    {
-        RemoveClass(this.element, "show");
-        AddClass(this.element, "hide");
+		this.CloseButton.focus();
 
-        setTimeout(() => HideElement(this.container), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
-    }
+		if (getComputedStyle(this.ConfirmButton).getPropertyValue("display") !== "none" && !this.ConfirmButton.disabled) this.ConfirmButton.focus();
+		else if (getComputedStyle(this.UpdateButton).getPropertyValue("display") !== "none" && !this.UpdateButton.disabled) this.UpdateButton.focus();
 
-    public Remove = () : void =>
-    {
-        this.OnClose();
-        
-        setTimeout(() => this.container.remove(), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
+		(<HTMLInputElement | HTMLButtonElement | null> this.Content.querySelector("input, select, button"))?.focus();
 
-        document.removeEventListener("click", this.HideOnOuterClick);
-    }
+		document.addEventListener("mouseup", this.HideOnOuterClick);
 
-    public HideAndRemove = () : void =>
-    {
-        this.Hide();
-        this.Remove();
-    }
+		window.addEventListener("keydown", e =>
+		{
+			const key = e.key.toLowerCase();
 
-    public set Title (title : string)
-    {
-        const titleElement : HTMLElement = this.element.querySelector(".title");
+			if ([ "escape" ].includes(key)) e.preventDefault();
 
-        titleElement.innerText = title;
-    }
+			if (key === "escape") this.HideAndRemove();
+		});
+	}
 
-    public set Subtitle (subtitle : string)
-    {
-        const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
+	public Hide = () : void =>
+	{
+		RemoveClass(this.element, "show");
+		AddClass(this.element, "hide");
 
-        subtitleElement.innerText = subtitle;
-    }
+		setTimeout(() => HideElement(this.container), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
+	}
 
-    public AppendContent = (data : any[]) : void =>
-    {
-        HideElement(this.spinner);
-    
-        data.filter(IsSet).forEach(element => this.Content.append(element));
+	public Remove = () : void =>
+	{
+		this.OnClose();
 
-        (<NodeListOf<HTMLInputElement>>this.Content.querySelectorAll("input:not([type=checkbox])")).forEach(element => element.addEventListener("keydown", e =>
-        {
-            if (e.key === "Enter")
-            {
-                this.ConfirmButton.click();
-                this.UpdateButton.click();
-            }
-        }));
-    }
+		setTimeout(() => this.container.remove(), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
 
-    public RemoveContent = () : void =>
-    {
-        ShowElement(this.spinner, "block");
+		document.removeEventListener("click", this.HideOnOuterClick);
+	}
 
-        this.Content.innerHTML = "";
-    }
+	public HideAndRemove = () : void =>
+	{
+		this.Hide();
+		this.Remove();
+	}
 
-    private HideOnOuterClick = (e : Event) : void =>
-    {
-        if (!this.element.contains(<HTMLElement>e.target) && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
-    }
+	public set Title(title : string)
+	{
+		const titleElement : HTMLElement = this.element.querySelector(".title");
+
+		titleElement.innerText = title;
+	}
+
+	public set Subtitle(subtitle : string)
+	{
+		const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
+
+		subtitleElement.innerText = subtitle;
+	}
+
+	public AppendContent = (data : any[]) : void =>
+	{
+		HideElement(this.spinner);
+
+		data.filter(IsSet).forEach(element => this.Content.append(element));
+
+		(<NodeListOf<HTMLInputElement>> this.Content.querySelectorAll("input:not([type=checkbox])")).forEach(element => element.addEventListener("keydown", e =>
+		{
+			if (e.key === "Enter")
+			{
+				this.ConfirmButton.click();
+				this.UpdateButton.click();
+			}
+		}));
+	}
+
+	public RemoveContent = () : void =>
+	{
+		ShowElement(this.spinner, "block");
+
+		this.Content.innerHTML = "";
+	}
+
+	private HideOnOuterClick = (e : Event) : void =>
+	{
+		if (!this.element.contains(<HTMLElement>e.target) && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
+	}
 }
 
 export class UploadModal extends Modal
 {
-    public ProgressBar : HTMLSpanElement;
+	public ProgressBar : HTMLSpanElement;
 
-    public TransferSize : HTMLSpanElement;
+	public TransferSize : HTMLSpanElement;
 
-    public OnPause : () => any;
-    public OnResume : () => any;
-    public OnCancel : () => any;
+	public OnPause : () => any;
 
-    constructor (name : string, size : number)
-    {
-        super({
-            subtitle: name,
-            floating: true,
-            animate: false,
-            aside: true
-        });
+	public OnResume : () => any;
 
-        this.AppendContent([
-            new Component("div", {
-                class: "transfer-info",
-                children: [
-                    new Component("div", {
-                        class: "progress-bar-container",
-                        children: [
-                            this.ProgressBar = new Component("span", {
-                                class: "progress-bar"
-                            }).element
-                        ]
-                    }).element,
-                    new Component("p", {
-                        class: "status",
-                        children: [
-                            this.TransferSize = new Component("span", {
-                                class: "transfer-size",
-                                innerText: 0
-                            }).element,
-                            new Component("span", {
-                                class: "tot-size",
-                                innerText: ` / ${FormatStorage(size)}`
-                            }).element
-                        ]
-                    }).element
-                ]
-            }).element,
-            new Component("div", {
-                class: "upload-controls",
-                children: [
-                    // Pause Button
-                    new Component("button", {
-                        class: "pause upload-control",
-                        children: [
-                            new Component("i", {
-                                class: "fas fa-pause fa-fw"
-                            }).element
-                        ]
-                    }).element,
-                    // Resume Button
-                    new Component("button", {
-                        class: "resume upload-control",
-                        children: [
-                            new Component("i", {
-                                class: "fas fa-play fa-fw"
-                            }).element
-                        ]
-                    }).element,
-                    // Cancel Button
-                    new Component("button", {
-                        class: "cancel upload-control",
-                        children: [
-                            new Component("i", {
-                                class: "fas fa-times fa-fw"
-                            }).element
-                        ]
-                    }).element
-                ]
-            }).element
-        ]);
+	public OnCancel : () => any;
 
-        const pauseButton : HTMLButtonElement = this.element.querySelector(".pause");
-        const resumeButton : HTMLButtonElement = this.element.querySelector(".resume");
-        const cancelButton : HTMLButtonElement = this.element.querySelector(".cancel");
+	constructor(name : string, size : number)
+	{
+		super({
+			subtitle: name,
+			floating: true,
+			animate: false,
+			aside: true,
+		});
 
-        pauseButton.addEventListener("click", () =>
-        {
-            HideElement(pauseButton);
-            ShowElement(resumeButton, "block");
+		this.AppendContent([
+			new Component("div", {
+				class: "transfer-info",
+				children: [
+					new Component("div", {
+						class: "progress-bar-container",
+						children: [
+							this.ProgressBar = new Component("span", {
+								class: "progress-bar",
+							}).element,
+						],
+					}).element,
+					new Component("p", {
+						class: "status",
+						children: [
+							this.TransferSize = new Component("span", {
+								class: "transfer-size",
+								innerText: 0,
+							}).element,
+							new Component("span", {
+								class: "tot-size",
+								innerText: ` / ${FormatStorage(size)}`,
+							}).element,
+						],
+					}).element,
+				],
+			}).element,
+			new Component("div", {
+				class: "upload-controls",
+				children: [
+					// Pause Button
+					new Component("button", {
+						class: "pause upload-control",
+						children: [
+							new Component("i", {
+								class: "fas fa-pause fa-fw",
+							}).element,
+						],
+					}).element,
+					// Resume Button
+					new Component("button", {
+						class: "resume upload-control",
+						children: [
+							new Component("i", {
+								class: "fas fa-play fa-fw",
+							}).element,
+						],
+					}).element,
+					// Cancel Button
+					new Component("button", {
+						class: "cancel upload-control",
+						children: [
+							new Component("i", {
+								class: "fas fa-times fa-fw",
+							}).element,
+						],
+					}).element,
+				],
+			}).element,
+		]);
 
-            this.OnPause();
-        });
+		const pauseButton : HTMLButtonElement = this.element.querySelector(".pause");
+		const resumeButton : HTMLButtonElement = this.element.querySelector(".resume");
+		const cancelButton : HTMLButtonElement = this.element.querySelector(".cancel");
 
-        resumeButton.addEventListener("click", () =>
-        {
-            HideElement(resumeButton);
-            ShowElement(pauseButton, "block");
+		pauseButton.addEventListener("click", () =>
+		{
+			HideElement(pauseButton);
+			ShowElement(resumeButton, "block");
 
-            this.OnResume();
-        });
+			this.OnPause();
+		});
 
-        cancelButton.addEventListener("click", this.OnCancel);
+		resumeButton.addEventListener("click", () =>
+		{
+			HideElement(resumeButton);
+			ShowElement(pauseButton, "block");
 
-        this.Show();
-    }
+			this.OnResume();
+		});
+
+		cancelButton.addEventListener("click", this.OnCancel);
+
+		this.Show();
+	}
 }
 
 export class DownloadModal extends Modal
 {
-    public ProgressBar : HTMLSpanElement;
-    public TransferSize : HTMLSpanElement;
+	public ProgressBar : HTMLSpanElement;
 
-    constructor (name : string, size : number)
-    {
-        super({
-            subtitle: `${Translation.Get("api->messages->file->downloading")}: ${name}`,
-            floating: true,
-            animate: false,
-            aside: true
-        });
+	public TransferSize : HTMLSpanElement;
 
-        this.AppendContent([
-            new Component("div", {
-                class: "transfer-info",
-                children: [
-                    new Component("div", {
-                        class: "progress-bar-container",
-                        children: [
-                            this.ProgressBar = new Component("span", {
-                                class: "progress-bar"
-                            }).element
-                        ]
-                    }).element,
-                    new Component("p", {
-                        class: "status",
-                        children: [
-                            this.TransferSize = new Component("span", {
-                                class: "transfer-size",
-                                innerText: 0
-                            }).element,
-                            new Component("span", {
-                                class: "tot-size",
-                                innerText: ` / ${FormatStorage(size)}`
-                            }).element
-                        ]
-                    }).element
-                ]
-            }).element
-        ]);
+	constructor(name : string, size : number)
+	{
+		super({
+			subtitle: `${Translation.Get("api->messages->file->downloading")}: ${name}`,
+			floating: true,
+			animate: false,
+			aside: true,
+		});
 
-        this.Show();
-    }
+		this.AppendContent([
+			new Component("div", {
+				class: "transfer-info",
+				children: [
+					new Component("div", {
+						class: "progress-bar-container",
+						children: [
+							this.ProgressBar = new Component("span", {
+								class: "progress-bar",
+							}).element,
+						],
+					}).element,
+					new Component("p", {
+						class: "status",
+						children: [
+							this.TransferSize = new Component("span", {
+								class: "transfer-size",
+								innerText: 0,
+							}).element,
+							new Component("span", {
+								class: "tot-size",
+								innerText: ` / ${FormatStorage(size)}`,
+							}).element,
+						],
+					}).element,
+				],
+			}).element,
+		]);
+
+		this.Show();
+	}
 }
