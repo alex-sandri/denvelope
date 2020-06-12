@@ -1,4 +1,4 @@
-export const en_US = {
+export default {
 	language: {
 		name: "English (United States)",
 	},

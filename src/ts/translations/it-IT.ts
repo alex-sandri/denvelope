@@ -1,4 +1,4 @@
-export const it_IT = {
+export default {
 	language: {
 		name: "Italiano",
 	},

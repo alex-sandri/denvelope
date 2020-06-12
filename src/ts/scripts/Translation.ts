@@ -1,5 +1,5 @@
-import { en_US } from "../translations/en-US";
-import { it_IT } from "../translations/it-IT";
+import enUS from "../translations/en-US";
+import itIT from "../translations/it-IT";
 import { DispatchEvent } from "./Utilities";
 
 export class Translation
@@ -80,10 +80,10 @@ export class Translation
 		{
 		case "it-it":
 		case "it":
-			array = it_IT;
+			array = itIT;
 			break;
 		default:
-			array = en_US;
+			array = enUS;
 			break;
 		}
 
