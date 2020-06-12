@@ -40,5 +40,6 @@ module.exports = {
     "max-classes-per-file": [ "off" ],
     "operator-linebreak": [ "error", "before" ],
     "no-nested-ternary": [ "off" ],
+    "no-shadow": [ "off" ],
   },
 };

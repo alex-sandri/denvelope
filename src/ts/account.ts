@@ -1500,11 +1500,11 @@ const UploadFile = async (
 			|| finalParentId === "starred"
 			|| finalParentId === "trash") finalParentId = "root";
 
-		name = await CheckElementNameValidity(name, "file", finalParentId);
+		const finalName = await CheckElementNameValidity(name, "file", finalParentId);
 
 		db.collection(`users/${Auth.UserId}/files`).add({
-			name,
-			finalParentId,
+			name: finalName,
+			parentId: finalParentId,
 			shared,
 			starred: false,
 			trashed: false,
@@ -1520,17 +1520,23 @@ const UploadFile = async (
 				content_id: id,
 			});
 
-			if (typeof file !== "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).put(file, metadata), name, size, id)
+			if (typeof file !== "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).put(file, metadata), finalName, size, id)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
-			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, id)
+			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), finalName, size, id)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
 		});
 	}
 });
 
-const ShowFileUploadModal = async (uploadTask : any, name : string, size : number, id : string) : Promise<void> => new Promise((resolve, reject) =>
+const ShowFileUploadModal = async (
+	uploadTask : any,
+	name : string,
+	size : number,
+	id : string,
+) : Promise<void> => new Promise((resolve, reject) =>
 {
-	// Avoid showing the modal if the upload size is 0, and also avoid a division by 0 while calculating the progress if the file is empty
+	// Avoid showing the modal if the upload size is 0
+	// And also avoid a division by 0 while calculating the progress if the file is empty
 	if (size > 0)
 	{
 		const modal = new UploadModal(name, size);
@@ -1581,7 +1587,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	HideElement(vaultInfo);
 
-	// The user is probably loading a file, this function will be called later when the file parentId is received by the client
+	// The user is probably loading a file, this function will be called
+	// later when the file parentId is received by the client
 	if (parentId === "") return;
 
 	if (IsSet(unsubscribeFoldersListener)) unsubscribeFoldersListener();
@@ -1602,7 +1609,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 				document
 					.querySelectorAll("[data-update-field=folder-name]")
-					.forEach(element => (<HTMLElement>element).innerText = data.name);
+					.forEach(element => { (<HTMLElement>element).innerText = data.name; });
 
 				folderShared = data.shared;
 
@@ -1620,7 +1627,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 				{
 					const { parentId } = data;
 
-					// A user cannot access another user's root (even if only shared content is shown), only one folder (get operation) is allowed just to get the name
+					// A user cannot access another user's root (even if only shared content is shown),
+					// only one folder (GET operation) is allowed just to get the name
 					if (parentId === "root") HideElement(navigationBackButton);
 					else db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get()
 						.then(() => ShowElement(navigationBackButton, "flex")) // If the query succeeds the folder is shared
@@ -1629,7 +1637,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 			});
 		}
 		else (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-			.forEach(element => element.innerText = Translation.Get("generic->vault"));
+			.forEach(element => { element.innerText = Translation.Get("generic->vault"); });
 
 		if (await vaultOnly())
 		{
@@ -1660,7 +1668,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		else HideElement(folderNavigation);
 
 		if (location.pathname.indexOf("file") === -1) (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-			.forEach(element => element.innerText = Translation.Get("account->title"));
+			.forEach(element => { element.innerText = Translation.Get("account->title"); });
 	}
 
 	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${document.querySelector(".top-section").clientHeight}px)`;
@@ -1677,7 +1685,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 		addUserContentEvents();
 
-		if (AreUserContentContainersEmpty() && (callCount === 2 || isUpdate || (callCount === 1 && !includeFolders)))
+		if (AreUserContentContainersEmpty()
+			&& (callCount === 2 || isUpdate || (callCount === 1 && !includeFolders)))
 		{
 			emptyFolder.querySelector("h2").innerText = Translation.Get(`api->messages->folder->${
 				!navigator.onLine
