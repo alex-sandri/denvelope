@@ -41,5 +41,6 @@ module.exports = {
     "operator-linebreak": [ "error", "before" ],
     "no-nested-ternary": [ "off" ],
     "no-shadow": [ "off" ],
+    "no-await-in-loop": [ "off" ],
   },
 };

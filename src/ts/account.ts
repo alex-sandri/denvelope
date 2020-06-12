@@ -1792,12 +1792,19 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 	{
 		HideElement(userContentLoadingSpinner);
 
-		const elements = Array.from(<NodeListOf<HTMLElement>>foldersContainer.querySelectorAll(folderSelector));
+		const elements = Array
+			.from(<NodeListOf<HTMLElement>>foldersContainer.querySelectorAll(folderSelector));
 
 		elements.forEach(element => AddClass(element, "old"));
 
 		snapshot.docs
-			.sort((a : any, b : any) => (!orderBy ? collator.compare(a.data().name, b.data().name) : 0) /* DO NOT SORT ON THE CLIENT IF ORDERBY IS SET */)
+			.sort((a : any, b : any) =>
+			{
+				/* Do not sort on the client if orderBy is set */
+				if (orderBy) return 0;
+
+				return collator.compare(a.data().name, b.data().name);
+			})
 			.forEach((doc : any) =>
 				CreateUserContent(
 					"folder",
@@ -1853,14 +1860,19 @@ const showContextMenu = (e : MouseEvent) : void =>
 	const contentTarget = GetUserContentElement(<HTMLElement>e.target);
 
 	contextMenuItem = null;
-	contextMenuItems = (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected"));
+	contextMenuItems = (<HTMLElement[]>[
+		...foldersContainer.children,
+		...filesContainer.children,
+	]).filter(element => HasClass(element, "selected"));
 
-	// Every event would have been fired twice because with length === 1 as contextMenuItem would have been the same element
+	// If contextMenuItems contains only one element
+	// This element is the same as in contextMenuItem
 	if (contextMenuItems?.length === 1) contextMenuItems = [];
 
 	HideElements([ contextMenuMoveSelector, contextMenuTools ]);
 
-	if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null) && contextMenuItems.length <= 1)
+	if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null)
+		&& contextMenuItems.length <= 1)
 	{
 		ShowElements(<HTMLElement[]>[ contextMenuContent, ...contextMenuContent.children ]);
 
@@ -1941,7 +1953,12 @@ const showContextMenu = (e : MouseEvent) : void =>
 	{
 		HideElements([ contextMenuContent, contextMenuGeneric, contextMenuVault ]);
 
-		if (!vault.contains(target)) ShowElements(<HTMLElement[]>[ contextMenuGeneric, ...contextMenuGeneric.children ]);
+		if (!vault.contains(target)) ShowElements(
+			<HTMLElement[]>[
+				contextMenuGeneric,
+				...contextMenuGeneric.children,
+			],
+		);
 		else
 		{
 			const vaultLocked = vault.getAttribute("data-locked");
@@ -1956,7 +1973,11 @@ const showContextMenu = (e : MouseEvent) : void =>
 	}
 	else if (contextMenuItems.length > 1)
 	{
-		HideElements(<HTMLElement[]>[ ...contextMenuContent.children, contextMenuGeneric, contextMenuVault ]);
+		HideElements(<HTMLElement[]>[
+			...contextMenuContent.children,
+			contextMenuGeneric,
+			contextMenuVault,
+		]);
 
 		ShowElement(contextMenuContent);
 
@@ -1991,7 +2012,12 @@ const showContextMenu = (e : MouseEvent) : void =>
 
 	if (!selectedEditorTabName?.endsWith(".json")) HideElement(contextMenuValidateJson);
 
-	if (!editor) HideElements([ contextMenuDisplayImage, contextMenuDisplayPdf, contextMenuValidateXml, contextMenuValidateJson ]);
+	if (!editor) HideElements([
+		contextMenuDisplayImage,
+		contextMenuDisplayPdf,
+		contextMenuValidateXml,
+		contextMenuValidateJson,
+	]);
 
 	const modal = new Modal();
 
@@ -2057,7 +2083,11 @@ const addUserContentEvents = () : void =>
  * @param e The event fired on user interaction (e.g.: MouseEvent)
  * @param targetElement Specified if an Event parameter is not available
  */
-const HandlePageChangeAndLoadUserContent = (e : MouseEvent, targetElement ?: HTMLElement, isMultipleFileEditor ?: boolean) =>
+const HandlePageChangeAndLoadUserContent = (
+	e : MouseEvent,
+	targetElement ?: HTMLElement,
+	isMultipleFileEditor ?: boolean,
+) =>
 {
 	const target : HTMLElement = targetElement ?? <HTMLElement>e.target;
 
@@ -2187,31 +2217,35 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 		document.removeEventListener("mouseup", ResetElement);
 	};
 
-	if (IsSet(element) && e.which !== 3) // Not on right click
+	if (IsSet(element) && e.which !== 3 && !ignoreMovement) // Not on right click
+	{
+		HideElement(element);
 
-		if (!ignoreMovement)
-		{
-			HideElement(element);
+		document.body.appendChild(element);
 
-			document.body.appendChild(element);
+		document.removeEventListener("mousemove", MoveElement);
+		document.removeEventListener("mouseup", ResetElement);
 
-			document.removeEventListener("mousemove", MoveElement);
-			document.removeEventListener("mouseup", ResetElement);
-
-			document.addEventListener("mousemove", MoveElement);
-			document.addEventListener("mouseup", ResetElement);
-		}
+		document.addEventListener("mousemove", MoveElement);
+		document.addEventListener("mouseup", ResetElement);
+	}
 };
 
-const isUserContentElement = (element : HTMLElement) : boolean => IsSet(GetUserContentElement(element));
+const isUserContentElement = (element : HTMLElement) : boolean =>
+	IsSet(GetUserContentElement(element));
 
 const getUserContentURL = (element : HTMLElement, isShared : boolean) : string =>
 	`${location.origin}/${element.classList[0]}/${isShared ? "shared/" : ""}${element.id}${isShared ? `/${Auth.UserId}` : ""}`;
 
-const CreateUserContent = (type : string, name : string, id : string, shared : boolean, starred : boolean, trashed : boolean) : HTMLElement =>
+const CreateUserContent = (
+	type : "file" | "folder",
+	name : string,
+	id : string,
+	shared : boolean,
+	starred : boolean,
+	trashed : boolean,
+) : HTMLElement =>
 {
-	if (type !== "file" && type !== "folder") return;
-
 	const language = Linguist.Get(<string>Linguist.Detect(name, type === "file"));
 
 	const { element } = new Component("div", {
@@ -2296,7 +2330,12 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 	});
 };
 
-const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: boolean, isMultipleFileEditor ?: boolean) : void =>
+const ShowFile = (
+	id : string,
+	skipFileLoading ?: boolean,
+	forceDownload ?: boolean,
+	isMultipleFileEditor ?: boolean,
+) : void =>
 {
 	AddClass(document.documentElement, "wait");
 	AddClass(document.documentElement, "file-open");
@@ -2443,8 +2482,11 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 		});
 
 		// If the user enabled the Data Saving option do not allow downloading files bigger than 1MB
-		// If the size of the file to be downloaded is bigger than what the user can download in one second
-		if (((<any>navigator).connection?.saveData && size > 1 * 1000 * 1000 || size > ((<any>navigator).connection?.downlink / 8) * 1000 * 1000) && !forceDownload)
+		// If the size of the file to be downloaded is bigger than what the user can download in 1s
+		if ((
+			((<any>navigator).connection?.saveData && size > 1 * 1000 * 1000)
+			|| size > ((<any>navigator).connection?.downlink / 8) * 1000 * 1000
+		) && !forceDownload)
 		{
 			ShowForceDownloadButton(id);
 
@@ -2462,7 +2504,7 @@ const ShowFile = (id : string, skipFileLoading ?: boolean, forceDownload ?: bool
 
 				const chunks : Uint8Array[] = [];
 
-				const downloadSize = parseInt(response.headers.get("Content-Length"));
+				const downloadSize = parseInt(response.headers.get("Content-Length"), 10);
 				let downloadedBytes = 0;
 
 				let value = "";
