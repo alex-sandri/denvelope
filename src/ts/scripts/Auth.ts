@@ -42,7 +42,21 @@ export default class Auth
 			case (<any>window).firebase.auth.GoogleAuthProvider.PROVIDER_ID:
 				provider = new (<any>window).firebase.auth.GoogleAuthProvider();
 				break;
-			// TODO: Add other providers
+			case (<any>window).firebase.auth.FacebookAuthProvider.PROVIDER_ID:
+				provider = new (<any>window).firebase.auth.FacebookAuthProvider();
+				break;
+			case (<any>window).firebase.auth.TwitterAuthProvider.PROVIDER_ID:
+				provider = new (<any>window).firebase.auth.TwitterAuthProvider();
+				break;
+			case (<any>window).firebase.auth.GithubAuthProvider.PROVIDER_ID:
+				provider = new (<any>window).firebase.auth.GithubAuthProvider();
+				break;
+			case "yahoo.com":
+				provider = new (<any>window).firebase.auth.OAuthProvider("yahoo.com");
+				break;
+			case "microsoft.com":
+				provider = new (<any>window).firebase.auth.OAuthProvider("microsoft.com");
+				break;
 		}
 
 		Auth.auth.signInWithPopup(provider)
