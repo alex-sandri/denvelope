@@ -82,7 +82,10 @@ export default class Auth
 		Auth.auth.onAuthStateChanged(user => Auth.AuthStateChanged(user));
 	}
 
-	public static RefreshToken = async () : Promise<void> => { await Auth.auth.currentUser.getIdToken(true); }
+	public static RefreshToken = async () : Promise<void> =>
+	{
+		await Auth.auth.currentUser.getIdToken(true);
+	}
 
 	public static get CurrentUser() : firebaseUser { return Auth.auth.currentUser; }
 

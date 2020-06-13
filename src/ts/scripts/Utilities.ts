@@ -135,7 +135,7 @@ export const GetFirestoreServerTimestamp = (): firebaseFirestore.FieldValue =>
 export const GetFirestoreUpdateTimestamp = (): Object =>
 	({
 		updated: GetFirestoreServerTimestamp(),
-		lastClientUpdateTime: <firebaseFirestore.Timestamp>new firebase.firestore.Timestamp.now(),
+		lastClientUpdateTime: new firebase.firestore.Timestamp.now() as firebaseFirestore.Timestamp,
 	});
 
 export const EscapeHtml = (string: string): string =>
