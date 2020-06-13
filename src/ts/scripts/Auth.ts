@@ -88,7 +88,7 @@ export default class Auth
 
 	public static get UserId() : string { return Auth.sharedContentUserId || Auth.CurrentUser.uid; }
 
-	private static AuthStateChanged = async (user : any) : Promise<void> =>
+	private static AuthStateChanged = async (user : firebaseUser) : Promise<void> =>
 	{
 		document.querySelector(".waiting-user")?.remove();
 
