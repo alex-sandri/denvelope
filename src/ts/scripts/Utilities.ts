@@ -1,3 +1,5 @@
+declare const firebase: any;
+
 export const ShowElement = (element: HTMLElement, displayType?: string): void => { element.style.display = displayType ?? "block"; };
 
 export const ShowElements = (elements: Array<HTMLElement>, displayType?: string): void =>
@@ -126,12 +128,12 @@ export const GetCurrentFolderIdAsync = async (allowFakeFolderIds?: boolean): Pro
 export const SetCurrentFolderId = (id: string): void => { (<HTMLInputElement>document.querySelector("input[name=folder-id]")).value = id; };
 
 export const GetFirestoreServerTimestamp = (): any =>
-	(<any>window).firebase.firestore.FieldValue.serverTimestamp();
+	firebase.firestore.FieldValue.serverTimestamp();
 
 export const GetFirestoreUpdateTimestamp = (): Object =>
 	({
 		updated: GetFirestoreServerTimestamp(),
-		lastClientUpdateTime: new (<any>window).firebase.firestore.Timestamp.now(),
+		lastClientUpdateTime: new firebase.firestore.Timestamp.now(),
 	});
 
 export const EscapeHtml = (string: string): string =>
@@ -149,7 +151,7 @@ export const UnescapeHtml = (string: string): string =>
 export const CamelCaseToKebabCase = (string: string) => string.replace(/([a-zA-Z])(?=[A-Z])/g, "$1-").toLowerCase();
 
 export const LogPageViewEvent = () =>
-	(<any>window).firebase.analytics().logEvent("page_view", {
+	firebase.analytics().logEvent("page_view", {
 		page_location: location.href,
 		page_path: location.pathname,
 		page_title: document.title,

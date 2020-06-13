@@ -2,9 +2,11 @@ import { ShowElements, HideElements } from "../scripts/Utilities";
 import * as genericMessage from "../scripts/generic-message";
 import Translation from "../scripts/Translation";
 
+declare const firebase: any;
+
 export default class ServiceWorkerController
 {
-	private static readonly analytics : any = (<any>window).firebase.analytics();
+	private static readonly analytics : any = firebase.analytics();
 
 	public static Register = () : void =>
 	{
@@ -92,7 +94,7 @@ export default class ServiceWorkerController
 
 			ServiceWorkerController.analytics.logEvent("update");
 
-			(<any>window).firebase.firestore().terminate();
+			firebase.firestore().terminate();
 
 			sw.postMessage({ action: "skipWaiting" });
 		});

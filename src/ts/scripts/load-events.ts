@@ -14,10 +14,12 @@ import Translation from "./Translation";
 import { Modal } from "./Modal";
 import Shortcuts from "./Shortcuts";
 
+declare const firebase: any;
+
 export default () : void =>
 {
-	const db = (<any>window).firebase.firestore();
-	const analytics = (<any>window).firebase.analytics();
+	const db = firebase.firestore();
+	const analytics = firebase.analytics();
 
 	const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
 

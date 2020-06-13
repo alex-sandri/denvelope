@@ -34,10 +34,13 @@ import Shortcuts from "./scripts/Shortcuts";
 
 Init();
 
-const db = (<any>window).firebase.firestore();
-const storage = (<any>window).firebase.storage();
-const functions = (<any>window).firebase.app().functions("europe-west1");
-const analytics = (<any>window).firebase.analytics();
+declare const firebase: any;
+declare const monaco: any;
+
+const db = firebase.firestore();
+const storage = firebase.storage();
+const functions = firebase.app().functions("europe-west1");
+const analytics = firebase.analytics();
 
 const addContentOptions : HTMLDivElement = document.querySelector(".add-content-options");
 
@@ -1491,7 +1494,7 @@ const UploadFile = async (
 
 	const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
 
-	if (IsSet(fileId) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${fileId}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), name, size, fileId)
+	if (IsSet(fileId) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${fileId}`).putString(file, firebase.storage.StringFormat.RAW, metadata), name, size, fileId)
 		.then(() => resolveUpload())
 		.catch(error => rejectUpload(error));
 	else
@@ -1524,7 +1527,7 @@ const UploadFile = async (
 
 			if (typeof file !== "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).put(file, metadata), finalName, size, id)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
-			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, (<any>window).firebase.storage.StringFormat.RAW, metadata), finalName, size, id)
+			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, firebase.storage.StringFormat.RAW, metadata), finalName, size, id)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
 		});
 	}
@@ -2312,14 +2315,14 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
 	editorSavedValue = value;
 
-	if (!editor) editor = (<any>window).monaco.editor.create(editorElement, {
+	if (!editor) editor = monaco.editor.create(editorElement, {
 		model: null,
 		theme: "vs-dark",
 		automaticLayout: true,
 		readOnly: !Auth.IsSignedIn,
 	});
 
-	const model = (<any>window).monaco.editor.createModel(value, language);
+	const model = monaco.editor.createModel(value, language);
 
 	if (isActive) editor.setModel(model);
 

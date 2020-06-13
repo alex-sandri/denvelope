@@ -22,11 +22,14 @@ import { header } from "./scripts/header";
 
 Init();
 
-const db = (<any>window).firebase.firestore();
-const functions = (<any>window).firebase.app().functions("europe-west1");
-const analytics = (<any>window).firebase.analytics();
+declare const firebase: any;
+declare const Stripe: any;
 
-const stripe = (<any>window).Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
+const db = firebase.firestore();
+const functions = firebase.app().functions("europe-west1");
+const analytics = firebase.analytics();
+
+const stripe = Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
 const stripeElements = stripe.elements({
 	fonts: [ {
 		family: "Source Code Variable",

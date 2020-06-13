@@ -4,11 +4,14 @@ import {
 import { userEmail, userName, userPhoto } from "./header";
 import Translation from "./Translation";
 
+declare const firebase: any;
+declare const firebaseui: any;
+
 export default class Auth
 {
-	private static readonly auth = (<any>window).firebase.auth();
+	private static readonly auth = firebase.auth();
 
-	private static readonly analytics = (<any>window).firebase.analytics();
+	private static readonly analytics = firebase.analytics();
 
 	private static sharedContentUserId : string = null;
 
@@ -39,23 +42,23 @@ export default class Auth
 
 		switch (Auth.auth.currentUser.providerData[0].providerId)
 		{
-			case (<any>window).firebase.auth.GoogleAuthProvider.PROVIDER_ID:
-				provider = new (<any>window).firebase.auth.GoogleAuthProvider();
+			case firebase.auth.GoogleAuthProvider.PROVIDER_ID:
+				provider = new firebase.auth.GoogleAuthProvider();
 				break;
-			case (<any>window).firebase.auth.FacebookAuthProvider.PROVIDER_ID:
-				provider = new (<any>window).firebase.auth.FacebookAuthProvider();
+			case firebase.auth.FacebookAuthProvider.PROVIDER_ID:
+				provider = new firebase.auth.FacebookAuthProvider();
 				break;
-			case (<any>window).firebase.auth.TwitterAuthProvider.PROVIDER_ID:
-				provider = new (<any>window).firebase.auth.TwitterAuthProvider();
+			case firebase.auth.TwitterAuthProvider.PROVIDER_ID:
+				provider = new firebase.auth.TwitterAuthProvider();
 				break;
-			case (<any>window).firebase.auth.GithubAuthProvider.PROVIDER_ID:
-				provider = new (<any>window).firebase.auth.GithubAuthProvider();
+			case firebase.auth.GithubAuthProvider.PROVIDER_ID:
+				provider = new firebase.auth.GithubAuthProvider();
 				break;
 			case "yahoo.com":
-				provider = new (<any>window).firebase.auth.OAuthProvider("yahoo.com");
+				provider = new firebase.auth.OAuthProvider("yahoo.com");
 				break;
 			case "microsoft.com":
-				provider = new (<any>window).firebase.auth.OAuthProvider("microsoft.com");
+				provider = new firebase.auth.OAuthProvider("microsoft.com");
 				break;
 		}
 
@@ -157,23 +160,23 @@ export default class Auth
 				},
 				signInOptions: [
 					{
-						provider: (<any>window).firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+						provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
 						authMethod: "https://accounts.google.com",
 						clientId: "1023448327269-h54u9u95f2cqs7m1bceqh9h0p1dskcmk.apps.googleusercontent.com",
 					},
-					(<any>window).firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-					(<any>window).firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-					(<any>window).firebase.auth.GithubAuthProvider.PROVIDER_ID,
+					firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+					firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+					firebase.auth.GithubAuthProvider.PROVIDER_ID,
 					"yahoo.com",
 					"microsoft.com",
 					// "apple.com",
 				],
-				credentialHelper: (<any>window).firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+				credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
 				tosUrl: "terms",
 				privacyPolicyUrl: () => window.location.assign("privacy"),
 			};
 
-			const ui = new (<any>window).firebaseui.auth.AuthUI(Auth.auth);
+			const ui = new firebaseui.auth.AuthUI(Auth.auth);
 
 			ui.disableAutoSignIn();
 
