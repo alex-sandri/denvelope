@@ -1,3 +1,5 @@
+import type { analytics as firebaseAnalytics, firestore as firebaseFirestore } from "firebase";
+
 import {
 	LogPageViewEvent,
 	ShowElement,
@@ -18,8 +20,8 @@ declare const firebase: any;
 
 export default () : void =>
 {
-	const db = firebase.firestore();
-	const analytics = firebase.analytics();
+	const db: firebaseFirestore.Firestore = firebase.firestore();
+	const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 	const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
 
@@ -122,7 +124,7 @@ export default () : void =>
 	{
 		if (Auth.IsAuthenticated)
 		{
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot(preferences =>
 			{
 				if (location.pathname.startsWith("/account") || location.pathname.startsWith("/settings"))
 				{
@@ -141,7 +143,7 @@ export default () : void =>
 				analytics.setAnalyticsCollectionEnabled(trackingEnabled);
 			});
 
-			db.collection("users").doc(Auth.UserId).onSnapshot((doc : any) =>
+			db.collection("users").doc(Auth.UserId).onSnapshot(doc =>
 			{
 				// It could not exist if the user just signed up
 				if (!doc.exists) return;
