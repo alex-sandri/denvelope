@@ -65,7 +65,7 @@ window.addEventListener("translationlanguagechange", () =>
 	});
 });
 
-paymentRequest.on("paymentmethod", async (e : any) =>
+paymentRequest.on("paymentmethod", async e =>
 {
 	const paymentMethod = e.paymentMethod.id;
 
@@ -390,7 +390,7 @@ window.addEventListener("userready", () =>
 			loading: false,
 		});
 
-		let cardElement : any;
+		let cardElement: stripe.elements.Element;
 
 		const showCreditCardInput : boolean = !userAlreadyHasCardInformation
 			|| button === addPaymentMethod;
@@ -433,7 +433,7 @@ window.addEventListener("userready", () =>
 				hidePostalCode: false,
 			});
 
-			cardElement.on("change", (e : any) =>
+			cardElement.on("change", e =>
 			{
 				modal.ConfirmButton.disabled = !e.complete;
 
@@ -451,7 +451,7 @@ window.addEventListener("userready", () =>
 
 		modal.OnConfirm = async () =>
 		{
-			let result : any;
+			let result : stripe.PaymentMethodResponse;
 
 			modal.HideAndRemove();
 
@@ -593,7 +593,7 @@ window.addEventListener("userready", () =>
 
 			modal.Hide();
 
-			functions.httpsCallable("changeVaultPin")({ currentPin, newPin }).then((result : any) =>
+			functions.httpsCallable("changeVaultPin")({ currentPin, newPin }).then(result =>
 			{
 				if (result.data.success) modal.Remove();
 				else
@@ -648,7 +648,7 @@ window.addEventListener("userready", () =>
 
 			modal.Hide();
 
-			functions.httpsCallable("deleteVault")({ pin }).then((result : any) =>
+			functions.httpsCallable("deleteVault")({ pin }).then(result =>
 			{
 				if (result.data.success) modal.Remove();
 				else
@@ -706,7 +706,7 @@ window.addEventListener("userready", () =>
 
 			modal.Hide();
 
-			functions.httpsCallable("generateVaultRecoveryCode")({ pin }).then((result : any) =>
+			functions.httpsCallable("generateVaultRecoveryCode")({ pin }).then(result =>
 			{
 				if (result.data.success)
 				{
@@ -816,7 +816,7 @@ window.addEventListener("userready", () =>
 		modal.Show(true);
 	}));
 
-	db.collection("users").doc(Auth.UserId).onSnapshot((user : any) =>
+	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
@@ -962,7 +962,7 @@ window.addEventListener("userready", () =>
 		}
 	});
 
-	db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot((preferences : any) =>
+	db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot(preferences =>
 	{
 		if (!preferences.data()) return;
 
@@ -985,7 +985,7 @@ window.addEventListener("userready", () =>
 		disableTracking.disabled = !enableTracking.disabled;
 	});
 
-	db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
+	db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot(snapshot =>
 	{
 		changeVaultPin.disabled
 			= deleteVault.disabled
