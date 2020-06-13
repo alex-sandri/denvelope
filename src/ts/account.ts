@@ -1,3 +1,5 @@
+import type { editor as monacoEditor } from "monaco-editor";
+
 import Init from "./scripts/load-events";
 import * as genericMessage from "./scripts/generic-message";
 import {
@@ -85,7 +87,7 @@ const editorMenuSelector : string = ".show-file .tabs .tab .menu";
 const editorTabs : HTMLElement = showFile.querySelector(".tabs");
 const editorElement : HTMLDivElement = document.querySelector("#editor");
 
-let editor : any;
+let editor : monacoEditor.IStandaloneCodeEditor;
 let editorSavedValue : string;
 const editorModels : Map<string, any> = new Map<string, any>();
 

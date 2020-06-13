@@ -46,5 +46,7 @@ module.exports = {
     "no-restricted-syntax": [ "off" ],
     "no-loop-func": [ "off" ],
     "linebreak-style": [ "off" ],
+    "no-unused-vars": [ "off" ],
+    "@typescript-eslint/no-unused-vars": [ "error" ],
   },
 };

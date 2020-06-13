@@ -36,7 +36,9 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
-  "dependencies": {},
+  "dependencies": {
+    "monaco-editor": "^0.20.0"
+  },
   "jest": {
     "testEnvironment": "jest-environment-uint8array",
     "testRegex": "test/.*\\.test\\.js$"
