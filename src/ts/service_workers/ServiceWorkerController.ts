@@ -1,3 +1,5 @@
+import type { analytics as firebaseAnalytics, firestore as firebaseFirestore } from "firebase";
+
 import { ShowElements, HideElements } from "../scripts/Utilities";
 import * as genericMessage from "../scripts/generic-message";
 import Translation from "../scripts/Translation";
@@ -6,7 +8,7 @@ declare const firebase: any;
 
 export default class ServiceWorkerController
 {
-	private static readonly analytics : any = firebase.analytics();
+	private static readonly analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 	public static Register = () : void =>
 	{
@@ -94,7 +96,7 @@ export default class ServiceWorkerController
 
 			ServiceWorkerController.analytics.logEvent("update");
 
-			firebase.firestore().terminate();
+			(<firebaseFirestore.Firestore>firebase.firestore()).terminate();
 
 			sw.postMessage({ action: "skipWaiting" });
 		});
