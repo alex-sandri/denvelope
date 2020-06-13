@@ -1,4 +1,10 @@
 import type { editor as monacoEditor } from "monaco-editor";
+import type {
+	analytics as firebaseAnalytics,
+	firestore as firebaseFirestore,
+	functions as firebaseFunctions,
+	storage as firebaseStorage,
+} from "firebase";
 
 import Init from "./scripts/load-events";
 import * as genericMessage from "./scripts/generic-message";
@@ -39,10 +45,10 @@ Init();
 declare const firebase: any;
 declare const monaco: any;
 
-const db = firebase.firestore();
-const storage = firebase.storage();
-const functions = firebase.app().functions("europe-west1");
-const analytics = firebase.analytics();
+const db: firebaseFirestore.Firestore = firebase.firestore();
+const storage: firebaseStorage.Storage = firebase.storage();
+const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
+const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 const addContentOptions : HTMLDivElement = document.querySelector(".add-content-options");
 
@@ -423,13 +429,13 @@ window.addEventListener("userready", async () =>
 			contextMenuMoveSelectorOptions.innerHTML = "";
 
 			db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get()
-				.then((docs : any) =>
+				.then(docs =>
 				{
 					HideElement(contextMenuMoveSelector.querySelector(".spinner"));
 
 					contextMenuMoveSelectorOptions.innerHTML = "";
 
-					docs.forEach((doc : any) =>
+					docs.forEach(doc =>
 					{
 						if (tempArray.filter(element => element.id === doc.id).length === 0)
 						{
@@ -578,7 +584,7 @@ window.addEventListener("userready", async () =>
 
 		modal.Show(true);
 
-		analytics.logEvent("view_item", {
+		analytics.logEvent(<never>"view_item", {
 			items: [
 				{
 					content_type: type,
@@ -587,7 +593,7 @@ window.addEventListener("userready", async () =>
 			],
 		});
 
-		const unsubscribe = db.collection(`users/${Auth.UserId}/${type}s`).doc(id).onSnapshot(async (doc : any) =>
+		const unsubscribe = db.collection(`users/${Auth.UserId}/${type}s`).doc(id).onSnapshot(async doc =>
 		{
 			if (!doc.exists || doc.data().trashed)
 			{
@@ -1069,7 +1075,7 @@ window.addEventListener("userready", async () =>
 			return;
 		}
 
-		db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get().then((doc : any) =>
+		db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get().then(doc =>
 		{
 			const { parentId } = doc.data();
 
@@ -1237,7 +1243,7 @@ window.addEventListener("userready", async () =>
 	{
 		if (vault.querySelector(".menu-button button").contains(<HTMLElement>e.target)) return;
 
-		db.collection(`users/${Auth.UserId}/vault`).doc("status").get().then((snapshot : any) =>
+		db.collection(`users/${Auth.UserId}/vault`).doc("status").get().then(snapshot =>
 		{
 			const LoadVault = () =>
 			{
@@ -1289,7 +1295,7 @@ window.addEventListener("userready", async () =>
 
 				modal.Hide();
 
-				functions.httpsCallable(snapshot.exists ? "unlockVault" : "createVault")({ pin }).then((result : any) =>
+				functions.httpsCallable(snapshot.exists ? "unlockVault" : "createVault")({ pin }).then(result =>
 				{
 					if (result.data.success)
 					{
@@ -1339,7 +1345,7 @@ window.addEventListener("userready", async () =>
 
 		ShowFile(id);
 
-		await db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
+		await db.collection(`users/${Auth.UserId}/files`).doc(id).get().then(doc =>
 		{
 			SetCurrentFolderId(doc.data().parentId);
 
@@ -1353,7 +1359,7 @@ window.addEventListener("userready", async () =>
 	else if (recentsOnly()) viewRecentContent.click();
 	else GetUserContent();
 
-	if (Auth.IsAuthenticated) db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot((snapshot : any) =>
+	if (Auth.IsAuthenticated) db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot(snapshot =>
 	{
 		if (snapshot.exists)
 		{
@@ -1518,7 +1524,7 @@ const UploadFile = async (
 			inVault,
 			created: GetFirestoreServerTimestamp(),
 			...GetFirestoreUpdateTimestamp(),
-		}).then((ref : any) =>
+		}).then(ref =>
 		{
 			const { id } = ref;
 
@@ -1536,7 +1542,7 @@ const UploadFile = async (
 });
 
 const ShowFileUploadModal = async (
-	uploadTask : any,
+	uploadTask : firebaseStorage.UploadTask,
 	name : string,
 	size : number,
 	id : string,
@@ -1552,13 +1558,13 @@ const ShowFileUploadModal = async (
 		modal.OnResume = () => uploadTask.resume();
 		modal.OnCancel = () => uploadTask.cancel();
 
-		uploadTask.on("state_changed", (snapshot : any) =>
+		uploadTask.on("state_changed", snapshot =>
 		{
 			const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
 			modal.ProgressBar.style.width = `${progress}%`;
 			modal.TransferSize.innerText = FormatStorage(snapshot.bytesTransferred);
-		}, (error : any) =>
+		}, error =>
 		{
 			// Upload Error
 			modal.Remove();
@@ -1610,7 +1616,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 			folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
 			folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
 
-			await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then((doc : any) =>
+			await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then(doc =>
 			{
 				const data = doc.data();
 
@@ -1795,7 +1801,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	let foldersUpdateCount = 0;
 
-	if (includeFolders) unsubscribeFoldersListener = foldersRef.onSnapshot((snapshot : any) =>
+	if (includeFolders) unsubscribeFoldersListener = foldersRef.onSnapshot(snapshot =>
 	{
 		HideElement(userContentLoadingSpinner);
 
@@ -1805,14 +1811,14 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		elements.forEach(element => AddClass(element, "old"));
 
 		snapshot.docs
-			.sort((a : any, b : any) =>
+			.sort((a, b) =>
 			{
 				/* Do not sort on the client if orderBy is set */
 				if (orderBy) return 0;
 
 				return collator.compare(a.data().name, b.data().name);
 			})
-			.forEach((doc : any) =>
+			.forEach(doc =>
 				CreateUserContent(
 					"folder",
 					doc.data().name,
@@ -1831,7 +1837,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	let filesUpdateCount = 0;
 
-	unsubscribeFilesListener = filesRef.onSnapshot((snapshot : any) =>
+	unsubscribeFilesListener = filesRef.onSnapshot(snapshot =>
 	{
 		HideElement(userContentLoadingSpinner);
 
@@ -1840,8 +1846,8 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		elements.forEach(element => AddClass(element, "old"));
 
 		snapshot.docs
-			.sort((a : any, b : any) => (!orderBy ? collator.compare(a.data().name, b.data().name) : 0))
-			.forEach((doc : any) =>
+			.sort((a, b) => (!orderBy ? collator.compare(a.data().name, b.data().name) : 0))
+			.forEach(doc =>
 				CreateUserContent(
 					"file",
 					doc.data().name,
@@ -2380,7 +2386,7 @@ const ShowFile = (
 		RemoveClass(document.documentElement, "file-loading");
 	};
 
-	db.collection(`users/${Auth.UserId}/files`).doc(id).get().then((doc : any) =>
+	db.collection(`users/${Auth.UserId}/files`).doc(id).get().then(doc =>
 	{
 		const { name } = doc.data();
 		const language = <string>Linguist.Detect(name, true);
@@ -2480,7 +2486,7 @@ const ShowFile = (
 
 		const fileRef = storage.ref(`${Auth.UserId}/${id}`);
 
-		fileRef.getMetadata().then((metadata : any) =>
+		fileRef.getMetadata().then(metadata =>
 		{
 			const { contentType } = metadata;
 
@@ -2551,7 +2557,7 @@ const ShowFile = (
 				// so they need to be put here and not in getMetadata()
 				if (name.endsWith(".xml")) ShowElement(contextMenuValidateXml);
 				else if (name.endsWith(".json")) ShowElement(contextMenuValidateJson);
-			})).catch((err : any) => err);
+			})).catch(err => err);
 	});
 };
 
@@ -2587,7 +2593,7 @@ const UploadFolder = async (
 		inVault: await vaultOnly(),
 		created: GetFirestoreServerTimestamp(),
 		...GetFirestoreUpdateTimestamp(),
-	}).then((ref : any) =>
+	}).then(ref =>
 	{
 		const { id } = ref;
 
@@ -2710,7 +2716,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 			id,
 			userId: Auth.UserId,
 			finalFolderFormat,
-		}).then((result : any) => { timestamp = result.data.timestamp; })
+		}).then(result => { timestamp = result.data.timestamp; })
 			.finally(() => modalCompressingFolder.HideAndRemove());
 
 		finalContentName += `.${finalFolderFormat}`;
@@ -2807,7 +2813,7 @@ const CheckElementNameValidity = async (
 
 	// Same name, different extension
 	if (tempSnapshot.size > 0
-		&& tempSnapshot.docs.filter((doc : any) => doc.data().name === name).length > 0)
+		&& tempSnapshot.docs.filter(doc => doc.data().name === name).length > 0)
 	{
 		let i = 1;
 		let tempName : string;
@@ -2817,7 +2823,7 @@ const CheckElementNameValidity = async (
 			name.indexOf(".") > -1 ? "." : ""
 		}${name.indexOf(".") > -1 ? name.split(".").pop() : ""}`).trim();
 		else tempName = `${name} (${i++})`;
-		while (tempSnapshot.docs.filter((doc : any) => doc.data().name === tempName).length > 0);
+		while (tempSnapshot.docs.filter(doc => doc.data().name === tempName).length > 0);
 
 		finalName = tempName;
 	}

@@ -1,3 +1,8 @@
+import type {
+	analytics as firebaseAnalytics,
+	auth as firebaseAuth,
+} from "firebase";
+
 import {
 	ClearCache, RemoveClass, AddClass, DispatchEvent, IsSet,
 } from "./Utilities";
@@ -9,9 +14,9 @@ declare const firebaseui: any;
 
 export default class Auth
 {
-	private static readonly auth = firebase.auth();
+	private static readonly auth: firebaseAuth.Auth = firebase.auth();
 
-	private static readonly analytics = firebase.analytics();
+	private static readonly analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 	private static sharedContentUserId : string = null;
 
@@ -69,14 +74,14 @@ export default class Auth
 
 	public static Init = () : void =>
 	{
-		Auth.auth.app.options.authDomain = "denvelope.com";
+		(<any>Auth.auth.app.options).authDomain = "denvelope.com";
 
 		Auth.auth.useDeviceLanguage();
 
 		Auth.auth.onAuthStateChanged((user : any) => Auth.AuthStateChanged(user));
 	}
 
-	public static RefreshToken = () : void => Auth.auth.currentUser.getIdToken(true);
+	public static RefreshToken = async () : Promise<void> => { await Auth.auth.currentUser.getIdToken(true); }
 
 	public static get CurrentUser() : any { return Auth.auth.currentUser; }
 
@@ -151,7 +156,7 @@ export default class Auth
 					{
 						Auth.analytics.setUserId(authResult.user.uid);
 
-						Auth.analytics.logEvent(authResult.additionalUserInfo.isNewUser ? "sign_up" : "login", {
+						Auth.analytics.logEvent(<never>(authResult.additionalUserInfo.isNewUser ? "sign_up" : "login"), {
 							method: authResult.additionalUserInfo.providerId,
 						});
 

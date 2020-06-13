@@ -1,3 +1,9 @@
+import type {
+	analytics as firebaseAnalytics,
+	firestore as firebaseFirestore,
+	functions as firebaseFunctions,
+} from "firebase";
+
 import Init from "./scripts/load-events";
 
 import {
@@ -25,9 +31,9 @@ Init();
 declare const firebase: any;
 declare const Stripe: stripe.StripeStatic;
 
-const db = firebase.firestore();
-const functions = firebase.app().functions("europe-west1");
-const analytics = firebase.analytics();
+const db: firebaseFirestore.Firestore = firebase.firestore();
+const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
+const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 const stripe = Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
 const stripeElements = stripe.elements({

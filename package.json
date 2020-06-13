@@ -37,6 +37,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "firebase": "^7.15.1",
     "monaco-editor": "^0.20.0"
   },
   "jest": {
