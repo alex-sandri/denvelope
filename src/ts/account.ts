@@ -2515,12 +2515,7 @@ const ShowFile = (
 		fileRef.getDownloadURL().then((url : string) =>
 			fetch(url).then(async response =>
 			{
-				const reader = response.body.getReader();
-
-				const chunks : Uint8Array[] = [];
-
 				const downloadSize = parseInt(response.headers.get("Content-Length"), 10);
-				let downloadedBytes = 0;
 
 				let value = "";
 
@@ -2528,27 +2523,9 @@ const ShowFile = (
 				{
 					const modal = new DownloadModal(name, downloadSize);
 
-					while (true)
-					{
-						const { done, value } = await reader.read();
-
-						if (done) break;
-
-						downloadedBytes += value.length;
-
-						chunks.push(value);
-
-						const progress = (downloadedBytes / downloadSize) * 100;
-
-						modal.ProgressBar.style.width = `${progress}%`;
-						modal.TransferSize.innerText = FormatStorage(downloadedBytes);
-					}
-
-					modal.Remove();
-
-					value = new TextDecoder().decode(Uint8Array
-						.from(chunks.reduce((previousValue, currentValue) =>
-							[ ...previousValue, ...currentValue ], [])));
+					value = new TextDecoder().decode(
+						await DownloadFromReadableStream(response.body, modal, downloadSize),
+					);
 				}
 
 				CreateEditor(id, value, language, forceDownload || editorTabs.querySelector(".active").id.split("-")[1] === id);
@@ -2559,6 +2536,41 @@ const ShowFile = (
 				else if (name.endsWith(".json")) ShowElement(contextMenuValidateJson);
 			})).catch(err => err);
 	});
+};
+
+const DownloadFromReadableStream = async (
+	stream: ReadableStream,
+	modal: DownloadModal,
+	size: number,
+): Promise<Uint8Array> =>
+{
+	const reader = stream.getReader();
+
+	const chunks : Uint8Array[] = [];
+
+	let downloadedBytes: number = 0;
+
+	while (true)
+	{
+		const { done, value } = await reader.read();
+
+		if (done) break;
+
+		downloadedBytes += value.length;
+
+		chunks.push(value);
+
+		const progress = (downloadedBytes / size) * 100;
+
+		modal.ProgressBar.style.width = `${progress}%`;
+		modal.TransferSize.innerText = FormatStorage(downloadedBytes);
+	}
+
+	modal.Remove();
+
+	return Uint8Array
+		.from(chunks.reduce((previousValue, currentValue) =>
+			[ ...previousValue, ...currentValue ], []));
 };
 
 const GetFolderUrl = (id : string, isShared : boolean) : string =>
@@ -2727,36 +2739,13 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 	fileRef.getDownloadURL().then((url : string) =>
 		fetch(url).then(async response =>
 		{
-			const reader = response.body.getReader();
-
-			const chunks : Uint8Array[] = [];
-
 			const downloadSize = parseInt(response.headers.get("Content-Length"), 10);
-			let downloadedBytes = 0;
 
 			const modal = new DownloadModal(finalContentName, downloadSize);
 
 			preventWindowUnload.fileDownload = true;
 
-			while (true)
-			{
-				const { done, value } = await reader.read();
-
-				if (done) break;
-
-				downloadedBytes += value.length;
-
-				chunks.push(value);
-
-				const progress = (downloadedBytes / downloadSize) * 100;
-
-				modal.ProgressBar.style.width = `${progress}%`;
-				modal.TransferSize.innerText = FormatStorage(downloadedBytes);
-			}
-
-			modal.Remove();
-
-			return new Blob(chunks);
+			return new Blob([ await DownloadFromReadableStream(response.body, modal, downloadSize) ]);
 		}).then(blob =>
 		{
 			const blobUrl = URL.createObjectURL(blob);
