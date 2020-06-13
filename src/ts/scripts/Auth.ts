@@ -1,6 +1,7 @@
 import type {
 	analytics as firebaseAnalytics,
 	auth as firebaseAuth,
+	User as firebaseUser,
 } from "firebase";
 
 import {
@@ -68,7 +69,7 @@ export default class Auth
 		}
 
 		Auth.auth.signInWithPopup(provider)
-			.then((result : any) => Auth.auth.currentUser.reauthenticateWithCredential(result.credential)
+			.then(result => Auth.auth.currentUser.reauthenticateWithCredential(result.credential)
 				.then(() => Auth.auth.currentUser.delete()));
 	}
 
@@ -78,12 +79,12 @@ export default class Auth
 
 		Auth.auth.useDeviceLanguage();
 
-		Auth.auth.onAuthStateChanged((user : any) => Auth.AuthStateChanged(user));
+		Auth.auth.onAuthStateChanged(user => Auth.AuthStateChanged(user));
 	}
 
 	public static RefreshToken = async () : Promise<void> => { await Auth.auth.currentUser.getIdToken(true); }
 
-	public static get CurrentUser() : any { return Auth.auth.currentUser; }
+	public static get CurrentUser() : firebaseUser { return Auth.auth.currentUser; }
 
 	public static get UserId() : string { return Auth.sharedContentUserId || Auth.CurrentUser.uid; }
 
