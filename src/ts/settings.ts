@@ -23,7 +23,7 @@ import { header } from "./scripts/header";
 Init();
 
 declare const firebase: any;
-declare const Stripe: any;
+declare const Stripe: stripe.StripeStatic;
 
 const db = firebase.firestore();
 const functions = firebase.app().functions("europe-west1");
@@ -42,6 +42,21 @@ const paymentRequest = stripe.paymentRequest({
 	country: "IT",
 	currency: Translation.Get("settings->plan->currency").toLowerCase(),
 	total: { label: "Denvelope", amount: 0 },
+});
+
+window.addEventListener("translationlanguagechange", () =>
+{
+	const selectedPlanMaxStorage = plans.querySelector(".selected")?.getAttribute("data-max-storage");
+
+	if (!selectedPlanMaxStorage) return;
+
+	paymentRequest.update({
+		currency: Translation.Get("settings->plan->currency").toLowerCase(),
+		total: {
+			label: `Denvelope ${selectedPlanMaxStorage}`,
+			amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`), 10) * 100, // In cents
+		},
+	});
 });
 
 paymentRequest.on("paymentmethod", async (e : any) =>
@@ -96,7 +111,7 @@ const paymentRequestButton = stripeElements.create("paymentRequestButton", {
 	},
 });
 
-paymentRequestButton.on("click", (e : Event) =>
+paymentRequestButton.on("click", e =>
 {
 	if (changePlan.disabled) e.preventDefault();
 });
@@ -123,6 +138,7 @@ paymentRequestButton.on("click", (e : Event) =>
 			const selectedPlanMaxStorage = plan.getAttribute("data-max-storage");
 
 			paymentRequest.update({
+				currency: Translation.Get("settings->plan->currency").toLowerCase(),
 				total: {
 					label: `Denvelope ${selectedPlanMaxStorage}`,
 					amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`), 10) * 100, // In cents
