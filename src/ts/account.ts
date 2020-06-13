@@ -2738,7 +2738,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 		await functions.httpsCallable("createFolderArchive")({
 			id,
 			userId: Auth.UserId,
-			finalFolderFormat,
+			format: finalFolderFormat,
 		}).then(result => { timestamp = result.data.timestamp; })
 			.finally(() => modalCompressingFolder.HideAndRemove());
 
