@@ -2542,35 +2542,46 @@ const DownloadFromReadableStream = async (
 	stream: ReadableStream,
 	modal: DownloadModal,
 	size: number,
-): Promise<Uint8Array> =>
+): Promise<ArrayBuffer> =>
 {
 	const reader = stream.getReader();
 
-	const chunks : Uint8Array[] = [];
-
 	let downloadedBytes: number = 0;
 
-	while (true)
-	{
-		const { done, value } = await reader.read();
+	const downloadStream = new ReadableStream({
+		start(controller)
+		{
+			const push = () =>
+			{
+				reader.read().then(({ done, value }) =>
+				{
+					if (done)
+					{
+						controller.close();
 
-		if (done) break;
+						return;
+					}
 
-		downloadedBytes += value.length;
+					controller.enqueue(value);
 
-		chunks.push(value);
+					downloadedBytes += value.length;
 
-		const progress = (downloadedBytes / size) * 100;
+					const progress = (downloadedBytes / size) * 100;
 
-		modal.ProgressBar.style.width = `${progress}%`;
-		modal.TransferSize.innerText = FormatStorage(downloadedBytes);
-	}
+					modal.ProgressBar.style.width = `${progress}%`;
+					modal.TransferSize.innerText = FormatStorage(downloadedBytes);
+
+					push();
+				});
+			};
+
+			push();
+		},
+	});
 
 	modal.Remove();
 
-	return Uint8Array
-		.from(chunks.reduce((previousValue, currentValue) =>
-			[ ...previousValue, ...currentValue ], []));
+	return new Response(downloadStream).arrayBuffer();
 };
 
 const GetFolderUrl = (id : string, isShared : boolean) : string =>
