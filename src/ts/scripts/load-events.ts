@@ -31,7 +31,10 @@ export default () : void =>
 	// Enable caching firestore queries for offline support and enable synchronization between tabs
 	db.enablePersistence({ synchronizeTabs: true });
 
-	if (document.body.classList.contains("account") || document.body.classList.contains("settings")) document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
+	ServiceWorkerController.Register();
+
+	if (document.body.classList.contains("account") || document.body.classList.contains("settings"))
+		document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
 
 	// Used in plans page and in plan settings
 	const updatePlans = () =>
@@ -94,8 +97,6 @@ export default () : void =>
 
 	// This needs to wait for the translation to be completed
 	LogPageViewEvent();
-
-	ServiceWorkerController.Register();
 
 	const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
 
