@@ -32,7 +32,7 @@ const auth = admin.auth();
 const db = admin.firestore();
 const storage = admin.storage();
 
-const MB = 1000 ** 2
+const MB = 1000 ** 2;
 const GB = 1000 * MB;
 
 const FREE_STORAGE : number = 100 * MB; // 100MB
