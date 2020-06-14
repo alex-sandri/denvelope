@@ -182,6 +182,7 @@ export default {
 		disable: "Disable",
 		enable: "Enable",
 		billing_period: "Billing period",
+		coming_soon: "Coming soon",
 	},
 	header: {
 		storage: {
