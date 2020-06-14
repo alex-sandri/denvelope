@@ -181,6 +181,7 @@ export default {
 		plans: "Piani",
 		disable: "Disabilita",
 		enable: "Abilita",
+		billing_period: "Periodo di fatturazione",
 	},
 	header: {
 		storage: {

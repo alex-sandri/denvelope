@@ -22,7 +22,7 @@
     <link rel="icon" type="image/png" sizes="194x194" href="favicon-194x194.png">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#160c28">
-    <link rel="stylesheet" href="assets/css/bundle.2d522359cc5dacac0fa95bc7d00f19dc.css">
+    <link rel="stylesheet" href="assets/css/bundle.1f0052417d35b77aa045bdc914770c24.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <script>window.trustedTypes?.createPolicy("default", { createHTML: string => string, createScriptURL: string => string });</script>
     <script src="https://js.stripe.com/v3/"></script>    <title data-only-translation="generic->plans"></title>
@@ -104,9 +104,12 @@
         </div>
     </div>    <main class="plans">
         <h1 data-translation="generic->plans"></h1>
-        <div class="billing-periods">
-            <button class="month selected" data-translation="generic->month"></button>
-            <button class="year" data-translation="generic->year"></button>
+        <div class="billing-period-choice">
+            <h2 data-translation="generic->billing_period"></h2>
+            <div class="billing-periods">
+                <button class="month selected" data-translation="generic->month"></button>
+                <button class="year" data-translation="generic->year"></button>
+            </div>
         </div>
         <div class="plans">
             <div class="plan" data-max-storage="100MB" tabindex="0">
@@ -161,6 +164,6 @@
         const trackingEnabled = !navigator.doNotTrack && !window.doNotTrack && (localStorage.getItem("tracking-enabled") ?? "true") === "true";
     
         analytics.setAnalyticsCollectionEnabled(trackingEnabled);
-    </script>    <script src="assets/js/home.fb238c235d26b8bc406a.js"></script>
+    </script>    <script src="assets/js/home.8b6cc568ff9336c922f4.js"></script>
 </body>
 </html>

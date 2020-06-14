@@ -527,31 +527,41 @@
     font-size: 50px;
 }
 
-.billing-periods
+.billing-period-choice
 {
-    @include flex;
-
-    button
+    h2
     {
-        width: 100%;
+        margin: 0;
+        margin-bottom: $standard-spacing;
+        font-weight: $regular;
+    }
 
-        &.selected
-        {
-            background-color: $secondary-color;
-            color: $primary-color;
-        }
+    .billing-periods
+    {
+        @include flex;
 
-        &:first-of-type
+        button
         {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
+            width: 100%;
 
-        &:last-of-type
-        {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            border-left: none;
+            &.selected
+            {
+                background-color: $secondary-color;
+                color: $primary-color;
+            }
+
+            &:first-of-type
+            {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            &:last-of-type
+            {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-left: none;
+            }
         }
     }
 }

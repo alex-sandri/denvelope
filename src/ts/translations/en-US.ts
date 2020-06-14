@@ -181,6 +181,7 @@ export default {
 		plans: "Plans",
 		disable: "Disable",
 		enable: "Enable",
+		billing_period: "Billing period",
 	},
 	header: {
 		storage: {
