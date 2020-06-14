@@ -248,7 +248,6 @@ export default {
 				title: "Metodi di pagamento",
 				set_as_default: "Imposta come predefinito",
 			},
-			add_payment_method: "Aggiungi metodo di pagamento",
 			next_renewal: "Prossimo rinnovo",
 			next_period_plan: "Il tuo piano dopo questo periodo",
 			subscription_end: "Fine sottoscrizione",

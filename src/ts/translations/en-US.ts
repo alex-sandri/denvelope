@@ -248,7 +248,6 @@ export default {
 				title: "Payment methods",
 				set_as_default: "Set as default",
 			},
-			add_payment_method: "Add payment method",
 			next_renewal: "Next renewal",
 			next_period_plan: "Your plan after this period",
 			subscription_end: "Subscription end",
