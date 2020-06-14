@@ -52,16 +52,15 @@ export default () : void =>
 
 	window.addEventListener("translationlanguagechange", updatePlans);
 
-	(<HTMLElement[]>Array.from(document.querySelector(".billing-periods").children))
-		.forEach(billingPeriod =>
-			billingPeriod.addEventListener("click", () =>
-			{
-				RemoveClass(billingPeriod.parentElement.querySelector(".selected"), "selected");
+	(<HTMLElement[]>Array.from(document.querySelector(".billing-periods")?.children ?? [])).forEach(billingPeriod =>
+		billingPeriod.addEventListener("click", () =>
+		{
+			RemoveClass(billingPeriod.parentElement.querySelector(".selected"), "selected");
 
-				AddClass(billingPeriod, "selected");
+			AddClass(billingPeriod, "selected");
 
-				updatePlans();
-			}));
+			updatePlans();
+		}));
 
 	Translation.Init();
 
