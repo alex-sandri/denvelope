@@ -770,3 +770,55 @@
     backdrop-filter: opacity(0.8);
     display: none;
 }
+
+main.terms,
+main.privacy,
+main.cookies,
+main.error,
+main.accessibility,
+main.plans
+{
+    margin: $standard-spacing;
+    margin-top: $header-height;
+    min-height: calc(100% - #{$standard-spacing});
+
+    h1
+    {
+        margin-top: 0;
+    }
+
+    a
+    {
+        color: $secondary-color;
+
+        &:hover
+        {
+            text-decoration: none;
+        }
+    }
+}
+
+main.error
+{
+    @include flex($flex-direction: column);
+
+    text-align: center;
+
+    h2
+    {
+        margin-top: 0;
+    }
+}
+
+main.accessibility
+{
+    li
+    {
+        font-weight: $light;
+
+        .shortcut
+        {
+            font-weight: $black;
+        }
+    }
+}
