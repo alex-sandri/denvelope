@@ -261,16 +261,19 @@ export default {
 				"100MB": {
 					price: {
 						month: "0",
+						year: "0",
 					},
 				},
 				"1GB": {
 					price: {
 						month: "2",
+						year: "20",
 					},
 				},
 				"10GB": {
 					price: {
 						month: "10",
+						year: "100",
 					},
 				},
 			},
