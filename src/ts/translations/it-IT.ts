@@ -174,6 +174,7 @@ export default {
 		yes: "Sì",
 		no: "No",
 		month: "Mese",
+		year: "Anno",
 		from: "Da",
 		to: "A",
 		add: "Aggiungi",

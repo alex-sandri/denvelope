@@ -174,6 +174,7 @@ export default {
 		yes: "Yes",
 		no: "No",
 		month: "Month",
+		year: "Year",
 		from: "From",
 		to: "To",
 		add: "Add",
