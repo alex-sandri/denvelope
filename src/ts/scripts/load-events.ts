@@ -8,6 +8,7 @@ import {
 	RemoveClass,
 	FormatStorage,
 	IsFreePlan,
+	AddClass,
 } from "./Utilities";
 import Auth from "./Auth";
 import { signOutButton, whatIsTakingUpSpace, upgradePlan } from "./header";
@@ -32,19 +33,34 @@ export default () : void =>
 
 	if (document.body.classList.contains("account") || document.body.classList.contains("settings")) document.body.style.backgroundImage = `url(${localStorage.getItem("background-image-url") ?? ""})`;
 
-	window.addEventListener("translationlanguagechange", () =>
 	// Used in plans page and in plan settings
+	const updatePlans = () =>
 		document
 			.querySelectorAll(".plans .plan")
 			.forEach(plan =>
 			{
+				const billingPeriod: string = document.querySelector(".billing-periods .selected").classList[0];
+
 				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get("settings->plan->currency"), minimumFractionDigits: 0 })
-					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->month`), 10))
+					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->${billingPeriod}`), 10))
 					.replace(/\s/, "");
 
-				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get("generic->month").toLowerCase()}`;
+				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get(`generic->${billingPeriod}`).toLowerCase()}`;
 
 				(<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage");
+			});
+
+	window.addEventListener("translationlanguagechange", updatePlans);
+
+	(<HTMLElement[]>Array.from(document.querySelector(".billing-periods").children))
+		.forEach(billingPeriod =>
+			billingPeriod.addEventListener("click", () =>
+			{
+				RemoveClass(billingPeriod.parentElement.querySelector(".selected"), "selected");
+
+				AddClass(billingPeriod, "selected");
+
+				updatePlans();
 			}));
 
 	Translation.Init();
