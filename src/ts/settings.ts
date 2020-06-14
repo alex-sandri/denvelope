@@ -380,12 +380,9 @@ window.addEventListener("userready", () =>
 
 	[ changePlan, addPaymentMethod ].forEach(button => button.addEventListener("click", () =>
 	{
-		const title = button === changePlan
-			? button.closest(".setting").querySelector("h1").innerText
-			: Translation.Get("settings->plan->add_payment_method");
-
 		const modal = new Modal({
-			title,
+			title: button.closest(".setting").querySelector("h1").innerText,
+			subtitle: button.innerText,
 			allow: [ "confirm" ],
 			loading: false,
 		});
@@ -477,7 +474,8 @@ window.addEventListener("userready", () =>
 	deletePlan.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: Translation.Get("settings->plan->delete_plan->title"),
+			title: deletePlan.closest(".setting").querySelector("h1").innerText,
+			subtitle: deletePlan.innerText,
 			allow: [ "confirm" ],
 			loading: false,
 		});
@@ -497,7 +495,8 @@ window.addEventListener("userready", () =>
 	[ cancelDowngrade, reactivateSubscription ].forEach(button => button.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: button.innerText,
+			title: button.closest(".setting").querySelector("h1").innerText,
+			subtitle: button.innerText,
 			allow: [ "confirm" ],
 			loading: false,
 		});
