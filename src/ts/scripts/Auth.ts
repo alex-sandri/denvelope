@@ -3,6 +3,7 @@ import type {
 	auth as firebaseAuth,
 	User as firebaseUser,
 } from "firebase";
+import type firebaseuiType from "firebaseui";
 
 import {
 	ClearCache, RemoveClass, AddClass, DispatchEvent, IsSet,
@@ -153,10 +154,10 @@ export default class Auth
 
 		script.onload = () =>
 		{
-			const uiConfig = {
+			const uiConfig: firebaseuiType.auth.Config = {
 				signInSuccessUrl: location.pathname === "/" ? "account" : "",
 				callbacks: {
-					signInSuccessWithAuthResult: (authResult : any) =>
+					signInSuccessWithAuthResult: authResult =>
 					{
 						Auth.analytics.setUserId(authResult.user.uid);
 
@@ -185,7 +186,7 @@ export default class Auth
 				privacyPolicyUrl: () => window.location.assign("privacy"),
 			};
 
-			const ui = new firebaseui.auth.AuthUI(Auth.auth);
+			const ui: firebaseuiType.auth.AuthUI = new firebaseui.auth.AuthUI(Auth.auth);
 
 			ui.disableAutoSignIn();
 

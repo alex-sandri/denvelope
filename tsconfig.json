@@ -15,5 +15,6 @@
     "strictNullChecks": false,
     "alwaysStrict": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
   }
 }
