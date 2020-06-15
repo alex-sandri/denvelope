@@ -1382,8 +1382,6 @@ window.addEventListener("userready", async () =>
 	});
 });
 
-window.addEventListener("resize", () => HideContextMenu());
-
 window.addEventListener("popstate", async () =>
 {
 	let id : string = "root";
