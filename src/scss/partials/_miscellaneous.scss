@@ -280,37 +280,37 @@
 {
     display: none;
 
-        #move-selector
+    #move-selector
+    {
+        .options div
         {
-            .options div
+            @include flex($align-items: unset);
+
+            span
             {
-                @include flex($align-items: unset);
-
-                span
-                {
-                    margin-left: $standard-spacing;
-                }
-
-                .select
-                {
-                    border-top-right-radius: 0;
-                    border-bottom-right-radius: 0;
-                }
-
-                .goto
-                {
-                    width: unset;
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
-                    border-left: none;
-                }
+                margin-left: $standard-spacing;
             }
 
-            p
+            .select
             {
-                margin: $standard-spacing;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .goto
+            {
+                width: unset;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-left: none;
             }
         }
+
+        p
+        {
+            margin: $standard-spacing;
+        }
+    }
 }
 
 .generic-message
