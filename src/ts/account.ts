@@ -469,6 +469,7 @@ window.addEventListener("userready", async () =>
 					});
 
 					if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0) contextMenuMoveSelectorOptions.appendChild(new Component("p", {
+						class: "multiline",
 						innerText: Translation.Get("account->context_menu->move->impossible"),
 					}).element);
 				});
