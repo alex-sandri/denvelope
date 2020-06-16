@@ -806,7 +806,7 @@ window.addEventListener("userready", () =>
 
 		modal.OnConfirm = () =>
 		{
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("trackingEnabled", Boolean(updateTracking.getAttribute("data-tracking-enabled")));
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("trackingEnabled", updateTracking.getAttribute("data-action") === "enable");
 
 			modal.HideAndRemove();
 		};
@@ -983,13 +983,13 @@ window.addEventListener("userready", () =>
 
 		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
 
-		updateTracking.setAttribute("data-tracking-enabled", trackingEnabled ?? true);
-		updateTracking.setAttribute("data-translation", `generic->${updateTracking.getAttribute("data-tracking-enabled") ? "disable" : "enable"}`);
+		updateTracking.setAttribute("data-action", (trackingEnabled ?? true) ? "disable" : "enable");
+		updateTracking.setAttribute("data-translation", `generic->${updateTracking.getAttribute("data-action")}`);
 
 		updateTracking.innerText = ` ${Translation.Get(updateTracking.getAttribute("data-translation"))}`;
 
 		updateTracking.insertAdjacentElement("afterbegin", new Component("i", {
-			class: `fas fa-toggle-${updateTracking.getAttribute("data-tracking-enabled") ? "off" : "on"}`,
+			class: `fas fa-toggle-${updateTracking.getAttribute("data-action") === "disable" ? "off" : "on"}`,
 		}).element);
 	});
 
