@@ -21,10 +21,12 @@ service cloud.firestore {
         allow read: if isOwner();
 
         allow write: if incomingData().size() <= 3 &&
-          incomingData().keys().hasOnly([ "backgroundImageUrl", "dateFormatOptions", "trackingEnabled" ]) &&
+          incomingData().keys().hasOnly([ "backgroundImageUrl", "dateFormatOptions", "trackingEnabled", "language" ]) &&
           (validateBackgroundImageUrl() || !("backgroundImageUrl" in incomingData())) &&
           (validateDateFormatOptions() || !("dateFormatOptions" in incomingData())) &&
-          (incomingData().trackingEnabled is bool || !("trackingEnabled" in incomingData()));
+          (incomingData().trackingEnabled is bool || !("trackingEnabled" in incomingData())) &&
+          ((incomingData().language is string && [ incomingData().language ].hasAny([ "en-us", "en", "it-it", "it" ]))
+          || !("language" in incomingData()));
       }
 
       function validateBackgroundImageUrl() {
