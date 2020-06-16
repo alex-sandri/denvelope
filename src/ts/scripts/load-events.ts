@@ -83,11 +83,13 @@ export default () : void =>
 
 		languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
 
-		modal.OnConfirm = () =>
+		modal.OnConfirm = async () =>
 		{
 			Translation.Init(languageSelect.selectedOptions[0].value);
 
 			modal.HideAndRemove();
+
+			await db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("language", Translation.Language);
 		};
 
 		modal.Show(true);
