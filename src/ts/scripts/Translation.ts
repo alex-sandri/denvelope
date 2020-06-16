@@ -37,19 +37,10 @@ export default class Translation
 
 		document.querySelectorAll("[data-use=translation]").forEach(element => element.remove());
 
-		const createTranslationElement = (text: string): HTMLElement =>
-		{
-			const span = document.createElement("span");
-
-			span.setAttribute("data-use", "translation");
-			span.innerText = text;
-
-			return span;
-		};
-
 		ids
 			.forEach(id => document.querySelectorAll(`[data-translation="${id}"]`)
-				.forEach(element => element.appendChild(createTranslationElement(` ${Translation.Get(id)}`))));
+				.forEach(element =>
+					element.appendChild(Translation.GetElement(id, { initialSpace: true }))));
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-placeholder-translation="${id}"]`)
@@ -65,7 +56,7 @@ export default class Translation
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-start-translation="${id}"]`)
-				.forEach(element => element.insertAdjacentElement("afterbegin", createTranslationElement(Translation.Get(id)))));
+				.forEach(element => element.insertAdjacentElement("afterbegin", Translation.GetElement(id))));
 
 		ids
 			.forEach(id => (<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-only-translation="${id}"]`))
@@ -93,6 +84,23 @@ export default class Translation
 		for (let i = 0; i < keys.length - 1; i++) array = array[keys[i]];
 
 		return array[keys[keys.length - 1]];
+	}
+
+	public static GetElement = (
+		id: string,
+		options: {
+			initialSpace: boolean,
+		} = {
+			initialSpace: false,
+		},
+	): HTMLElement =>
+	{
+		const span = document.createElement("span");
+
+		span.setAttribute("data-use", "translation");
+		span.innerText = (options.initialSpace ? " " : "") + Translation.Get(id);
+
+		return span;
 	}
 
 	public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
