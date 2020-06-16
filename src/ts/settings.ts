@@ -965,11 +965,15 @@ window.addEventListener("userready", () =>
 	{
 		if (!preferences.data()) return;
 
-		const { backgroundImageUrl } = preferences.data();
+		const {
+			backgroundImageUrl,
+			dateFormatOptions,
+			trackingEnabled,
+		} = preferences.data();
 
 		resetBackground.disabled = !backgroundImageUrl;
 
-		userDateFormatOptions = preferences.data().dateFormatOptions;
+		userDateFormatOptions = dateFormatOptions;
 
 		if (userDateFormatOptions === "default") userDateFormatOptions = null;
 
@@ -980,7 +984,7 @@ window.addEventListener("userready", () =>
 
 		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
 
-		enableTracking.disabled = preferences.data().trackingEnabled ?? true;
+		enableTracking.disabled = trackingEnabled ?? true;
 		disableTracking.disabled = !enableTracking.disabled;
 	});
 
