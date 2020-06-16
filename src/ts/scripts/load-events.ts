@@ -157,6 +157,8 @@ export default () : void =>
 				localStorage.setItem("tracking-enabled", `${trackingEnabled}`);
 
 				analytics.setAnalyticsCollectionEnabled(trackingEnabled);
+
+				Translation.Init(preferences.data().language ?? Translation.Language);
 			});
 
 			db.collection("users").doc(Auth.UserId).onSnapshot(doc =>
