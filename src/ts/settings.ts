@@ -175,8 +175,7 @@ const currentCacheSize : HTMLElement = document.querySelector("#cache-size .curr
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
 const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
-const disableTracking : HTMLButtonElement = document.querySelector("#tracking .disable");
-const enableTracking : HTMLButtonElement = document.querySelector("#tracking .enable");
+const updateTracking : HTMLButtonElement = document.querySelector("#tracking .update");
 
 let section : string = "general";
 
@@ -796,24 +795,24 @@ window.addEventListener("userready", () =>
 
 	clearCache.addEventListener("click", ClearFirestoreCache);
 
-	[ disableTracking, enableTracking ].forEach(button => button.addEventListener("click", () =>
+	updateTracking.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: button.closest(".setting").querySelector("h1").innerText,
-			subtitle: button.innerText,
+			title: updateTracking.closest(".setting").querySelector("h1").innerText,
+			subtitle: updateTracking.innerText,
 			allow: [ "confirm" ],
 			loading: false,
 		});
 
 		modal.OnConfirm = () =>
 		{
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("trackingEnabled", button === enableTracking);
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("trackingEnabled", Boolean(updateTracking.getAttribute("data-tracking-enabled")));
 
 			modal.HideAndRemove();
 		};
 
 		modal.Show(true);
-	}));
+	});
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
@@ -984,8 +983,14 @@ window.addEventListener("userready", () =>
 
 		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
 
-		enableTracking.disabled = trackingEnabled ?? true;
-		disableTracking.disabled = !enableTracking.disabled;
+		updateTracking.setAttribute("data-tracking-enabled", trackingEnabled ?? true);
+		updateTracking.setAttribute("data-translation", `generic->${updateTracking.getAttribute("data-tracking-enabled") ? "disable" : "enable"}`);
+
+		updateTracking.innerText = ` ${Translation.Get(updateTracking.getAttribute("data-translation"))}`;
+
+		updateTracking.insertAdjacentElement("afterbegin", new Component("i", {
+			class: `fas fa-toggle-${updateTracking.getAttribute("data-tracking-enabled") ? "off" : "on"}`,
+		}).element);
 	});
 
 	db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot(snapshot =>
