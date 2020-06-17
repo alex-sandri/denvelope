@@ -464,11 +464,13 @@ export const generateVaultRecoveryCode = functions.region(FUNCTIONS_REGION).runW
 
 export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
-    if (!context.auth || !data.maxStorage || !data.currency) return;
+    if (!context.auth || !data.maxStorage || !data.currency || !data.billingPeriod) return;
 
     if (!plansMaxStorage.includes(data.maxStorage)) return;
 
     if (![ "USD", "EUR" ].includes(data.currency)) return;
+
+    if (![ "month", "year" ].includes(data.billingPeriod)) return;
 
     const userId : string = context.auth.uid;
 
