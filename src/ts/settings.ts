@@ -103,6 +103,7 @@ const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-me
 const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
 const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
 const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-period-plan .value");
+const nextBillingPeriod : HTMLElement = document.querySelector("#change-plan .next-billing-period .value");
 const completePayment : HTMLAnchorElement = document.querySelector("#change-plan .complete-payment");
 const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
@@ -822,6 +823,9 @@ window.addEventListener("userready", () =>
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
 
+		const billingPeriod: "month" | "year" = user.data().stripe?.billingPeriod;
+		const userNextBillingPeriod : "month" | "year" = user.data().stripe?.nextBillingPeriod;
+
 		const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
 		const subscriptionNextRenewalOrEndDate : number = user.data().stripe?.nextRenewal;
 
@@ -835,6 +839,7 @@ window.addEventListener("userready", () =>
 			reactivateSubscription,
 			nextRenewal.parentElement,
 			nextPeriodPlan.parentElement,
+			nextBillingPeriod.parentElement,
 			paymentMethodsContainer,
 			noPaymentMethod,
 			completePayment,
@@ -853,14 +858,22 @@ window.addEventListener("userready", () =>
 
 			ShowElement(nextRenewal.parentElement);
 
-			if (userNextPeriodMaxStorage
-				&& userNextPeriodMaxStorage < maxStorage
-				&& !userCanceledSubscription
-			)
+			if (userNextPeriodMaxStorage && !userCanceledSubscription)
 			{
-				nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
+				if (userNextPeriodMaxStorage < maxStorage)
+				{
+					nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
-				ShowElements([ nextPeriodPlan.parentElement, cancelDowngrade ]);
+					ShowElements([ nextPeriodPlan.parentElement, cancelDowngrade ]);
+				}
+
+				if (userNextBillingPeriod !== billingPeriod)
+				{
+					nextBillingPeriod.setAttribute("data-translation", `generic->${userNextBillingPeriod}`);
+					nextBillingPeriod.innerText = Translation.Get(nextBillingPeriod.getAttribute("data-translation"));
+
+					ShowElement(nextBillingPeriod.parentElement);
+				}
 			}
 		}
 
