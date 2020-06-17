@@ -497,7 +497,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
     }
 
-    const priceId : string = GetStripePriceId(maxStorage, data.currency);
+    const priceId : string = GetStripePriceId(maxStorage, data.currency, data.billingPeriod);
 
     if (maxStorage !== FREE_STORAGE)
     {
@@ -793,24 +793,48 @@ const GetUserByCustomerId = async (customerId : string) : Promise<FirebaseFirest
     return user.docs[0];
 }
 
-const GetStripePriceId = (maxStorage : number, currency: "USD" | "EUR") : string =>
+const GetStripePriceId = (maxStorage : number, currency: "USD" | "EUR", billingPeriod: "month" | "year") : string =>
 {
     let priceId : string = "";
 
     switch (maxStorage)
     {
         case 1 * GB:
-            switch (currency)
+            switch (billingPeriod)
             {
-                case "USD": priceId = "price_HNAYCgztn4lNRy"; break;
-                case "EUR": priceId = "price_HNAYubjD3l2adD"; break;
+                case "month":
+                    switch (currency)
+                    {
+                        case "USD": priceId = "price_HNAYCgztn4lNRy"; break;
+                        case "EUR": priceId = "price_HNAYubjD3l2adD"; break;
+                    }
+                break;
+                case "year":
+                    switch (currency)
+                    {
+                        case "USD": priceId = "price_1GuxGkEG9Je5IkssfggDObO3"; break;
+                        case "EUR": priceId = "price_1GuxHBEG9Je5IkssrgygSkra"; break;
+                    }
+                break;
             }
         break;
         case 10 * GB:
-            switch (currency)
+            switch (billingPeriod)
             {
-                case "USD": priceId = "price_HNAzSbDQBxhsri"; break;
-                case "EUR": priceId = "price_HNAzAVDolqJcv6"; break;
+                case "month":
+                    switch (currency)
+                    {
+                        case "USD": priceId = "price_HNAzSbDQBxhsri"; break;
+                        case "EUR": priceId = "price_HNAzAVDolqJcv6"; break;
+                    }
+                break;
+                case "year":
+                    switch (currency)
+                    {
+                        case "USD": priceId = "price_1GuxM4EG9Je5IkssnKVcpYjb"; break;
+                        case "EUR": priceId = "price_1GuxMAEG9Je5Ikss5sVWkTLi"; break;
+                    }
+                break;
             }
         break;
     }
