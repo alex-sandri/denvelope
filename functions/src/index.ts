@@ -649,6 +649,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 "stripe.cancelAtPeriodEnd": admin.firestore.FieldValue.delete(),
                 "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
                 "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
+                "stripe.billingPeriod": admin.firestore.FieldValue.delete(),
+                "stripe.nextBillingPeriod": admin.firestore.FieldValue.delete(),
                 maxStorage: FREE_STORAGE
             });
         break;
@@ -676,7 +678,8 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await user.ref.update({
                 "stripe.cancelAtPeriodEnd": subscription.cancel_at_period_end,
-                "stripe.nextPeriodMaxStorage": GetPlanMaxStorageBytes(product.metadata.maxStorage)
+                "stripe.nextPeriodMaxStorage": GetPlanMaxStorageBytes(product.metadata.maxStorage),
+                "stripe.nextBillingPeriod": (<Stripe.Price.Recurring>subscription.items.data[0].price.recurring).interval,
             });
         break;
         case "invoice.payment_succeeded":
@@ -693,6 +696,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 "stripe.nextRenewal": subscription.current_period_end,
                 "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                 "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
+                "stripe.billingPeriod": (<Stripe.Price.Recurring>subscription.items.data[0].price.recurring).interval,
                 maxStorage
             });
         break;
