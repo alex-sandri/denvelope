@@ -707,6 +707,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 "stripe.nextRenewal": subscription.current_period_end,
                 "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                 "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
+                "stripe.nextBillingPeriod": admin.firestore.FieldValue.delete(),
                 "stripe.billingPeriod": (<Stripe.Price.Recurring>subscription.items.data[0].price.recurring).interval,
                 maxStorage
             });
