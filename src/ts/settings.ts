@@ -1040,7 +1040,7 @@ const UpdateCacheSize = (bytes : number) =>
 	resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 };
 
-const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void =>
+const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year" | undefined) : void =>
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
 
@@ -1050,11 +1050,14 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void
 
 	plans.querySelector(".selected")?.classList.remove("selected");
 
-	document.querySelector(".billing-periods .current")?.classList.remove("current");
+	if (billingPeriod)
+	{
+		document.querySelector(".billing-periods .current")?.classList.remove("current");
 
-	AddClass(document.querySelector(`.billing-periods .${billingPeriod}`), "current");
+		AddClass(document.querySelector(`.billing-periods .${billingPeriod}`), "current");
 
-	document.querySelector(".billing-periods .selected")?.classList.remove("selected");
+		document.querySelector(".billing-periods .selected")?.classList.remove("selected");
+	}
 
 	changePlan.disabled = true;
 };
