@@ -831,7 +831,7 @@ window.addEventListener("userready", () =>
 
 		const invoiceUrl : string = user.data().stripe?.invoiceUrl;
 
-		UpdatePlan(maxStorage);
+		UpdatePlan(maxStorage, billingPeriod);
 
 		deletePlan.disabled = IsFreePlan(maxStorage) || userCanceledSubscription;
 
@@ -1040,7 +1040,7 @@ const UpdateCacheSize = (bytes : number) =>
 	resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 };
 
-const UpdatePlan = (maxStorage : number) : void =>
+const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void =>
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
 
@@ -1049,6 +1049,12 @@ const UpdatePlan = (maxStorage : number) : void =>
 	AddClass(plans.querySelector(`[data-max-storage="${FormatStorage(maxStorage)}"]`), "current");
 
 	plans.querySelector(".selected")?.classList.remove("selected");
+
+	document.querySelector(".billing-periods .current")?.classList.remove("current");
+
+	AddClass(document.querySelector(`.billing-periods .${billingPeriod}`), "current");
+
+	document.querySelector(".billing-periods .selected")?.classList.remove("selected");
 
 	changePlan.disabled = true;
 };
