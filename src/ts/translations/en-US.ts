@@ -253,6 +253,7 @@ export default {
 			},
 			next_renewal: "Next renewal",
 			next_period_plan: "Your plan after this period",
+			next_billing_period: "Your next billing period",
 			subscription_end: "Subscription end",
 			no_payment_method: "You haven't added any payment method",
 			reactivate_subscription: "Reactivate subscription",

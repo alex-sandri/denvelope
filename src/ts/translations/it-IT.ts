@@ -253,6 +253,7 @@ export default {
 			},
 			next_renewal: "Prossimo rinnovo",
 			next_period_plan: "Il tuo piano dopo questo periodo",
+			next_billing_period: "Il tuo prossimo periodo di fatturazione",
 			subscription_end: "Fine sottoscrizione",
 			no_payment_method: "Non hai aggiunto nessun metodo di pagamento",
 			reactivate_subscription: "Riattiva sottoscrizione",
