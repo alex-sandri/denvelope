@@ -72,6 +72,7 @@ paymentRequest.on("paymentmethod", async e =>
 	await functions.httpsCallable("createSubscription")({
 		maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
 		currency: Translation.Get("settings->plan->currency"),
+		billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 		paymentMethod,
 	});
 
@@ -456,6 +457,7 @@ window.addEventListener("userready", () =>
 			if (button === changePlan) functions.httpsCallable("createSubscription")({
 				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
 				currency: Translation.Get("settings->plan->currency"),
+				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 				// Not needed if the user already has a default payment method
 				paymentMethod: result?.paymentMethod.id,
 			});
@@ -507,6 +509,7 @@ window.addEventListener("userready", () =>
 			if (button === cancelDowngrade) params = {
 				maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
 				currency: Translation.Get("settings->plan->currency"),
+				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 			};
 
 			functions.httpsCallable(button === cancelDowngrade ? "createSubscription" : "reactivateSubscription")(params);
