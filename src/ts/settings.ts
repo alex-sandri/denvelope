@@ -1050,14 +1050,11 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year" | undef
 
 	plans.querySelector(".selected")?.classList.remove("selected");
 
-	if (billingPeriod)
-	{
-		document.querySelector(".billing-periods .current")?.classList.remove("current");
+	document.querySelector(".billing-periods .current")?.classList.remove("current");
 
-		AddClass(document.querySelector(`.billing-periods .${billingPeriod}`), "current");
+	AddClass(document.querySelector(`.billing-periods .${billingPeriod ?? "month"}`), "current");
 
-		document.querySelector(".billing-periods .selected")?.classList.remove("selected");
-	}
+	document.querySelector(".billing-periods .selected")?.classList.remove("selected");
 
 	changePlan.disabled = true;
 };
