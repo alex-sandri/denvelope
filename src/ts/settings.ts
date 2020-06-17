@@ -823,8 +823,8 @@ window.addEventListener("userready", () =>
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
 
-		const billingPeriod: "month" | "year" = user.data().stripe?.billingPeriod;
-		const userNextBillingPeriod : "month" | "year" = user.data().stripe?.nextBillingPeriod;
+		const billingPeriod: "month" | "year" | undefined = user.data().stripe?.billingPeriod;
+		const userNextBillingPeriod : "month" | "year" | undefined = user.data().stripe?.nextBillingPeriod;
 
 		const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
 		const subscriptionNextRenewalOrEndDate : number = user.data().stripe?.nextRenewal;
@@ -858,16 +858,16 @@ window.addEventListener("userready", () =>
 
 			ShowElement(nextRenewal.parentElement);
 
-			if (userNextPeriodMaxStorage && !userCanceledSubscription)
+			if (!userCanceledSubscription)
 			{
-				if (userNextPeriodMaxStorage < maxStorage)
+				if (userNextPeriodMaxStorage && userNextPeriodMaxStorage < maxStorage)
 				{
 					nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
 					ShowElements([ nextPeriodPlan.parentElement, cancelDowngrade ]);
 				}
 
-				if (userNextBillingPeriod !== billingPeriod)
+				if (userNextBillingPeriod && userNextBillingPeriod !== billingPeriod)
 				{
 					nextBillingPeriod.setAttribute("data-translation", `generic->${userNextBillingPeriod}`);
 					nextBillingPeriod.innerText = Translation.Get(nextBillingPeriod.getAttribute("data-translation"));
