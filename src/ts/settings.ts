@@ -870,7 +870,7 @@ window.addEventListener("userready", () =>
 
 				if (userNextBillingPeriod && userNextBillingPeriod !== billingPeriod)
 				{
-					nextBillingPeriod.setAttribute("data-translation", `generic->${userNextBillingPeriod}`);
+					nextBillingPeriod.setAttribute("data-only-translation", `generic->${userNextBillingPeriod}`);
 					nextBillingPeriod.innerText = Translation.Get(nextBillingPeriod.getAttribute("data-translation"));
 
 					ShowElement(nextBillingPeriod.parentElement);
@@ -1045,8 +1045,8 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
 
-	currentBillingPeriod.setAttribute("data-translation", `generic->${billingPeriod}`);
-	currentBillingPeriod.innerText = Translation.Get(currentBillingPeriod.getAttribute("data-translation"));
+	currentBillingPeriod.setAttribute("data-only-translation", `generic->${billingPeriod}`);
+	currentBillingPeriod.innerText = Translation.Get(currentBillingPeriod.getAttribute("data-only-translation"));
 
 	plans.querySelector(".current")?.classList.remove("current");
 
