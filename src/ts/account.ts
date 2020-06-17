@@ -1599,6 +1599,10 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	HideElement(vaultInfo);
 
+	HideElement(emptyFolder);
+
+	ShowElement(userContentLoadingSpinner);
+
 	// The user is probably loading a file, this function will be called
 	// later when the file parentId is received by the client
 	if (parentId === "") return;
@@ -1684,10 +1688,6 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 	}
 
 	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${document.querySelector(".top-section").clientHeight}px)`;
-
-	HideElement(emptyFolder);
-
-	ShowElement(userContentLoadingSpinner);
 
 	let callCount = 0; // The number of times UserContentLoaded has been called
 
