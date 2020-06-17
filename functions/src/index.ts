@@ -547,7 +547,7 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                     });
 
                 await stripe.subscriptions.update(subscription.id, {
-                    // Upgrade the plan immediately if this is an upgrade, otherwise downgrade at the current period end
+                    // Upgrade the plan immediately if this is an upgrade, otherwise downgrade or change billing period at the current period end
                     billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
                     proration_behavior: isUpgrade ? "always_invoice" : "none",
                     cancel_at_period_end: false,
