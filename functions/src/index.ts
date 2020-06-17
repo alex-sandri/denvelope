@@ -534,7 +534,16 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
                     await stripe.subscriptions.update(subscription.id, {
                         billing_cycle_anchor: "unchanged",
                         proration_behavior: "none",
-                        items: [ { id: subscription.items.data[0].id, price: GetStripePriceId((<FirebaseFirestore.DocumentData>user.data()).maxStorage, data.currency) } ]
+                        items: [
+                            {
+                                id: subscription.items.data[0].id,
+                                price: GetStripePriceId(
+                                    (<FirebaseFirestore.DocumentData>user.data()).maxStorage,
+                                    (<FirebaseFirestore.DocumentData>user.data()).stripe.currency,
+                                    (<FirebaseFirestore.DocumentData>user.data()).stripe.billingPeriod,
+                                )
+                            }
+                        ]
                     });
 
                 await stripe.subscriptions.update(subscription.id, {
