@@ -42,7 +42,7 @@ export default () : void =>
 			.querySelectorAll(".plans .plan")
 			.forEach(plan =>
 			{
-				const billingPeriod: string = document.querySelector(".billing-periods .selected").classList[0];
+				const billingPeriod: string = document.querySelector(".billing-periods .current")?.classList[0] ?? "month";
 
 				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get("settings->plan->currency"), minimumFractionDigits: 0 })
 					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->${billingPeriod}`), 10))
