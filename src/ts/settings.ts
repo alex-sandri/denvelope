@@ -101,6 +101,7 @@ const reactivateSubscription : HTMLButtonElement = document.querySelector("#chan
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
 const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
+const currentBillingPeriod : HTMLElement = document.querySelector("#change-plan .current-billing-period .value");
 const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
 const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-period-plan .value");
 const nextBillingPeriod : HTMLElement = document.querySelector("#change-plan .next-billing-period .value");
@@ -823,7 +824,7 @@ window.addEventListener("userready", () =>
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
 
-		const billingPeriod: "month" | "year" | undefined = user.data().stripe?.billingPeriod;
+		const billingPeriod: "month" | "year" = user.data().stripe?.billingPeriod ?? "month";
 		const userNextBillingPeriod : "month" | "year" | undefined = user.data().stripe?.nextBillingPeriod;
 
 		const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
@@ -1040,9 +1041,12 @@ const UpdateCacheSize = (bytes : number) =>
 	resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 };
 
-const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year" | undefined) : void =>
+const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void =>
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
+
+	currentBillingPeriod.setAttribute("data-translation", `generic->${billingPeriod}`);
+	currentBillingPeriod.innerText = Translation.Get(currentBillingPeriod.getAttribute("data-translation"));
 
 	plans.querySelector(".current")?.classList.remove("current");
 
@@ -1050,7 +1054,7 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year" | undef
 
 	plans.querySelector(".selected")?.classList.remove("selected");
 
-	(<HTMLButtonElement>document.querySelector(`.billing-periods .${billingPeriod ?? "month"}`)).click();
+	(<HTMLButtonElement>document.querySelector(`.billing-periods .${billingPeriod}`)).click();
 
 	changePlan.disabled = true;
 };

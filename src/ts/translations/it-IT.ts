@@ -251,6 +251,7 @@ export default {
 				title: "Metodi di pagamento",
 				set_as_default: "Imposta come predefinito",
 			},
+			current_billing_period: "Periodo di fatturazione attuale",
 			next_renewal: "Prossimo rinnovo",
 			next_period_plan: "Il tuo piano dopo questo periodo",
 			next_billing_period: "Il tuo prossimo periodo di fatturazione",
