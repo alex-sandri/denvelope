@@ -38,7 +38,7 @@
                     margin-bottom: 0;
                 }
             
-                button:not(.selected),
+                button:not(.selected):not(.current),
                 a
                 {
                     width: 100%;

@@ -539,6 +539,7 @@
         {
             width: 100%;
 
+            &.current,
             &.selected
             {
                 background-color: $secondary-color;
