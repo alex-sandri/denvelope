@@ -7,7 +7,9 @@ import Translation from "./Translation";
 interface ModalOptions
 {
 	title?: string,
+	titleTranslationId?: string,
 	subtitle?: string,
+	subtitleTranslationId?: string,
 	action?: "confirm" | "update",
 	floating?: boolean,
 	animate?: boolean,
@@ -39,7 +41,12 @@ export class Modal
 
 	constructor(options ?: ModalOptions)
 	{
+		if (options?.titleTranslationId) this.TitleTranslationId = options.titleTranslationId;
+
 		if (options?.title) this.Title = options.title;
+
+		if (options?.subtitleTranslationId) this.SubtitleTranslationId = options.subtitleTranslationId;
+
 		if (options?.subtitle) this.Subtitle = options.subtitle;
 
 		switch (options?.action)
@@ -131,18 +138,32 @@ export class Modal
 		this.Remove();
 	}
 
-	public set Title(title : string)
+	public set Title(title: string)
 	{
 		const titleElement : HTMLElement = this.element.querySelector(".title");
 
 		titleElement.innerText = title;
 	}
 
-	public set Subtitle(subtitle : string)
+	public set Subtitle(subtitle: string)
 	{
 		const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
 
 		subtitleElement.innerText = subtitle;
+	}
+
+	public set TitleTranslationId(id: string)
+	{
+		const titleElement : HTMLElement = this.element.querySelector(".title");
+
+		titleElement.appendChild(Translation.GetElement(id));
+	}
+
+	public set SubtitleTranslationId(id: string)
+	{
+		const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
+
+		subtitleElement.appendChild(Translation.GetElement(id));
 	}
 
 	public AppendContent = (data : any[]) : void =>

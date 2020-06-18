@@ -181,7 +181,7 @@ window.addEventListener("userready", async () =>
 			const isFile = button.contains(createFile) || button.contains(contextMenuCreateFile);
 
 			const modal = new Modal({
-				title: Translation.Get(isFile ? "account->create_file" : "account->create_folder"),
+				titleTranslationId: isFile ? "account->create_file" : "account->create_folder",
 				action: "confirm",
 			});
 
@@ -731,7 +731,7 @@ window.addEventListener("userready", async () =>
 
 			if (type === "folder" && contextMenuItems?.length <= 1)
 			{
-				const modal = new Modal({ title: Translation.Get("api->messages->folder->choose_download_format") });
+				const modal = new Modal({ titleTranslationId: "api->messages->folder->choose_download_format" });
 
 				modal.AppendContent([
 					new Component("button", {
@@ -1265,7 +1265,7 @@ window.addEventListener("userready", async () =>
 			}
 
 			const modal = new Modal({
-				title: Translation.Get(`api->messages->vault->${snapshot.exists ? "unlock" : "set_pin"}`),
+				titleTranslationId: `api->messages->vault->${snapshot.exists ? "unlock" : "set_pin"}`,
 				action: "confirm",
 			});
 
@@ -2727,7 +2727,7 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 	if (isFolder)
 	{
 		const modalCompressingFolder = new Modal({
-			subtitle: Translation.Get("api->messages->folder->compressing"),
+			subtitleTranslationId: "api->messages->folder->compressing",
 			floating: true,
 			aside: true,
 		});

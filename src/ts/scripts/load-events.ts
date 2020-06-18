@@ -75,7 +75,7 @@ export default () : void =>
 	changeLanguage?.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: Translation.Get("generic->language"),
+			titleTranslationId: "generic->language",
 			action: "confirm",
 		});
 

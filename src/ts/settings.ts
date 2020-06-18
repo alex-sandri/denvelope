@@ -243,7 +243,10 @@ window.addEventListener("userready", () =>
 {
 	changeBackground.addEventListener("click", () =>
 	{
-		const modal = new Modal({ title: changeBackground.closest(".setting").querySelector("h1").innerText, action: "confirm" });
+		const modal = new Modal({
+			titleTranslationId: changeBackground.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			action: "confirm",
+		});
 
 		const backgroundImageUrlInput = new InputWithIcon({
 			attributes: {
@@ -294,7 +297,10 @@ window.addEventListener("userready", () =>
 
 	changeDateFormat.addEventListener("click", async () =>
 	{
-		const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, action: "confirm" });
+		const modal = new Modal({
+			titleTranslationId: changeDateFormat.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			action: "confirm",
+		});
 
 		const dateFormatOptions : HTMLDivElement = <HTMLDivElement>document.querySelector("#date-format .date-format-options").cloneNode(true);
 
@@ -381,8 +387,8 @@ window.addEventListener("userready", () =>
 	[ changePlan, addPaymentMethod ].forEach(button => button.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: button.closest(".setting").querySelector("h1").innerText,
-			subtitle: button.innerText,
+			titleTranslationId: button.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: button.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -475,8 +481,8 @@ window.addEventListener("userready", () =>
 	deletePlan.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: deletePlan.closest(".setting").querySelector("h1").innerText,
-			subtitle: deletePlan.innerText,
+			titleTranslationId: deletePlan.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: deletePlan.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -496,8 +502,8 @@ window.addEventListener("userready", () =>
 	[ cancelDowngrade, reactivateSubscription ].forEach(button => button.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: button.closest(".setting").querySelector("h1").innerText,
-			subtitle: button.innerText,
+			titleTranslationId: button.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: button.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -523,7 +529,7 @@ window.addEventListener("userready", () =>
 	signOutFromAllDevices.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: signOutFromAllDevices.closest(".setting").querySelector("h1").innerText,
+			titleTranslationId: signOutFromAllDevices.closest(".setting").querySelector("h1").getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -543,8 +549,8 @@ window.addEventListener("userready", () =>
 	changeVaultPin.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: changeVaultPin.closest(".setting").querySelector("h1").innerText,
-			subtitle: changeVaultPin.innerText,
+			titleTranslationId: changeVaultPin.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: changeVaultPin.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -617,8 +623,8 @@ window.addEventListener("userready", () =>
 	deleteVault.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: deleteVault.closest(".setting").querySelector("h1").innerText,
-			subtitle: deleteVault.innerText,
+			titleTranslationId: deleteVault.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: deleteVault.getAttribute("data-translation"),
 			action: "confirm",
 		});
 
@@ -672,8 +678,8 @@ window.addEventListener("userready", () =>
 	generateVaultRecoveryCode.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: generateVaultRecoveryCode.closest(".setting").querySelector("h1").innerText,
-			subtitle: generateVaultRecoveryCode.innerText,
+			titleTranslationId: generateVaultRecoveryCode.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: generateVaultRecoveryCode.getAttribute("data-translation"),
 			action: "confirm",
 		});
 
@@ -744,7 +750,7 @@ window.addEventListener("userready", () =>
 	changeCacheSize.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: changeCacheSize.closest(".setting").querySelector("h1").innerText,
+			titleTranslationId: changeCacheSize.closest(".setting").querySelector("h1").getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -781,7 +787,7 @@ window.addEventListener("userready", () =>
 	deleteAccount.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: deleteAccount.closest(".setting").querySelector("h1").innerText,
+			titleTranslationId: deleteAccount.closest(".setting").querySelector("h1").getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -801,8 +807,8 @@ window.addEventListener("userready", () =>
 	updateTracking.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			title: updateTracking.closest(".setting").querySelector("h1").innerText,
-			subtitle: updateTracking.innerText,
+			titleTranslationId: updateTracking.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: updateTracking.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -933,7 +939,7 @@ window.addEventListener("userready", () =>
 					[ setAsDefaultButton, deleteButton ].forEach(button => button.addEventListener("click", () =>
 					{
 						const modal = new Modal({
-							title: button.innerText,
+							titleTranslationId: button.getAttribute("data-translation"),
 							action: "confirm",
 							loading: false,
 						});
