@@ -4,6 +4,17 @@ import {
 import { Component } from "./Component";
 import Translation from "./Translation";
 
+interface ModalOptions
+{
+	title?: string,
+	subtitle?: string,
+	allow?: string[],
+	floating?: boolean,
+	animate?: boolean,
+	aside?: boolean,
+	loading?: boolean,
+}
+
 export class Modal
 {
 	private readonly container : HTMLDivElement = <HTMLDivElement>document.querySelector(".modal-container").cloneNode(true);
@@ -26,33 +37,30 @@ export class Modal
 
 	public OnUpdate : () => any;
 
-	constructor(options ?: any)
+	constructor(options ?: ModalOptions)
 	{
-		if (IsSet(options))
+		if (options?.title) this.Title = options.title;
+		if (options?.subtitle) this.Subtitle = options.subtitle;
+
+		if (options?.allow)
 		{
-			if (options.title) this.Title = (<any>options).title;
-			if (options.subtitle) this.Subtitle = (<any>options).subtitle;
-
-			if (options.allow)
-			{
-				if ((<string[]>(<any>options).allow).includes("confirm")) ShowElement(this.ConfirmButton, "block");
-				if ((<string[]>(<any>options).allow).includes("update")) ShowElement(this.UpdateButton, "block");
-			}
-
-			if (options.floating)
-			{
-				AddClass(this.element, "floating");
-
-				AddClass(this.container, "no-background");
-			}
-
-			if (options.animate === false) AddClass(this.element, "no-animate");
-
-			if (options.aside) AddClass(this.element, "aside");
-
-			if (options.loading === false) HideElement(this.spinner);
-			else ShowElement(this.spinner, "block");
+			if (options.allow.includes("confirm")) ShowElement(this.ConfirmButton, "block");
+			if (options.allow.includes("update")) ShowElement(this.UpdateButton, "block");
 		}
+
+		if (options?.floating)
+		{
+			AddClass(this.element, "floating");
+
+			AddClass(this.container, "no-background");
+		}
+
+		if (options?.animate === false) AddClass(this.element, "no-animate");
+
+		if (options?.aside) AddClass(this.element, "aside");
+
+		if (options?.loading === false) HideElement(this.spinner);
+		else ShowElement(this.spinner, "block");
 
 		this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
 
