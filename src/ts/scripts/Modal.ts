@@ -8,7 +8,7 @@ interface ModalOptions
 {
 	title?: string,
 	subtitle?: string,
-	allow?: string[],
+	action?: "confirm" | "update",
 	floating?: boolean,
 	animate?: boolean,
 	aside?: boolean,
@@ -42,10 +42,10 @@ export class Modal
 		if (options?.title) this.Title = options.title;
 		if (options?.subtitle) this.Subtitle = options.subtitle;
 
-		if (options?.allow)
+		switch (options?.action)
 		{
-			if (options.allow.includes("confirm")) ShowElement(this.ConfirmButton, "block");
-			if (options.allow.includes("update")) ShowElement(this.UpdateButton, "block");
+			case "confirm": ShowElement(this.ConfirmButton, "block"); break;
+			case "update": ShowElement(this.UpdateButton, "block"); break;
 		}
 
 		if (options?.floating)

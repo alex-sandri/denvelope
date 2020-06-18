@@ -76,7 +76,7 @@ export default () : void =>
 	{
 		const modal = new Modal({
 			title: Translation.Get("generic->language"),
-			allow: [ "confirm" ],
+			action: "confirm",
 		});
 
 		modal.AppendContent([ languageSelect ]);

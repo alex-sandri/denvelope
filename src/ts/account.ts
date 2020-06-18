@@ -182,7 +182,7 @@ window.addEventListener("userready", async () =>
 
 			const modal = new Modal({
 				title: Translation.Get(isFile ? "account->create_file" : "account->create_folder"),
-				allow: [ "confirm" ],
+				action: "confirm",
 			});
 
 			const input = <HTMLInputElement> new Input({
@@ -511,7 +511,7 @@ window.addEventListener("userready", async () =>
 		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
 
-		const modal = new Modal({ allow: [ "update" ] });
+		const modal = new Modal({ action: "update" });
 
 		const nameInput = new Input({
 			attributes: {
@@ -1266,7 +1266,7 @@ window.addEventListener("userready", async () =>
 
 			const modal = new Modal({
 				title: Translation.Get(`api->messages->vault->${snapshot.exists ? "unlock" : "set_pin"}`),
-				allow: [ "confirm" ],
+				action: "confirm",
 			});
 
 			const vaultPinInput = new InputWithIcon({

@@ -243,7 +243,7 @@ window.addEventListener("userready", () =>
 {
 	changeBackground.addEventListener("click", () =>
 	{
-		const modal = new Modal({ title: changeBackground.closest(".setting").querySelector("h1").innerText, allow: [ "confirm" ] });
+		const modal = new Modal({ title: changeBackground.closest(".setting").querySelector("h1").innerText, action: "confirm" });
 
 		const backgroundImageUrlInput = new InputWithIcon({
 			attributes: {
@@ -294,7 +294,7 @@ window.addEventListener("userready", () =>
 
 	changeDateFormat.addEventListener("click", async () =>
 	{
-		const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, allow: [ "confirm" ] });
+		const modal = new Modal({ title: changeDateFormat.closest(".setting").querySelector("h1").innerText, action: "confirm" });
 
 		const dateFormatOptions : HTMLDivElement = <HTMLDivElement>document.querySelector("#date-format .date-format-options").cloneNode(true);
 
@@ -383,7 +383,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: button.closest(".setting").querySelector("h1").innerText,
 			subtitle: button.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -477,7 +477,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: deletePlan.closest(".setting").querySelector("h1").innerText,
 			subtitle: deletePlan.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -498,7 +498,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: button.closest(".setting").querySelector("h1").innerText,
 			subtitle: button.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -524,7 +524,7 @@ window.addEventListener("userready", () =>
 	{
 		const modal = new Modal({
 			title: signOutFromAllDevices.closest(".setting").querySelector("h1").innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -545,7 +545,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: changeVaultPin.closest(".setting").querySelector("h1").innerText,
 			subtitle: changeVaultPin.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -619,7 +619,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: deleteVault.closest(".setting").querySelector("h1").innerText,
 			subtitle: deleteVault.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 		});
 
 		const vaultPinInput = new InputWithIcon({
@@ -674,7 +674,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: generateVaultRecoveryCode.closest(".setting").querySelector("h1").innerText,
 			subtitle: generateVaultRecoveryCode.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 		});
 
 		const vaultPinInput = new InputWithIcon({
@@ -745,7 +745,7 @@ window.addEventListener("userready", () =>
 	{
 		const modal = new Modal({
 			title: changeCacheSize.closest(".setting").querySelector("h1").innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -782,7 +782,7 @@ window.addEventListener("userready", () =>
 	{
 		const modal = new Modal({
 			title: deleteAccount.closest(".setting").querySelector("h1").innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -803,7 +803,7 @@ window.addEventListener("userready", () =>
 		const modal = new Modal({
 			title: updateTracking.closest(".setting").querySelector("h1").innerText,
 			subtitle: updateTracking.innerText,
-			allow: [ "confirm" ],
+			action: "confirm",
 			loading: false,
 		});
 
@@ -934,7 +934,7 @@ window.addEventListener("userready", () =>
 					{
 						const modal = new Modal({
 							title: button.innerText,
-							allow: [ "confirm" ],
+							action: "confirm",
 							loading: false,
 						});
 
