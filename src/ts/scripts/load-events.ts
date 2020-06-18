@@ -153,7 +153,7 @@ export default () : void =>
 					localStorage.setItem("background-image-url", backgroundImageUrl);
 				}
 
-				const trackingEnabled : boolean = preferences.data().trackingEnabled
+				const trackingEnabled : boolean = preferences.data()?.trackingEnabled
 					?? (!navigator.doNotTrack && !window.doNotTrack);
 
 				localStorage.setItem("tracking-enabled", `${trackingEnabled}`);
