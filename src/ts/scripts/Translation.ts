@@ -1,6 +1,13 @@
+import type { firestore as firebaseFirestore } from "firebase";
+
 import enUS from "../translations/en-US";
 import itIT from "../translations/it-IT";
 import { DispatchEvent } from "./Utilities";
+import Auth from "./Auth";
+
+declare const firebase: any;
+
+const db: firebaseFirestore.Firestore = firebase.firestore();
 
 export default class Translation
 {
@@ -63,6 +70,9 @@ export default class Translation
 				.forEach(element => { element.innerText = Translation.Get(id); }));
 
 		DispatchEvent("translationlanguagechange");
+
+		if (Auth.IsSignedIn)
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("language", Translation.Language);
 	}
 
 	public static Get = (id : string) : string =>

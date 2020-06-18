@@ -88,8 +88,6 @@ export default () : void =>
 			Translation.Init(languageSelect.selectedOptions[0].value);
 
 			modal.HideAndRemove();
-
-			await db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("language", Translation.Language);
 		};
 
 		modal.Show(true);
