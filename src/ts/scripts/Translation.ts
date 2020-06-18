@@ -72,7 +72,9 @@ export default class Translation
 		DispatchEvent("translationlanguagechange");
 
 		if (Auth.IsSignedIn)
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("language", Translation.Language);
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
+				language: Translation.Language,
+			}, { merge: true });
 	}
 
 	public static Get = (id : string) : string =>
