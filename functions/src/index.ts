@@ -903,7 +903,12 @@ const AddPaymentMethod = async (userId : string, userEmail : string, paymentMeth
 
 const CreateCustomer = async (userId : string, userEmail : string, paymentMethod ?: Stripe.PaymentMethod) : Promise<Stripe.Customer> =>
 {
-    const customer = await stripe.customers.create({ email: userEmail });
+    const userPreferences = await db.collection(`users/${userId}/config`).doc("preferences").get();
+
+    const customer = await stripe.customers.create({
+        email: userEmail,
+        preferred_locales: [ userPreferences.data()?.language ?? "en-US" ],
+    });
 
     await db.collection("users").doc(userId).update("stripe.customerId", customer.id);
 
