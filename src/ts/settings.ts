@@ -155,7 +155,16 @@ paymentRequestButton.on("click", e =>
 			});
 		}
 
-		changePlan.disabled = (plans.querySelector(".selected") ?? currentPlanElement) === currentPlanElement;
+		// If the user is on the free plan and has changed the selected billing period
+		if ([ currentPlanElement, plans.querySelector(".selected") ].every(element => element?.matches(":first-child") ?? true))
+		{
+			changePlan.disabled = true;
+
+			return;
+		}
+
+		changePlan.disabled = (plans.querySelector(".selected") ?? currentPlanElement) === currentPlanElement
+			&& currentBillingPeriod.innerText === (<HTMLButtonElement>document.querySelector(".billing-periods .selected")).innerText;
 	};
 
 	plan.addEventListener("click", SelectPlan);
@@ -165,6 +174,9 @@ paymentRequestButton.on("click", e =>
 		if (e.key === "Enter") SelectPlan();
 	});
 });
+
+Array.from(document.querySelector(".billing-periods").children).forEach(billingPeriod =>
+	billingPeriod.addEventListener("click", () => (<HTMLElement>plans.querySelector(".current")).click()));
 
 const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
 const changeVaultPin : HTMLButtonElement = document.querySelector("#vault .change-pin");
