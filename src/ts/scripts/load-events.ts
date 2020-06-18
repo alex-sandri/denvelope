@@ -158,7 +158,7 @@ export default () : void =>
 
 				analytics.setAnalyticsCollectionEnabled(trackingEnabled);
 
-				Translation.Init(preferences.data().language ?? Translation.Language);
+				Translation.Init(preferences.data()?.language ?? Translation.Language);
 			});
 
 			db.collection("users").doc(Auth.UserId).onSnapshot(doc =>
