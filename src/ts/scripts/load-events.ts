@@ -44,7 +44,7 @@ export default () : void =>
 			{
 				const billingPeriod: string = document.querySelector(".billing-periods .selected").classList[0];
 
-				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Get("settings->plan->currency"), minimumFractionDigits: 0 })
+				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Currency, minimumFractionDigits: 0 })
 					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->${billingPeriod}`), 10))
 					.replace(/\s/, "");
 

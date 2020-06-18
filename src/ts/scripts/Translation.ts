@@ -116,4 +116,6 @@ export default class Translation
 	}
 
 	public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
+
+	public static get Currency(): string { return Translation.Get("settings->plan->currency"); }
 }
