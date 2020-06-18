@@ -133,6 +133,26 @@ export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDele
     await userDoc.ref.delete();
 });
 
+export const changeUserPreference = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/config/preferences").onUpdate(async (change, context) =>
+{
+    const userId = context.params.userId;
+
+    const { language } = change.after.data();
+
+    if (language)
+    {
+        const user = await db.collection("users").doc(userId).get();
+
+        const customerId = user.data()?.stripe?.customerId;
+
+        if (!customerId) return;
+
+        await stripe.customers.update(customerId, {
+            preferred_locales: [ language ]
+        });
+    }
+});
+
 export const signOutUserFromAllDevices = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
