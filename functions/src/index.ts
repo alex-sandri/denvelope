@@ -133,7 +133,7 @@ export const userDeleted = functions.region(FUNCTIONS_REGION).auth.user().onDele
     await userDoc.ref.delete();
 });
 
-export const changeUserPreference = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/config/preferences").onWrite(async (change, context) =>
+export const changeUserPreferences = functions.region(FUNCTIONS_REGION).firestore.document("users/{userId}/config/preferences").onWrite(async (change, context) =>
 {
     const userId = context.params.userId;
 
