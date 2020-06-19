@@ -112,20 +112,7 @@ html:not(.signed-in):not(.signed-out)
 
         .vault-info
         {
-            @include flex($justify-content: space-between);
-            
-            background-color: $secondary-color;
-            color: $primary-color;
-            padding: $standard-spacing;
-            border-radius: $border-radius;
-            margin-top: $standard-spacing;
             display: none;
-
-            p
-            {
-                margin: 0;
-                margin-left: $standard-spacing;
-            }
         }
 
         @at-root .add-content-options
