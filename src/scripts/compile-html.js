@@ -86,3 +86,8 @@ fs.writeFileSync("../../public/404.html", handlebars.compile(fs.readFileSync("..
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
+
+console.log(CssFileName);
+console.log(homeJsFileName);
+console.log(accountJsFileName);
+console.log(settingsJsFileName);
