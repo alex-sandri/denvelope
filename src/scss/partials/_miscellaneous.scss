@@ -817,3 +817,19 @@ main.accessibility
         }
     }
 }
+
+.info
+{
+    @include flex($justify-content: space-between);
+
+    background-color: $secondary-color;
+    color: $primary-color;
+    padding: $standard-spacing;
+    border-radius: $border-radius;
+    margin-top: $standard-spacing;
+
+    p
+    {
+        margin: 0;
+    }
+}
