@@ -116,10 +116,12 @@ export default class Translation
 	{
 		const span = document.createElement("span");
 
-		if (!options.standalone) span.setAttribute("data-use", "translation");
-		else span.setAttribute("data-only-translation", id);
+		const UpdateElement = () => { span.innerText = (options.initialSpace ? " " : "") + (options.before ?? "") + Translation.Get(id) + (options.after ?? ""); };
 
-		span.innerText = (options.initialSpace ? " " : "") + (options.before ?? "") + Translation.Get(id) + (options.after ?? "");
+		UpdateElement();
+
+		if (options.standalone) window.addEventListener("translationlanguagechange", UpdateElement);
+		else span.setAttribute("data-use", "translation");
 
 		return span;
 	}
