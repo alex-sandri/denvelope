@@ -828,14 +828,11 @@ window.addEventListener("userready", () =>
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
-		if (user.data().stripe.currency)
-		{
-			Translation.Currency = customerCurrency = user.data().stripe.currency;
+		customerCurrency = Translation.Currency = user.data().stripe?.currency;
 
-			customerHasDefaultCurrency = true;
+		customerHasDefaultCurrency = !!Translation.Currency;
 
-			UpdatePaymentRequest();
-		}
+		UpdatePaymentRequest();
 
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
