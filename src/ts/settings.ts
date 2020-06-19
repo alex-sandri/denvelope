@@ -320,7 +320,7 @@ window.addEventListener("userready", () =>
 		modal.AppendContent([
 			new Component("p", {
 				children: [
-					new Component("span", { innerText: Translation.Get("generic->reference") }).element,
+					Translation.GetElement("generic->reference", { standalone: true }),
 					new Component("a", {
 						innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
 						href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
@@ -330,7 +330,7 @@ window.addEventListener("userready", () =>
 			}).element,
 			new Component("p", {
 				children: [
-					new Component("span", { innerText: Translation.Get("generic->example") }).element,
+					Translation.GetElement("generic->example", { standalone: true }),
 					new Component("span", {
 						id: "example-date",
 						innerText: FormatDate(Date.now(), userDateFormatOptions !== "default"
@@ -399,13 +399,13 @@ window.addEventListener("userready", () =>
 		if (button === changePlan) modal.AppendContent([
 			new Component("p", {
 				children: [
-					new Component("span", { innerText: Translation.Get("generic->from") }).element,
+					Translation.GetElement("generic->from", { standalone: true }),
 					new Component("span", { innerText: (<HTMLElement>plans.querySelector(".current > .storage")).innerText }).element,
 				],
 			}).element,
 			new Component("p", {
 				children: [
-					new Component("span", { innerText: Translation.Get("generic->to") }).element,
+					Translation.GetElement("generic->to", { standalone: true }),
 					new Component("span", { innerText: (<HTMLElement>plans.querySelector(".selected > .storage")).innerText }).element,
 				],
 			}).element,
@@ -922,7 +922,7 @@ window.addEventListener("userready", () =>
 						class: "delete",
 						children: [
 							new Component("i", { class: "fas fa-trash" }).element,
-							new Component("span", { innerText: ` ${Translation.Get("generic->delete")}` }).element,
+							Translation.GetElement("generic->delete", { initialSpace: true, standalone: true }),
 						],
 					}).element;
 
@@ -964,7 +964,7 @@ window.addEventListener("userready", () =>
 
 						paymentMethodsContainer
 							.querySelector(`#${paymentMethod.id} span:last-of-type`)
-							.insertAdjacentElement("afterend", new Component("span", { innerText: `(${Translation.Get("generic->default")})` }).element);
+							.insertAdjacentElement("afterend", Translation.GetElement("generic->default", { before: "(", standalone: true, after: ")" }));
 					}
 				});
 			};

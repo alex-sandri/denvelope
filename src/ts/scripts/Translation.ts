@@ -102,16 +102,24 @@ export default class Translation
 	public static GetElement = (
 		id: string,
 		options: {
-			initialSpace: boolean,
+			initialSpace?: boolean,
+			before?: string,
+			after?: string,
+			standalone?: boolean,
 		} = {
 			initialSpace: false,
+			before: "",
+			after: "",
+			standalone: false,
 		},
 	): HTMLElement =>
 	{
 		const span = document.createElement("span");
 
-		span.setAttribute("data-use", "translation");
-		span.innerText = (options.initialSpace ? " " : "") + Translation.Get(id);
+		if (!options.standalone) span.setAttribute("data-use", "translation");
+		else span.setAttribute("data-only-translation", id);
+
+		span.innerText = (options.initialSpace ? " " : "") + (options.before ?? "") + Translation.Get(id) + (options.after ?? "");
 
 		return span;
 	}
