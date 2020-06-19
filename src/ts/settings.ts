@@ -75,7 +75,6 @@ const UpdatePaymentRequest = () =>
 }
 
 window.addEventListener("translationlanguagechange", UpdatePaymentRequest);
-window.addEventListener("currencychange", UpdatePaymentRequest);
 
 paymentRequest.on("paymentmethod", async e =>
 {
@@ -834,6 +833,8 @@ window.addEventListener("userready", () =>
 			customerCurrency = user.data().stripe.currency;
 
 			customerHasDefaultCurrency = true;
+
+			UpdatePaymentRequest();
 		}
 
 		const { maxStorage } = user.data();
