@@ -519,8 +519,8 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
         await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
     }
 
-    if ((<FirebaseFirestore.DocumentData>user.data()).stripe?.currency)
-        data.currency = (<FirebaseFirestore.DocumentData>user.data()).stripe.currency;
+    if (customer.currency)
+        data.currency = customer.currency.toUpperCase();
 
     const priceId : string = GetStripePriceId(maxStorage, data.currency, data.billingPeriod);
 
