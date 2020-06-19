@@ -45,29 +45,37 @@ const stripeElements = stripe.elements({
 	locale: Translation.Language,
 });
 
+let customerCurrency: Config.Currency = Translation.Currency;
+let customerHasDefaultCurrency: boolean = false;
+
 const paymentRequest = stripe.paymentRequest({
 	country: "IT",
-	currency: Translation.Currency.toLowerCase(),
+	currency: customerCurrency.toLowerCase(),
 	total: { label: "Denvelope", amount: 0 },
 });
 
-window.addEventListener("translationlanguagechange", () =>
+const UpdatePaymentRequest = () =>
 {
 	const selectedPlanMaxStorage = plans.querySelector(".selected")?.getAttribute("data-max-storage");
 
 	if (!selectedPlanMaxStorage) return;
 
+	if (!customerHasDefaultCurrency) customerCurrency = Translation.Currency;
+
 	paymentRequest.update({
-		currency: Translation.Currency.toLowerCase(),
+		currency: customerCurrency.toLowerCase(),
 		total: {
 			label: `Denvelope ${selectedPlanMaxStorage}`,
 			amount: Config
 				.Pricing
 				.Plan(<Config.PlanName>selectedPlanMaxStorage)
-				.Price(Translation.Currency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
+				.Price(customerCurrency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
 		},
 	});
-});
+}
+
+window.addEventListener("translationlanguagechange", UpdatePaymentRequest);
+window.addEventListener("currencychange", UpdatePaymentRequest);
 
 paymentRequest.on("paymentmethod", async e =>
 {
@@ -75,7 +83,7 @@ paymentRequest.on("paymentmethod", async e =>
 
 	await functions.httpsCallable("createSubscription")({
 		maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-		currency: Translation.Currency,
+		currency: customerCurrency,
 		billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 		paymentMethod,
 	});
@@ -148,18 +156,7 @@ paymentRequestButton.on("click", e =>
 		{
 			AddClass(plan, "selected");
 
-			const selectedPlanMaxStorage = plan.getAttribute("data-max-storage");
-
-			paymentRequest.update({
-				currency: Translation.Currency.toLowerCase(),
-				total: {
-					label: `Denvelope ${selectedPlanMaxStorage}`,
-					amount: Config
-						.Pricing
-						.Plan(<Config.PlanName>selectedPlanMaxStorage)
-						.Price(Translation.Currency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
-				},
-			});
+			UpdatePaymentRequest();
 		}
 
 		// If the user is on the free plan and has changed the selected billing period
@@ -469,7 +466,7 @@ window.addEventListener("userready", () =>
 
 			if (button === changePlan) functions.httpsCallable("createSubscription")({
 				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-				currency: Translation.Currency,
+				currency: customerCurrency,
 				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 				// Not needed if the user already has a default payment method
 				paymentMethod: result?.paymentMethod.id,
@@ -521,7 +518,7 @@ window.addEventListener("userready", () =>
 
 			if (button === cancelDowngrade) params = {
 				maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
-				currency: Translation.Currency,
+				currency: customerCurrency,
 				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 			};
 
@@ -832,6 +829,13 @@ window.addEventListener("userready", () =>
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
+		if (user.data().stripe.currency)
+		{
+			customerCurrency = user.data().stripe.currency;
+
+			customerHasDefaultCurrency = true;
+		}
+
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
 
