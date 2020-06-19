@@ -4,6 +4,7 @@ import enUS from "../translations/en-US";
 import itIT from "../translations/it-IT";
 import { DispatchEvent } from "./Utilities";
 import Auth from "./Auth";
+import { Config } from "../config/Config";
 
 declare const firebase: any;
 
@@ -117,5 +118,5 @@ export default class Translation
 
 	public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
 
-	public static get Currency(): string { return Translation.Get("settings->plan->currency"); }
+	public static get Currency(): Config.Currency { return <Config.Currency>Translation.Get("settings->plan->currency"); }
 }

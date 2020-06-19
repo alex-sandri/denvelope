@@ -16,6 +16,7 @@ import ServiceWorkerController from "../service_workers/ServiceWorkerController"
 import Translation from "./Translation";
 import { Modal } from "./Modal";
 import Shortcuts from "./Shortcuts";
+import { Config } from "../config/Config";
 
 declare const firebase: any;
 
@@ -42,10 +43,10 @@ export default () : void =>
 			.querySelectorAll(".plans .plan")
 			.forEach(plan =>
 			{
-				const billingPeriod: string = document.querySelector(".billing-periods .selected").classList[0];
+				const billingPeriod: Config.BillingPeriod = <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0];
 
 				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Currency, minimumFractionDigits: 0 })
-					.format(parseInt(Translation.Get(`settings->plan->plans->${plan.getAttribute("data-max-storage")}->price->${billingPeriod}`), 10))
+					.format(Config.Pricing.Plan(<Config.PlanName>plan.getAttribute("data-max-storage")).Price(Translation.Currency, billingPeriod))
 					.replace(/\s/, "");
 
 				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get(`generic->${billingPeriod}`).toLowerCase()}`;
