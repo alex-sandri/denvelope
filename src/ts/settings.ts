@@ -25,6 +25,7 @@ import Translation from "./scripts/Translation";
 import { Component, InputWithIcon } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
 import { header } from "./scripts/header";
+import { Config } from "./config/Config";
 
 Init();
 
@@ -60,7 +61,10 @@ window.addEventListener("translationlanguagechange", () =>
 		currency: Translation.Currency.toLowerCase(),
 		total: {
 			label: `Denvelope ${selectedPlanMaxStorage}`,
-			amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`), 10) * 100, // In cents
+			amount: Config
+				.Pricing
+				.Plan(<Config.PlanName>selectedPlanMaxStorage)
+				.Price(Translation.Currency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
 		},
 	});
 });
@@ -150,7 +154,10 @@ paymentRequestButton.on("click", e =>
 				currency: Translation.Currency.toLowerCase(),
 				total: {
 					label: `Denvelope ${selectedPlanMaxStorage}`,
-					amount: parseInt(Translation.Get(`settings->plan->plans->${selectedPlanMaxStorage}->price->month`), 10) * 100, // In cents
+					amount: Config
+						.Pricing
+						.Plan(<Config.PlanName>selectedPlanMaxStorage)
+						.Price(Translation.Currency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
 				},
 			});
 		}
