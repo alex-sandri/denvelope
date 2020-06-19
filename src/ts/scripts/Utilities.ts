@@ -43,7 +43,8 @@ export const PreventDragEvents = (): void =>
 	document.addEventListener("drop", e => e.preventDefault());
 };
 
-export const DispatchEvent = (name: string) => window.dispatchEvent(new Event(name));
+export const DispatchEvent = (name: string, data?: any) =>
+	window.dispatchEvent(new CustomEvent(name, data));
 
 export const FormatStorage = (bytes: number): string =>
 {

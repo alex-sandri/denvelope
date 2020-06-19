@@ -72,7 +72,7 @@ const UpdatePaymentRequest = () =>
 				.Price(customerCurrency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
 		},
 	});
-}
+};
 
 window.addEventListener("translationlanguagechange", UpdatePaymentRequest);
 
@@ -830,7 +830,7 @@ window.addEventListener("userready", () =>
 	{
 		if (user.data().stripe.currency)
 		{
-			customerCurrency = user.data().stripe.currency;
+			Translation.Currency = customerCurrency = user.data().stripe.currency;
 
 			customerHasDefaultCurrency = true;
 
