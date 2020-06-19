@@ -485,7 +485,9 @@ window.addEventListener("userready", () =>
 			loading: false,
 		});
 
-		modal.AppendContent([ new Component("p", { innerText: Translation.Get("settings->plan->delete_plan->message") }).element ]);
+		modal.AppendContent([ new Component("p", {
+			children: [ Translation.GetElement("settings->plan->delete_plan->message", { standalone: true }) ],
+		}).element ]);
 
 		modal.OnConfirm = () =>
 		{
@@ -697,7 +699,10 @@ window.addEventListener("userready", () =>
 		modal.ConfirmButton.disabled = true;
 
 		modal.AppendContent([
-			new Component("p", { class: "multiline", innerText: Translation.Get("settings->security->vault->recovery_code_info") }).element,
+			new Component("p", {
+				class: "multiline",
+				children: [ Translation.GetElement("settings->security->vault->recovery_code_info", { standalone: true }) ],
+			}).element,
 			vaultPinInput,
 		]);
 
