@@ -33,7 +33,8 @@ interface PlanObject
 
 class Plan
 {
-	constructor (private plan: PlanObject) {}
+	constructor(private plan: PlanObject)
+	{}
 
 	public Price(currency: Config.Currency, billingPeriod: Config.BillingPeriod)
 	{

@@ -48,5 +48,7 @@ module.exports = {
     "linebreak-style": [ "off" ],
     "no-unused-vars": [ "off" ],
     "@typescript-eslint/no-unused-vars": [ "error" ],
+    "no-useless-constructor": [ "off" ],
+    "no-empty-function": [ "off" ],
   },
 };
