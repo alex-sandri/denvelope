@@ -970,8 +970,6 @@ window.addEventListener("userready", () =>
 			};
 
 			ShowUserPaymentMethods(userPaymentMethods, userDefaultPaymentMethod);
-
-			window.addEventListener("translationlanguagechange", () => ShowUserPaymentMethods(userPaymentMethods, userDefaultPaymentMethod));
 		}
 		else ShowElement(noPaymentMethod);
 
