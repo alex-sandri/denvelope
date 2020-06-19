@@ -45,12 +45,9 @@ const stripeElements = stripe.elements({
 	locale: Translation.Language,
 });
 
-let customerCurrency: Config.Currency = Translation.Currency;
-let customerHasDefaultCurrency: boolean = false;
-
 const paymentRequest = stripe.paymentRequest({
 	country: "IT",
-	currency: customerCurrency.toLowerCase(),
+	currency: Translation.Currency.toLowerCase(),
 	total: { label: "Denvelope", amount: 0 },
 });
 
@@ -60,16 +57,14 @@ const UpdatePaymentRequest = () =>
 
 	if (!selectedPlanMaxStorage) return;
 
-	if (!customerHasDefaultCurrency) customerCurrency = Translation.Currency;
-
 	paymentRequest.update({
-		currency: customerCurrency.toLowerCase(),
+		currency: Translation.Currency.toLowerCase(),
 		total: {
 			label: `Denvelope ${selectedPlanMaxStorage}`,
 			amount: Config
 				.Pricing
 				.Plan(<Config.PlanName>selectedPlanMaxStorage)
-				.Price(customerCurrency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
+				.Price(Translation.Currency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
 		},
 	});
 };
@@ -82,7 +77,7 @@ paymentRequest.on("paymentmethod", async e =>
 
 	await functions.httpsCallable("createSubscription")({
 		maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-		currency: customerCurrency,
+		currency: Translation.Currency,
 		billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 		paymentMethod,
 	});
@@ -465,7 +460,7 @@ window.addEventListener("userready", () =>
 
 			if (button === changePlan) functions.httpsCallable("createSubscription")({
 				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-				currency: customerCurrency,
+				currency: Translation.Currency,
 				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 				// Not needed if the user already has a default payment method
 				paymentMethod: result?.paymentMethod.id,
@@ -517,7 +512,7 @@ window.addEventListener("userready", () =>
 
 			if (button === cancelDowngrade) params = {
 				maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
-				currency: customerCurrency,
+				currency: Translation.Currency,
 				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 			};
 
@@ -828,13 +823,7 @@ window.addEventListener("userready", () =>
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
-		// IMPORTANT: Keep this two lines as they are
-		// Translation.Currency may receive undefined which will reset a private variable
-		// And then this getter will start returning the default currency for the current locale
 		Translation.Currency = user.data().stripe?.currency;
-		customerCurrency = Translation.Currency;
-
-		customerHasDefaultCurrency = !!Translation.Currency;
 
 		UpdatePaymentRequest();
 
