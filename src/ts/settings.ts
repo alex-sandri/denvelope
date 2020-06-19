@@ -828,7 +828,11 @@ window.addEventListener("userready", () =>
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
-		customerCurrency = Translation.Currency = user.data().stripe?.currency;
+		// IMPORTANT: Keep this two lines as they are
+		// Translation.Currency may receive undefined which will reset a private variable
+		// And then this getter will start returning the default currency for the current locale
+		Translation.Currency = user.data().stripe?.currency;
+		customerCurrency = Translation.Currency;
 
 		customerHasDefaultCurrency = !!Translation.Currency;
 
