@@ -1,4 +1,4 @@
-import * as pricing from "./pricing.json";
+import pricing from "./pricing.json";
 
 export namespace Config
 {
