@@ -915,7 +915,7 @@ window.addEventListener("userready", () =>
 
 					const setAsDefaultButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
 						class: "set-as-default",
-						innerText: Translation.Get("settings->plan->payment_methods->set_as_default"),
+						children: [ Translation.GetElement("settings->plan->payment_methods->set_as_default", { standalone: true }) ],
 					}).element;
 
 					const deleteButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
