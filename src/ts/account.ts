@@ -1653,7 +1653,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 			});
 		}
 		else (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-			.forEach(element => { element.innerText = Translation.Get("generic->vault"); });
+			.forEach(element => Translation.Register("account->vault", element));
 
 		if (await vaultOnly())
 		{
@@ -1684,7 +1684,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		else HideElement(folderNavigation);
 
 		if (location.pathname.indexOf("file") === -1) (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-			.forEach(element => { element.innerText = Translation.Get("account->title"); });
+			.forEach(element => Translation.Register("account->title", element));
 	}
 
 	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${document.querySelector(".top-section").clientHeight}px)`;
