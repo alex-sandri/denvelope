@@ -20,7 +20,7 @@ type TranslationElementOptions =
 
 export default class Translation
 {
-	public static get Language() : string { return localStorage.getItem("lang").toLowerCase(); }
+	public static get Language(): Config.Locale { return <Config.Locale>localStorage.getItem("lang").toLowerCase(); }
 
 	public static Init = (language ?: string) : void =>
 	{
