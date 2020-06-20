@@ -1612,6 +1612,9 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 	if (IsShowFileVisible() && location.pathname.indexOf("/file/") === -1) CloseEditor();
 
+	(<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
+		.forEach(element => Translation.Unregister(element));
+
 	if ((searchTerm ?? "").length === 0 && !globalSearch) if (parentId !== "root" && GetCurrentFolderId(true) !== "shared" && !starredOnly() && !trashedOnly() && location.pathname.indexOf("/file/") === -1)
 	{
 		if (!await vaultOnly(false)) // If this isn't the vault root directory

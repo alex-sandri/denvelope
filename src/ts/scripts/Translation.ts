@@ -128,7 +128,7 @@ export default class Translation
 
 	public static Register = (id: string, element: HTMLElement) =>
 	{
-		const UpdateElement = () => element.innerText = Translation.Get(id);
+		const UpdateElement = () => { element.innerText = Translation.Get(id); };
 
 		UpdateElement();
 
