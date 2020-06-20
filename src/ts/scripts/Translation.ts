@@ -160,7 +160,7 @@ export default class Translation
 	};
 
 	private static GetFormattedTranslatedText = (id: string, options?: TranslationElementOptions) =>
-		(options?.initialSpace ? " " : "") + (options.before ?? "") + Translation.Get(id) + (options.after ?? "");
+		(options?.initialSpace ? " " : "") + (options?.before ?? "") + Translation.Get(id) + (options?.after ?? "");
 
 	public static Unregister = (element: HTMLElement) => element.removeAttribute("data-translation-registered");
 
