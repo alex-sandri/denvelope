@@ -12,6 +12,8 @@ const db: firebaseFirestore.Firestore = firebase.firestore();
 
 export default class Translation
 {
+	private static translations: number = 0;
+
 	public static get Language() : string { return localStorage.getItem("lang").toLowerCase(); }
 
 	public static Init = (language ?: string) : void =>
@@ -72,10 +74,14 @@ export default class Translation
 
 		DispatchEvent("translationlanguagechange");
 
-		if (Auth.IsSignedIn)
+		// Do not update with the first call of Translation.Init
+		// as the current language may not be up to date
+		if (Auth.IsSignedIn && Translation.translations > 0)
 			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
 				language: Translation.Language,
 			}, { merge: true });
+
+		Translation.translations++;
 	}
 
 	public static Get = (id : string) : string =>
