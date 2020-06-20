@@ -764,8 +764,7 @@ window.addEventListener("userready", () =>
 		const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>document.querySelector("#cache-size .cache-size-options").cloneNode(true);
 
 		Translation.Register("generic->default", (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")), {
-			initialSpace: true,
-			before: "(",
+			before: `${(<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText} (`,
 			after: ")",
 		});
 
