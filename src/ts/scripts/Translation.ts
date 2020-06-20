@@ -20,8 +20,6 @@ type TranslationElementOptions =
 
 export default class Translation
 {
-	private static translations: number = 0;
-
 	public static get Language() : string { return localStorage.getItem("lang").toLowerCase(); }
 
 	public static Init = (language ?: string) : void =>
@@ -82,14 +80,17 @@ export default class Translation
 
 		DispatchEvent("translationlanguagechange");
 
-		// Do not update with the first call of Translation.Init
-		// as the current language may not be up to date
-		if (Auth.IsSignedIn && Translation.translations > 0)
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
-				language: Translation.Language,
-			}, { merge: true });
+		if (Auth.IsSignedIn)
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").get().then(preferences =>
+			{
+				const preferredLanguage: Config.Locale | undefined = preferences.data()?.language;
 
-		Translation.translations++;
+				if (preferredLanguage !== Translation.Language) return;
+
+				preferences.ref.set({
+					language: Translation.Language,
+				}, { merge: true });
+			});
 	}
 
 	public static Get = (id : string) : string =>
