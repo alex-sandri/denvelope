@@ -127,7 +127,20 @@ export default class Translation
 	}
 
 	public static Register = (id: string, element: HTMLElement) =>
-		window.addEventListener("translationlanguagechange", () => element.innerText = Translation.Get(id));
+	{
+		const UpdateElement = () => element.innerText = Translation.Get(id);
+
+		UpdateElement();
+
+		element.setAttribute("data-translation-registered", "true");
+
+		window.addEventListener("translationlanguagechange", () =>
+		{
+			if (element.hasAttribute("data-translation-registered")) UpdateElement();
+		});
+	};
+
+	public static Unregister = (element: HTMLElement) => element.removeAttribute("data-translation-registered");
 
 	public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
 
