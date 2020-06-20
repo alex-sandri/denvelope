@@ -125,7 +125,10 @@ export default class Translation
 	{
 		const span = document.createElement("span");
 
-		const UpdateElement = () => { span.innerText = Translation.GetFormattedTranslatedText(id, options); };
+		const UpdateElement = () =>
+		{
+			span.innerText = Translation.GetFormattedTranslatedText(id, options);
+		};
 
 		UpdateElement();
 
@@ -135,9 +138,16 @@ export default class Translation
 		return span;
 	}
 
-	public static Register = (id: string, element: HTMLElement, options?: TranslationElementOptions) =>
+	public static Register = (
+		id: string,
+		element: HTMLElement,
+		options?: TranslationElementOptions,
+	) =>
 	{
-		const UpdateElement = () => { element.innerText = Translation.GetFormattedTranslatedText(id, options); };
+		const UpdateElement = () =>
+		{
+			element.innerText = Translation.GetFormattedTranslatedText(id, options);
+		};
 
 		UpdateElement();
 
