@@ -1,5 +1,5 @@
 "use strict";
-const cacheName = "static-v2933";
+const cacheName = "static-v2934";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
     "/",
     "/account",
@@ -13,13 +13,13 @@ self.addEventListener("install", (e) => e.waitUntil(caches.open(cacheName).then(
     "/assets/js/home.63e5e09b3a9248a10771.js",
     "/assets/js/account.b4158b0ba9796e462fb3.js",
     "/assets/js/settings.e4934e2ad1a5eb554921.js",
-    "/__/firebase/7.15.2/firebase-app.js",
-    "/__/firebase/7.15.2/firebase-auth.js",
-    "/__/firebase/7.15.2/firebase-firestore.js",
-    "/__/firebase/7.15.2/firebase-storage.js",
-    "/__/firebase/7.15.2/firebase-functions.js",
-    "/__/firebase/7.15.2/firebase-analytics.js",
-    "/__/firebase/7.15.2/firebase-performance.js",
+    "/__/firebase/7.15.3/firebase-app.js",
+    "/__/firebase/7.15.3/firebase-auth.js",
+    "/__/firebase/7.15.3/firebase-firestore.js",
+    "/__/firebase/7.15.3/firebase-storage.js",
+    "/__/firebase/7.15.3/firebase-functions.js",
+    "/__/firebase/7.15.3/firebase-analytics.js",
+    "/__/firebase/7.15.3/firebase-performance.js",
     "/__/firebase/init.js",
     "/assets/img/miscellaneous/empty.svg",
     "/assets/img/miscellaneous/file-sync.svg",
