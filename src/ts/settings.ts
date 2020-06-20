@@ -887,8 +887,7 @@ window.addEventListener("userready", () =>
 
 				if (userNextBillingPeriod && userNextBillingPeriod !== billingPeriod)
 				{
-					nextBillingPeriod.setAttribute("data-only-translation", `generic->${userNextBillingPeriod}`);
-					nextBillingPeriod.innerText = Translation.Get(nextBillingPeriod.getAttribute("data-translation"));
+					Translation.Register(`generic->${userNextBillingPeriod}`, nextBillingPeriod);
 
 					ShowElement(nextBillingPeriod.parentElement);
 				}
@@ -1018,7 +1017,7 @@ window.addEventListener("userready", () =>
 		updateTracking.setAttribute("data-action", (trackingEnabled ?? true) ? "disable" : "enable");
 		updateTracking.setAttribute("data-translation", `generic->${updateTracking.getAttribute("data-action")}`);
 
-		updateTracking.innerText = ` ${Translation.Get(updateTracking.getAttribute("data-translation"))}`;
+		Translation.Register(`generic->${updateTracking.getAttribute("data-action")}`, updateTracking, { initialSpace: true });
 
 		updateTracking.insertAdjacentElement("afterbegin", new Component("i", {
 			class: `fas fa-toggle-${updateTracking.getAttribute("data-action") === "disable" ? "off" : "on"}`,
@@ -1060,8 +1059,7 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
 
-	currentBillingPeriod.setAttribute("data-only-translation", `generic->${billingPeriod}`);
-	currentBillingPeriod.innerText = Translation.Get(currentBillingPeriod.getAttribute("data-only-translation"));
+	Translation.Register(`generic->${billingPeriod}`, currentBillingPeriod);
 
 	plans.querySelector(".current")?.classList.remove("current");
 
