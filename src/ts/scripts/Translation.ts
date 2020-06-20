@@ -10,6 +10,14 @@ declare const firebase: any;
 
 const db: firebaseFirestore.Firestore = firebase.firestore();
 
+type TranslationElementOptions =
+{
+	initialSpace?: boolean,
+	before?: string,
+	after?: string,
+	standalone?: boolean,
+}
+
 export default class Translation
 {
 	private static translations: number = 0;
@@ -107,12 +115,7 @@ export default class Translation
 
 	public static GetElement = (
 		id: string,
-		options: {
-			initialSpace?: boolean,
-			before?: string,
-			after?: string,
-			standalone?: boolean,
-		} = {
+		options: TranslationElementOptions = {
 			initialSpace: false,
 			before: "",
 			after: "",
@@ -122,7 +125,7 @@ export default class Translation
 	{
 		const span = document.createElement("span");
 
-		const UpdateElement = () => { span.innerText = (options.initialSpace ? " " : "") + (options.before ?? "") + Translation.Get(id) + (options.after ?? ""); };
+		const UpdateElement = () => { span.innerText = Translation.GetFormattedTranslatedText(id, options); };
 
 		UpdateElement();
 
@@ -132,9 +135,9 @@ export default class Translation
 		return span;
 	}
 
-	public static Register = (id: string, element: HTMLElement) =>
+	public static Register = (id: string, element: HTMLElement, options?: TranslationElementOptions) =>
 	{
-		const UpdateElement = () => { element.innerText = Translation.Get(id); };
+		const UpdateElement = () => { element.innerText = Translation.GetFormattedTranslatedText(id, options); };
 
 		UpdateElement();
 
@@ -145,6 +148,9 @@ export default class Translation
 			if (element.hasAttribute("data-translation-registered")) UpdateElement();
 		});
 	};
+
+	private static GetFormattedTranslatedText = (id: string, options?: TranslationElementOptions) =>
+		(options?.initialSpace ? " " : "") + (options.before ?? "") + Translation.Get(id) + (options.after ?? "");
 
 	public static Unregister = (element: HTMLElement) => element.removeAttribute("data-translation-registered");
 

@@ -763,7 +763,11 @@ window.addEventListener("userready", () =>
 
 		const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>document.querySelector("#cache-size .cache-size-options").cloneNode(true);
 
-		(<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText += ` (${Translation.Get("generic->default")})`;
+		Translation.Register("generic->default", (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")), {
+			initialSpace: true,
+			before: "(",
+			after: ")",
+		});
 
 		const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
 
