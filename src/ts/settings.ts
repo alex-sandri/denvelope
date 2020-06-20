@@ -607,10 +607,11 @@ window.addEventListener("userready", () =>
 				{
 					AddClass(currentPinInput, "error");
 
-					currentVaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
-						class: "input-error",
-						innerText: Translation.Get("api->messages->vault->wrong_pin"),
-					}).element);
+					const errorParagraph = new Component("p", { class: "input-error" }).element;
+
+					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
+
+					currentVaultPinInput.insertAdjacentElement("beforebegin", errorParagraph);
 
 					modal.Show(true);
 				}
@@ -662,10 +663,11 @@ window.addEventListener("userready", () =>
 				{
 					AddClass(input, "error");
 
-					vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
-						class: "input-error",
-						innerText: Translation.Get("api->messages->vault->wrong_pin"),
-					}).element);
+					const errorParagraph = new Component("p", { class: "input-error" }).element;
+
+					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
+
+					vaultPinInput.insertAdjacentElement("beforebegin", errorParagraph);
 
 					modal.Show(true);
 				}
@@ -737,10 +739,11 @@ window.addEventListener("userready", () =>
 				{
 					AddClass(input, "error");
 
-					vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
-						class: "input-error",
-						innerText: Translation.Get("api->messages->vault->wrong_pin"),
-					}).element);
+					const errorParagraph = new Component("p", { class: "input-error" }).element;
+
+					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
+
+					vaultPinInput.insertAdjacentElement("beforebegin", errorParagraph);
 
 					modal.Show(true);
 				}
