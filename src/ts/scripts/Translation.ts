@@ -153,10 +153,8 @@ export default class Translation
 
 		element.setAttribute("data-translation-registered", "true");
 
-		window.addEventListener("translationlanguagechange", () =>
-		{
-			if (element.hasAttribute("data-translation-registered")) UpdateElement();
-		});
+		if (element.hasAttribute("data-translation-registered")) window.addEventListener("translationlanguagechange", UpdateElement);
+		else window.removeEventListener("translationlanguagechange", UpdateElement);
 	};
 
 	private static GetFormattedTranslatedText = (id: string, options?: TranslationElementOptions) =>
