@@ -87,7 +87,7 @@ export default () : void =>
 
 		modal.OnConfirm = async () =>
 		{
-			Translation.Init(languageSelect.selectedOptions[0].value);
+			Translation.Init(<Config.Locale>languageSelect.selectedOptions[0].value);
 
 			modal.HideAndRemove();
 		};

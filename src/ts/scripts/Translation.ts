@@ -22,7 +22,7 @@ export default class Translation
 {
 	public static get Language(): Config.Locale { return <Config.Locale>localStorage.getItem("lang").toLowerCase(); }
 
-	public static Init = (language ?: string) : void =>
+	public static Init = (language ?: Config.Locale) : void =>
 	{
 		let translationLanguage : string = language;
 
