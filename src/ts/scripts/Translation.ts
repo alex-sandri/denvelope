@@ -126,6 +126,9 @@ export default class Translation
 		return span;
 	}
 
+	public static Register = (id: string, element: HTMLElement) =>
+		window.addEventListener("translationlanguagechange", () => element.innerText = Translation.Get(id));
+
 	public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
 
 	private static currency: Config.Currency;
