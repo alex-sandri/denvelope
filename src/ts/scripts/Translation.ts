@@ -81,16 +81,9 @@ export default class Translation
 		DispatchEvent("translationlanguagechange");
 
 		if (Auth.IsSignedIn)
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").get().then(preferences =>
-			{
-				const preferredLanguage: Config.Locale | undefined = preferences.data()?.language;
-
-				if (preferredLanguage && preferredLanguage !== Translation.Language) return;
-
-				preferences.ref.set({
-					language: Translation.Language,
-				}, { merge: true });
-			});
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
+				language: Translation.Language,
+			}, { merge: true });
 	}
 
 	public static Get = (id : string) : string =>
