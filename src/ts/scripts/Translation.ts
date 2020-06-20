@@ -85,7 +85,7 @@ export default class Translation
 			{
 				const preferredLanguage: Config.Locale | undefined = preferences.data()?.language;
 
-				if (preferredLanguage !== Translation.Language) return;
+				if (preferredLanguage && preferredLanguage !== Translation.Language) return;
 
 				preferences.ref.set({
 					language: Translation.Language,
