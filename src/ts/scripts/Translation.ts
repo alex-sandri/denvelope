@@ -80,6 +80,8 @@ export default class Translation
 
 		DispatchEvent("translationlanguagechange");
 
+		console.log(Auth.IsSignedIn, allowPreferenceUpdate, Translation.Language);
+
 		if (Auth.IsSignedIn && allowPreferenceUpdate)
 			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
 				language: Translation.Language,
