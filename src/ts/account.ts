@@ -623,38 +623,38 @@ window.addEventListener("userready", async () =>
 			modal.AppendContent([
 				new Component("p", {
 					children: [
-						new Component("span", { innerText: Translation.Get("generic->id") }).element,
+						Translation.GetElement("generic->id", { standalone: true }),
 						new Component("span", { innerText: doc.id }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						new Component("span", { innerText: Translation.Get("generic->name") }).element,
+						Translation.GetElement("generic->name", { standalone: true }),
 						new Component("span", { innerText: name }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						new Component("span", { innerText: Translation.Get("generic->type") }).element,
+						Translation.GetElement("generic->type", { standalone: true }),
 						new Component("span", { innerText: Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`) }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						new Component("span", { innerText: Translation.Get("generic->created") }).element,
+						Translation.GetElement("generic->created", { standalone: true }),
 						new Component("span", { innerText: FormatDate(data.created.seconds * 1000, dateFormatOptions) }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						new Component("span", { innerText: Translation.Get("generic->last_modified") }).element,
+						Translation.GetElement("generic->last_modified", { standalone: true }),
 						new Component("span", { innerText: FormatDate(data.updated.seconds * 1000, dateFormatOptions) }).element,
 					],
 				}).element,
 				type === "file"
 					? new Component("p", {
 						children: [
-							new Component("span", { innerText: Translation.Get("generic->size") }).element,
+							Translation.GetElement("generic->size", { standalone: true }),
 							new Component("span", { innerText: FormatStorage(data.size || 0) }).element,
 						],
 					}).element
@@ -667,7 +667,7 @@ window.addEventListener("userready", async () =>
 
 				const contentPosition = new Component("p", {
 					children: [
-						new Component("span", { innerText: Translation.Get("generic->position") }).element,
+						Translation.GetElement("generic->position", { standalone: true }),
 						new Component("a", {
 							href: parentFolderUrl,
 							innerText: data.parentId === "root"
@@ -698,14 +698,14 @@ window.addEventListener("userready", async () =>
 				modal.AppendContent([
 					new Component("p", {
 						children: [
-							new Component("span", { innerText: Translation.Get("generic->shared") }).element,
-							new Component("span", { innerText: Translation.Get(`generic->${data.shared ? "yes" : "no"}`) }).element,
+							Translation.GetElement("generic->shared", { standalone: true }),
+							Translation.GetElement(`generic->${data.shared ? "yes" : "no"}`, { standalone: true }),
 						],
 					}).element,
 					new Component("p", {
 						children: [
-							new Component("span", { innerText: Translation.Get("generic->starred") }).element,
-							new Component("span", { innerText: Translation.Get(`generic->${data.starred ? "yes" : "no"}`) }).element,
+							Translation.GetElement("generic->starred", { standalone: true }),
+							Translation.GetElement(`generic->${data.starred ? "yes" : "no"}`, { standalone: true }),
 						],
 					}).element,
 					contentPosition,
