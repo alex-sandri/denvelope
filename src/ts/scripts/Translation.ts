@@ -22,7 +22,7 @@ export default class Translation
 {
 	public static get Language(): Config.Locale { return <Config.Locale>localStorage.getItem("lang").toLowerCase(); }
 
-	public static Init = (language ?: Config.Locale) : void =>
+	public static Init = (language ?: Config.Locale, allowPreferenceUpdate?: boolean) : void =>
 	{
 		let translationLanguage : string = language;
 
@@ -80,7 +80,7 @@ export default class Translation
 
 		DispatchEvent("translationlanguagechange");
 
-		if (Auth.IsSignedIn)
+		if (Auth.IsSignedIn && allowPreferenceUpdate)
 			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
 				language: Translation.Language,
 			}, { merge: true });
