@@ -2371,7 +2371,7 @@ const ShowFile = (
 			class: "force-download",
 			children: [
 				new Component("i", { class: "fas fa-download" }).element,
-				new Component("span", { innerText: ` ${Translation.Get("generic->download")}` }).element,
+				Translation.GetElement("generic->download", { initialSpace: true, standalone: true }),
 			],
 		}).element);
 
@@ -2476,7 +2476,7 @@ const ShowFile = (
 		if (!navigator.onLine)
 		{
 			editorElement.innerHTML = "";
-			editorElement.insertAdjacentElement("afterbegin", new Component("p", { innerText: Translation.Get("errors->offline") }).element);
+			editorElement.insertAdjacentElement("afterbegin", Translation.GetElement("errors->offline", { standalone: true }));
 
 			RemoveClass(document.documentElement, "wait");
 			RemoveClass(document.documentElement, "file-loading");
