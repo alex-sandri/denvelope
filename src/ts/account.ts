@@ -1701,7 +1701,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		if (AreUserContentContainersEmpty()
 			&& (callCount === 2 || isUpdate || (callCount === 1 && !includeFolders)))
 		{
-			emptyFolder.querySelector("h2").innerText = Translation.Get(`api->messages->folder->${
+			Translation.Register(`api->messages->folder->${
 				!navigator.onLine
 					? "offline"
 					: (searchTerm?.length > 0
@@ -1714,7 +1714,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 							)
 						)
 					)
-			}`);
+			}`, emptyFolder.querySelector("h2"));
 
 			emptyFolder.querySelector("img").src = `assets/img/miscellaneous/${
 				!navigator.onLine
