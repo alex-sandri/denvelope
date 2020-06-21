@@ -198,4 +198,28 @@ export default class Translation
 
 		return locale;
 	}
+
+	public static GetDateElement(date: Date, options: Intl.DateTimeFormatOptions = {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "numeric",
+		minute: "numeric",
+		second: "numeric",
+		timeZoneName: "short",
+	})
+	{
+		const element = document.createElement("span");
+
+		const UpdateElement = () =>
+		{
+			element.innerText = date.toLocaleDateString(Translation.Language, options);
+		};
+
+		UpdateElement();
+
+		window.addEventListener("translationlanguagechange", UpdateElement);
+
+		return element;
+	}
 }
