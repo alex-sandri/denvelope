@@ -72,7 +72,7 @@ export default class Translation
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-start-translation="${id}"]`)
-				.forEach(element => element.insertAdjacentElement("afterbegin", Translation.GetElement(id))));
+				.forEach(element => element.insertAdjacentElement("afterbegin", Translation.GetElement(id, { after: " " }))));
 
 		ids
 			.forEach(id => (<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-only-translation="${id}"]`))
