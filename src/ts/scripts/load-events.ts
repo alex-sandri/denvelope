@@ -83,7 +83,11 @@ export default () : void =>
 
 		modal.AppendContent([ languageSelect ]);
 
-		languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
+		const SelectCurrentLanguage = () => { languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index; };
+
+		SelectCurrentLanguage();
+
+		window.addEventListener("translationlanguagechange", SelectCurrentLanguage);
 
 		modal.OnConfirm = async () =>
 		{
