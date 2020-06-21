@@ -331,12 +331,9 @@ window.addEventListener("userready", () =>
 			new Component("p", {
 				children: [
 					Translation.GetElement("generic->example"),
-					new Component("span", {
-						id: "example-date",
-						innerText: FormatDate(Date.now(), userDateFormatOptions !== "default"
-							? userDateFormatOptions
-							: null),
-					}).element,
+					Translation.GetDateElement(new Date(), userDateFormatOptions !== "default"
+						? userDateFormatOptions
+						: null),
 				],
 			}).element,
 			dateFormatOptions,
@@ -366,7 +363,7 @@ window.addEventListener("userready", () =>
 		[ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
 			.forEach(element => element.addEventListener("change", () =>
 			{
-				(<HTMLSpanElement>modal.Content.querySelector("#example-date")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions());
+				(<HTMLSpanElement>modal.Content.querySelector("[data-use=date]")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions());
 			}));
 
 		modal.OnConfirm = () =>
@@ -869,10 +866,10 @@ window.addEventListener("userready", () =>
 		if (!IsFreePlan(maxStorage))
 		{
 			nextRenewal.innerHTML = "";
-			nextRenewal.appendChild(new Component("span", {
-				data: { date: subscriptionNextRenewalOrEndDate },
-				innerText: FormatDate(subscriptionNextRenewalOrEndDate * 1000, userDateFormatOptions),
-			}).element);
+			nextRenewal.appendChild(Translation.GetDateElement(
+				new Date(subscriptionNextRenewalOrEndDate * 1000),
+				userDateFormatOptions,
+			));
 
 			ShowElement(nextRenewal.parentElement);
 
@@ -1006,11 +1003,6 @@ window.addEventListener("userready", () =>
 		userDateFormatOptions = dateFormatOptions;
 
 		if (userDateFormatOptions === "default") userDateFormatOptions = null;
-
-		document.querySelectorAll("[data-date]").forEach(element =>
-		{
-			(<HTMLElement>element).innerText = FormatDate(Number(element.getAttribute("data-date")) * 1000, userDateFormatOptions);
-		});
 
 		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
 

@@ -14,7 +14,6 @@ import {
 	RemoveClass,
 	IsSet,
 	LogPageViewEvent,
-	FormatDate,
 	FormatStorage,
 	SetCurrentFolderId,
 	GetFirestoreUpdateTimestamp,
@@ -642,13 +641,13 @@ window.addEventListener("userready", async () =>
 				new Component("p", {
 					children: [
 						Translation.GetElement("generic->created"),
-						new Component("span", { innerText: FormatDate(data.created.seconds * 1000, dateFormatOptions) }).element,
+						Translation.GetDateElement(new Date(data.created.seconds * 1000), dateFormatOptions),
 					],
 				}).element,
 				new Component("p", {
 					children: [
 						Translation.GetElement("generic->last_modified"),
-						new Component("span", { innerText: FormatDate(data.updated.seconds * 1000, dateFormatOptions) }).element,
+						Translation.GetDateElement(new Date(data.updated.seconds * 1000), dateFormatOptions),
 					],
 				}).element,
 				type === "file"
