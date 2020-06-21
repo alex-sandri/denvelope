@@ -158,6 +158,8 @@ export default class Translation
 	{
 		Translation.Unregister(element);
 
+		element.innerText = Translation.GetFormattedTranslatedText(id, options);
+
 		Translation.TranslationRegistrations.push({ id, element, options });
 	}
 
