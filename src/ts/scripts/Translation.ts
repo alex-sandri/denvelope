@@ -18,6 +18,13 @@ type TranslationElementOptions =
 	standalone?: boolean,
 }
 
+type TranslationRegistration =
+{
+	element: HTMLElement,
+	id: string,
+	options: TranslationElementOptions,
+}
+
 export default class Translation
 {
 	public static get Language(): Config.Locale { return <Config.Locale>localStorage.getItem("lang").toLowerCase(); }
@@ -81,6 +88,12 @@ export default class Translation
 			.forEach(id => (<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-only-translation="${id}"]`))
 				.forEach(element => { element.innerText = Translation.Get(id); }));
 
+		Translation.TranslationRegistrations.forEach(registration =>
+		{
+			registration.element.innerText
+				= Translation.GetFormattedTranslatedText(registration.id, registration.options);
+		});
+
 		DispatchEvent("translationlanguagechange");
 
 		if (Auth.IsSignedIn && allowPreferenceUpdate)
@@ -135,29 +148,28 @@ export default class Translation
 		return span;
 	}
 
+	private static TranslationRegistrations: TranslationRegistration[] = [];
+
 	public static Register = (
 		id: string,
 		element: HTMLElement,
 		options?: TranslationElementOptions,
 	) =>
 	{
-		const UpdateElement = () =>
-		{
-			element.innerText = Translation.GetFormattedTranslatedText(id, options);
-		};
+		Translation.Unregister(element);
 
-		UpdateElement();
-
-		element.setAttribute("data-translation-registered", "true");
-
-		if (element.hasAttribute("data-translation-registered")) window.addEventListener("translationlanguagechange", UpdateElement);
-		else window.removeEventListener("translationlanguagechange", UpdateElement);
-	};
+		Translation.TranslationRegistrations.push({ id, element, options });
+	}
 
 	private static GetFormattedTranslatedText = (id: string, options?: TranslationElementOptions) =>
 		(options?.initialSpace ? " " : "") + (options?.before ?? "") + Translation.Get(id) + (options?.after ?? "");
 
-	public static Unregister = (element: HTMLElement) => element.removeAttribute("data-translation-registered");
+	public static Unregister = (element: HTMLElement) =>
+	{
+		Translation.TranslationRegistrations
+			= Translation.TranslationRegistrations.filter(registration =>
+				registration.element !== element);
+	};
 
 	public static IsSupportedLanguage = (lang : string) => [ "en", "en-us", "it", "it-it" ].includes(lang.toLowerCase());
 
