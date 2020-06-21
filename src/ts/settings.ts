@@ -320,7 +320,7 @@ window.addEventListener("userready", () =>
 		modal.AppendContent([
 			new Component("p", {
 				children: [
-					Translation.GetElement("generic->reference", { standalone: true }),
+					Translation.GetElement("generic->reference"),
 					new Component("a", {
 						innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
 						href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
@@ -330,7 +330,7 @@ window.addEventListener("userready", () =>
 			}).element,
 			new Component("p", {
 				children: [
-					Translation.GetElement("generic->example", { standalone: true }),
+					Translation.GetElement("generic->example"),
 					new Component("span", {
 						id: "example-date",
 						innerText: FormatDate(Date.now(), userDateFormatOptions !== "default"
@@ -399,13 +399,13 @@ window.addEventListener("userready", () =>
 		if (button === changePlan) modal.AppendContent([
 			new Component("p", {
 				children: [
-					Translation.GetElement("generic->from", { standalone: true }),
+					Translation.GetElement("generic->from"),
 					new Component("span", { innerText: (<HTMLElement>plans.querySelector(".current > .storage")).innerText }).element,
 				],
 			}).element,
 			new Component("p", {
 				children: [
-					Translation.GetElement("generic->to", { standalone: true }),
+					Translation.GetElement("generic->to"),
 					new Component("span", { innerText: (<HTMLElement>plans.querySelector(".selected > .storage")).innerText }).element,
 				],
 			}).element,
@@ -486,7 +486,7 @@ window.addEventListener("userready", () =>
 		});
 
 		modal.AppendContent([ new Component("p", {
-			children: [ Translation.GetElement("settings->plan->delete_plan->message", { standalone: true }) ],
+			children: [ Translation.GetElement("settings->plan->delete_plan->message") ],
 		}).element ]);
 
 		modal.OnConfirm = () =>
@@ -703,7 +703,7 @@ window.addEventListener("userready", () =>
 		modal.AppendContent([
 			new Component("p", {
 				class: "multiline",
-				children: [ Translation.GetElement("settings->security->vault->recovery_code_info", { standalone: true }) ],
+				children: [ Translation.GetElement("settings->security->vault->recovery_code_info") ],
 			}).element,
 			vaultPinInput,
 		]);
@@ -925,14 +925,14 @@ window.addEventListener("userready", () =>
 
 					const setAsDefaultButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
 						class: "set-as-default",
-						children: [ Translation.GetElement("settings->plan->payment_methods->set_as_default", { standalone: true }) ],
+						children: [ Translation.GetElement("settings->plan->payment_methods->set_as_default") ],
 					}).element;
 
 					const deleteButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
 						class: "delete",
 						children: [
 							new Component("i", { class: "fas fa-trash" }).element,
-							Translation.GetElement("generic->delete", { initialSpace: true, standalone: true }),
+							Translation.GetElement("generic->delete", { initialSpace: true }),
 						],
 					}).element;
 
@@ -974,7 +974,7 @@ window.addEventListener("userready", () =>
 
 						paymentMethodsContainer
 							.querySelector(`#${paymentMethod.id} span:last-of-type`)
-							.insertAdjacentElement("afterend", Translation.GetElement("generic->default", { before: "(", standalone: true, after: ")" }));
+							.insertAdjacentElement("afterend", Translation.GetElement("generic->default", { before: "(", after: ")" }));
 					}
 				});
 			};

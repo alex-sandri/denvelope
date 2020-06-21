@@ -156,14 +156,14 @@ export class Modal
 	{
 		const titleElement : HTMLElement = this.element.querySelector(".title");
 
-		titleElement.appendChild(Translation.GetElement(id, { standalone: true }));
+		titleElement.appendChild(Translation.GetElement(id));
 	}
 
 	public set SubtitleTranslationId(id: string)
 	{
 		const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
 
-		subtitleElement.appendChild(Translation.GetElement(id, { standalone: true }));
+		subtitleElement.appendChild(Translation.GetElement(id));
 	}
 
 	public AppendContent = (data : any[]) : void =>

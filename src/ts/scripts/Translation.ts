@@ -56,7 +56,10 @@ export default class Translation
 		ids
 			.forEach(id => document.querySelectorAll(`[data-translation="${id}"]`)
 				.forEach(element =>
-					element.appendChild(Translation.GetElement(id, { initialSpace: true }))));
+					element.appendChild(Translation.GetElement(id, {
+						standalone: false,
+						initialSpace: true,
+					}))));
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-placeholder-translation="${id}"]`)
@@ -72,7 +75,7 @@ export default class Translation
 
 		ids
 			.forEach(id => document.querySelectorAll(`[data-start-translation="${id}"]`)
-				.forEach(element => element.insertAdjacentElement("afterbegin", Translation.GetElement(id, { after: " " }))));
+				.forEach(element => element.insertAdjacentElement("afterbegin", Translation.GetElement(id, { standalone: false, after: " " }))));
 
 		ids
 			.forEach(id => (<NodeListOf<HTMLElement>>document.querySelectorAll(`[data-only-translation="${id}"]`))
@@ -113,7 +116,7 @@ export default class Translation
 			initialSpace: false,
 			before: "",
 			after: "",
-			standalone: false,
+			standalone: true,
 		},
 	): HTMLElement =>
 	{

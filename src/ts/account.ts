@@ -623,38 +623,38 @@ window.addEventListener("userready", async () =>
 			modal.AppendContent([
 				new Component("p", {
 					children: [
-						Translation.GetElement("generic->id", { standalone: true }),
+						Translation.GetElement("generic->id"),
 						new Component("span", { innerText: doc.id }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						Translation.GetElement("generic->name", { standalone: true }),
+						Translation.GetElement("generic->name"),
 						new Component("span", { innerText: name }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						Translation.GetElement("generic->type", { standalone: true }),
+						Translation.GetElement("generic->type"),
 						new Component("span", { innerText: Linguist.GetDisplayName(<string>Linguist.Detect(name, type === "file")) || Translation.Get(`generic->${type}`) }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						Translation.GetElement("generic->created", { standalone: true }),
+						Translation.GetElement("generic->created"),
 						new Component("span", { innerText: FormatDate(data.created.seconds * 1000, dateFormatOptions) }).element,
 					],
 				}).element,
 				new Component("p", {
 					children: [
-						Translation.GetElement("generic->last_modified", { standalone: true }),
+						Translation.GetElement("generic->last_modified"),
 						new Component("span", { innerText: FormatDate(data.updated.seconds * 1000, dateFormatOptions) }).element,
 					],
 				}).element,
 				type === "file"
 					? new Component("p", {
 						children: [
-							Translation.GetElement("generic->size", { standalone: true }),
+							Translation.GetElement("generic->size"),
 							new Component("span", { innerText: FormatStorage(data.size || 0) }).element,
 						],
 					}).element
@@ -667,7 +667,7 @@ window.addEventListener("userready", async () =>
 
 				const contentPosition = new Component("p", {
 					children: [
-						Translation.GetElement("generic->position", { standalone: true }),
+						Translation.GetElement("generic->position"),
 						new Component("a", {
 							href: parentFolderUrl,
 							innerText: data.parentId === "root"
@@ -698,14 +698,14 @@ window.addEventListener("userready", async () =>
 				modal.AppendContent([
 					new Component("p", {
 						children: [
-							Translation.GetElement("generic->shared", { standalone: true }),
-							Translation.GetElement(`generic->${data.shared ? "yes" : "no"}`, { standalone: true }),
+							Translation.GetElement("generic->shared"),
+							Translation.GetElement(`generic->${data.shared ? "yes" : "no"}`),
 						],
 					}).element,
 					new Component("p", {
 						children: [
-							Translation.GetElement("generic->starred", { standalone: true }),
-							Translation.GetElement(`generic->${data.starred ? "yes" : "no"}`, { standalone: true }),
+							Translation.GetElement("generic->starred"),
+							Translation.GetElement(`generic->${data.starred ? "yes" : "no"}`),
 						],
 					}).element,
 					contentPosition,
@@ -2371,7 +2371,7 @@ const ShowFile = (
 			class: "force-download",
 			children: [
 				new Component("i", { class: "fas fa-download" }).element,
-				Translation.GetElement("generic->download", { initialSpace: true, standalone: true }),
+				Translation.GetElement("generic->download", { initialSpace: true }),
 			],
 		}).element);
 
@@ -2476,7 +2476,7 @@ const ShowFile = (
 		if (!navigator.onLine)
 		{
 			editorElement.innerHTML = "";
-			editorElement.insertAdjacentElement("afterbegin", Translation.GetElement("errors->offline", { standalone: true }));
+			editorElement.insertAdjacentElement("afterbegin", Translation.GetElement("errors->offline"));
 
 			RemoveClass(document.documentElement, "wait");
 			RemoveClass(document.documentElement, "file-loading");
