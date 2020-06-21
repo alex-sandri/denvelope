@@ -202,6 +202,7 @@ export default class Translation
 	public static GetDateElement(date: Date, options: Intl.DateTimeFormatOptions)
 	{
 		const element = document.createElement("span");
+		element.setAttribute("data-use", "date");
 
 		const UpdateElement = () =>
 		{
