@@ -14,6 +14,16 @@ export namespace Config
 			return new Plan(pricing[name]);
 		}
 	}
+
+	export const DefaultDateFormatOptions: Intl.DateTimeFormatOptions = {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "numeric",
+		minute: "numeric",
+		second: "numeric",
+		timeZoneName: "short",
+	};
 }
 
 interface PlanObject

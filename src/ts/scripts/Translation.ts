@@ -199,21 +199,16 @@ export default class Translation
 		return locale;
 	}
 
-	public static GetDateElement(date: Date, options: Intl.DateTimeFormatOptions = {
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-		hour: "numeric",
-		minute: "numeric",
-		second: "numeric",
-		timeZoneName: "short",
-	})
+	public static GetDateElement(date: Date, options: Intl.DateTimeFormatOptions)
 	{
 		const element = document.createElement("span");
 
 		const UpdateElement = () =>
 		{
-			element.innerText = date.toLocaleDateString(Translation.Language, options);
+			element.innerText = date.toLocaleDateString(
+				Translation.Language,
+				options ?? Config.DefaultDateFormatOptions,
+			);
 		};
 
 		UpdateElement();
