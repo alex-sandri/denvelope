@@ -23,12 +23,12 @@
     left: 0;
     border: $border-width solid $secondary-color;
     width: 100%;
-    padding: $standard-spacing;
-    border-top-left-radius: $standard-spacing;
-    border-top-right-radius: $standard-spacing;
+    padding: $default-spacing;
+    border-top-left-radius: $default-spacing;
+    border-top-right-radius: $default-spacing;
     background-color: $secondary-color;
     z-index: 11;
-    transform: translateY(calc(100% + #{$standard-spacing}));
+    transform: translateY(calc(100% + #{$default-spacing}));
     color: $primary-color;
     max-height: calc(100% - #{$header-height});
     overflow: auto;
@@ -41,12 +41,12 @@
         {
             @include flex($justify-content: space-between);
 
-            margin-bottom: $standard-spacing;
+            margin-bottom: $default-spacing;
 
             .progress-bar-container
             {
                 width: 100%;
-                margin-right: $standard-spacing;
+                margin-right: $default-spacing;
 
                 .progress-bar
                 {
@@ -84,7 +84,7 @@
 
                 &:last-child
                 {
-                    margin-left: $standard-spacing;
+                    margin-left: $default-spacing;
                 }
             }
         }
@@ -96,7 +96,7 @@
         @include text-ellipsis-on-overflow;
 
         margin: 0;
-        margin-bottom: $standard-spacing;
+        margin-bottom: $default-spacing;
         user-select: none;
 
         &:empty
@@ -112,7 +112,7 @@
 
     .title:not(:empty) + .subtitle:not(:empty)
     {
-        margin-top: -$standard-spacing;
+        margin-top: -$default-spacing;
     }
 
     p:not(.input-error):not(.status)
@@ -120,7 +120,7 @@
         @include text-ellipsis-on-overflow;
 
         margin: 0;
-        margin-bottom: $standard-spacing;
+        margin-bottom: $default-spacing;
 
         &.multiline
         {
@@ -172,7 +172,7 @@
 
         &:not(.close-button):not(.input-icon):not(.upload-control)
         {
-            margin-bottom: $standard-spacing;
+            margin-bottom: $default-spacing;
         }
 
         &.close-button,
@@ -223,10 +223,10 @@
 
     &.floating
     {
-        bottom: $standard-spacing;
-        left: $standard-spacing;
-        width: calc(100% - (#{$standard-spacing} * 2));
-        border-radius: $standard-spacing;
+        bottom: $default-spacing;
+        left: $default-spacing;
+        width: calc(100% - (#{$default-spacing} * 2));
+        border-radius: $default-spacing;
     }
 
     &.aside
@@ -238,7 +238,7 @@
 .spinner
 {
     font-size: 40px;
-    margin: $standard-spacing;
+    margin: $default-spacing;
     display: block;
     text-align: center;
 
@@ -254,7 +254,7 @@
     @include flex($align-items: unset, $justify-content: unset);
     @include input-container;
 
-    margin-bottom: $standard-spacing;
+    margin-bottom: $default-spacing;
 
     input
     {
@@ -272,7 +272,7 @@
 {
     margin: 0;
     color: $primary-color;
-    margin-bottom: $standard-spacing;
+    margin-bottom: $default-spacing;
     border-radius: $border-radius;
 }
 
@@ -288,7 +288,7 @@
 
             span
             {
-                margin-left: $standard-spacing;
+                margin-left: $default-spacing;
             }
 
             .select
@@ -313,11 +313,11 @@
     @include flex;
 
     display: none;
-    max-width: calc(100% - #{$standard-spacing * 2});
+    max-width: calc(100% - #{$default-spacing * 2});
     position: fixed;
-    bottom: $standard-spacing;
-    left: $standard-spacing;
-    padding: $standard-spacing;
+    bottom: $default-spacing;
+    left: $default-spacing;
+    padding: $default-spacing;
     background-color: $secondary-color;
     color: $primary-color;
     z-index: 999;
@@ -332,7 +332,7 @@
 
     button
     {
-        margin-left: $standard-spacing;
+        margin-left: $default-spacing;
         padding: 5px;
         font-size: 15px;
         border-color: $primary-color;
@@ -381,7 +381,7 @@
         {
             @include flex;
 
-            padding: $standard-spacing;
+            padding: $default-spacing;
             cursor: pointer;
             max-width: 100%;
 
@@ -404,7 +404,7 @@
             {
                 @include text-ellipsis-on-overflow;
 
-                margin: 0 $standard-spacing / 2;
+                margin: 0 $default-spacing / 2;
             }
 
             .menu,
@@ -424,7 +424,7 @@
 
             .close
             {
-                margin-left: $standard-spacing;
+                margin-left: $default-spacing;
             }
 
             &.active
@@ -473,7 +473,7 @@
     z-index: 999;
     top: 0;
     background-color: rgba(0, 0, 0, 0.9);
-    padding: $standard-spacing;
+    padding: $default-spacing;
     display: none;
 
     .menu
@@ -488,20 +488,20 @@
     {
         @include flex;
 
-        margin-top: $standard-spacing;
-        height: calc(100vh - #{$standard-spacing * 3} - 49px);
+        margin-top: $default-spacing;
+        height: calc(100vh - #{$default-spacing * 3} - 49px);
 
         canvas,
         iframe
         {
             position: absolute;
             max-width: calc(100vw - 30px);
-            max-height: calc(100vh - #{$standard-spacing * 3} - 49px);
+            max-height: calc(100vh - #{$default-spacing * 3} - 49px);
         }
     
         iframe
         {
-            top: $standard-spacing * 2 + 49px;
+            top: $default-spacing * 2 + 49px;
             width: 100%;
             height: 100%;
         }
@@ -527,7 +527,7 @@
     h2
     {
         margin: 0;
-        margin-bottom: $standard-spacing;
+        margin-bottom: $default-spacing;
         font-weight: $regular;
     }
 
@@ -565,9 +565,9 @@
 {
     .plan
     {
-        padding: $standard-spacing;
+        padding: $default-spacing;
         background-color: rgba($primary-color, 0.5);
-        margin-top: $standard-spacing;
+        margin-top: $default-spacing;
         border: $border-width solid $secondary-color;
         border-radius: $border-radius;
         cursor: pointer;
@@ -613,11 +613,11 @@
 
 .StripeElement:not(#payment-request-button)
 {
-    padding: $standard-spacing;
+    padding: $default-spacing;
     border: $border-width solid $primary-color;
     border-radius: $border-radius;
     background-color: $primary-color;
-    margin-bottom: $standard-spacing;
+    margin-bottom: $default-spacing;
 
     &--invalid
     {
@@ -638,7 +638,7 @@
     background-color: rgba($primary-color, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    padding: $standard-spacing;
+    padding: $default-spacing;
     display: none;
 
     .close
@@ -646,8 +646,8 @@
         @include flex;
 
         position: absolute;
-        top: $standard-spacing;
-        right: $standard-spacing;
+        top: $default-spacing;
+        right: $default-spacing;
         border: none;
         padding: 0;
         background-color: transparent;
@@ -678,7 +678,7 @@
                     {
                         display: block;
                         width: 100%;
-                        margin-bottom: $standard-spacing;
+                        margin-bottom: $default-spacing;
 
                         .firebaseui-idp-button
                         {
@@ -698,7 +698,7 @@
                                 .firebaseui-idp-icon
                                 {
                                     height: 18px;
-                                    margin-right: $standard-spacing;
+                                    margin-right: $default-spacing;
                                 }
                             }
 
@@ -773,9 +773,9 @@ main.error,
 main.accessibility,
 main.plans
 {
-    margin: $standard-spacing;
+    margin: $default-spacing;
     margin-top: $header-height;
-    min-height: calc(100% - #{$standard-spacing});
+    min-height: calc(100% - #{$default-spacing});
 
     h1
     {
@@ -824,13 +824,13 @@ main.accessibility
 
     background-color: $secondary-color;
     color: $primary-color;
-    padding: $standard-spacing;
+    padding: $default-spacing;
     border-radius: $border-radius;
-    margin-top: $standard-spacing;
+    margin-top: $default-spacing;
 
     p
     {
         margin: 0;
-        margin-left: $standard-spacing;
+        margin-left: $default-spacing;
     }
 }

@@ -133,7 +133,7 @@
     {
         &.aside
         {
-            width: calc(100% - #{$standard-spacing * 2});
+            width: calc(100% - #{$default-spacing * 2});
         }
     }
 }

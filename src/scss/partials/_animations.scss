@@ -14,7 +14,7 @@
 {
     from
     {
-        transform: translateY(100% + #{$standard-spacing});
+        transform: translateY(100% + #{$default-spacing});
     }
     to
     {
@@ -30,6 +30,6 @@
     }
     to
     {
-        transform: translateY(100% + #{$standard-spacing});
+        transform: translateY(100% + #{$default-spacing});
     }
 }

@@ -9,7 +9,7 @@ header
     left: 0;
     z-index: 1;
     background-color: rgba($color: $primary-color, $alpha: 0.5);
-    padding: $standard-spacing;
+    padding: $default-spacing;
     width: 100%;
     height: $header-height;
     backdrop-filter: blur(20px);
@@ -26,7 +26,7 @@ header
 
             img
             {
-                height: #{$header-height - $standard-spacing * 2};
+                height: #{$header-height - $default-spacing * 2};
             }
 
             &:focus
@@ -56,11 +56,11 @@ header
     {
         @include flex;
 
-        font-size: #{$header-height - $standard-spacing * 2};
+        font-size: #{$header-height - $default-spacing * 2};
         margin: 0;
         position: fixed;
-        top: $standard-spacing;
-        right: $standard-spacing;
+        top: $default-spacing;
+        right: $default-spacing;
 
         i
         {
@@ -81,8 +81,8 @@ header
 
             img
             {
-                height: #{$header-height - $standard-spacing * 2};
-                width: #{$header-height - $standard-spacing * 2};
+                height: #{$header-height - $default-spacing * 2};
+                width: #{$header-height - $default-spacing * 2};
                 border-radius: 50%;
             }
 
@@ -117,9 +117,9 @@ header
             border-radius: $border-radius;
             background-color: rgba($primary-color, 0.5);
             backdrop-filter: blur(20px);
-            padding: $standard-spacing;
-            max-width: calc(100% - #{$standard-spacing * 2});
-            max-height: calc(100% - #{$standard-spacing * 2});
+            padding: $default-spacing;
+            max-width: calc(100% - #{$default-spacing * 2});
+            max-height: calc(100% - #{$default-spacing * 2});
             overflow: auto;
             overflow-x: hidden;
             overscroll-behavior: contain;
@@ -146,7 +146,7 @@ header
             .storage-info,
             .upgrade-plan
             {
-                margin-bottom: $standard-spacing;
+                margin-bottom: $default-spacing;
                 border-radius: 25px;
                 text-decoration: none;
                 text-align: center;
@@ -155,10 +155,10 @@ header
 
             hr
             {
-                margin: $standard-spacing 0;
+                margin: $default-spacing 0;
                 border: #{$border-width / 4} solid $secondary-color;
-                width: calc(100% + #{$standard-spacing * 2});
-                margin-left: -$standard-spacing;
+                width: calc(100% + #{$default-spacing * 2});
+                margin-left: -$default-spacing;
             }
 
             .user
@@ -169,7 +169,7 @@ header
                     height: 100px;
                     border-radius: 50%;
                     margin: auto;
-                    margin-bottom: $standard-spacing;
+                    margin-bottom: $default-spacing;
                 }
 
                 p
@@ -185,14 +185,14 @@ header
                     {
                         font-weight: $light;
                         font-size: 20px;
-                        margin-bottom: $standard-spacing;
+                        margin-bottom: $default-spacing;
                     }
                 }
             }
 
             .storage
             {
-                margin: $standard-spacing 0;
+                margin: $default-spacing 0;
 
                 p
                 {
@@ -221,7 +221,7 @@ header
                 .upgrade-plan,
                 .storage-info
                 {
-                    margin-top: $standard-spacing;
+                    margin-top: $default-spacing;
                 }
 
                 .spinner
@@ -260,12 +260,12 @@ header
         
                     &.privacy
                     {
-                        margin-right: #{$standard-spacing / 2};
+                        margin-right: #{$default-spacing / 2};
                     }
         
                     &.terms
                     {
-                        margin-left: #{$standard-spacing / 2};
+                        margin-left: #{$default-spacing / 2};
                     }
 
                     &:hover,
@@ -279,7 +279,7 @@ header
                 {
                     @include flex;
 
-                    margin-bottom: $standard-spacing;
+                    margin-bottom: $default-spacing;
                 }
             }
         }

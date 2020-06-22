@@ -4,7 +4,7 @@
 
     background-color: $secondary-color;
     color: $primary-color;
-    padding: $standard-spacing;
+    padding: $default-spacing;
     position: fixed;
     bottom: 0;
     z-index: 999;
@@ -13,7 +13,7 @@
 
     p
     {
-        margin: 0 $standard-spacing;
+        margin: 0 $default-spacing;
     }
 
     a

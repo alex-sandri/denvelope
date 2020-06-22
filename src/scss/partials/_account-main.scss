@@ -10,7 +10,7 @@ html:not(.signed-in):not(.signed-out)
 .account-main
 {
     height: calc(100% - #{$header-height + $account-bottom-bar-height});
-    padding: 0 $standard-spacing;
+    padding: 0 $default-spacing;
     background-color: rgba($primary-color, 0.5);
 
     .top-section
@@ -43,7 +43,7 @@ html:not(.signed-in):not(.signed-out)
             .more-options
             {
                 background-color: rgba($primary-color, 0.5);
-                margin-left: $standard-spacing;
+                margin-left: $default-spacing;
 
                 &:hover
                 {
@@ -63,7 +63,7 @@ html:not(.signed-in):not(.signed-out)
             @include flex($justify-content: space-between);
 
             display: none;
-            margin-top: $standard-spacing;
+            margin-top: $default-spacing;
 
             .back-button,
             .empty-trash-button,
@@ -82,7 +82,7 @@ html:not(.signed-in):not(.signed-out)
             {
                 @include flex;
 
-                margin-right: $standard-spacing;
+                margin-right: $default-spacing;
                 white-space: pre;
 
                 &.target
@@ -146,16 +146,16 @@ html:not(.signed-in):not(.signed-out)
         img
         {
             width: 30%;
-            margin: $standard-spacing 0;
+            margin: $default-spacing 0;
         }
     }
 
     .user-content
     {
         overflow: auto;
-        padding: $standard-spacing;
+        padding: $default-spacing;
         padding-bottom: 0;
-        margin: 0 #{-$standard-spacing};
+        margin: 0 #{-$default-spacing};
 
         .vault
         {
@@ -167,7 +167,7 @@ html:not(.signed-in):not(.signed-out)
             border-radius: $border-radius;
             width: 100%;
             cursor: pointer;
-            margin-bottom: $standard-spacing;
+            margin-bottom: $default-spacing;
             transition: box-shadow $transition-time;
             display: none;
     
@@ -250,8 +250,8 @@ html:not(.signed-in):not(.signed-out)
         {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: $standard-spacing;
-            margin-bottom: $standard-spacing;
+            gap: $default-spacing;
+            margin-bottom: $default-spacing;
 
             &:empty
             {
@@ -271,7 +271,7 @@ html:not(.signed-in):not(.signed-out)
                     cursor: pointer;
                     transition: box-shadow $transition-time;
                     overflow: auto;
-                    max-width: calc(100vw - #{$standard-spacing * 2});
+                    max-width: calc(100vw - #{$default-spacing * 2});
     
                     .icon
                     {

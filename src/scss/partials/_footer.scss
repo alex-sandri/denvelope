@@ -1,6 +1,6 @@
 footer
 {
-    padding: $standard-spacing;
+    padding: $default-spacing;
     background-color: $secondary-color;
 
     .copyright
@@ -17,7 +17,7 @@ footer
         {
             text-decoration: none;
             color: $primary-color;
-            margin: $standard-spacing;
+            margin: $default-spacing;
             margin-bottom: 0;
 
             &:focus,
@@ -30,7 +30,7 @@ footer
 
     hr
     {
-        margin: $standard-spacing 0;
+        margin: $default-spacing 0;
         border: #{$border-width / 4} solid $primary-color;
     }
 

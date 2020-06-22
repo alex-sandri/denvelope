@@ -1,14 +1,14 @@
 .home-features
 {
-    margin: 0 $standard-spacing;
+    margin: 0 $default-spacing;
 
     .home-feature-container
     {
         @include flex($justify-content: space-around);
         
-        padding: $standard-spacing;
+        padding: $default-spacing;
         border-radius: $border-radius;
-        margin: $standard-spacing 0;
+        margin: $default-spacing 0;
         background-color: $secondary-color;
         color: $primary-color;
 
@@ -29,14 +29,14 @@
                 
                 &:not(:last-child)
                 {
-                    margin-bottom: $standard-spacing;
+                    margin-bottom: $default-spacing;
                 }
             }
 
             .github-link
             {
                 display: block;
-                margin-bottom: $standard-spacing;
+                margin-bottom: $default-spacing;
                 color: $primary-color;
 
                 &:hover,

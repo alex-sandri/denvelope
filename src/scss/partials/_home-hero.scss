@@ -2,8 +2,8 @@
 {
     @include flex($align-items: unset, $justify-content: center, $flex-direction: column);
 
-    margin: $standard-spacing;
-    min-height: calc(100% - #{$standard-spacing + $header-height});
+    margin: $default-spacing;
+    min-height: calc(100% - #{$default-spacing + $header-height});
     margin-top: #{$header-height};
 
     .text
@@ -33,8 +33,8 @@
     & > img
     {
         position: absolute;
-        width: calc(100% - (#{$standard-spacing * 2}));
-        height: calc(100% - #{$standard-spacing + $header-height});
+        width: calc(100% - (#{$default-spacing * 2}));
+        height: calc(100% - #{$default-spacing + $header-height});
         z-index: -1;
         opacity: 0.3;
         margin: 0 auto;

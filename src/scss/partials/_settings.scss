@@ -1,13 +1,13 @@
 .settings main
 {
-    padding: 0 $standard-spacing;
+    padding: 0 $default-spacing;
     background-color: rgba($primary-color, 0.5);
     overflow: auto;
 
     .settings-section
     {
-        padding: $standard-spacing;
-        margin: 0 #{-$standard-spacing};
+        padding: $default-spacing;
+        margin: 0 #{-$default-spacing};
         display: none;
 
         .setting
@@ -71,7 +71,7 @@
 
                 &:not(.info) > *
                 {
-                    margin-top: $standard-spacing;
+                    margin-top: $default-spacing;
                 }
             }
 
@@ -91,19 +91,19 @@
             .cc-info
             {
                 background-color: rgba($primary-color, 0.5);
-                padding: $standard-spacing;
+                padding: $default-spacing;
                 border: $border-width solid $secondary-color;
                 border-radius: $border-radius;
-                margin-top: $standard-spacing;
+                margin-top: $default-spacing;
 
                 span:not(:last-of-type)
                 {
-                    margin-right: $standard-spacing;
+                    margin-right: $default-spacing;
                 }
 
                 button
                 {
-                    margin-top: $standard-spacing;
+                    margin-top: $default-spacing;
                 }
             }
 
@@ -112,19 +112,19 @@
                 label
                 {
                     display: inline-block;
-                    margin-bottom: $standard-spacing / 2;
+                    margin-bottom: $default-spacing / 2;
                 }
 
                 & > div > div
                 {
                     @include flex;
 
-                    margin-bottom: $standard-spacing;
+                    margin-bottom: $default-spacing;
 
                     input[type=checkbox]
                     {
                         margin: 0;
-                        margin-right: $standard-spacing;
+                        margin-right: $default-spacing;
                     }
 
                     select
@@ -136,7 +136,7 @@
         
             &:not(:last-child)
             {
-                margin-bottom: $standard-spacing;
+                margin-bottom: $default-spacing;
             }
         }
 
