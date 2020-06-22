@@ -1,8 +1,7 @@
 {
     "extends": "./tsconfig",
-    "files": [
-        "src/ts/translations/en-US.ts",
-        "src/ts/translations/it-IT.ts",
+    "include": [
+        "src/ts/translations/*.ts",
     ],
     "compilerOptions": {
         "sourceMap": false
