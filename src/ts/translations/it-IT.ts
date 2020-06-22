@@ -261,6 +261,7 @@ export default {
 			reactivate_subscription: "Riattiva sottoscrizione",
 			complete_payment: "Completa pagamento",
 			cancel_downgrade: "Annulla downgrade",
+			manage_subscription: "Gestisci sottoscrizione",
 			currency: "EUR",
 		},
 		security: {

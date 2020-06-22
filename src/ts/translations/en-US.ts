@@ -261,6 +261,7 @@ export default {
 			reactivate_subscription: "Reactivate subscription",
 			complete_payment: "Complete payment",
 			cancel_downgrade: "Cancel downgrade",
+			manage_subscription: "Manage subscription",
 			currency: "USD",
 		},
 		security: {
