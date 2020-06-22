@@ -651,6 +651,22 @@ export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.o
     await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: false });
 });
 
+export const createBillingPortalSession = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth) return;
+
+    const userId = context.auth.uid;
+
+    const user = await db.collection("users").doc(userId).get();
+    const userData: FirebaseFirestore.DocumentData = <FirebaseFirestore.DocumentData>user.data();
+
+    if (!userData.stripe?.customerId) await CreateCustomer(userId, <string>context.auth.token.email);
+
+    const session = await stripe.billingPortal.sessions.create({ customer: userData.stripe.customerId });
+
+    return { session };
+});
+
 export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(async (request, response) =>
 {
     let event;
