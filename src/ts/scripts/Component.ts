@@ -62,15 +62,13 @@ export class Component
 
 export class Input extends Component
 {
-	constructor(protected options : any)
+	constructor(protected options: any)
 	{
 		super("div", {
 			class: options.class ?? "input",
 			children: [
-				new Component("input", {
-					...(<Component[]>(<any>options).attributes),
-				}).element,
-				...(<Component[]>(<any>options).children || []),
+				new Component("input", { ...options.attributes }).element,
+				...(options.children ?? []),
 			],
 		});
 	}
@@ -78,28 +76,24 @@ export class Input extends Component
 
 export class InputWithIcon extends Input
 {
-	constructor(protected options : Object)
+	constructor(protected options: any)
 	{
 		super({
 			class: "input-with-icon",
 			children: [
 				new Component("div", {
 					class: "input-icon",
-					aria: {
-						hidden: true,
-					},
+					aria: { hidden: true },
 					tabindex: -1,
 					children: [
-						new Component("i", {
-							class: (<any>options).iconClassName,
-						}).element,
+						new Component("i", { class: options.iconClassName }).element,
 					],
 				}).element,
 			],
-			attributes: (<any>options).attributes,
+			attributes: options.attributes,
 		});
 
-		if ((<any>options).attributes?.type === "password") this.element.querySelector(".input-icon").addEventListener("click", () =>
+		if (options.attributes?.type === "password") this.element.querySelector(".input-icon").addEventListener("click", () =>
 		{
 			this.element.querySelector("input").type = this.element.querySelector("input").type === "password"
 				? "text"
