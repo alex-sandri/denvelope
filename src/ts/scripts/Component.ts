@@ -1,4 +1,4 @@
-import { IsSet, HasClass } from "./Utilities";
+import { IsSet } from "./Utilities";
 
 export class Component
 {
@@ -37,27 +37,12 @@ export class Component
 			{
 				const previousStyles : any = {};
 
-				Array.from(Object.keys(options.style)).filter(option => ![ ":hover", ":focus" ].includes(option)).forEach((option, i) =>
+				Object.keys(options.style).forEach((option, i) =>
 				{
 					this.element.style[option as any]
 						= previousStyles[option]
 						= Object.values(<Object>options.style)[i];
 				});
-
-				if (options.style[":hover"])
-				{
-					const hoverStyles : Object = options.style[":hover"];
-
-					Array.from(Object.keys(hoverStyles)).forEach((option, i) =>
-					{
-						this.element.addEventListener("mouseenter", () =>
-						{
-							if (!HasClass(this.element, "no-hover")) this.element.style[option as any] = Object.values(hoverStyles)[i];
-						});
-
-						this.element.addEventListener("mouseleave", () => { this.element.style[option as any] = previousStyles[option] || ""; });
-					});
-				}
 
 				delete options.style;
 			}
