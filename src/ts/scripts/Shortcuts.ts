@@ -1,5 +1,17 @@
 import Translation from "./Translation";
 
+type ShortcutRegistrationOptions =
+{
+	ignoreInInput: boolean,
+}
+
+type ShortcutRegistration =
+{
+	shortcut: string,
+	callback: (e: KeyboardEvent) => void,
+	options: ShortcutRegistrationOptions,
+}
+
 export default class Shortcuts
 {
 	public static Init = () : void =>
@@ -17,54 +29,41 @@ export default class Shortcuts
 						.join(" + ")
 						.toUpperCase()
 				}`;
+
+				Shortcuts.Register(element.getAttribute("data-keyboard-shortcut"), () =>
+				{
+					if (element instanceof HTMLButtonElement
+						|| element instanceof HTMLAnchorElement) element.click();
+					else if (element instanceof HTMLInputElement) element.focus();
+				});
 			});
 
 		window.addEventListener("keydown", e =>
 		{
 			const key = e.key.toLowerCase();
 
-			if ([ "input", "textarea" ].includes(document.activeElement.tagName.toLowerCase())) return;
-
 			const keyCombination = (e.ctrlKey && key !== "control" ? "control+" : "")
 				+ (e.shiftKey && key !== "shift" ? "shift+" : "")
 				+ key;
 
-			const element : HTMLElement = elementsWithShortcuts
-				.find(elementWithShortcut =>
-					elementWithShortcut.getAttribute("data-keyboard-shortcut") === keyCombination);
+			Shortcuts.ShortcutRegistrations.forEach(registration =>
+			{
+				if (registration.options.ignoreInInput && [ "input", "textarea" ].includes(document.activeElement.tagName.toLowerCase())) return;
 
-			if (!element) return;
+				if (registration.shortcut !== keyCombination) return;
 
-			// Do not prevent if the pressed key is ENTER, as this breaks keyboard navigation
-			if (keyCombination !== "enter") e.preventDefault();
+				if (keyCombination !== "enter") e.preventDefault();
 
-			if (element instanceof HTMLButtonElement
-				|| element instanceof HTMLAnchorElement) element.click();
-			else if (element instanceof HTMLInputElement) element.focus();
+				registration.callback(e);
+			});
 		});
 	}
+
+	private static ShortcutRegistrations: ShortcutRegistration[] = [];
 
 	public static Register = (
-		shortcut : string,
-		callback : (e : KeyboardEvent) => void,
-		options : { ignoreInInput ?: boolean } = { ignoreInInput: true },
-	) : void =>
-	{
-		window.addEventListener("keydown", e =>
-		{
-			const key = e.key.toLowerCase();
-
-			if (options.ignoreInInput && [ "input", "textarea" ].includes(document.activeElement.tagName.toLowerCase())) return;
-
-			const keyCombination = (e.ctrlKey && key !== "control" ? "control+" : "")
-				+ (e.shiftKey && key !== "shift" ? "shift+" : "")
-				+ key;
-
-			if (shortcut !== keyCombination) return;
-
-			e.preventDefault();
-
-			callback(e);
-		});
-	}
+		shortcut: string,
+		callback: (e : KeyboardEvent) => void,
+		options: ShortcutRegistrationOptions = { ignoreInInput: true },
+	) => Shortcuts.ShortcutRegistrations.push({ shortcut, callback, options });
 }
