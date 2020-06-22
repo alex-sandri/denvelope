@@ -1,5 +1,3 @@
-import { IsSet } from "./Utilities";
-
 export class Component
 {
 	public element : HTMLElement;
@@ -8,7 +6,7 @@ export class Component
 	{
 		this.element = document.createElement(type);
 
-		if (IsSet(options))
+		if (options)
 		{
 			if (options.aria)
 			{
@@ -64,10 +62,10 @@ export class Component
 
 export class Input extends Component
 {
-	constructor(protected options : Object)
+	constructor(protected options : any)
 	{
 		super("div", {
-			class: IsSet((<any>options).class) ? (<any>options).class : "input",
+			class: options.class ? options.class : "input",
 			children: [
 				new Component("input", {
 					...(<Component[]>(<any>options).attributes),
