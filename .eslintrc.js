@@ -50,5 +50,12 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": [ "error" ],
     "no-useless-constructor": [ "off" ],
     "no-empty-function": [ "off" ],
+    "max-len": [ "error", 100, 2, {
+      ignoreUrls: true,
+      ignoreComments: true,
+      ignoreRegExpLiterals: true,
+      ignoreStrings: true,
+      ignoreTemplateLiterals: true,
+    } ],
   },
 };

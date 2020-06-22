@@ -651,6 +651,7 @@ export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.o
     await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: false });
 });
 
+/*
 export const createBillingPortalSession = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
@@ -666,6 +667,7 @@ export const createBillingPortalSession = functions.region(FUNCTIONS_REGION).htt
 
     return { session };
 });
+*/
 
 export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(async (request, response) =>
 {
