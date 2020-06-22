@@ -151,8 +151,6 @@ export const UnescapeHtml = (string: string): string =>
 		.replace(/&#039;/g, "'")
 		.replace(/&#x2F;/g, "/");
 
-export const CamelCaseToKebabCase = (string: string) => string.replace(/([a-zA-Z])(?=[A-Z])/g, "$1-").toLowerCase();
-
 export const LogPageViewEvent = () =>
 	(<firebaseAnalytics.Analytics>firebase.analytics()).logEvent("page_view", {
 		page_location: location.href,
