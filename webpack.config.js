@@ -1,4 +1,5 @@
 const path = require("path");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = [
     {
@@ -14,9 +15,13 @@ module.exports = [
                     include: path.resolve(__dirname, "src/ts"),
                     loader: "ts-loader",
                     exclude: /node_modules/,
+                    options: {
+                        transpileOnly: true
+                    }
                 },
             ],
         },
+        plugins: [ new ForkTsCheckerWebpackPlugin() ],
         resolve: {
             extensions: [
                 ".ts",
