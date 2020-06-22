@@ -65,7 +65,7 @@ export class Input extends Component
 	constructor(protected options : any)
 	{
 		super("div", {
-			class: options.class ? options.class : "input",
+			class: options.class ?? "input",
 			children: [
 				new Component("input", {
 					...(<Component[]>(<any>options).attributes),
