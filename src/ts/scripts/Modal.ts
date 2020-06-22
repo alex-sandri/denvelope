@@ -1,5 +1,5 @@
 import {
-	ShowElement, AddClass, IsSet, HideElement, HasClass, RemoveClass, FormatStorage,
+	ShowElement, AddClass, HideElement, HasClass, RemoveClass, FormatStorage,
 } from "./Utilities";
 import { Component } from "./Component";
 import Translation from "./Translation";
@@ -85,7 +85,7 @@ export class Modal
 		this.ConfirmButton.addEventListener("click", this.OnConfirm);
 		this.UpdateButton.addEventListener("click", this.OnUpdate);
 
-		if (IsSet(unique) && unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
+		if (unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
 		else AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
 
 		if (!HasClass(this.element, "show"))
@@ -170,7 +170,7 @@ export class Modal
 	{
 		HideElement(this.spinner);
 
-		data.filter(IsSet).forEach(element => this.Content.append(element));
+		data.filter(Boolean).forEach(element => this.Content.append(element));
 
 		(<NodeListOf<HTMLInputElement>> this.Content.querySelectorAll("input:not([type=checkbox])")).forEach(element => element.addEventListener("keydown", e =>
 		{
