@@ -14,7 +14,7 @@
   "author": "Alex Sandri <me@alexsandri.com> (https://alexsandri.com)",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@firebase/testing": "^0.20.2",
+    "@firebase/testing": "^0.20.3",
     "@types/stripe-v3": "^3.1.19",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
