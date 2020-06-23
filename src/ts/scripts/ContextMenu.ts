@@ -13,8 +13,6 @@ export default class ContextMenu
 		ContextMenu.modal.AppendContent(items);
 
 		ContextMenu.modal.Show(true);
-
-		items[0].focus();
 	}
 
 	public static Hide()
