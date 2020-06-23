@@ -350,7 +350,9 @@ window.addEventListener("userready", async () =>
 	{
 		const tempArray = ContextMenu.Items;
 
-		let currentId = GetCurrentFolderId();
+		const initialFolderId = GetCurrentFolderId();
+
+		let currentId = initialFolderId;
 
 		ContextMenu.Show([ ContextMenuButtons.MoveSelector ]);
 
@@ -358,6 +360,8 @@ window.addEventListener("userready", async () =>
 		{
 			if (id === "root") HideElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
 			else ShowElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
+
+			(<HTMLButtonElement>ContextMenuButtons.MoveSelector.querySelector(".move-here")).disabled = currentId === initialFolderId;
 
 			ShowElement(ContextMenuButtons.MoveSelector.querySelector(".spinner"));
 
