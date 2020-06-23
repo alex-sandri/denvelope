@@ -397,7 +397,7 @@ window.addEventListener("userready", async () =>
 							{
 								ContextMenu.Hide();
 
-								MoveElements(tempArray, element.id)
+								MoveElements(tempArray, element.id);
 							});
 
 							element.querySelector(".goto").addEventListener("click", () =>

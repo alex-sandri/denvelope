@@ -34,7 +34,8 @@ export default class ContextMenu
 		{
 			const target: HTMLElement = <HTMLElement>e.target;
 
-			if (!ContextMenuItems.Move.contains(target)) ContextMenu.Hide();
+			if (!ContextMenuItems.Move.contains(target)
+				&& !ContextMenuItems.MoveSelector.contains(target)) ContextMenu.Hide();
 		}));
 
 		ContextMenu.modal.OnClose = () => ContextMenu.Items.forEach(item => item.classList.remove("selected"));
