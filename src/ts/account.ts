@@ -99,9 +99,6 @@ const editorModels : Map<string, any> = new Map<string, any>();
 const contextMenuContainer : HTMLDivElement = document.querySelector(".context-menu-container");
 const contextMenu : HTMLDivElement = contextMenuContainer.querySelector(".context-menu");
 
-let contextMenuItem : HTMLElement;
-let contextMenuItems : HTMLElement[];
-
 const contextMenuMoveSelector : HTMLDivElement = contextMenu.querySelector("#move-selector");
 const contextMenuMoveSelectorOptions : HTMLDivElement = contextMenuMoveSelector.querySelector(".options");
 
@@ -277,10 +274,8 @@ window.addEventListener("userready", async () =>
 	});
 
 	ContextMenuItems.View.addEventListener("click", () =>
-		[ ...contextMenuItems, contextMenuItem ]
-			.filter(Boolean)
-			.forEach((item, index, array) =>
-				HandlePageChangeAndLoadUserContent(null, item, array.length > 1)));
+		ContextMenu.Items.forEach((item, index, array) =>
+			HandlePageChangeAndLoadUserContent(null, item, array.length > 1)));
 
 	ContextMenuItems.Save.addEventListener("click", () =>
 	{
@@ -300,7 +295,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuItems.SaveToMyAccount.addEventListener("click", () =>
 	{
-		[ ...contextMenuItems, contextMenuItem ].filter(Boolean).forEach(item =>
+		ContextMenu.Items.forEach(item =>
 			functions.httpsCallable("saveToMyAccount")({
 				userId: Auth.UserId,
 				id: item.id,
@@ -312,8 +307,8 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuItems.Share.addEventListener("click", () =>
 	{
-		const { id } = contextMenuItem;
-		const type = contextMenuItem.classList[0];
+		const { id } = ContextMenu.Item;
+		const type = ContextMenu.Item.classList[0];
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: true,
@@ -335,17 +330,17 @@ window.addEventListener("userready", async () =>
 	ContextMenuItems.SharingOptions.addEventListener("click", () =>
 		(<any>navigator).share({
 			title: "Denvelope",
-			text: `${Translation.Get("share->check_out")} ${(<HTMLElement>contextMenuItem.querySelector(".name p")).innerText} ${Translation.Get("share->on_denvelope")}`,
-			url: getUserContentURL(contextMenuItem, true),
+			text: `${Translation.Get("share->check_out")} ${(<HTMLElement>ContextMenu.Item.querySelector(".name p")).innerText} ${Translation.Get("share->on_denvelope")}`,
+			url: getUserContentURL(ContextMenu.Item, true),
 		}));
 
 	ContextMenuItems.CopyShareableLink.addEventListener("click", () =>
-		navigator.clipboard.writeText(getUserContentURL(contextMenuItem, true)));
+		navigator.clipboard.writeText(getUserContentURL(ContextMenu.Item, true)));
 
 	ContextMenuItems.Unshare.addEventListener("click", () =>
 	{
-		const { id } = contextMenuItem;
-		const type = contextMenuItem.classList[0];
+		const { id } = ContextMenu.Item;
+		const type = ContextMenu.Item.classList[0];
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: false,
@@ -357,7 +352,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuItems.Move.addEventListener("click", () =>
 	{
-		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
+		const tempArray = ContextMenu.Items;
 
 		let currentId = GetCurrentFolderId();
 
@@ -439,7 +434,7 @@ window.addEventListener("userready", async () =>
 	{
 		const batch = db.batch();
 
-		[ ...contextMenuItems, contextMenuItem ].filter(Boolean).forEach(item =>
+		ContextMenu.Items.forEach(item =>
 			batch.update(db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id), {
 				starred: ContextMenuItems.AddToStarred.contains(element),
 				...GetFirestoreUpdateTimestamp(),
@@ -450,8 +445,8 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuItems.Rename.addEventListener("click", () =>
 	{
-		const { id } = contextMenuItem;
-		const type = contextMenuItem.classList[0];
+		const { id } = ContextMenu.Item;
+		const type = ContextMenu.Item.classList[0];
 
 		const modal = new Modal({ action: "update" });
 
@@ -468,7 +463,7 @@ window.addEventListener("userready", async () =>
 
 		modal.AppendContent([ nameInput ]);
 
-		input.value = (<HTMLParagraphElement>contextMenuItem.querySelector(".name p")).innerText;
+		input.value = (<HTMLParagraphElement>ContextMenu.Item.querySelector(".name p")).innerText;
 
 		modal.OnUpdate = async () =>
 		{
@@ -516,8 +511,8 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuItems.Info.addEventListener("click", () =>
 	{
-		const { id } = contextMenuItem;
-		const type = contextMenuItem.classList[0];
+		const { id } = ContextMenu.Item;
+		const type = ContextMenu.Item.classList[0];
 
 		const modal = new Modal();
 
@@ -656,7 +651,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuItems.Download.addEventListener("click", () =>
 	{
-		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
+		const tempArray = ContextMenu.Items;
 
 		tempArray.forEach(async item =>
 		{
@@ -665,7 +660,7 @@ window.addEventListener("userready", async () =>
 
 			let folderFormat : string;
 
-			if (type === "folder" && contextMenuItems?.length <= 1)
+			if (type === "folder" && tempArray.length === 1)
 			{
 				const modal = new Modal({ titleTranslationId: "api->messages->folder->choose_download_format" });
 
@@ -702,8 +697,8 @@ window.addEventListener("userready", async () =>
 
 	[ ContextMenuItems.Delete, ContextMenuItems.Restore ].forEach(element => element.addEventListener("click", async () =>
 	{
-		// Waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
-		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
+		// Waiting for vaultOnly() caused ContextMenu.Item to become null on HideContextMenu()
+		const tempArray = ContextMenu.Items;
 
 		const batch = db.batch();
 
@@ -784,7 +779,7 @@ window.addEventListener("userready", async () =>
 
 		img.onerror = () => filePreviewContainer.click();
 
-		img.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
+		img.src = await storage.ref(`${Auth.UserId}/${ContextMenu.Item.id}`).getDownloadURL();
 
 		let scale = 1;
 
@@ -914,7 +909,7 @@ window.addEventListener("userready", async () =>
 
 		const iframe = document.createElement("iframe");
 
-		iframe.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
+		iframe.src = await storage.ref(`${Auth.UserId}/${ContextMenu.Item.id}`).getDownloadURL();
 		iframe.frameBorder = "0";
 
 		iframe.onload = () =>
@@ -1050,7 +1045,8 @@ window.addEventListener("userready", async () =>
 	{
 		if (e.target === contextMenuContainer) HideContextMenu();
 
-		if ((<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected")).length === 0) contextMenuItems = [];
+		if ((<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected")).length === 0)
+			ContextMenu.Items = [];
 	});
 
 	document.addEventListener("scroll", () => HideContextMenu());
@@ -1146,8 +1142,7 @@ window.addEventListener("userready", async () =>
 				else RemoveClass(element, "selected");
 			});
 
-			contextMenuItem = null;
-			contextMenuItems = (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected"));
+			ContextMenu.Items = (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected"));
 		};
 
 		document.addEventListener("mousemove", UpdateContentSelectorSize);
@@ -1348,7 +1343,7 @@ Shortcuts.Register("control+s", () =>
 Shortcuts.Register("delete", () => ContextMenuItems.Delete.click);
 
 Shortcuts.Register("backspace", () =>
-	(contextMenuItems?.length > 0 ? ContextMenuItems.Delete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null)));
+	(ContextMenu.Items?.length > 0 ? ContextMenuItems.Delete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null)));
 
 Shortcuts.Register("d", () => DownloadContent(GetCurrentFolderId(), document.title, true));
 
@@ -1792,32 +1787,27 @@ const showContextMenu = (e : MouseEvent) : void =>
 	const target = <HTMLElement>e.target;
 	const contentTarget = GetUserContentElement(<HTMLElement>e.target);
 
-	contextMenuItem = null;
-	contextMenuItems = (<HTMLElement[]>[
+	ContextMenu.Items = (<HTMLElement[]>[
 		...foldersContainer.children,
 		...filesContainer.children,
 	]).filter(element => HasClass(element, "selected"));
-
-	// If contextMenuItems contains only one element
-	// This element is the same as in contextMenuItem
-	if (contextMenuItems?.length === 1) contextMenuItems = [];
 
 	HideElements([ contextMenuMoveSelector ]);
 
 	const contextMenuButtons: ContextMenuItem[] = [];
 
 	if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null)
-		&& contextMenuItems.length <= 1)
+		&& ContextMenu.Items.length <= 1)
 	{
-		if (isUserContentElement(contentTarget)) contextMenuItem = contentTarget;
-		else contextMenuItem = document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]);
+		if (isUserContentElement(contentTarget)) ContextMenu.Items = [ contentTarget ];
+		else ContextMenu.Items = [ document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]) ];
 
-		if (Auth.IsAuthenticated && contextMenuItem.getAttribute("data-trashed") === "false")
+		if (Auth.IsAuthenticated && ContextMenu.Item.getAttribute("data-trashed") === "false")
 			contextMenuButtons.push(...[ ContextMenuItems.Move, ContextMenuItems.Rename ]);
 
-		if (contextMenuItem.getAttribute("data-trashed") === "false")
+		if (ContextMenu.Item.getAttribute("data-trashed") === "false")
 		{
-			if (contextMenuItem.getAttribute("data-shared") === "true")
+			if (ContextMenu.Item.getAttribute("data-shared") === "true")
 			{
 				if ((<any>navigator).share) contextMenuButtons.push(ContextMenuItems.SharingOptions);
 
@@ -1827,7 +1817,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 			}
 			else contextMenuButtons.push(ContextMenuItems.Share);
 
-			if (contextMenuItem.getAttribute("data-starred") === "true" && Auth.IsAuthenticated) contextMenuButtons.push(ContextMenuItems.RemoveFromStarred);
+			if (ContextMenu.Item.getAttribute("data-starred") === "true" && Auth.IsAuthenticated) contextMenuButtons.push(ContextMenuItems.RemoveFromStarred);
 			else if (Auth.IsAuthenticated) contextMenuButtons.push(ContextMenuItems.AddToStarred);
 
 			if (target.closest(editorMenuSelector) === null)
@@ -1845,7 +1835,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 		else if (Auth.IsAuthenticated)
 			contextMenuButtons.push(...[ ContextMenuItems.Delete, ContextMenuItems.Restore ]);
 	}
-	else if (Auth.IsAuthenticated && contextMenuItems.length === 0)
+	else if (Auth.IsAuthenticated && ContextMenu.Items.length === 0)
 		if (!vault.contains(target))
 			contextMenuButtons.push(...[
 				ContextMenuItems.AddFiles,
@@ -1863,18 +1853,18 @@ const showContextMenu = (e : MouseEvent) : void =>
 					? ContextMenuItems.LockVault
 					: ContextMenuItems.CreateVault));
 		}
-	else if (contextMenuItems.length > 1)
+	else if (ContextMenu.Items.length > 1)
 	{
 		if (Auth.IsAuthenticated) contextMenuButtons.push(ContextMenuItems.Delete);
 		else if (Auth.IsSignedIn) contextMenuButtons.push(ContextMenuItems.SaveToMyAccount);
 
-		if (contextMenuItems.filter(element => element.getAttribute("data-trashed") === "false").length > 0)
+		if (ContextMenu.Items.filter(element => element.getAttribute("data-trashed") === "false").length > 0)
 		{
 			if (Auth.IsAuthenticated)
 			{
-				if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "false").length > 0)
+				if (ContextMenu.Items.filter(element => element.getAttribute("data-starred") === "false").length > 0)
 					contextMenuButtons.push(ContextMenuItems.AddToStarred);
-				else if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "true").length > 0)
+				else if (ContextMenu.Items.filter(element => element.getAttribute("data-starred") === "true").length > 0)
 					contextMenuButtons.push(ContextMenuItems.RemoveFromStarred);
 
 				contextMenuButtons.push(ContextMenuItems.Move);
@@ -1884,7 +1874,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 		}
 		else contextMenuButtons.push(ContextMenuItems.Restore);
 
-		if (contextMenuItems.filter(element => HasClass(element, "file")).length === contextMenuItems.length) contextMenuButtons.push(ContextMenuItems.View);
+		if (ContextMenu.Items.filter(element => HasClass(element, "file")).length === ContextMenu.Items.length) contextMenuButtons.push(ContextMenuItems.View);
 	}
 
 	const selectedEditorTabContentType = target.closest(".tab")?.getAttribute("content-type");
@@ -1905,7 +1895,7 @@ const HideContextMenu = () : void =>
 {
 	ContextMenu.Hide();
 
-	contextMenuItem = null;
+	ContextMenu.Items = [];
 };
 
 const addUserContentEvents = () : void =>
@@ -1996,7 +1986,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 
 	let moved : boolean = false;
 
-	const tempArray = <HTMLElement[]>[ ...(contextMenuItems || []), element ].filter(Boolean);
+	const tempArray = <HTMLElement[]>[ ...(ContextMenu.Items || []), element ].filter(Boolean);
 
 	const MoveElement = (ev : MouseEvent, ignoreMovement ?: boolean) : void =>
 	{
