@@ -361,7 +361,8 @@ window.addEventListener("userready", async () =>
 			if (id === "root") HideElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
 			else ShowElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
 
-			(<HTMLButtonElement>ContextMenuButtons.MoveSelector.querySelector(".move-here")).disabled = currentId === initialFolderId;
+			if (currentId === initialFolderId) HideElement(ContextMenuButtons.MoveSelector.querySelector(".move-here"));
+			else ShowElement(ContextMenuButtons.MoveSelector.querySelector(".move-here"));
 
 			ShowElement(ContextMenuButtons.MoveSelector.querySelector(".spinner"));
 
