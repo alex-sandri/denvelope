@@ -1787,7 +1787,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 	const target = <HTMLElement>e.target;
 	const contentTarget = GetUserContentElement(<HTMLElement>e.target);
 
-	ContextMenu.Items = (<HTMLElement[]>[
+	let contextMenuItems = (<HTMLElement[]>[
 		...foldersContainer.children,
 		...filesContainer.children,
 	]).filter(element => HasClass(element, "selected"));
@@ -1797,10 +1797,10 @@ const showContextMenu = (e : MouseEvent) : void =>
 	const contextMenuButtons: ContextMenuItem[] = [];
 
 	if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null)
-		&& ContextMenu.Items.length <= 1)
+		&& contextMenuItems.length <= 1)
 	{
-		if (isUserContentElement(contentTarget)) ContextMenu.Items = [ contentTarget ];
-		else ContextMenu.Items = [ document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]) ];
+		if (isUserContentElement(contentTarget)) contextMenuItems = [ contentTarget ];
+		else contextMenuItems = [ document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]) ];
 
 		if (Auth.IsAuthenticated && ContextMenu.Item.getAttribute("data-trashed") === "false")
 			contextMenuButtons.push(...[ ContextMenuItems.Move, ContextMenuItems.Rename ]);
@@ -1835,7 +1835,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 		else if (Auth.IsAuthenticated)
 			contextMenuButtons.push(...[ ContextMenuItems.Delete, ContextMenuItems.Restore ]);
 	}
-	else if (Auth.IsAuthenticated && ContextMenu.Items.length === 0)
+	else if (Auth.IsAuthenticated && contextMenuItems.length === 0)
 		if (!vault.contains(target))
 			contextMenuButtons.push(...[
 				ContextMenuItems.AddFiles,
@@ -1853,18 +1853,18 @@ const showContextMenu = (e : MouseEvent) : void =>
 					? ContextMenuItems.LockVault
 					: ContextMenuItems.CreateVault));
 		}
-	else if (ContextMenu.Items.length > 1)
+	else if (contextMenuItems.length > 1)
 	{
 		if (Auth.IsAuthenticated) contextMenuButtons.push(ContextMenuItems.Delete);
 		else if (Auth.IsSignedIn) contextMenuButtons.push(ContextMenuItems.SaveToMyAccount);
 
-		if (ContextMenu.Items.filter(element => element.getAttribute("data-trashed") === "false").length > 0)
+		if (contextMenuItems.filter(element => element.getAttribute("data-trashed") === "false").length > 0)
 		{
 			if (Auth.IsAuthenticated)
 			{
-				if (ContextMenu.Items.filter(element => element.getAttribute("data-starred") === "false").length > 0)
+				if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "false").length > 0)
 					contextMenuButtons.push(ContextMenuItems.AddToStarred);
-				else if (ContextMenu.Items.filter(element => element.getAttribute("data-starred") === "true").length > 0)
+				else if (contextMenuItems.filter(element => element.getAttribute("data-starred") === "true").length > 0)
 					contextMenuButtons.push(ContextMenuItems.RemoveFromStarred);
 
 				contextMenuButtons.push(ContextMenuItems.Move);
@@ -1874,7 +1874,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 		}
 		else contextMenuButtons.push(ContextMenuItems.Restore);
 
-		if (ContextMenu.Items.filter(element => HasClass(element, "file")).length === ContextMenu.Items.length) contextMenuButtons.push(ContextMenuItems.View);
+		if (contextMenuItems.filter(element => HasClass(element, "file")).length === contextMenuItems.length) contextMenuButtons.push(ContextMenuItems.View);
 	}
 
 	const selectedEditorTabContentType = target.closest(".tab")?.getAttribute("content-type");
@@ -1889,6 +1889,8 @@ const showContextMenu = (e : MouseEvent) : void =>
 	if (selectedEditorTabName?.endsWith(".json")) contextMenuButtons.push(ContextMenuItems.ValidateJson);
 
 	ContextMenu.Show(contextMenuButtons);
+
+	ContextMenu.Items = contextMenuItems;
 };
 
 const HideContextMenu = () : void =>

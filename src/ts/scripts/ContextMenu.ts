@@ -13,7 +13,12 @@ export default class ContextMenu
 
 	public static get Items()
 	{
-		return ContextMenu.items;
+		const { items } = ContextMenu;
+
+		// This property can only be read once after setting it
+		ContextMenu.Items = null;
+
+		return items;
 	}
 
 	public static get Item(): HTMLElement
