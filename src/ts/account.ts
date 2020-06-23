@@ -393,7 +393,13 @@ window.addEventListener("userready", async () =>
 
 							ContextMenuItems.MoveSelectorOptions.appendChild(element);
 
-							element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
+							element.querySelector(".select").addEventListener("click", async () =>
+							{
+								ContextMenu.Hide();
+
+								MoveElements(tempArray, element.id)
+							});
+
 							element.querySelector(".goto").addEventListener("click", () =>
 							{
 								currentId = doc.id;
