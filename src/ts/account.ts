@@ -1041,10 +1041,8 @@ window.addEventListener("userready", async () =>
 		UpdateBottomSectionBar(viewMyAccount);
 	});
 
-	document.addEventListener("click", e =>
+	document.addEventListener("click", () =>
 	{
-		if (e.target === contextMenuContainer) HideContextMenu();
-
 		if ((<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).filter(element => HasClass(element, "selected")).length === 0)
 			ContextMenu.Items = [];
 	});
