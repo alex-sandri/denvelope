@@ -4,7 +4,22 @@ export default class ContextMenu
 {
 	private static modal: Modal;
 
-	public static Items: HTMLElement[];
+	private static items: HTMLElement[];
+
+	public static set Items(items: HTMLElement[])
+	{
+		ContextMenu.items = items;
+	}
+
+	public static get Items()
+	{
+		const { items } = ContextMenu;
+
+		// This property can only be read once after setting it
+		ContextMenu.Items = null;
+
+		return items;
+	}
 
 	public static Show(items: ContextMenuItem[])
 	{
@@ -13,6 +28,8 @@ export default class ContextMenu
 		ContextMenu.modal.AppendContent(items);
 
 		ContextMenu.modal.Show(true);
+
+		ContextMenu.modal.Content.querySelectorAll("button").forEach(button => button.addEventListener("click", ContextMenu.Hide));
 	}
 
 	public static Hide()

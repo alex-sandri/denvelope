@@ -277,21 +277,15 @@ window.addEventListener("userready", async () =>
 	});
 
 	ContextMenuItems.View.addEventListener("click", () =>
-	{
 		[ ...contextMenuItems, contextMenuItem ]
 			.filter(Boolean)
 			.forEach((item, index, array) =>
-				HandlePageChangeAndLoadUserContent(null, item, array.length > 1));
-
-		HideContextMenu();
-	});
+				HandlePageChangeAndLoadUserContent(null, item, array.length > 1)));
 
 	ContextMenuItems.Save.addEventListener("click", () =>
 	{
 		const value = editor.getValue();
 		const id = editorTabs.querySelector(".active").id.split("-")[1];
-
-		HideContextMenu();
 
 		UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
 
@@ -313,8 +307,6 @@ window.addEventListener("userready", async () =>
 				type: item.classList[0],
 			}));
 
-		HideContextMenu();
-
 		preventWindowUnload.editor = false;
 	});
 
@@ -322,8 +314,6 @@ window.addEventListener("userready", async () =>
 	{
 		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
-
-		HideContextMenu();
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: true,
@@ -343,29 +333,19 @@ window.addEventListener("userready", async () =>
 	});
 
 	ContextMenuItems.SharingOptions.addEventListener("click", () =>
-	{
 		(<any>navigator).share({
 			title: "Denvelope",
 			text: `${Translation.Get("share->check_out")} ${(<HTMLElement>contextMenuItem.querySelector(".name p")).innerText} ${Translation.Get("share->on_denvelope")}`,
 			url: getUserContentURL(contextMenuItem, true),
-		});
-
-		HideContextMenu();
-	});
+		}));
 
 	ContextMenuItems.CopyShareableLink.addEventListener("click", () =>
-	{
-		navigator.clipboard.writeText(getUserContentURL(contextMenuItem, true));
-
-		HideContextMenu();
-	});
+		navigator.clipboard.writeText(getUserContentURL(contextMenuItem, true)));
 
 	ContextMenuItems.Unshare.addEventListener("click", () =>
 	{
 		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
-
-		HideContextMenu();
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: false,
@@ -465,8 +445,6 @@ window.addEventListener("userready", async () =>
 				...GetFirestoreUpdateTimestamp(),
 			}));
 
-		HideContextMenu();
-
 		batch.commit();
 	}));
 
@@ -534,16 +512,12 @@ window.addEventListener("userready", async () =>
 		};
 
 		modal.Show(true);
-
-		HideContextMenu();
 	});
 
 	ContextMenuItems.Info.addEventListener("click", () =>
 	{
 		const { id } = contextMenuItem;
 		const type = contextMenuItem.classList[0];
-
-		HideContextMenu();
 
 		const modal = new Modal();
 
@@ -684,8 +658,6 @@ window.addEventListener("userready", async () =>
 	{
 		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
 
-		HideContextMenu();
-
 		tempArray.forEach(async item =>
 		{
 			const { id } = item;
@@ -732,8 +704,6 @@ window.addEventListener("userready", async () =>
 	{
 		// Waiting for vaultOnly() caused contextMenuItem to become null on HideContextMenu()
 		const tempArray = [ ...contextMenuItems, contextMenuItem ].filter(Boolean);
-
-		HideContextMenu();
 
 		const batch = db.batch();
 
@@ -815,8 +785,6 @@ window.addEventListener("userready", async () =>
 		img.onerror = () => filePreviewContainer.click();
 
 		img.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
-
-		HideContextMenu();
 
 		let scale = 1;
 
@@ -949,8 +917,6 @@ window.addEventListener("userready", async () =>
 		iframe.src = await storage.ref(`${Auth.UserId}/${contextMenuItem.id}`).getDownloadURL();
 		iframe.frameBorder = "0";
 
-		HideContextMenu();
-
 		iframe.onload = () =>
 		{
 			HideElement(filePreviewSpinner);
@@ -1008,19 +974,9 @@ window.addEventListener("userready", async () =>
 		genericMessage.Show(message);
 	});
 
-	[ ContextMenuItems.CreateVault, ContextMenuItems.UnlockVault ].forEach(element => element.addEventListener("click", () =>
-	{
-		HideContextMenu();
+	[ ContextMenuItems.CreateVault, ContextMenuItems.UnlockVault ].forEach(element => element.addEventListener("click", () => vault.click()));
 
-		vault.click();
-	}));
-
-	ContextMenuItems.LockVault.addEventListener("click", () =>
-	{
-		HideContextMenu();
-
-		lockVaultButton.click();
-	});
+	ContextMenuItems.LockVault.addEventListener("click", () => lockVaultButton.click());
 
 	navigationBackButton.addEventListener("click", async () =>
 	{
