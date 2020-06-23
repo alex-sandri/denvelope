@@ -21,7 +21,7 @@ export default class ContextMenu
 		return ContextMenu.Items[0];
 	}
 
-	public static Show(items: ContextMenuItem[])
+	public static Show(items: ContextMenuButton[])
 	{
 		ContextMenu.modal = new Modal();
 
@@ -34,8 +34,8 @@ export default class ContextMenu
 		{
 			const target: HTMLElement = <HTMLElement>e.target;
 
-			if (!ContextMenuItems.Move.contains(target)
-				&& !ContextMenuItems.MoveSelector.contains(target)) ContextMenu.Hide();
+			if (!ContextMenuButtons.Move.contains(target)
+				&& !ContextMenuButtons.MoveSelector.contains(target)) ContextMenu.Hide();
 		}));
 
 		ContextMenu.modal.OnClose = () =>
@@ -54,63 +54,63 @@ export default class ContextMenu
 	}
 }
 
-export type ContextMenuItem = HTMLButtonElement | HTMLDivElement;
+export type ContextMenuButton = HTMLButtonElement | HTMLDivElement;
 
-export class ContextMenuItems
+export class ContextMenuButtons
 {
-	public static View: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-view");
+	public static View: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-view");
 
-	public static Save: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-save");
+	public static Save: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-save");
 
-	public static SaveToMyAccount: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-save-to-my-account");
+	public static SaveToMyAccount: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-save-to-my-account");
 
-	public static Share: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-share");
+	public static Share: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-share");
 
-	public static SharingOptions: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-sharing-options");
+	public static SharingOptions: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-sharing-options");
 
-	public static CopyShareableLink: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-copy-shareable-link");
+	public static CopyShareableLink: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-copy-shareable-link");
 
-	public static Unshare: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-unshare");
+	public static Unshare: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-unshare");
 
-	public static Move: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-move");
+	public static Move: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-move");
 
-	public static MoveSelector: ContextMenuItem = <HTMLDivElement>document.querySelector("#move-selector");
+	public static MoveSelector: ContextMenuButton = <HTMLDivElement>document.querySelector("#move-selector");
 
-	public static MoveSelectorOptions: ContextMenuItem = <HTMLDivElement>ContextMenuItems.MoveSelector.querySelector(".options");
+	public static MoveSelectorOptions: ContextMenuButton = <HTMLDivElement>ContextMenuButtons.MoveSelector.querySelector(".options");
 
-	public static AddToStarred: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-add-to-starred");
+	public static AddToStarred: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-add-to-starred");
 
-	public static RemoveFromStarred: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-remove-from-starred");
+	public static RemoveFromStarred: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-remove-from-starred");
 
-	public static Rename: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-rename");
+	public static Rename: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-rename");
 
-	public static Info: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-info");
+	public static Info: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-info");
 
-	public static Download: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-download");
+	public static Download: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-download");
 
-	public static Restore: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-restore");
+	public static Restore: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-restore");
 
-	public static Delete: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-delete");
+	public static Delete: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-delete");
 
-	public static DisplayImage: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-display-image");
+	public static DisplayImage: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-display-image");
 
-	public static DisplayPdf: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-display-pdf");
+	public static DisplayPdf: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-display-pdf");
 
-	public static ValidateXml: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-validate-xml");
+	public static ValidateXml: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-validate-xml");
 
-	public static ValidateJson: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-validate-json");
+	public static ValidateJson: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-validate-json");
 
-	public static AddFiles: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-add-files");
+	public static AddFiles: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-add-files");
 
-	public static AddFolder: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-add-folder");
+	public static AddFolder: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-add-folder");
 
-	public static CreateFile: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-create-file");
+	public static CreateFile: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-create-file");
 
-	public static CreateFolder: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-create-folder");
+	public static CreateFolder: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-create-folder");
 
-	public static CreateVault: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-create-vault");
+	public static CreateVault: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-create-vault");
 
-	public static UnlockVault: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-unlock");
+	public static UnlockVault: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-unlock");
 
-	public static LockVault: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-lock");
+	public static LockVault: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-lock");
 }
