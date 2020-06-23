@@ -1885,12 +1885,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 	ContextMenu.Show(contextMenuButtons);
 };
 
-const HideContextMenu = () : void =>
-{
-	ContextMenu.Hide();
-
-	ContextMenu.Items = [];
-};
+const HideContextMenu = () => ContextMenu.Hide();
 
 const addUserContentEvents = () : void =>
 {
