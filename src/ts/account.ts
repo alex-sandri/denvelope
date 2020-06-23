@@ -1342,7 +1342,7 @@ Shortcuts.Register("control+s", () =>
 	else if (Auth.IsSignedIn) ContextMenuItems.SaveToMyAccount.click();
 }, { ignoreInInput: false });
 
-Shortcuts.Register("delete", () => ContextMenuItems.Delete.click);
+Shortcuts.Register("delete", () => ContextMenuItems.Delete.click());
 
 Shortcuts.Register("backspace", () =>
 	(ContextMenu.Items?.length > 0 ? ContextMenuItems.Delete.click() : (GetCurrentFolderId() !== "root" ? navigationBackButton.click() : null)));
