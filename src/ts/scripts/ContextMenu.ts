@@ -16,7 +16,7 @@ export default class ContextMenu
 		const { items } = ContextMenu;
 
 		// This property can only be read once after setting it
-		ContextMenu.Items = null;
+		ContextMenu.Items = [];
 
 		return items;
 	}
