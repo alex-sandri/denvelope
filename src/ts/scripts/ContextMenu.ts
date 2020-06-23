@@ -38,7 +38,12 @@ export default class ContextMenu
 				&& !ContextMenuItems.MoveSelector.contains(target)) ContextMenu.Hide();
 		}));
 
-		ContextMenu.modal.OnClose = () => ContextMenu.Items.forEach(item => item.classList.remove("selected"));
+		ContextMenu.modal.OnClose = () =>
+		{
+			ContextMenu.Items.forEach(item => item.classList.remove("selected"));
+
+			ContextMenu.Items = [];
+		};
 	}
 
 	public static Hide()
