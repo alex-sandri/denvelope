@@ -191,7 +191,7 @@ export class Modal
 
 	private HideOnOuterClick = (e : Event) : void =>
 	{
-		if (!this.element.contains(<HTMLElement>e.target) && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
+		if (e.target === this.element.parentElement && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
 	}
 }
 
