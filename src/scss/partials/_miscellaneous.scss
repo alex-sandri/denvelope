@@ -279,31 +279,31 @@
 .context-menu-container
 {
     display: none;
+}
 
-    #move-selector
+#move-selector
+{
+    .options div
     {
-        .options div
+        @include flex($align-items: unset);
+
+        span
         {
-            @include flex($align-items: unset);
+            margin-left: $default-spacing;
+        }
 
-            span
-            {
-                margin-left: $default-spacing;
-            }
+        .select
+        {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
 
-            .select
-            {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-
-            .goto
-            {
-                width: unset;
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                border-left: none;
-            }
+        .goto
+        {
+            width: unset;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-left: none;
         }
     }
 }
