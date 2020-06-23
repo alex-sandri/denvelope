@@ -1078,7 +1078,9 @@ window.addEventListener("userready", async () =>
 
 	foldersContainer.parentElement.addEventListener("mousedown", e =>
 	{
-		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected")) (<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element => RemoveClass(element, "selected"));
+		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected"))
+			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ])
+				.forEach(element => RemoveClass(element, "selected"));
 
 		if (isUserContentElement(<HTMLElement>e.target)
 			|| contextMenuContainer.contains(<HTMLElement>e.target)) return;
@@ -1901,7 +1903,12 @@ const addUserContentEvents = () : void =>
 	const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(`${folderSelector} .menu-button button,${fileSelector} .menu-button button`));
 	const userContentElements = (<NodeListOf<HTMLDivElement>>document.querySelectorAll(`${folderSelector}, ${fileSelector}`));
 
-	[ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", showContextMenu));
+	[ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", e =>
+	{
+		AddClass(GetUserContentElement(<HTMLElement>e.target), "selected");
+
+		showContextMenu(e);
+	}));
 
 	if (trashedOnly()) return;
 

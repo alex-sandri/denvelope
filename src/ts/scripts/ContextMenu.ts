@@ -30,11 +30,15 @@ export default class ContextMenu
 		ContextMenu.modal.Show(true);
 
 		ContextMenu.modal.Content.querySelectorAll("button").forEach(button => button.addEventListener("click", ContextMenu.Hide));
+
+		ContextMenu.modal.OnClose = () => ContextMenu.Items.forEach(item => item.classList.remove("selected"));
 	}
 
 	public static Hide()
 	{
-		ContextMenu.modal.HideAndRemove();
+		ContextMenu.modal?.HideAndRemove();
+
+		ContextMenu.modal = null;
 	}
 }
 

@@ -129,7 +129,7 @@ export class Modal
 
 		setTimeout(() => this.container.remove(), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
 
-		document.removeEventListener("click", this.HideOnOuterClick);
+		document.removeEventListener("mouseup", this.HideOnOuterClick);
 	}
 
 	public HideAndRemove = () : void =>
