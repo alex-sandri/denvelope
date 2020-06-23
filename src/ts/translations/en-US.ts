@@ -37,6 +37,7 @@ export default {
 		context_menu: {
 			move: {
 				impossible: "Impossible to move this item, there are no folders to move this into",
+				here: "Move here",
 			},
 		},
 	},

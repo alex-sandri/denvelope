@@ -37,6 +37,7 @@ export default {
 		context_menu: {
 			move: {
 				impossible: "Impossibile spostare questo elemento, non ci sono cartelle in cui spostarlo",
+				here: "Sposta qui",
 			},
 		},
 	},

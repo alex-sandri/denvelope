@@ -429,6 +429,13 @@ window.addEventListener("userready", async () =>
 			ShowAvailableFoldersIn(currentId);
 		});
 
+		ContextMenuButtons.MoveSelector.querySelector(".move-here").addEventListener("click", async () =>
+		{
+			ContextMenu.Hide();
+
+			MoveElements(tempArray, currentId);
+		});
+
 		ShowAvailableFoldersIn(currentId);
 	});
 
