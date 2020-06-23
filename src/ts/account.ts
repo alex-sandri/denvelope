@@ -97,10 +97,6 @@ let editorSavedValue : string;
 const editorModels : Map<string, any> = new Map<string, any>();
 
 const contextMenuContainer : HTMLDivElement = document.querySelector(".context-menu-container");
-const contextMenu : HTMLDivElement = contextMenuContainer.querySelector(".context-menu");
-
-const contextMenuMoveSelector : HTMLDivElement = contextMenu.querySelector("#move-selector");
-const contextMenuMoveSelectorOptions : HTMLDivElement = contextMenuMoveSelector.querySelector(".options");
 
 const emptyFolder : HTMLDivElement = document.querySelector(".empty-folder");
 
@@ -356,23 +352,23 @@ window.addEventListener("userready", async () =>
 
 		let currentId = GetCurrentFolderId();
 
-		ShowElement(contextMenuMoveSelector);
+		ContextMenu.Show([ ContextMenuItems.MoveSelector ]);
 
 		const ShowAvailableFoldersIn = async (id : string) =>
 		{
-			if (id === "root") HideElement(contextMenuMoveSelector.querySelector(".back"));
-			else ShowElement(contextMenuMoveSelector.querySelector(".back"));
+			if (id === "root") HideElement(ContextMenuItems.MoveSelector.querySelector(".back"));
+			else ShowElement(ContextMenuItems.MoveSelector.querySelector(".back"));
 
-			ShowElement(contextMenuMoveSelector.querySelector(".spinner"));
+			ShowElement(ContextMenuItems.MoveSelector.querySelector(".spinner"));
 
-			contextMenuMoveSelectorOptions.innerHTML = "";
+			ContextMenuItems.MoveSelectorOptions.innerHTML = "";
 
 			db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get()
 				.then(docs =>
 				{
-					HideElement(contextMenuMoveSelector.querySelector(".spinner"));
+					HideElement(ContextMenuItems.MoveSelector.querySelector(".spinner"));
 
-					contextMenuMoveSelectorOptions.innerHTML = "";
+					ContextMenuItems.MoveSelectorOptions.innerHTML = "";
 
 					docs.forEach(doc =>
 					{
@@ -395,7 +391,7 @@ window.addEventListener("userready", async () =>
 								],
 							});
 
-							contextMenuMoveSelectorOptions.appendChild(element);
+							ContextMenuItems.MoveSelectorOptions.appendChild(element);
 
 							element.querySelector(".select").addEventListener("click", async () => MoveElements(tempArray, element.id));
 							element.querySelector(".goto").addEventListener("click", () =>
@@ -407,20 +403,20 @@ window.addEventListener("userready", async () =>
 						}
 					});
 
-					if (contextMenuMoveSelectorOptions.innerHTML.trim().length === 0) contextMenuMoveSelectorOptions.appendChild(new Component("p", {
+					if (ContextMenuItems.MoveSelectorOptions.innerHTML.trim().length === 0) ContextMenuItems.MoveSelectorOptions.appendChild(new Component("p", {
 						class: "multiline",
 						innerText: Translation.Get("account->context_menu->move->impossible"),
 					}).element);
 				});
 		};
 
-		contextMenuMoveSelector.querySelector(".back").addEventListener("click", async () =>
+		ContextMenuItems.MoveSelector.querySelector(".back").addEventListener("click", async () =>
 		{
-			HideElement(contextMenuMoveSelector.querySelector(".back"));
+			HideElement(ContextMenuItems.MoveSelector.querySelector(".back"));
 
-			ShowElement(contextMenuMoveSelector.querySelector(".spinner"));
+			ShowElement(ContextMenuItems.MoveSelector.querySelector(".spinner"));
 
-			contextMenuMoveSelectorOptions.innerHTML = "";
+			ContextMenuItems.MoveSelectorOptions.innerHTML = "";
 
 			currentId = (await db.collection(`users/${Auth.UserId}/folders`).doc(currentId).get()).data().parentId;
 
@@ -1791,8 +1787,6 @@ const showContextMenu = (e : MouseEvent) : void =>
 		...foldersContainer.children,
 		...filesContainer.children,
 	]).filter(element => HasClass(element, "selected"));
-
-	HideElements([ contextMenuMoveSelector ]);
 
 	const contextMenuButtons: ContextMenuItem[] = [];
 

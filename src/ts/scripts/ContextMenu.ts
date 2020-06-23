@@ -29,7 +29,12 @@ export default class ContextMenu
 
 		ContextMenu.modal.Show(true);
 
-		ContextMenu.modal.Content.querySelectorAll("button").forEach(button => button.addEventListener("click", ContextMenu.Hide));
+		ContextMenu.modal.Content.querySelectorAll("button").forEach(button => button.addEventListener("click", e =>
+		{
+			const target: HTMLElement = <HTMLElement>e.target;
+
+			if (!ContextMenuItems.Move.contains(target)) ContextMenu.Hide();
+		}));
 
 		ContextMenu.modal.OnClose = () => ContextMenu.Items.forEach(item => item.classList.remove("selected"));
 	}
@@ -42,7 +47,7 @@ export default class ContextMenu
 	}
 }
 
-export type ContextMenuItem = HTMLButtonElement;
+export type ContextMenuItem = HTMLButtonElement | HTMLDivElement;
 
 export class ContextMenuItems
 {
@@ -61,6 +66,10 @@ export class ContextMenuItems
 	public static Unshare: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-unshare");
 
 	public static Move: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-move");
+
+	public static MoveSelector: ContextMenuItem = <HTMLDivElement>document.querySelector("#move-selector");
+
+	public static MoveSelectorOptions: ContextMenuItem = <HTMLDivElement>ContextMenuItems.MoveSelector.querySelector(".options");
 
 	public static AddToStarred: ContextMenuItem = <HTMLButtonElement>document.querySelector("#cm-add-to-starred");
 
