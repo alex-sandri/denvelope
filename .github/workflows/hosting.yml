@@ -9,21 +9,18 @@ on:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - name: build
+        uses: actions/setup-node@master
         with:
           node-version: 12.x
-      - run: npm ci
-      - run: npm run build:linux
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: w9jds/firebase-action@master
+        run: npm ci
+        run: npm run build:ci
+      - name: deploy
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
