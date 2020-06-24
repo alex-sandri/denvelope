@@ -26,11 +26,22 @@ handlebars.registerPartial("privacy", handlebars.compile(fs.readFileSync(path.jo
 handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "security.hbs")).toString("utf-8")));
 handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "spinner.hbs")).toString("utf-8")));
 
-const cssFileName = glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css"))[0].split("/").pop();
+/**
+ * The first file is the newest
+ */
+const sortByFileCreationTime = (a, b) =>
+{
+    const aStats = fs.statSync(a);
+    const bStats = fs.statSync(b);
 
-const indexJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "index.*.js"))[0].split("/").pop();
-const accountJsFileName =  glob.sync(path.join(ASSETS_PATH, "js", "account.*.js"))[0].split("/").pop();
-const settingsJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "settings.*.js"))[0].split("/").pop();
+    return bStats.ctime - aStats.ctime;
+}
+
+const cssFileName = glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css")).sort(sortByFileCreationTime)[0].split("/").pop();
+
+const indexJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "index.*.js")).sort(sortByFileCreationTime)[0].split("/").pop();
+const accountJsFileName =  glob.sync(path.join(ASSETS_PATH, "js", "account.*.js")).sort(sortByFileCreationTime)[0].split("/").pop();
+const settingsJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "settings.*.js")).sort(sortByFileCreationTime)[0].split("/").pop();
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "index.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "index.hbs"), "utf8"))({
     cssversion: cssFileName,
