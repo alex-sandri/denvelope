@@ -14,11 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
-      - name: build
         with:
           node-version: 12.x
-        run: npm ci
-        run: npm run build:ci
+      - name: build
+        run: |
+          npm ci
+          npm run build:ci
       - name: deploy
         uses: w9jds/firebase-action@master
         with:
