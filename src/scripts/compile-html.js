@@ -1,3 +1,5 @@
+const assets = require("../ts/config/assets.json");
+
 const fs = require("fs");
 const path = require("path");
 const handlebars = require("handlebars");
@@ -87,7 +89,11 @@ fs.writeFileSync("../../public/404.html", handlebars.compile(fs.readFileSync("..
     logoRedirectPath: "/",
 }));
 
-console.log(CssFileName);
-console.log(homeJsFileName);
-console.log(accountJsFileName);
-console.log(settingsJsFileName);
+const updatedAssets = assets;
+
+updatedAssets.dynamic.css.bundle = CssFileName;
+updatedAssets.dynamic.js.home = homeJsFileName;
+updatedAssets.dynamic.js.account = accountJsFileName;
+updatedAssets.dynamic.js.settings = settingsJsFileName;
+
+fs.writeFileSync("../ts/config/assets.json", JSON.stringify(updatedAssets, null, 4));
