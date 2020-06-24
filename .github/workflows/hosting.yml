@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 12.x
       - run: npm ci
-      - run: npm run build
+      - run: npm run build:linux
   deploy:
     needs: build
     runs-on: ubuntu-latest
