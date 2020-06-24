@@ -1906,7 +1906,7 @@ const addUserContentEvents = () : void =>
 
 	[ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", e =>
 	{
-		AddClass(GetUserContentElement(<HTMLElement>e.target), "selected");
+		if (!vault.contains(element)) AddClass(GetUserContentElement(<HTMLElement>e.target), "selected");
 
 		showContextMenu(e);
 	}));

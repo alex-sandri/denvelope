@@ -26,68 +26,68 @@ handlebars.registerPartial("privacy", handlebars.compile(fs.readFileSync(path.jo
 handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "security.hbs")).toString("utf-8")));
 handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "spinner.hbs")).toString("utf-8")));
 
-const CssFileName = glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css"))[0].split("/").pop();
+const cssFileName = glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css"))[0].split("/").pop();
 
 const homeJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "home.*.js"))[0].split("/").pop();
 const accountJsFileName =  glob.sync(path.join(ASSETS_PATH, "js", "account.*.js"))[0].split("/").pop();
 const settingsJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "settings.*.js"))[0].split("/").pop();
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "index.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "home.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "account.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "account.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: accountJsFileName,
     logoRedirectPath: "/account",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "settings.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: settingsJsFileName,
     logoRedirectPath: "/account",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "plans.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "plans.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "terms.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "terms.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "privacy.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "privacy.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "cookies.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "cookies.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "accessibility.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "accessibility.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "404.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "404.hbs"), "utf8"))({
-    cssversion: CssFileName,
+    cssversion: cssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
@@ -95,7 +95,7 @@ fs.writeFileSync(path.join(PUBLIC_PATH, "404.html"), handlebars.compile(fs.readF
 
 const updatedAssets = assets;
 
-updatedAssets.dynamic.css.bundle = CssFileName;
+updatedAssets.dynamic.css.bundle = cssFileName;
 updatedAssets.dynamic.js.home = homeJsFileName;
 updatedAssets.dynamic.js.account = accountJsFileName;
 updatedAssets.dynamic.js.settings = settingsJsFileName;
