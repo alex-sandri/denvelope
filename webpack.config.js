@@ -35,28 +35,6 @@ module.exports = [
         mode: "production",
     },
     {
-        entry: "./src/ts/service_workers/sw.ts",
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    loader: "ts-loader",
-                },
-            ],
-        },
-        resolve: {
-            extensions: [
-                ".ts",
-                ".js"
-            ],
-        },
-        output: {
-            filename: "sw.js",
-            path: path.resolve(__dirname, "public"),
-        },
-        mode: "production",
-    },
-    {
         entry: "./src/scss/main.scss",
         output: {
             // This is necessary for webpack to compile
