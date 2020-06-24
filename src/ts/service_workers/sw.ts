@@ -1,14 +1,14 @@
 import { static as staticAssets, dynamic } from "../config/assets.json";
 
-const cacheName : string = "static-v3040";
+const cacheName : string = "static-v3041";
 
 self.addEventListener("install", (e : any) =>
 	e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
 		...staticAssets,
-		dynamic.css.bundle,
-		dynamic.js.home,
-		dynamic.js.account,
-		dynamic.js.settings,
+		`${dynamic.css.rootDir}/${dynamic.css.bundle}`,
+		`${dynamic.js.rootDir}/${dynamic.js.home}`,
+		`${dynamic.js.rootDir}/${dynamic.js.account}`,
+		`${dynamic.js.rootDir}/${dynamic.js.settings}`,
 	]))));
 
 self.addEventListener("activate", (e : any) =>

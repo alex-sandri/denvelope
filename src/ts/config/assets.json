@@ -74,9 +74,11 @@
     ],
     "dynamic": {
         "css": {
+            "rootDir": "/assets/css",
             "bundle": "bundle.53d27b743b4a0130e84bf6043e64d1ae.css"
         },
         "js": {
+            "rootDir": "/assets/js",
             "home": "home.c9300e4a9544342949e9.js",
             "account": "account.e2f118b9342c68e0e002.js",
             "settings": "settings.47beb9d85040bfbed95c.js"
