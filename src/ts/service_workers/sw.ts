@@ -6,7 +6,7 @@ self.addEventListener("install", (e : any) =>
 	e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
 		...staticAssets,
 		`${dynamic.css.rootDir}/${dynamic.css.bundle}`,
-		`${dynamic.js.rootDir}/${dynamic.js.home}`,
+		`${dynamic.js.rootDir}/${dynamic.js.index}`,
 		`${dynamic.js.rootDir}/${dynamic.js.account}`,
 		`${dynamic.js.rootDir}/${dynamic.js.settings}`,
 	]))));

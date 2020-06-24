@@ -2,7 +2,7 @@
   "compileOnSave": true,
   "files": [
     "src/ts/account.ts",
-    "src/ts/home.ts",
+    "src/ts/index.ts",
     "src/ts/settings.ts"
   ],
   "compilerOptions": {

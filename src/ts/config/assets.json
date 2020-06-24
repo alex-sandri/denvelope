@@ -79,7 +79,7 @@
         },
         "js": {
             "rootDir": "/assets/js",
-            "home": "home.c9300e4a9544342949e9.js",
+            "index": "index.c9300e4a9544342949e9.js",
             "account": "account.d226de35766e4ef93555.js",
             "settings": "settings.47beb9d85040bfbed95c.js"
         }
