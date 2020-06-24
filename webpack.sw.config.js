@@ -21,6 +21,5 @@ module.exports = [
             filename: "sw.js",
             path: path.resolve(__dirname, "public"),
         },
-        mode: "production",
     }
 ];

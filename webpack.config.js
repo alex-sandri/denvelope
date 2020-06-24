@@ -32,7 +32,6 @@ module.exports = [
             filename: "[name].[contenthash].js",
             path: path.resolve(__dirname, "public/assets/js"),
         },
-        mode: "production",
     },
     {
         entry: "./src/scss/main.scss",
@@ -74,6 +73,5 @@ module.exports = [
                 }
             ]
         },
-        mode: "production"
     }
 ];
