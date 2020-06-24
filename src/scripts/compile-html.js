@@ -5,84 +5,88 @@ const path = require("path");
 const handlebars = require("handlebars");
 const glob = require("glob");
 
-handlebars.registerPartial("advanced", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/advanced.hbs")).toString("utf-8")));
-handlebars.registerPartial("contextmenu", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/contextmenu.hbs")).toString("utf-8")));
-handlebars.registerPartial("defaulttags", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/defaulttags.hbs")).toString("utf-8")));
-handlebars.registerPartial("editor", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/editor.hbs")).toString("utf-8")));
-handlebars.registerPartial("firebase", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/firebase.hbs")).toString("utf-8")));
-handlebars.registerPartial("footer", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/footer.hbs")).toString("utf-8")));
-handlebars.registerPartial("general", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/general.hbs")).toString("utf-8")));
-handlebars.registerPartial("header", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/header.hbs")).toString("utf-8")));
-handlebars.registerPartial("info", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/info.hbs")).toString("utf-8")));
-handlebars.registerPartial("languageselect", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/components/language-select.hbs")).toString("utf-8")));
-handlebars.registerPartial("modal", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/modal.hbs")).toString("utf-8")));
-handlebars.registerPartial("plan", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/plan.hbs")).toString("utf-8")));
-handlebars.registerPartial("plans", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/components/plans.hbs")).toString("utf-8")));
-handlebars.registerPartial("privacy", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/privacy.hbs")).toString("utf-8")));
-handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/settings/security.hbs")).toString("utf-8")));
-handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(__dirname + "/../views/spinner.hbs")).toString("utf-8")));
+const PUBLIC_PATH = path.join(__dirname, "..", "..", "public");
+const ASSETS_PATH = path.join(PUBLIC_PATH, "assets");
+const VIEWS_PATH = path.join(__dirname, "..", "views");
 
-const CssFileName = glob.sync("../../public/assets/css/bundle.*.css")[0].split("/").pop();
+handlebars.registerPartial("advanced", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "advanced.hbs")).toString("utf-8")));
+handlebars.registerPartial("contextmenu", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "contextmenu.hbs")).toString("utf-8")));
+handlebars.registerPartial("defaulttags", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "defaulttags.hbs")).toString("utf-8")));
+handlebars.registerPartial("editor", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "editor.hbs")).toString("utf-8")));
+handlebars.registerPartial("firebase", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "firebase.hbs")).toString("utf-8")));
+handlebars.registerPartial("footer", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "footer.hbs")).toString("utf-8")));
+handlebars.registerPartial("general", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "general.hbs")).toString("utf-8")));
+handlebars.registerPartial("header", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "header.hbs")).toString("utf-8")));
+handlebars.registerPartial("info", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "info.hbs")).toString("utf-8")));
+handlebars.registerPartial("languageselect", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "components", "language-select.hbs")).toString("utf-8")));
+handlebars.registerPartial("modal", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "modal.hbs")).toString("utf-8")));
+handlebars.registerPartial("plan", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "plan.hbs")).toString("utf-8")));
+handlebars.registerPartial("plans", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "components", "plans.hbs")).toString("utf-8")));
+handlebars.registerPartial("privacy", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "privacy.hbs")).toString("utf-8")));
+handlebars.registerPartial("security", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings", "security.hbs")).toString("utf-8")));
+handlebars.registerPartial("spinner", handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "spinner.hbs")).toString("utf-8")));
 
-const homeJsFileName = glob.sync("../../public/assets/js/home.*.js")[0].split("/").pop();
-const accountJsFileName =  glob.sync("../../public/assets/js/account.*.js")[0].split("/").pop();
-const settingsJsFileName = glob.sync("../../public/assets/js/settings.*.js")[0].split("/").pop();
+const CssFileName = glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css"))[0].split("/").pop();
 
-fs.writeFileSync("../../public/index.html", handlebars.compile(fs.readFileSync("../views/home.hbs", "utf8"))({
+const homeJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "home.*.js"))[0].split("/").pop();
+const accountJsFileName =  glob.sync(path.join(ASSETS_PATH, "js", "account.*.js"))[0].split("/").pop();
+const settingsJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "settings.*.js"))[0].split("/").pop();
+
+fs.writeFileSync(path.join(PUBLIC_PATH, "index.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "home.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync("../../public/account.html", handlebars.compile(fs.readFileSync("../views/account.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "account.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "account.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: accountJsFileName,
     logoRedirectPath: "/account",
 }));
 
-fs.writeFileSync("../../public/settings.html", handlebars.compile(fs.readFileSync("../views/settings.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "settings.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: settingsJsFileName,
     logoRedirectPath: "/account",
 }));
 
-fs.writeFileSync("../../public/plans.html", handlebars.compile(fs.readFileSync("../views/plans.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "plans.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "plans.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync("../../public/terms.html", handlebars.compile(fs.readFileSync("../views/terms.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "terms.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "terms.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync("../../public/privacy.html", handlebars.compile(fs.readFileSync("../views/privacy.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "privacy.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "privacy.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync("../../public/cookies.html", handlebars.compile(fs.readFileSync("../views/cookies.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "cookies.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "cookies.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync("../../public/accessibility.html", handlebars.compile(fs.readFileSync("../views/accessibility.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "accessibility.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "accessibility.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync("../../public/404.html", handlebars.compile(fs.readFileSync("../views/404.hbs", "utf8"))({
+fs.writeFileSync(path.join(PUBLIC_PATH, "404.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "404.hbs"), "utf8"))({
     cssversion: CssFileName,
     jsversion: homeJsFileName,
     year: new Date().getFullYear(),
@@ -96,4 +100,4 @@ updatedAssets.dynamic.js.home = homeJsFileName;
 updatedAssets.dynamic.js.account = accountJsFileName;
 updatedAssets.dynamic.js.settings = settingsJsFileName;
 
-fs.writeFileSync("../ts/config/assets.json", JSON.stringify(updatedAssets, null, 4));
+fs.writeFileSync(path.join(__dirname, "..", "ts", "config", "assets.json"), JSON.stringify(updatedAssets, null, 4));
