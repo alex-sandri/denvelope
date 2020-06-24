@@ -1,6 +1,6 @@
 import { static as staticAssets, dynamic } from "../config/assets.json";
 
-const cacheName : string = "static-v3048";
+const cacheName : string = "static-v3049";
 
 self.addEventListener("install", (e : any) =>
 	e.waitUntil(caches.open(cacheName).then(cache => cache.addAll([
