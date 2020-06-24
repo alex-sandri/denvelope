@@ -214,6 +214,10 @@ export const fileDeleted = functions.region(FUNCTIONS_REGION).firestore.document
     const userId = context.params.userId;
     const fileId = context.params.fileId;
 
+    const exists = await storage.bucket().file(`${userId}/${fileId}`).exists();
+
+    if (!exists[0]) return; // Do not continue if the file doesn't exist
+
     await storage.bucket().file(`${userId}/${fileId}`).delete();
 
     const size = doc.data().size;
