@@ -5,11 +5,7 @@ aside
     width: 100%;
     background-color: $primary-color;
 
-    #my-account,
-    #shared,
-    #starred,
-    #recents,
-    #trash
+    button:not(:disabled)
     {
         padding: 5px;
         width: 20%;
