@@ -58,7 +58,7 @@
                     text-decoration: none;
                 }
 
-                .delete:not(.blocked):not(:disabled)
+                .delete:not(:disabled)
                 {
                     &:focus,
                     &:hover
