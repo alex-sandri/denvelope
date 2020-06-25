@@ -124,10 +124,7 @@ header
             overflow-x: hidden;
             overscroll-behavior: contain;
 
-            .account,
-            .settings,
-            .storage-info,
-            .upgrade-plan,
+            a,
             button
             {
                 width: 100%;
@@ -141,10 +138,7 @@ header
                 }
             }
 
-            .account,
-            .settings,
-            .storage-info,
-            .upgrade-plan
+            a
             {
                 margin-bottom: $default-spacing;
                 border-radius: 25px;
