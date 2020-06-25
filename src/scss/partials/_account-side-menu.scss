@@ -38,5 +38,10 @@ aside
             background-color: rgba($secondary-color, 0.2);
             color: $secondary-color;
         }
+
+        &:focus
+        {
+            box-shadow: none;
+        }
     }
 }
