@@ -58,7 +58,8 @@ html
 
     &:not(.file-open):not(.signed-out)
     {
-        body.account
+        body.account,
+        body.settings
         {
             .modal.floating,
             .generic-message
