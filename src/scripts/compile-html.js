@@ -106,6 +106,8 @@ fs.writeFileSync(path.join(PUBLIC_PATH, "404.html"), handlebars.compile(fs.readF
 
 const updatedAssets = assets;
 
+updatedAssets.version++;
+
 updatedAssets.dynamic.css.bundle = cssFileName;
 updatedAssets.dynamic.js.index = indexJsFileName;
 updatedAssets.dynamic.js.account = accountJsFileName;
