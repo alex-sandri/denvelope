@@ -127,14 +127,13 @@ export default () : void =>
 	document.querySelectorAll(".sign-in").forEach(element => element.addEventListener("click", () =>
 	{
 		firebaseUiAuthContainer.style.display = "flex";
+
+		const modal = new Modal();
+
+		modal.AppendContent([ firebaseUiAuthContainer ]);
+
+		modal.Show(true);
 	}));
-
-	firebaseUiAuthContainer.addEventListener("click", e =>
-	{
-		const target = <HTMLElement>e.target;
-
-		if (![ "button", "a", "p" ].includes(target.tagName.toLowerCase())) firebaseUiAuthContainer.style.display = "none";
-	});
 
 	signOutButton.addEventListener("click", () => Auth.SignOut());
 

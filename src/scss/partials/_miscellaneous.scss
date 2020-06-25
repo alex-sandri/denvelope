@@ -156,7 +156,7 @@
             box-shadow: 0 0 0 $border-width * 2 $primary-color;
         }
 
-        &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.input-icon)
+        &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.input-icon):not(.firebaseui-idp-button)
         {
             width: 100%;
             background-color: $secondary-color;
@@ -627,41 +627,12 @@
 
 .firebaseui-auth-container
 {
-    @include flex($flex-direction: column);
-
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    background-color: rgba($primary-color, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: $default-spacing;
     display: none;
-
-    .close
-    {
-        @include flex;
-
-        position: absolute;
-        top: $default-spacing;
-        right: $default-spacing;
-        border: none;
-        padding: 0;
-        background-color: transparent;
-
-        &:focus,
-        &:hover
-        {
-            background-color: unset;
-            color: currentColor;
-        }
-    }
 
     .firebaseui-container
     {
+        width: 100%;
+
         .firebaseui-card-content
         {
             form
