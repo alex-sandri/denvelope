@@ -31,22 +31,11 @@ html:not(.signed-in):not(.signed-out)
                 {
                     -webkit-appearance: textfield;
                 }
-
-                &:focus-within
-                {
-                    // Make it appear above the header just during focus to avoid seeing the top box-shadow under it
-                    z-index: 999;
-                }
             }
 
             #add-content
             {
                 margin-left: $default-spacing;
-            }
-
-            .more-options
-            {
-                display: none;
             }
         }
 
@@ -97,16 +86,6 @@ html:not(.signed-in):not(.signed-out)
         @at-root .add-content-options
         {
             display: none;
-
-            .buttons-container
-            {
-                @include flex($flex-direction: column, $align-items: unset);
-            }
-
-            .input-container
-            {
-                display: none;
-            }
         }
     }
 
@@ -344,11 +323,6 @@ html:not(.signed-in):not(.signed-out)
                     border-radius: $border-radius;
                 }
             }
-        }
-
-        .edit-info
-        {
-            display: none;
         }
     }
 }
