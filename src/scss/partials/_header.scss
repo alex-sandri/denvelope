@@ -237,15 +237,9 @@ header
 
             .links
             {
-                a,
-                span
-                {
-                    color: $secondary-color;
-                    font-size: 12px;
-                }
-
                 a
                 {
+                    font-size: 12px;
                     padding: 4px 8px;
                     margin: auto;
                     text-decoration: none;
@@ -265,6 +259,8 @@ header
                     &:hover,
                     &:focus
                     {
+                        color: $secondary-color;
+                        background-color: unset;
                         text-decoration: underline;
                     }
                 }
