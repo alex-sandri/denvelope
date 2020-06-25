@@ -38,17 +38,10 @@
                     margin-bottom: 0;
                 }
             
-                button:not(.selected),
+                button,
                 a
                 {
                     width: 100%;
-                    background-color: rgba($primary-color, 0.5);
-
-                    &:hover:not(:disabled)
-                    {
-                        background-color: $secondary-color;
-                        color: $primary-color;
-                    }
                 }
 
                 a

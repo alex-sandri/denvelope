@@ -12,6 +12,22 @@ button,
     cursor: pointer;
     transition: $transition-time;
 
+    &.transparent
+    {
+        background-color: rgba($primary-color, 0.5);
+
+        &:hover
+        {
+            color: $primary-color;
+            background-color: $secondary-color;
+        }
+
+        &:disabled:hover
+        {
+            background-color: rgba($primary-color, 0.5);
+        }
+    }
+
     &:focus
     {
         box-shadow: 0 0 0 $border-width * 2 $secondary-color;

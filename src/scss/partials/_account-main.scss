@@ -39,17 +39,9 @@ html:not(.signed-in):not(.signed-out)
                 }
             }
 
-            #add-content,
-            .more-options
+            #add-content
             {
-                background-color: rgba($primary-color, 0.5);
                 margin-left: $default-spacing;
-
-                &:hover
-                {
-                    background-color: $secondary-color;
-                    color: $primary-color;
-                }
             }
 
             .more-options
@@ -64,19 +56,6 @@ html:not(.signed-in):not(.signed-out)
 
             display: none;
             margin-top: $default-spacing;
-
-            .back-button,
-            .empty-trash-button,
-            .lock-vault-button
-            {
-                background-color: rgba($primary-color, 0.5);
-
-                &:not(:disabled):hover
-                {
-                    background-color: $secondary-color;
-                    color: $primary-color;
-                }
-            }
 
             .back-button
             {
