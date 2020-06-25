@@ -1,13 +1,13 @@
 .settings main
 {
-    padding: 0 $default-spacing;
+    height: calc(100% - #{$header-height + $account-bottom-bar-height});
+    padding: $default-spacing;
+    padding-top: 0;
     background-color: rgba($primary-color, 0.5);
     overflow: auto;
 
     .settings-section
     {
-        padding: $default-spacing;
-        margin: 0 #{-$default-spacing};
         display: none;
 
         .setting
