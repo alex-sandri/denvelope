@@ -15,7 +15,6 @@
         @include flex;
 
         flex: 1 1 0;
-        background-color: rgba($primary-color, 0.5);
 
         i::after
         {
@@ -23,11 +22,8 @@
             white-space: pre;
         }
 
-        &:focus,
-        &:hover
+        &:focus
         {
-            background-color: $secondary-color;
-            color: $primary-color;
             box-shadow: none;
         }
         
