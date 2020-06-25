@@ -12,18 +12,21 @@ button,
     cursor: pointer;
     transition: $transition-time;
 
-    &:not(:disabled)
+    &:focus
     {
-        &:focus
-        {
-            box-shadow: 0 0 0 $border-width * 2 $secondary-color
-        }
+        box-shadow: 0 0 0 $border-width * 2 $secondary-color;
+    }
 
-        &:hover
-        {
-            background-color: $secondary-color;
-            color: $primary-color;
-        }
+    &:hover
+    {
+        background-color: $secondary-color;
+        color: $primary-color;
+    }
+
+    &:disabled:hover
+    {
+        background-color: $primary-color;
+        color: $secondary-color;
     }
 
     &:disabled
