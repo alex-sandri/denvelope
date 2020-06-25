@@ -121,18 +121,13 @@ window.addEventListener("userready", async () =>
 				action: "confirm",
 			});
 
-			const input = <HTMLInputElement> new Input({
-				attributes: {
-					id: "name",
-					placeholder: Translation.Get("generic->name"),
-				},
-			}).element.querySelector("input");
+			const { element, input } = new Input({ labelTranslationId: "generic->name" });
 
 			input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length === 0; });
 
 			modal.ConfirmButton.disabled = true;
 
-			modal.AppendContent([ input.parentElement ]);
+			modal.AppendContent([ element ]);
 
 			modal.OnConfirm = () =>
 			{
@@ -150,7 +145,7 @@ window.addEventListener("userready", async () =>
 				}
 				else
 				{
-					input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
+					element.insertAdjacentElement("beforebegin", new Component("p", {
 						innerText: Translation.Get("errors->empty"),
 						class: "input-error",
 					}).element);
@@ -439,18 +434,11 @@ window.addEventListener("userready", async () =>
 
 		const modal = new Modal({ action: "update" });
 
-		const nameInput = new Input({
-			attributes: {
-				class: "name",
-				placeholder: Translation.Get("generic->name"),
-			},
-		}).element;
-
-		const input : HTMLInputElement = nameInput.querySelector(".name");
+		const { element, input } = new Input({ labelTranslationId: "generic->name" });
 
 		input.addEventListener("input", () => { modal.UpdateButton.disabled = input.value.length === 0; });
 
-		modal.AppendContent([ nameInput ]);
+		modal.AppendContent([ element ]);
 
 		input.value = (<HTMLParagraphElement>ContextMenu.Item.querySelector(".name p")).innerText;
 
@@ -486,7 +474,7 @@ window.addEventListener("userready", async () =>
 			{
 				modal.Show(true);
 
-				input.parentElement.insertAdjacentElement("beforebegin", new Component("p", {
+				element.insertAdjacentElement("beforebegin", new Component("p", {
 					innerText: Translation.Get(`errors->${name.length === 0 ? "empty" : "user_content->already_exists"}`),
 					class: "input-error",
 				}).element);
@@ -1167,28 +1155,23 @@ window.addEventListener("userready", async () =>
 				action: "confirm",
 			});
 
-			const vaultPinInput = new InputWithIcon({
-				attributes: {
-					id: "vault-pin",
-					placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
-					type: "password",
-				},
+			const { element, input } = new InputWithIcon({
+				labelTranslationId: "generic->name",
 				iconClassName: "fas fa-key fa-fw",
-			}).element;
-
-			const input = vaultPinInput.querySelector("input");
+				attributes: { type: "password" },
+			});
 
 			input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
 
 			modal.ConfirmButton.disabled = true;
 
-			modal.AppendContent([ vaultPinInput ]);
+			modal.AppendContent([ element ]);
 
 			modal.OnConfirm = async () =>
 			{
 				const pin = input.value;
 
-				if (HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
+				if (HasClass(input, "error")) element.previousElementSibling.remove();
 
 				RemoveClass(input, "error");
 
@@ -1206,7 +1189,7 @@ window.addEventListener("userready", async () =>
 					{
 						AddClass(input, "error");
 
-						vaultPinInput.insertAdjacentElement("beforebegin", new Component("p", {
+						element.insertAdjacentElement("beforebegin", new Component("p", {
 							class: "input-error",
 							innerText: Translation.Get("api->messages->vault->wrong_pin"),
 						}).element);

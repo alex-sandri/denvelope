@@ -1,3 +1,5 @@
+import Translation from "./Translation";
+
 export class Component
 {
 	public element : HTMLElement;
@@ -60,25 +62,43 @@ export class Component
 	}
 }
 
+interface InputComponentOptions
+{
+	labelTranslationId: string,
+	class?: string,
+	children?: HTMLElement[],
+	attributes?: { type?: string },
+}
+
+interface InputWithIconComponentOptions extends InputComponentOptions
+{
+	iconClassName: string,
+}
+
 export class Input extends Component
 {
-	constructor(protected options: any)
+	public input: HTMLInputElement;
+
+	constructor(protected options: InputComponentOptions)
 	{
 		super("div", {
 			class: options.class ?? "input",
 			children: [
-				new Component("input", { ...options.attributes }).element,
-				...(options.children ?? []),
+				Translation.GetElement(options.labelTranslationId),
+				new Component("input").element,
 			],
 		});
+
+		this.input = this.element.querySelector("input");
 	}
 }
 
 export class InputWithIcon extends Input
 {
-	constructor(protected options: any)
+	constructor(protected options: InputWithIconComponentOptions)
 	{
 		super({
+			labelTranslationId: options.labelTranslationId,
 			class: "input-with-icon",
 			children: [
 				new Component("div", {
@@ -95,7 +115,7 @@ export class InputWithIcon extends Input
 
 		if (options.attributes?.type === "password") this.element.querySelector(".input-icon").addEventListener("click", () =>
 		{
-			this.element.querySelector("input").type = this.element.querySelector("input").type === "password"
+			this.input.type = this.input.type === "password"
 				? "text"
 				: "password";
 		});

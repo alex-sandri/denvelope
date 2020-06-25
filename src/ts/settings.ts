@@ -239,16 +239,11 @@ window.addEventListener("userready", () =>
 			action: "confirm",
 		});
 
-		const backgroundImageUrlInput = new InputWithIcon({
-			attributes: {
-				id: "background-image-url",
-				placeholder: Translation.Get("account->image_address"),
-				type: "url",
-			},
+		const { element, input } = new InputWithIcon({
+			labelTranslationId: "account->image_address",
 			iconClassName: "fas fa-link fa-fw",
-		}).element;
-
-		const input = backgroundImageUrlInput.querySelector("input");
+			attributes: { type: "url" },
+		});
 
 		input.addEventListener("input", () =>
 		{
@@ -267,11 +262,11 @@ window.addEventListener("userready", () =>
 
 		modal.ConfirmButton.disabled = true;
 
-		modal.AppendContent([ backgroundImageUrlInput ]);
+		modal.AppendContent([ element ]);
 
 		modal.OnConfirm = () =>
 		{
-			if (HasClass(input, "error")) backgroundImageUrlInput.previousElementSibling.remove();
+			if (HasClass(input, "error")) element.previousElementSibling.remove();
 
 			RemoveClass(input, "error");
 
@@ -557,25 +552,19 @@ window.addEventListener("userready", () =>
 		});
 
 		const currentVaultPinInput = new InputWithIcon({
-			attributes: {
-				id: "current-vault-pin",
-				placeholder: Translation.Get("settings->security->change_vault_pin->current_or_recovery_code"),
-				type: "password",
-			},
+			labelTranslationId: "settings->security->change_vault_pin->current_or_recovery_code",
 			iconClassName: "fas fa-key fa-fw",
-		}).element;
+			attributes: { type: "password" },
+		});
 
 		const newVaultPinInput = new InputWithIcon({
-			attributes: {
-				id: "new-vault-pin",
-				placeholder: Translation.Get("settings->security->change_vault_pin->new"),
-				type: "password",
-			},
+			labelTranslationId: "settings->security->change_vault_pin->new",
 			iconClassName: "fas fa-key fa-fw",
-		}).element;
+			attributes: { type: "password" },
+		});
 
-		const currentPinInput = currentVaultPinInput.querySelector("input");
-		const newPinInput = newVaultPinInput.querySelector("input");
+		const currentPinInput = currentVaultPinInput.input;
+		const newPinInput = newVaultPinInput.input;
 
 		[ currentPinInput, newPinInput ].forEach(input =>
 			input.addEventListener("input", () =>
@@ -586,15 +575,15 @@ window.addEventListener("userready", () =>
 
 		modal.ConfirmButton.disabled = true;
 
-		modal.AppendContent([ currentVaultPinInput, newVaultPinInput ]);
+		modal.AppendContent([ currentVaultPinInput.element, newVaultPinInput.element ]);
 
 		modal.OnConfirm = async () =>
 		{
 			const currentPin = currentPinInput.value;
 			const newPin = newPinInput.value;
 
-			if (HasClass(currentPinInput, "error")) currentVaultPinInput.previousElementSibling.remove();
-			if (HasClass(newPinInput, "error")) newVaultPinInput.previousElementSibling.remove();
+			if (HasClass(currentPinInput, "error")) currentVaultPinInput.element.previousElementSibling.remove();
+			if (HasClass(newPinInput, "error")) newVaultPinInput.element.previousElementSibling.remove();
 
 			RemoveClass(currentPinInput, "error");
 			RemoveClass(newPinInput, "error");
@@ -612,7 +601,7 @@ window.addEventListener("userready", () =>
 
 					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
 
-					currentVaultPinInput.insertAdjacentElement("beforebegin", errorParagraph);
+					currentVaultPinInput.element.insertAdjacentElement("beforebegin", errorParagraph);
 
 					modal.Show(true);
 				}
@@ -630,28 +619,23 @@ window.addEventListener("userready", () =>
 			action: "confirm",
 		});
 
-		const vaultPinInput = new InputWithIcon({
-			attributes: {
-				id: "vault-pin",
-				placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
-				type: "password",
-			},
+		const { element, input } = new InputWithIcon({
+			labelTranslationId: "api->messages->vault->pin_or_recovery_code",
 			iconClassName: "fas fa-key fa-fw",
-		}).element;
-
-		const input = vaultPinInput.querySelector("input");
+			attributes: { type: "password" },
+		});
 
 		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
 
 		modal.ConfirmButton.disabled = true;
 
-		modal.AppendContent([ vaultPinInput ]);
+		modal.AppendContent([ element ]);
 
 		modal.OnConfirm = async () =>
 		{
 			const pin = input.value;
 
-			if (HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
+			if (HasClass(input, "error")) element.previousElementSibling.remove();
 
 			RemoveClass(input, "error");
 
@@ -668,7 +652,7 @@ window.addEventListener("userready", () =>
 
 					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
 
-					vaultPinInput.insertAdjacentElement("beforebegin", errorParagraph);
+					element.insertAdjacentElement("beforebegin", errorParagraph);
 
 					modal.Show(true);
 				}
@@ -686,16 +670,11 @@ window.addEventListener("userready", () =>
 			action: "confirm",
 		});
 
-		const vaultPinInput = new InputWithIcon({
-			attributes: {
-				id: "vault-pin",
-				placeholder: Translation.Get("api->messages->vault->pin_or_recovery_code"),
-				type: "password",
-			},
+		const { element, input } = new InputWithIcon({
+			labelTranslationId: "api->messages->vault->pin_or_recovery_code",
 			iconClassName: "fas fa-key fa-fw",
-		}).element;
-
-		const input = vaultPinInput.querySelector("input");
+			attributes: { type: "password" },
+		});
 
 		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
 
@@ -706,14 +685,14 @@ window.addEventListener("userready", () =>
 				class: "multiline",
 				children: [ Translation.GetElement("settings->security->vault->recovery_code_info") ],
 			}).element,
-			vaultPinInput,
+			element,
 		]);
 
 		modal.OnConfirm = async () =>
 		{
 			const pin = input.value;
 
-			if (HasClass(input, "error")) vaultPinInput.previousElementSibling.remove();
+			if (HasClass(input, "error")) element.previousElementSibling.remove();
 
 			RemoveClass(input, "error");
 
@@ -744,7 +723,7 @@ window.addEventListener("userready", () =>
 
 					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
 
-					vaultPinInput.insertAdjacentElement("beforebegin", errorParagraph);
+					element.insertAdjacentElement("beforebegin", errorParagraph);
 
 					modal.Show(true);
 				}
