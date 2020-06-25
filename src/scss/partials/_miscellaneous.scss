@@ -134,11 +134,6 @@
         }
     }
 
-    .input
-    {
-        @include input-container($bg-color: $secondary-color, $color: $primary-color, $has-icon: false);
-    }
-
     .input-with-icon
     {
         @include input-container($bg-color: $secondary-color, $color: $primary-color);
@@ -248,7 +243,6 @@
     }
 }
 
-.input,
 .input-with-icon
 {
     @include flex($align-items: unset, $justify-content: unset);
@@ -261,19 +255,6 @@
         width: 100%;
         margin: 0; // Safari puts margins by default
     }
-}
-
-.input
-{
-    @include input-container($has-icon: false);
-}
-
-.input-error
-{
-    margin: 0;
-    color: $primary-color;
-    margin-bottom: $default-spacing;
-    border-radius: $border-radius;
 }
 
 .context-menu-container

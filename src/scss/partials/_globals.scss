@@ -78,3 +78,48 @@ select
         color: $secondary-color;
     }
 }
+
+.input
+{
+    border-radius: $border-radius;
+    margin-bottom: $default-spacing;
+
+    .label
+    {
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input
+    {
+        font-family: inherit;
+        font-size: 20px;
+        width: 100%;
+        margin: 0; // Safari puts margins by default
+        padding: 10px;
+        color: $primary-color;
+        background-color: $secondary-color;
+        border: $border-width solid $primary-color;
+        border-radius: $border-radius;
+        transition: $transition-time;
+
+        &.error
+        {
+            color: $secondary-color;
+            background-color: $primary-color;
+        }
+    }
+
+    &:focus-within input
+    {
+        box-shadow: 0 0 0 $border-width * 2 $primary-color;
+    }
+}
+
+.input-error
+{
+    margin: 0;
+    color: $primary-color;
+    margin-bottom: $default-spacing;
+    border-radius: $border-radius;
+}

@@ -84,8 +84,11 @@ export class Input extends Component
 		super("div", {
 			class: options.class ?? "input",
 			children: [
-				Translation.GetElement(options.labelTranslationId),
-				new Component("input").element,
+				new Component("span", {
+					class: "label",
+					children: [ Translation.GetElement(options.labelTranslationId) ],
+				}).element,
+				new Component("input", options.attributes).element,
 			],
 		});
 
