@@ -50,16 +50,8 @@ const storage: firebaseStorage.Storage = firebase.storage();
 const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
 const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
-const addContentOptions : HTMLDivElement = document.querySelector(".add-content-options");
-
-const addFiles : HTMLButtonElement = addContentOptions.querySelector("#add-files");
-const fileInput : HTMLInputElement = addContentOptions.querySelector("#files");
-
-const addFolder : HTMLButtonElement = addContentOptions.querySelector("#add-folder");
-const folderInput : HTMLInputElement = addContentOptions.querySelector("#folder");
-
-const createFile : HTMLButtonElement = addContentOptions.querySelector("#create-file");
-const createFolder : HTMLButtonElement = addContentOptions.querySelector("#create-folder");
+const fileInput : HTMLInputElement = document.querySelector("#files");
+const folderInput : HTMLInputElement = document.querySelector("#folder");
 
 const bottomMenu : HTMLElement = document.querySelector("aside");
 const viewMyAccount : HTMLButtonElement = bottomMenu.querySelector("#my-account");
@@ -115,31 +107,14 @@ const IS_SHARED_FOLDER : boolean = location.pathname.startsWith("/folder/shared/
 
 window.addEventListener("userready", async () =>
 {
-	[ addFiles, ContextMenuButtons.AddFiles ].forEach(element => element.addEventListener("click", () =>
-	{
-		HideContextMenu();
+	ContextMenuButtons.AddFiles.addEventListener("click", () => fileInput.click());
 
-		fileInput.click();
-	}));
+	ContextMenuButtons.AddFolder.addEventListener("click", () => folderInput.click());
 
-	[ addFolder, ContextMenuButtons.AddFolder ].forEach(element => element.addEventListener("click", () =>
-	{
-		HideContextMenu();
-
-		folderInput.click();
-	}));
-
-	[
-		createFile,
-		ContextMenuButtons.CreateFile,
-		createFolder,
-		ContextMenuButtons.CreateFolder,
-	].forEach(button =>
+	[ ContextMenuButtons.CreateFile, ContextMenuButtons.CreateFolder ].forEach(button =>
 		button.addEventListener("click", () =>
 		{
-			HideContextMenu();
-
-			const isFile = button.contains(createFile) || button.contains(ContextMenuButtons.CreateFile);
+			const isFile = button.contains(ContextMenuButtons.CreateFile);
 
 			const modal = new Modal({
 				titleTranslationId: isFile ? "account->create_file" : "account->create_folder",
@@ -1253,8 +1228,8 @@ window.addEventListener("userready", async () =>
 
 			UploadFile(file, file.name, file.size, "root");
 		}
-		else if ("add" in e.data) if (e.data.add === "file") createFile.click();
-		else if (e.data.add === "folder") createFolder.click();
+		else if ("add" in e.data) if (e.data.add === "file") ContextMenuButtons.CreateFile.click();
+		else if (e.data.add === "folder") ContextMenuButtons.CreateFolder.click();
 	});
 
 	navigator.serviceWorker?.controller?.postMessage("ready");

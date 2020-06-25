@@ -26,17 +26,9 @@
                 <p data-translation="vault->info"></p>
             </div>
         </section>
-        <div class="add-content-options">
-            <div class="buttons-container">
-                <button id="add-files" data-translation="account->add_files" data-keyboard-shortcut="o"><i class="fas fa-file fa-fw"></i></button>
-                <button id="add-folder" data-translation="account->add_folder" data-keyboard-shortcut="shift+o"><i class="fas fa-folder fa-fw"></i></button>
-                <button id="create-file" data-translation="account->create_file" data-keyboard-shortcut="n"><i class="fas fa-file-code fa-fw"></i></button>
-                <button id="create-folder" data-translation="account->create_folder" data-keyboard-shortcut="shift+n"><i class="fas fa-folder-plus fa-fw"></i></button>
-            </div>
-            <div class="input-container">
-                <input type="file" id="files" name="files" multiple>
-                <input type="file" id="folder" name="folder" webkitdirectory mozdirectory msdirectory odirectory directory>
-            </div>
+        <div class="input-container">
+            <input type="file" id="files" multiple>
+            <input type="file" id="folder" webkitdirectory mozdirectory msdirectory odirectory directory>
         </div>
         <section class="user-content">
             {{> spinner}}
