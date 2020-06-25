@@ -64,7 +64,7 @@ html
             .modal.floating,
             .generic-message
             {
-                bottom: $default-spacing + $account-bottom-bar-height
+                bottom: $default-spacing + $bottom-menu-height;
             }
         }
     }

@@ -9,7 +9,7 @@ html:not(.signed-in):not(.signed-out)
 
 .account-main
 {
-    height: calc(100% - #{$header-height + $account-bottom-bar-height});
+    height: calc(100% - #{$header-height + $bottom-menu-height});
     padding: 0 $default-spacing;
     background-color: rgba($primary-color, 0.5);
 
