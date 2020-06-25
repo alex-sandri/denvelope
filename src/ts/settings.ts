@@ -933,12 +933,12 @@ window.addEventListener("userready", () =>
 					const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
 
 					const setAsDefaultButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
-						class: "set-as-default",
+						class: "set-as-default transparent",
 						children: [ Translation.GetElement("settings->plan->payment_methods->set_as_default") ],
 					}).element;
 
 					const deleteButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
-						class: "delete",
+						class: "delete transparent",
 						children: [
 							new Component("i", { class: "fas fa-trash" }).element,
 							Translation.GetElement("generic->delete", { initialSpace: true }),
