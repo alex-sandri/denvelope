@@ -705,6 +705,7 @@
                 color: #4285f4;
                 text-decoration: none;
 
+                &:focus,
                 &:hover
                 {
                     text-decoration: underline;
