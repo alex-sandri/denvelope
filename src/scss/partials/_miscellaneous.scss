@@ -27,7 +27,6 @@
     border-top-left-radius: $default-spacing;
     border-top-right-radius: $default-spacing;
     background-color: $secondary-color;
-    z-index: 11;
     transform: translateY(calc(100% + #{$default-spacing}));
     color: $primary-color;
     max-height: calc(100% - #{$header-height});
