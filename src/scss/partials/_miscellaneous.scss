@@ -122,7 +122,8 @@
         margin: 0;
         margin-bottom: $default-spacing;
 
-        &.multiline
+        &.multiline,
+        &.firebaseui-tos
         {
             white-space: unset;
         }
@@ -652,9 +653,7 @@
 
         .firebaseui-tos
         {
-            margin: 0;
             font-size: 12px;
-            color: #757575;
             text-align: center;
 
             a
