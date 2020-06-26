@@ -125,94 +125,6 @@ html:not(.signed-in):not(.signed-out)
         padding-bottom: 0;
         margin: 0 #{-$default-spacing};
 
-        .vault
-        {
-            @include flex($align-items: unset, $justify-content: space-between, $flex-wrap: nowrap);
-
-            background-color: #444d56;
-            color: $secondary-color;
-            border: $border-width solid #444d56;
-            border-radius: $border-radius;
-            width: 100%;
-            cursor: pointer;
-            margin-bottom: $default-spacing;
-            transition: box-shadow $transition-time;
-            display: none;
-    
-            .icon
-            {
-                @include flex;
-
-                i
-                {
-                    width: 40px;
-                    height: 100%;
-                    background-position: center;
-                    background-repeat: no-repeat;
-                    background-size: contain;
-                    background-origin: content-box;
-                    padding: 5px;
-                    background-color: $primary-color;
-                    border-radius: $border-radius;
-                    background-image: url("/assets/img/icons/languages/lock.svg");
-                }
-            }
-    
-            .name
-            {
-                @include flex($justify-content: unset);
-    
-                margin: 0 0 0 $border-width;
-                width: 100%;
-                overflow: hidden;
-                padding: 10px;
-                background-color: #444d56;
-    
-                p
-                {
-                    @include text-ellipsis-on-overflow;
-    
-                    margin: 0;
-                }
-            }
-
-            .menu-button
-            {
-                button
-                {
-                    margin-left: $border-width;
-                    background-color: #444d56;
-                    border-color: $secondary-color;
-
-                    &:focus,
-                    &:hover
-                    {
-                        background-color: $secondary-color;
-                        color: #444d56;
-                        box-shadow: none;
-                    }
-                }
-            }
-    
-            &:hover:not(.no-hover),
-            &:focus,
-            &:focus-within
-            {
-                box-shadow: 0 0 0 5px $secondary-color;
-            }
-
-            &.disabled.target:hover
-            {
-                box-shadow: unset;
-
-                &,
-                *
-                {
-                    cursor: not-allowed !important;
-                }
-            }
-        }
-
         .folders-container,
         .files-container
         {
@@ -225,114 +137,169 @@ html:not(.signed-in):not(.signed-out)
             {
                 margin-bottom: 0;
             }
+        }
+    }
+}
 
-            @each $element in ("folder", "file")
+@each $element in ("vault", "folder", "file")
+{
+    div.#{$element}
+    {
+        @include flex($align-items: unset, $justify-content: space-between, $flex-wrap: nowrap);
+
+        background-color: $secondary-color;
+        color: $primary-color;
+        border: $border-width solid $secondary-color;
+        border-radius: $border-radius;
+        cursor: pointer;
+        transition: box-shadow $transition-time;
+        overflow: auto;
+        max-width: calc(100vw - #{$default-spacing * 2});
+    
+        .icon
+        {
+            @include flex;
+
+            i
             {
-                @at-root div.#{$element}
-                {
-                    @include flex($align-items: unset, $justify-content: space-between, $flex-wrap: nowrap);
-
-                    background-color: $secondary-color;
-                    color: $primary-color;
-                    border: $border-width solid $secondary-color;
-                    border-radius: $border-radius;
-                    cursor: pointer;
-                    transition: box-shadow $transition-time;
-                    overflow: auto;
-                    max-width: calc(100vw - #{$default-spacing * 2});
-    
-                    .icon
-                    {
-                        @include flex;
-
-                        i
-                        {
-                            width: 40px;
-                            height: 100%;
-                            background-position: center;
-                            background-repeat: no-repeat;
-                            background-size: contain;
-                            background-origin: content-box;
-                            padding: 5px;
-                            background-color: $primary-color;
-                            border-radius: $border-radius;
-                        }
-                    }
-    
-                    .name
-                    {
-                        @include flex($justify-content: unset);
-    
-                        margin: 0 0 0 $border-width;
-                        width: 100%;
-                        overflow: hidden;
-                        padding: 10px;
-                        background-color: $secondary-color;
-    
-                        p
-                        {
-                            @include text-ellipsis-on-overflow;
-    
-                            margin: 0;
-                        }
-                    }
-    
-                    .menu-button
-                    {
-                        button
-                        {
-                            margin-left: $border-width;
-                            border-color: $primary-color;
-
-                            &:focus
-                            {
-                                box-shadow: none;
-                            }
-                        }
-                    }
-    
-                    &.dragging
-                    {
-                        position: fixed;
-                        z-index: 999;
-                        margin: 0 !important;
-                    }
-    
-                    &.placeholder,
-                    &.disabled
-                    {
-                        opacity: 0.5;
-
-                        &:hover
-                        {
-                            &,
-                            *
-                            {
-                                cursor: not-allowed !important;
-                            }
-                        }
-                    }
-
-                    &:hover:not(.no-hover),
-                    &:focus,
-                    &:focus-within,
-                    &.target,
-                    &.selected
-                    {
-                        box-shadow: 0 0 0 5px $secondary-color;
-                    }
-                }
+                width: 40px;
+                height: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-origin: content-box;
+                padding: 5px;
+                background-color: $primary-color;
+                border-radius: $border-radius;
             }
-
-            @at-root div.file
+        }
+    
+        .name
+        {
+            @include flex($justify-content: unset);
+    
+            margin: 0 0 0 $border-width;
+            width: 100%;
+            overflow: hidden;
+            padding: 10px;
+            background-color: $secondary-color;
+    
+            p
             {
-                .name
+                @include text-ellipsis-on-overflow;
+    
+                margin: 0;
+            }
+        }
+    
+        .menu-button
+        {
+            button
+            {
+                margin-left: $border-width;
+                border-color: $primary-color;
+
+                &:focus
                 {
-                    background-color: $primary-color;
-                    color: $secondary-color;
-                    border-radius: $border-radius;
+                    box-shadow: none;
                 }
             }
         }
+    
+        @if ($element == "folder" or $element == "file")
+        {
+            &.dragging
+            {
+                position: fixed;
+                z-index: 999;
+                margin: 0 !important;
+            }
+        
+            &.placeholder,
+            &.disabled
+            {
+                opacity: 0.5;
+
+                &:hover
+                {
+                    &,
+                    *
+                    {
+                        cursor: not-allowed !important;
+                    }
+                }
+            }
+        }
+
+        &:hover:not(.no-hover),
+        &:focus,
+        &:focus-within,
+        &.target,
+        &.selected
+        {
+            box-shadow: 0 0 0 5px $secondary-color;
+        }
+    }
+}
+
+div.vault
+{
+    background-color: #444d56;
+    color: $secondary-color;
+    border-color: #444d56;
+    margin-bottom: $default-spacing;
+    display: none;
+    
+    .icon
+    {
+        @include flex;
+
+        i
+        {
+            background-image: url("/assets/img/icons/languages/lock.svg");
+        }
+    }
+    
+    .name
+    {
+        background-color: #444d56;
+    }
+
+    .menu-button
+    {
+        button
+        {
+            background-color: #444d56;
+            border-color: $secondary-color;
+
+            &:focus,
+            &:hover
+            {
+                background-color: $secondary-color;
+                color: #444d56;
+                box-shadow: none;
+            }
+        }
+    }
+
+    &.disabled.target:hover
+    {
+        box-shadow: unset;
+
+        &,
+        *
+        {
+            cursor: not-allowed !important;
+        }
+    }
+}
+
+div.file
+{
+    .name
+    {
+        background-color: $primary-color;
+        color: $secondary-color;
+        border-radius: $border-radius;
     }
 }
