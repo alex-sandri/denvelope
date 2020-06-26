@@ -1,5 +1,5 @@
 {
-    "version": 3102,
+    "version": 3103,
     "static": [
         "/",
         "/account",
@@ -76,7 +76,7 @@
     "dynamic": {
         "css": {
             "rootDir": "/assets/css",
-            "bundle": "bundle.9b02213dc0fc9b735ec253afd536aed7.css"
+            "bundle": "bundle.0f4ee85ffaaafd0d79f82456c4673f23.css"
         },
         "js": {
             "rootDir": "/assets/js",
