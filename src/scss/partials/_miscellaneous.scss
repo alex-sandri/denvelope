@@ -595,17 +595,14 @@
                 {
                     margin: 0;
                     padding: 0;
-                    width: max-content;
 
                     .firebaseui-list-item
                     {
                         display: block;
-                        width: 100%;
-                        margin-bottom: $default-spacing;
 
                         .firebaseui-idp-button
                         {
-                            @include flex($justify-content: start);
+                            @include flex;
                             
                             border-radius: $border-radius;
                             color: #fff;
