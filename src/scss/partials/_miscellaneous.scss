@@ -189,21 +189,16 @@
     &.show
     {
         animation: account-modal-show 100ms linear forwards;
-
-        &.no-animate
-        {
-            animation: account-modal-show 0ms linear forwards;
-        }
     }
 
     &.hide
     {
         animation: account-modal-hide 100ms linear forwards;
+    }
 
-        &.no-animate
-        {
-            animation: account-modal-hide 0ms linear forwards;
-        }
+    &.no-animate
+    {
+        animation-duration: 0ms;
     }
 
     &.floating
