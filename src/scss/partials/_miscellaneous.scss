@@ -224,7 +224,7 @@
 
     i
     {
-        @include animation($name: rotate, $duration: 1s, $timing-function: linear, $iteration-count: infinite);
+        animation: rotate 1s linear infinite;
     }
 }
 

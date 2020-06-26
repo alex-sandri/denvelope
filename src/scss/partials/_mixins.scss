@@ -7,20 +7,6 @@
     flex-wrap: $flex-wrap;
 }
 
-@mixin animation (
-        $name,
-        $duration: 100ms,
-        $timing-function: linear,
-        $iteration-count: unset,
-        $fill-mode: forwards
-    ) {
-    animation: $name;
-    animation-duration: $duration;
-    animation-timing-function: $timing-function;
-    animation-iteration-count: $iteration-count;
-    animation-fill-mode: $fill-mode;
-}
-
 @mixin text-ellipsis-on-overflow
 {
     white-space: nowrap;
