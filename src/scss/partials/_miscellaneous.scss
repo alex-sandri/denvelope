@@ -684,7 +684,7 @@
     position: absolute;
     border: 1px solid rgba($color: $secondary-color, $alpha: 0.5);
     border-radius: $border-radius;
-    backdrop-filter: opacity(0.8);
+    background-color: rgba(0, 0, 0, 0.2);
     display: none;
 }
 
