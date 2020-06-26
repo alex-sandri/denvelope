@@ -89,7 +89,7 @@ const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
     }
 }
 
-export const scheduledFirestoreExport = functions.region(FUNCTIONS_REGION).pubsub.schedule("every 24 hours").onRun(async () =>
+export const scheduledFirestoreExport = functions.region(FUNCTIONS_REGION).pubsub.schedule("every day 00:00").onRun(async () =>
 {
     const client = new firestore.v1.FirestoreAdminClient();
 
