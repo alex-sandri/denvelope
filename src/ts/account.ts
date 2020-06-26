@@ -1151,7 +1151,7 @@ window.addEventListener("userready", async () =>
 			});
 
 			const { element, input } = new Input({
-				labelTranslationId: "generic->name",
+				labelTranslationId: "api->messages->vault->pin_or_recovery_code",
 				attributes: { type: "password" },
 			});
 
