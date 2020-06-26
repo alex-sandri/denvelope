@@ -1,10 +1,26 @@
 @mixin flex ($align-items: center, $justify-content: center, $flex-direction: row, $flex-wrap: unset)
 {
     display: flex;
-    align-items: $align-items;
-    justify-content: $justify-content;
-    flex-direction: $flex-direction;
-    flex-wrap: $flex-wrap;
+
+    @if ($align-items != unset)
+    {
+        align-items: $align-items;
+    }
+
+    @if ($justify-content != unset)
+    {
+        justify-content: $justify-content;
+    }
+
+    @if ($flex-direction != row and $flex-direction != unset)
+    {
+        flex-direction: $flex-direction;
+    }
+
+    @if ($flex-wrap != unset)
+    {
+        flex-wrap: $flex-wrap;
+    }
 }
 
 @mixin text-ellipsis-on-overflow
