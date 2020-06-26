@@ -29,12 +29,7 @@ import {
 import { Modal, UploadModal, DownloadModal } from "./scripts/Modal";
 import Auth from "./scripts/Auth";
 import Linguist from "./scripts/Linguist";
-import {
-	Component,
-	Input,
-	Spinner,
-	InputWithIcon,
-} from "./scripts/Component";
+import { Component, Input, Spinner } from "./scripts/Component";
 import Translation from "./scripts/Translation";
 import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
 import Shortcuts from "./scripts/Shortcuts";
@@ -1155,9 +1150,8 @@ window.addEventListener("userready", async () =>
 				action: "confirm",
 			});
 
-			const { element, input } = new InputWithIcon({
+			const { element, input } = new Input({
 				labelTranslationId: "generic->name",
-				iconClassName: "fas fa-key fa-fw",
 				attributes: { type: "password" },
 			});
 

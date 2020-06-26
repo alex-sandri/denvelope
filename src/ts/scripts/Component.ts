@@ -65,14 +65,7 @@ export class Component
 interface InputComponentOptions
 {
 	labelTranslationId: string,
-	class?: string,
-	children?: HTMLElement[],
 	attributes?: { type?: string },
-}
-
-interface InputWithIconComponentOptions extends InputComponentOptions
-{
-	iconClassName: string,
 }
 
 export class Input extends Component
@@ -82,7 +75,7 @@ export class Input extends Component
 	constructor(protected options: InputComponentOptions)
 	{
 		super("div", {
-			class: options.class ?? "input",
+			class: "input",
 			children: [
 				new Component("span", {
 					class: "label",
@@ -93,35 +86,6 @@ export class Input extends Component
 		});
 
 		this.input = this.element.querySelector("input");
-	}
-}
-
-export class InputWithIcon extends Input
-{
-	constructor(protected options: InputWithIconComponentOptions)
-	{
-		super({
-			labelTranslationId: options.labelTranslationId,
-			class: "input-with-icon",
-			children: [
-				new Component("div", {
-					class: "input-icon",
-					aria: { hidden: true },
-					tabindex: -1,
-					children: [
-						new Component("i", { class: options.iconClassName }).element,
-					],
-				}).element,
-			],
-			attributes: options.attributes,
-		});
-
-		if (options.attributes?.type === "password") this.element.querySelector(".input-icon").addEventListener("click", () =>
-		{
-			this.input.type = this.input.type === "password"
-				? "text"
-				: "password";
-		});
 	}
 }
 

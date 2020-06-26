@@ -21,15 +21,25 @@ html:not(.signed-in):not(.signed-out)
 
             .search-bar
             {
-                @include input-container($bg-color: rgba($primary-color, 0.5), $has-icon: false);
-
                 margin-bottom: 0;
                 width: 100%;
-                transition: $transition-time;
 
                 input
                 {
+                    color: $secondary-color;
+                    background-color: rgba($primary-color, 0.5);
+                    border: $border-width solid $secondary-color;
                     -webkit-appearance: textfield;
+
+                    &::placeholder
+                    {
+                        color: $secondary-color;
+                    }
+                }
+
+                &:focus-within input
+                {
+                    box-shadow: 0 0 0 $border-width * 2 $secondary-color;
                 }
             }
 

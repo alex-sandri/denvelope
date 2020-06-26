@@ -134,16 +134,6 @@
         }
     }
 
-    .input-with-icon
-    {
-        @include input-container($bg-color: $secondary-color, $color: $primary-color);
-
-        input
-        {
-            margin-bottom: 0;
-        }
-    }
-
     button
     {
         &:focus
@@ -240,20 +230,6 @@
     i
     {
         @include animation($name: rotate, $duration: 1s, $timing-function: linear, $iteration-count: infinite);
-    }
-}
-
-.input-with-icon
-{
-    @include flex($align-items: unset, $justify-content: unset);
-    @include input-container;
-
-    margin-bottom: $default-spacing;
-
-    input
-    {
-        width: 100%;
-        margin: 0; // Safari puts margins by default
     }
 }
 

@@ -7,66 +7,6 @@
     flex-wrap: $flex-wrap;
 }
 
-@mixin input-container ($bg-color: $primary-color, $color: $secondary-color, $has-icon: true)
-{
-    border-radius: $border-radius;
-    transition: $transition-time;
-
-    &:focus-within
-    {
-        box-shadow: 0 0 0 $border-width * 2 $color;
-    }
-        
-    input
-    {
-        font-family: $font-family;
-        border: $border-width solid $color;
-        background-color: $bg-color;
-        color: $color;
-        border-radius: $border-radius;
-        padding: 10px;
-        font-size: 20px;
-
-        @if $has-icon
-        {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-
-            & + .input-icon
-            {
-                @include flex;
-
-                background-color: $color;
-                color: $bg-color;
-                font-size: 20px;
-                border-top-right-radius: $border-radius;
-                border-bottom-right-radius: $border-radius;
-                padding: 10px;
-                border: 0;
-                cursor: pointer;
-            }
-        }
-
-        &.error
-        {
-            background-color: $color;
-            color: $bg-color;
-
-            &::placeholder
-            {
-                color: $bg-color;
-                font-weight: $regular;
-            }
-        }
-
-        &::placeholder
-        {
-            color: $color;
-            font-weight: $regular;
-        }
-    }
-}
-
 @mixin animation (
         $name,
         $duration: 100ms,

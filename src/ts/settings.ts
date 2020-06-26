@@ -22,7 +22,7 @@ import {
 import { Modal } from "./scripts/Modal";
 import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
-import { Component, InputWithIcon } from "./scripts/Component";
+import { Component, Input } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
 import { Config } from "./config/Config";
 
@@ -239,9 +239,8 @@ window.addEventListener("userready", () =>
 			action: "confirm",
 		});
 
-		const { element, input } = new InputWithIcon({
+		const { element, input } = new Input({
 			labelTranslationId: "account->image_address",
-			iconClassName: "fas fa-link fa-fw",
 			attributes: { type: "url" },
 		});
 
@@ -551,15 +550,13 @@ window.addEventListener("userready", () =>
 			loading: false,
 		});
 
-		const currentVaultPinInput = new InputWithIcon({
+		const currentVaultPinInput = new Input({
 			labelTranslationId: "settings->security->change_vault_pin->current_or_recovery_code",
-			iconClassName: "fas fa-key fa-fw",
 			attributes: { type: "password" },
 		});
 
-		const newVaultPinInput = new InputWithIcon({
+		const newVaultPinInput = new Input({
 			labelTranslationId: "settings->security->change_vault_pin->new",
-			iconClassName: "fas fa-key fa-fw",
 			attributes: { type: "password" },
 		});
 
@@ -619,9 +616,8 @@ window.addEventListener("userready", () =>
 			action: "confirm",
 		});
 
-		const { element, input } = new InputWithIcon({
+		const { element, input } = new Input({
 			labelTranslationId: "api->messages->vault->pin_or_recovery_code",
-			iconClassName: "fas fa-key fa-fw",
 			attributes: { type: "password" },
 		});
 
@@ -670,9 +666,8 @@ window.addEventListener("userready", () =>
 			action: "confirm",
 		});
 
-		const { element, input } = new InputWithIcon({
+		const { element, input } = new Input({
 			labelTranslationId: "api->messages->vault->pin_or_recovery_code",
-			iconClassName: "fas fa-key fa-fw",
 			attributes: { type: "password" },
 		});
 
