@@ -1244,6 +1244,8 @@ window.addEventListener("userready", async () =>
 			const icon = document.createElement("i");
 			icon.className = `fas fa-lock${locked ? "" : "-open"}`;
 
+			vault.querySelector(".name p i")?.remove();
+
 			vault.querySelector(".name p").appendChild(icon);
 
 			vault.setAttribute("data-locked", `${locked}`);
