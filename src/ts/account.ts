@@ -1529,7 +1529,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 			});
 		}
 		else (<NodeListOf<HTMLElement>>document.querySelectorAll("[data-update-field=folder-name]"))
-			.forEach(element => Translation.Register("account->vault", element));
+			.forEach(element => Translation.Register("generic->vault", element));
 
 		if (await vaultOnly())
 		{
