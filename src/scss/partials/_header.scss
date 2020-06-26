@@ -117,6 +117,7 @@ header
             border-radius: $border-radius;
             background-color: rgba($primary-color, 0.5);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: $default-spacing;
             max-width: calc(100% - #{$default-spacing * 2});
             max-height: calc(100% - #{$default-spacing * 2});
