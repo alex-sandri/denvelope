@@ -602,7 +602,7 @@
 
                         .firebaseui-idp-button
                         {
-                            @include flex;
+                            @include flex($justify-content: unset);
                             
                             border-radius: $border-radius;
                             color: #fff;
