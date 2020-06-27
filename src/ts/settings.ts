@@ -183,7 +183,6 @@ const currentCacheSize : HTMLElement = document.querySelector("#cache-size .curr
 const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
 
 const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
-const updateTracking : HTMLButtonElement = document.querySelector("#tracking .update");
 
 let section : string = "general";
 
@@ -778,25 +777,6 @@ window.addEventListener("userready", () =>
 
 	clearCache.addEventListener("click", ClearFirestoreCache);
 
-	updateTracking.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: updateTracking.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: updateTracking.getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		modal.OnConfirm = () =>
-		{
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").update("trackingEnabled", updateTracking.getAttribute("data-action") === "enable");
-
-			modal.HideAndRemove();
-		};
-
-		modal.Show(true);
-	});
-
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
 		Translation.Currency = user.data().stripe?.currency;
@@ -960,11 +940,7 @@ window.addEventListener("userready", () =>
 	{
 		if (!preferences.data()) return;
 
-		const {
-			backgroundImageUrl,
-			dateFormatOptions,
-			trackingEnabled,
-		} = preferences.data();
+		const { backgroundImageUrl, dateFormatOptions } = preferences.data();
 
 		resetBackground.disabled = !backgroundImageUrl;
 
@@ -973,15 +949,6 @@ window.addEventListener("userready", () =>
 		if (userDateFormatOptions === "default") userDateFormatOptions = null;
 
 		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
-
-		updateTracking.setAttribute("data-action", (trackingEnabled ?? true) ? "disable" : "enable");
-		updateTracking.setAttribute("data-translation", `generic->${updateTracking.getAttribute("data-action")}`);
-
-		Translation.Register(`generic->${updateTracking.getAttribute("data-action")}`, updateTracking, { initialSpace: true });
-
-		updateTracking.insertAdjacentElement("afterbegin", new Component("i", {
-			class: `fas fa-toggle-${updateTracking.getAttribute("data-action") === "disable" ? "off" : "on"}`,
-		}).element);
 	});
 
 	db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot(snapshot =>
