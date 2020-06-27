@@ -185,6 +185,10 @@ export default {
 				title: "We are Open Source",
 				description: "Denvelope is an and Open Source project.",
 			},
+			privacy: {
+				title: "A completely private experience",
+				description: "Denvelope does not track you in any way.",
+			},
 			store: {
 				title: "Never lose your code again",
 				description: "With Denvelope you can now store your code in a secure place. Never worry again about losing your projects.",
