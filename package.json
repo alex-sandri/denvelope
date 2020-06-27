@@ -6,6 +6,7 @@
   "scripts": {
     "start": "firebase serve --only hosting --host 0.0.0.0",
     "build": "npm run lint && webpack --mode production && node src/scripts/compile-html.js && webpack --mode production --config webpack.sw.config.js",
+    "build:clean:windows": "cd public/assets && del css /s /q && del js /s /q && cd ../../ && npm run build",
     "build:ci": "npm run lint && mkdir public/assets/{css,js} && webpack --mode production && node src/scripts/compile-html.js && webpack --mode production --config webpack.sw.config.js && rm public/assets/css/style-bundle.js",
     "test": "set FIRESTORE_EMULATOR_HOST=localhost:5002 && firebase emulators:exec --only firestore \"jest --detectOpenHandles\"",
     "lint": "npx eslint src/ts/**/*.ts",
