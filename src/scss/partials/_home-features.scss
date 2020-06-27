@@ -32,19 +32,6 @@
                     margin-bottom: $default-spacing;
                 }
             }
-
-            .github-link
-            {
-                display: block;
-                margin-bottom: $default-spacing;
-                color: $primary-color;
-
-                &:hover,
-                &:focus
-                {
-                    text-decoration: none;
-                }
-            }
         }
 
         &:nth-child(2n)

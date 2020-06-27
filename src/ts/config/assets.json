@@ -1,5 +1,5 @@
 {
-    "version": 3121,
+    "version": 3122,
     "static": [
         "/",
         "/account",
@@ -17,7 +17,6 @@
         "/__/firebase/init.js",
         "/assets/img/miscellaneous/empty.svg",
         "/assets/img/miscellaneous/file-sync.svg",
-        "/assets/img/miscellaneous/open-source.svg",
         "/assets/img/miscellaneous/share.svg",
         "/assets/img/miscellaneous/source-code.svg",
         "/assets/img/miscellaneous/starred.svg",
@@ -74,13 +73,13 @@
     "dynamic": {
         "css": {
             "rootDir": "/assets/css",
-            "bundle": "bundle.ce3f7d283bdd0c23c6718cf9d334b6eb.css"
+            "bundle": "bundle.add48dfc809597e33f4ebead4e59458d.css"
         },
         "js": {
             "rootDir": "/assets/js",
-            "index": "index.3a2e2be806dc428ff258.js",
-            "account": "account.c205d0e3aa0c6c41b869.js",
-            "settings": "settings.2c033188be6016897c08.js"
+            "index": "index.b21270d19c978622e601.js",
+            "account": "account.a6f2c0b90425f46026ee.js",
+            "settings": "settings.f0205ebf6f2aff3c4d1f.js"
         }
     }
 }

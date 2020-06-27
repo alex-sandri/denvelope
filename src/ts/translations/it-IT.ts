@@ -181,10 +181,6 @@ export default {
 			subheading: "Denvelope è il posto perfetto per salvare, modificare e condividere il tuo codice in modo semplice, veloce e affidabile",
 		},
 		feature_section: {
-			open_source: {
-				title: "Noi siamo Open Source",
-				description: "Denvelope è un progetto Open Source.",
-			},
 			privacy: {
 				title: "Un esperienza completamente privata",
 				description: "Denvelope non ti traccia in alcun modo.",
