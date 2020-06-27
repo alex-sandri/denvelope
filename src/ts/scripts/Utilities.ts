@@ -1,4 +1,4 @@
-import type { firestore as firebaseFirestore, analytics as firebaseAnalytics } from "firebase";
+import type { firestore as firebaseFirestore } from "firebase";
 
 declare const firebase: any;
 
@@ -150,15 +150,6 @@ export const UnescapeHtml = (string: string): string =>
 	string.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"")
 		.replace(/&#039;/g, "'")
 		.replace(/&#x2F;/g, "/");
-
-export const LogPageViewEvent = () =>
-	(<firebaseAnalytics.Analytics>firebase.analytics()).logEvent("page_view", {
-		page_location: location.href,
-		page_path: location.pathname,
-		page_title: document.title,
-		offline: !navigator.onLine,
-		isPwa: (<any>navigator).standalone || window.matchMedia("(display-mode: standalone)").matches,
-	});
 
 export const ClearFirestoreCache = () =>
 // Firebase Cloud Firestore DB to keep persisted data for offline usage

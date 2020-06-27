@@ -11,14 +11,6 @@
 {{#if functions}}
 <script src="/__/firebase/7.15.4/firebase-functions.js"></script>
 {{/if}}
-<script src="/__/firebase/7.15.4/firebase-analytics.js"></script>
 <script src="/__/firebase/7.15.4/firebase-performance.js"></script>
 <script src="/__/firebase/init.js"></script>
-<script>
-    const analytics = firebase.analytics();
-    const perf = firebase.performance();
-
-    const trackingEnabled = !navigator.doNotTrack && !window.doNotTrack && (localStorage.getItem("tracking-enabled") ?? "true") === "true";
-
-    analytics.setAnalyticsCollectionEnabled(trackingEnabled);
-</script>
+<script>const perf = firebase.performance();</script>

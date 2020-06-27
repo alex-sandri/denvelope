@@ -1,5 +1,5 @@
 {
-    "version": 3115,
+    "version": 3116,
     "static": [
         "/",
         "/account",
@@ -14,7 +14,6 @@
         "/__/firebase/7.15.4/firebase-firestore.js",
         "/__/firebase/7.15.4/firebase-storage.js",
         "/__/firebase/7.15.4/firebase-functions.js",
-        "/__/firebase/7.15.4/firebase-analytics.js",
         "/__/firebase/7.15.4/firebase-performance.js",
         "/__/firebase/init.js",
         "/assets/img/miscellaneous/empty.svg",
@@ -80,9 +79,9 @@
         },
         "js": {
             "rootDir": "/assets/js",
-            "index": "index.34227e0d48e2aab1445d.js",
-            "account": "account.c7d1fcf3d99219507ad6.js",
-            "settings": "settings.0fc64c30e8b0d1831d72.js"
+            "index": "index.fabc71223ac0b7666a07.js",
+            "account": "account.d3ffaf943efd30158057.js",
+            "settings": "settings.c70bab4e814bd6761d42.js"
         }
     }
 }

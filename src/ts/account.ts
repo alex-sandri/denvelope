@@ -1,6 +1,5 @@
 import type { editor as monacoEditor } from "monaco-editor";
 import type {
-	analytics as firebaseAnalytics,
 	firestore as firebaseFirestore,
 	functions as firebaseFunctions,
 	storage as firebaseStorage,
@@ -13,7 +12,6 @@ import {
 	AddClass,
 	RemoveClass,
 	IsSet,
-	LogPageViewEvent,
 	FormatStorage,
 	SetCurrentFolderId,
 	GetFirestoreUpdateTimestamp,
@@ -43,7 +41,6 @@ declare const monaco: any;
 const db: firebaseFirestore.Firestore = firebase.firestore();
 const storage: firebaseStorage.Storage = firebase.storage();
 const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
-const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 const fileInput : HTMLInputElement = document.querySelector("#files");
 const folderInput : HTMLInputElement = document.querySelector("#folder");
@@ -280,12 +277,6 @@ window.addEventListener("userready", async () =>
 
 		if ((<any>navigator).share) ContextMenuButtons.SharingOptions.click();
 		else ContextMenuButtons.CopyShareableLink.click();
-
-		analytics.logEvent("share", {
-			method: (<any>navigator).share ? "share_api" : "shareable_link",
-			content_type: type,
-			content_id: id,
-		});
 	});
 
 	ContextMenuButtons.SharingOptions.addEventListener("click", () =>
@@ -490,15 +481,6 @@ window.addEventListener("userready", async () =>
 
 		modal.Show(true);
 
-		analytics.logEvent(<never>"view_item", {
-			items: [
-				{
-					content_type: type,
-					content_id: id,
-				},
-			],
-		});
-
 		const unsubscribe = db.collection(`users/${Auth.UserId}/${type}s`).doc(id).onSnapshot(async doc =>
 		{
 			if (!doc.exists || doc.data().trashed)
@@ -687,26 +669,11 @@ window.addEventListener("userready", async () =>
 
 			// If the content is in the vault it is immediately deleted
 			if (!inVault && (!trashed || (trashed && ContextMenuButtons.Restore.contains(element))))
-			{
 				batch.update(docRef, {
 					trashed: !trashed,
 					...GetFirestoreUpdateTimestamp(),
 				});
-
-				analytics.logEvent(!trashed ? "trash" : "restore", {
-					content_type: type,
-					content_id: id,
-				});
-			}
-			else
-			{
-				batch.delete(docRef);
-
-				analytics.logEvent("delete", {
-					content_type: type,
-					content_id: id,
-				});
-			}
+			else batch.delete(docRef);
 		});
 
 		batch.commit();
@@ -1376,7 +1343,7 @@ const UploadFile = async (
 
 	const metadata = { customMetadata: { shared: `${shared}`, inVault: `${inVault}` } };
 
-	if (IsSet(fileId) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${fileId}`).putString(file, firebase.storage.StringFormat.RAW, metadata), name, size, fileId)
+	if (IsSet(fileId) && typeof file === "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${fileId}`).putString(file, firebase.storage.StringFormat.RAW, metadata), name, size)
 		.then(() => resolveUpload())
 		.catch(error => rejectUpload(error));
 	else
@@ -1402,14 +1369,9 @@ const UploadFile = async (
 		{
 			const { id } = ref;
 
-			analytics.logEvent("create", {
-				content_type: "file",
-				content_id: id,
-			});
-
-			if (typeof file !== "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).put(file, metadata), finalName, size, id)
+			if (typeof file !== "string") ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).put(file, metadata), finalName, size)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
-			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, firebase.storage.StringFormat.RAW, metadata), finalName, size, id)
+			else ShowFileUploadModal(storage.ref(`${Auth.UserId}/${id}`).putString(file, firebase.storage.StringFormat.RAW, metadata), finalName, size)
 				.then(() => resolveUpload()).catch(error => rejectUpload(error));
 		});
 	}
@@ -1419,7 +1381,6 @@ const ShowFileUploadModal = async (
 	uploadTask : firebaseStorage.UploadTask,
 	name : string,
 	size : number,
-	id : string,
 ) : Promise<void> => new Promise((resolve, reject) =>
 {
 	// Avoid showing the modal if the upload size is 0
@@ -1448,12 +1409,6 @@ const ShowFileUploadModal = async (
 		{
 			// Upload Success
 			modal.Remove();
-
-			analytics.logEvent("upload", {
-				content_type: "file",
-				content_id: id,
-				size,
-			});
 
 			resolve();
 		});
@@ -1618,13 +1573,9 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 		}
 
 		if (searchTerm?.length > 0)
-		{
 			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ])
 				.filter(element => element.getAttribute("data-search-term") !== searchTerm)
 				.forEach(element => element.remove());
-
-			analytics.logEvent("view_search_results", { search_term: searchTerm });
-		}
 
 		emptyTrashButton.disabled = trashedOnly() && AreUserContentContainersEmpty();
 	};
@@ -1657,8 +1608,6 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 	{
 		foldersRef = foldersRef.where("name", ">=", searchTerm).where("name", "<", end);
 		filesRef = filesRef.where("name", ">=", searchTerm).where("name", "<", end);
-
-		analytics.logEvent("search", { search_term: searchTerm });
 	}
 
 	if (orderBy)
@@ -1740,8 +1689,6 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 		filesUpdateCount++;
 	});
-
-	LogPageViewEvent();
 };
 
 const showContextMenu = (e : MouseEvent) : void =>
@@ -2273,8 +2220,6 @@ const ShowFile = (
 
 		if (!isMultipleFileEditor) (<HTMLTitleElement>document.head.querySelector("[data-update-field=folder-name]")).innerText = name;
 
-		LogPageViewEvent();
-
 		if (!navigator.onLine)
 		{
 			editorElement.innerHTML = "";
@@ -2415,11 +2360,6 @@ const UploadFolder = async (
 		const { id } = ref;
 
 		const folders : Set<string> = new Set();
-
-		analytics.logEvent(depth === 0 ? "upload" : "create", {
-			content_type: "folder",
-			content_id: id,
-		});
 
 		const nextDepth = depth + 1;
 

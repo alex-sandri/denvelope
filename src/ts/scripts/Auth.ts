@@ -1,8 +1,4 @@
-import type {
-	analytics as firebaseAnalytics,
-	auth as firebaseAuth,
-	User as firebaseUser,
-} from "firebase";
+import type { auth as firebaseAuth, User as firebaseUser } from "firebase";
 import type firebaseuiType from "firebaseui";
 
 import {
@@ -17,8 +13,6 @@ declare const firebaseui: any;
 export default class Auth
 {
 	private static readonly auth: firebaseAuth.Auth = firebase.auth();
-
-	private static readonly analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 	private static sharedContentUserId : string = null;
 
@@ -157,16 +151,7 @@ export default class Auth
 			const uiConfig: firebaseuiType.auth.Config = {
 				signInSuccessUrl: location.pathname === "/" ? "account" : "",
 				callbacks: {
-					signInSuccessWithAuthResult: authResult =>
-					{
-						Auth.analytics.setUserId(authResult.user.uid);
-
-						Auth.analytics.logEvent(<never>(authResult.additionalUserInfo.isNewUser ? "sign_up" : "login"), {
-							method: authResult.additionalUserInfo.providerId,
-						});
-
-						return true; // Redirect the user
-					},
+					signInSuccessWithAuthResult: () => true, // Redirect the user
 				},
 				signInOptions: [
 					{

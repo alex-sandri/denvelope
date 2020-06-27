@@ -1,8 +1,4 @@
-import type {
-	analytics as firebaseAnalytics,
-	firestore as firebaseFirestore,
-	functions as firebaseFunctions,
-} from "firebase";
+import type { firestore as firebaseFirestore, functions as firebaseFunctions } from "firebase";
 
 import Init from "./scripts/load-events";
 
@@ -33,7 +29,6 @@ declare const Stripe: stripe.StripeStatic;
 
 const db: firebaseFirestore.Firestore = firebase.firestore();
 const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
-const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 const stripe = Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
 const stripeElements = stripe.elements({
@@ -449,12 +444,7 @@ window.addEventListener("userready", () =>
 				// Not needed if the user already has a default payment method
 				paymentMethod: result?.paymentMethod.id,
 			});
-			else
-			{
-				functions.httpsCallable("addPaymentMethod")({ paymentMethod: result.paymentMethod.id });
-
-				analytics.logEvent("add_payment_info");
-			}
+			else functions.httpsCallable("addPaymentMethod")({ paymentMethod: result.paymentMethod.id });
 		};
 
 		modal.Show(true);

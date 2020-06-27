@@ -1,7 +1,6 @@
-import type { analytics as firebaseAnalytics, firestore as firebaseFirestore } from "firebase";
+import type { firestore as firebaseFirestore } from "firebase";
 
 import {
-	LogPageViewEvent,
 	ShowElement,
 	HideElement,
 	PreventDragEvents,
@@ -23,7 +22,6 @@ declare const firebase: any;
 export default () : void =>
 {
 	const db: firebaseFirestore.Firestore = firebase.firestore();
-	const analytics: firebaseAnalytics.Analytics = firebase.analytics();
 
 	const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
 
@@ -101,9 +99,6 @@ export default () : void =>
 
 	Auth.Init();
 
-	// This needs to wait for the translation to be completed
-	LogPageViewEvent();
-
 	const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
 
 	if (!localStorage.getItem("cookie-consent"))
@@ -155,13 +150,6 @@ export default () : void =>
 
 					localStorage.setItem("background-image-url", backgroundImageUrl);
 				}
-
-				const trackingEnabled : boolean = preferences.data()?.trackingEnabled
-					?? (!navigator.doNotTrack && !window.doNotTrack);
-
-				localStorage.setItem("tracking-enabled", `${trackingEnabled}`);
-
-				analytics.setAnalyticsCollectionEnabled(trackingEnabled);
 
 				Translation.Init(preferences.data()?.language ?? Translation.Language);
 			});

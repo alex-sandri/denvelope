@@ -1,4 +1,4 @@
-import type { analytics as firebaseAnalytics, firestore as firebaseFirestore } from "firebase";
+import type { firestore as firebaseFirestore } from "firebase";
 
 import { ShowElements, HideElements } from "../scripts/Utilities";
 import * as genericMessage from "../scripts/generic-message";
@@ -8,8 +8,6 @@ declare const firebase: any;
 
 export default class ServiceWorkerController
 {
-	private static readonly analytics: firebaseAnalytics.Analytics = firebase.analytics();
-
 	public static Register = () : void =>
 	{
 		if (!navigator.serviceWorker) return;
@@ -65,8 +63,6 @@ export default class ServiceWorkerController
 			], "block");
 		});
 
-		window.addEventListener("appinstalled", () => ServiceWorkerController.analytics.logEvent("install"));
-
 		installPwaButton.addEventListener("click", () =>
 		{
 			deferredPrompt.prompt();
@@ -93,8 +89,6 @@ export default class ServiceWorkerController
 		genericMessage.Show(Translation.Get("pwa->update_available"), Translation.Get("generic->update"), -1).then(() =>
 		{
 			genericMessage.ShowSpinner();
-
-			ServiceWorkerController.analytics.logEvent("update");
 
 			(<firebaseFirestore.Firestore>firebase.firestore()).terminate();
 
