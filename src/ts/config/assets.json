@@ -1,5 +1,5 @@
 {
-    "version": 3122,
+    "version": 3123,
     "static": [
         "/",
         "/account",
@@ -17,6 +17,7 @@
         "/__/firebase/init.js",
         "/assets/img/miscellaneous/empty.svg",
         "/assets/img/miscellaneous/file-sync.svg",
+        "/assets/img/miscellaneous/privacy.svg",
         "/assets/img/miscellaneous/share.svg",
         "/assets/img/miscellaneous/source-code.svg",
         "/assets/img/miscellaneous/starred.svg",
