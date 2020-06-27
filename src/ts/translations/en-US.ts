@@ -80,19 +80,6 @@ export default {
 			image: "Image",
 		},
 	},
-	cookies: {
-		text: "Cookies are small data files sent to your browser when you visit a site. We use both our own cookies, as well as third-party cookies, to do a few different things",
-		why: {
-			access_services: "Log you in to our services",
-			remember_settings: "Remember preferences and settings",
-			secure_account: "Keep your account secure",
-			improve_services: "Better understand how people are using our services and how we can improve",
-		},
-		opt_out: {
-			title: "Opt-Out",
-			text: "You can set your browser to not accept cookies, but this may limit your ability to use the Services.",
-		},
-	},
 	errors: {
 		empty: "This field cannot be empty",
 		offline: "You are offline. To complete this action you need an Internet connection",
@@ -139,7 +126,6 @@ export default {
 		update: "Update",
 		terms_of_service: "Terms of Service",
 		privacy_policy: "Privacy Policy",
-		cookie_policy: "Cookie Policy",
 		version: "Version",
 		account: "Account",
 		name: "Name",

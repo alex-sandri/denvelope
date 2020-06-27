@@ -80,19 +80,6 @@ export default {
 			image: "Immagine",
 		},
 	},
-	cookies: {
-		text: "I cookie sono piccoli file di dati inviati al tuo browser quando visiti un sito. Utilizziamo sia i nostri cookie che quelli di terze parti per varie finalità",
-		why: {
-			access_services: "Farti accedere ai nostri servizi",
-			remember_settings: "Ricordare preferenze e impostazioni",
-			secure_account: "Mantenere al sicuro il tuo account",
-			improve_services: "Capire meglio in che modo gli utenti utilizzano i nostri servizi e migliorarli",
-		},
-		opt_out: {
-			title: "Disattivazione",
-			text: "Puoi impostare il tuo browser in modo che non accetti i cookie, ma ciò potrebbe limitare la possibilità di utilizzare i nostri Servizi.",
-		},
-	},
 	errors: {
 		empty: "Questo campo non può essere vuoto",
 		offline: "Sei offline. Per completare questa azione devi disporre di una connessione ad Internet",
@@ -139,7 +126,6 @@ export default {
 		update: "Aggiorna",
 		terms_of_service: "Termini di Servizio",
 		privacy_policy: "Norme sulla Privacy",
-		cookie_policy: "Norme sui Cookie",
 		version: "Versione",
 		account: "Account",
 		name: "Nome",

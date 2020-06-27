@@ -83,13 +83,6 @@ fs.writeFileSync(path.join(PUBLIC_PATH, "privacy.html"), handlebars.compile(fs.r
     logoRedirectPath: "/",
 }));
 
-fs.writeFileSync(path.join(PUBLIC_PATH, "cookies.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "cookies.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
-    year: new Date().getFullYear(),
-    logoRedirectPath: "/",
-}));
-
 fs.writeFileSync(path.join(PUBLIC_PATH, "accessibility.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "accessibility.hbs"), "utf8"))({
     cssversion: cssFileName,
     jsversion: indexJsFileName,

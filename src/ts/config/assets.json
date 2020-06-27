@@ -1,5 +1,5 @@
 {
-    "version": 3118,
+    "version": 3119,
     "static": [
         "/",
         "/account",
@@ -7,7 +7,6 @@
         "/plans",
         "/terms",
         "/privacy",
-        "/cookies",
         "/accessibility",
         "/__/firebase/7.15.5/firebase-app.js",
         "/__/firebase/7.15.5/firebase-auth.js",
@@ -75,13 +74,13 @@
     "dynamic": {
         "css": {
             "rootDir": "/assets/css",
-            "bundle": "bundle.7740ff3ab8761bfd5c9bda8fca4030f3.css"
+            "bundle": "bundle.ce3f7d283bdd0c23c6718cf9d334b6eb.css"
         },
         "js": {
             "rootDir": "/assets/js",
-            "index": "index.7132c9eb80b6b77f0c43.js",
-            "account": "account.a7e85fff698a8373030a.js",
-            "settings": "settings.cc568768d2e508931285.js"
+            "index": "index.edda697eadedd1e49a24.js",
+            "account": "account.7cdb2a539039d2550ec1.js",
+            "settings": "settings.5fe24a46dacb094be718.js"
         }
     }
 }
