@@ -290,7 +290,6 @@ export default {
 				title: "Clear cache",
 				clear: "Clear",
 			},
-			tracking: "Tracking",
 		},
 		info: {
 			title: "Info",

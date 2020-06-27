@@ -290,7 +290,6 @@ export default {
 				title: "Svuota cache",
 				clear: "Svuota",
 			},
-			tracking: "Tracciamento",
 		},
 		info: {
 			title: "Informazioni",
