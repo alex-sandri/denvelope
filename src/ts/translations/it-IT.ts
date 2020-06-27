@@ -80,10 +80,6 @@ export default {
 			image: "Immagine",
 		},
 	},
-	cookie_banner: {
-		text: "Usiamo i cookie per rendere possibile il corretto funzionamento di Denvelope per te. Utilizzando il nostro sito, accetti le nostre modalità di utilizzo dei cookie.",
-		learn_more: "Ulteriori informazioni",
-	},
 	cookies: {
 		text: "I cookie sono piccoli file di dati inviati al tuo browser quando visiti un sito. Utilizziamo sia i nostri cookie che quelli di terze parti per varie finalità",
 		why: {

@@ -99,17 +99,6 @@ export default () : void =>
 
 	Auth.Init();
 
-	const cookieBanner : HTMLElement = document.querySelector(".cookie-banner");
-
-	if (!localStorage.getItem("cookie-consent"))
-	{
-		ShowElement(cookieBanner, "flex");
-
-		cookieBanner.querySelector("i:last-child").addEventListener("click", () => HideElement(document.querySelector(".cookie-banner")));
-	}
-
-	localStorage.setItem("cookie-consent", "true");
-
 	PreventDragEvents();
 
 	document.addEventListener("contextmenu", e =>

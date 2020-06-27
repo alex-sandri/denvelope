@@ -80,10 +80,6 @@ export default {
 			image: "Image",
 		},
 	},
-	cookie_banner: {
-		text: "We use cookies so that Denvelope works for you. By using our website, you agree with our use of cookies.",
-		learn_more: "Learn more",
-	},
 	cookies: {
 		text: "Cookies are small data files sent to your browser when you visit a site. We use both our own cookies, as well as third-party cookies, to do a few different things",
 		why: {
