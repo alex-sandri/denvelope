@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = [
     {
-        entry: "./src/ts/service_workers/sw.ts",
+        entry: "./src/ts/sw/sw.ts",
         module: {
             rules: [
                 {

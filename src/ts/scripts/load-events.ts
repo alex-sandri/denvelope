@@ -12,7 +12,7 @@ import {
 } from "./Utilities";
 import Auth from "./Auth";
 import { signOutButton, whatIsTakingUpSpace, upgradePlan } from "./header";
-import ServiceWorkerController from "../service_workers/ServiceWorkerController";
+import ServiceWorkerController from "../sw/ServiceWorkerController";
 import Translation from "./Translation";
 import { Modal } from "./Modal";
 import Shortcuts from "./Shortcuts";
