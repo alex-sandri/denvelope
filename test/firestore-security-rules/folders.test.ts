@@ -1,5 +1,6 @@
-const firebase = require("@firebase/testing");
-const { setup, teardown, mockData, newFileValidMockData, newFileInvalidMockData, unlockedVaultMockData, lockedVaultMockData } = require("../helpers");
+import * as firebase from "@firebase/testing";
+
+import { setup, teardown, mockData, newFolderValidMockData, newFolderInvalidMockData, unlockedVaultMockData, lockedVaultMockData } from "../helpers";
 
 describe("OWNER:TRUE", () =>
 {
@@ -13,7 +14,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
         
-                const ref = db.collection("users/test/files").doc("fileId");
+                const ref = db.collection("users/test/folders").doc("folderId");
         
                 await expect(ref.get()).toAllow();
             });
@@ -25,7 +26,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData });
 
-                const ref = db.collection("users/test/files").doc("inVaultFile");
+                const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
                 await expect(ref.get()).toDeny();
             });
@@ -40,9 +41,9 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
 
-                const ref = db.collection("users/test/files");
+                const ref = db.collection("users/test/folders");
 
-                await expect(ref.add(newFileValidMockData)).toAllow();
+                await expect(ref.add(newFolderValidMockData)).toAllow();
             });
         });
 
@@ -52,9 +53,9 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
 
-                const ref = db.collection("users/test/files");
+                const ref = db.collection("users/test/folders");
 
-                await expect(ref.add(newFileInvalidMockData)).toDeny();
+                await expect(ref.add(newFolderInvalidMockData)).toDeny();
             });
         });
     });
@@ -67,7 +68,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
 
-                const ref = db.collection("users/test/files").doc("fileId");
+                const ref = db.collection("users/test/folders").doc("folderId");
 
                 await expect(ref.update({
                     name: "testName",
@@ -76,7 +77,7 @@ describe("OWNER:TRUE", () =>
                 })).toAllow();
 
                 await expect(ref.update({
-                    parentId: "folderId",
+                    parentId: "anotherFolderId",
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
                 })).toAllow();
@@ -86,7 +87,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData });
 
-                const ref = db.collection("users/test/files").doc("fileId");
+                const ref = db.collection("users/test/folders").doc("folderId");
 
                 await expect(ref.update({
                     parentId: "vault",
@@ -103,7 +104,13 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
 
-                const ref = db.collection("users/test/files").doc("fileId");
+                const ref = db.collection("users/test/folders").doc("folderId");
+
+                await expect(ref.update({
+                    parentId: "folderId",
+                    updated: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+                })).toDeny();
 
                 await expect(ref.update({
                     parentId: "nonExistentFolderId",
@@ -113,7 +120,7 @@ describe("OWNER:TRUE", () =>
 
                 await expect(ref.update({
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastClientUpdateTime: new firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
+                    lastClientUpdateTime: firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
                 })).toDeny();
             });
 
@@ -121,7 +128,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData});
 
-                const ref = db.collection("users/test/files").doc("fileId");
+                const ref = db.collection("users/test/folders").doc("folderId");
 
                 await expect(ref.update({
                     parentId: "vault",
@@ -166,7 +173,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
     
-                const ref = db.collection("users/test/files").doc("trashedFile");
+                const ref = db.collection("users/test/folders").doc("trashedFolder");
     
                 await expect(ref.delete()).toAllow();
             });
@@ -175,7 +182,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData });
     
-                const ref = db.collection("users/test/files").doc("inVaultFile");
+                const ref = db.collection("users/test/folders").doc("inVaultFolder");
     
                 await expect(ref.delete()).toAllow();
             });
@@ -187,7 +194,7 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, mockData);
         
-                const ref = db.collection("users/test/files").doc("fileId");
+                const ref = db.collection("users/test/folders").doc("folderId");
         
                 await expect(ref.delete()).toDeny();
             });
@@ -196,97 +203,9 @@ describe("OWNER:TRUE", () =>
             {
                 const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData });
     
-                const ref = db.collection("users/test/files").doc("inVaultFile");
+                const ref = db.collection("users/test/folders").doc("inVaultFolder");
     
                 await expect(ref.delete()).toDeny();
-            });
-        });
-    });
-});
-
-describe("OWNER:FALSE", () =>
-{
-    afterEach(async () => await teardown());
-
-    describe("GENERIC", () =>
-    {
-        describe("CREATE", () =>
-        {
-            describe("DENY", () =>
-            {
-                test("GENERIC", async () =>
-                {
-                    const db = await setup({ uid: "test1" }, mockData);
-
-                    await expect(db.collection("users/test/files").add(newFileValidMockData)).toDeny();
-                });
-            });
-        });
-
-        describe("UPDATE", () =>
-        {
-            describe("DENY", () =>
-            {
-                test("GENERIC", async () =>
-                {
-                    const db = await setup({ uid: "test1" }, mockData);
-            
-                    const file = db.collection("users/test/files").doc("fileId");
-
-                    await expect(file.update({
-                        name: "aNewFileName",
-                        updated: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-                    })).toDeny();
-                });
-            });
-        });
-
-        describe("DELETE", () =>
-        {
-            describe("DENY", () =>
-            {
-                test("GENERIC", async () =>
-                {
-                    const db = await setup({ uid: "test1" }, mockData);
-            
-                    const file = db.collection("users/test/files").doc("fileId");
-
-                    await expect(file.delete()).toDeny();
-                });
-            });
-        });
-    });
-
-    describe("SHARED:TRUE", () =>
-    {
-        describe("READ", () =>
-        {
-            describe("ALLOW", () =>
-            {
-                test("GENERIC", async () =>
-                {
-                    const db = await setup({ uid: "test1" }, mockData);
-            
-                    const ref = db.collection("users/test/files").doc("sharedFile");
-            
-                    await expect(ref.get()).toAllow();
-                });
-            });
-
-            describe("DENY", () =>
-            {
-                test("GENERIC", async () =>
-                {
-                    const db = await setup({ uid: "test1" }, mockData);
-            
-                    const files = [
-                        db.collection("users/test/files").doc("fileId"),
-                        db.collection("users/test/files").doc("inVaultFile"),
-                    ];
-
-                    for await (const file of files) expect(file.get()).toDeny();
-                });
             });
         });
     });

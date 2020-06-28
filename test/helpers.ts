@@ -1,7 +1,19 @@
-const firebase = require("@firebase/testing");
-const fs = require("fs");
+import * as firebase from "@firebase/testing";
+import * as fs from "fs";
 
-module.exports.setup = async (auth, data) =>
+declare global
+{
+    namespace jest
+    {
+        interface Matchers<R>
+        {
+            toAllow(): CustomMatcherResult,
+            toDeny(): CustomMatcherResult,
+        }
+    }
+}
+
+export const setup = async (auth?: any, data?: any) =>
 {
     const projectId = `rules-test-${Date.now()}`;
 
@@ -20,9 +32,9 @@ module.exports.setup = async (auth, data) =>
     return db;
 }
 
-module.exports.teardown = async () => Promise.all(firebase.apps().map(app => app.delete()));
+export const teardown = async () => Promise.all(firebase.apps().map(app => app.delete()));
 
-module.exports.mockData = {
+export const mockData = {
     "users/test/folders/folderId": {
         name: "folder",
         parentId: "root",
@@ -129,7 +141,7 @@ module.exports.mockData = {
     }
 }
 
-module.exports.newFolderValidMockData = {
+export const newFolderValidMockData = {
     name: "newFolder",
     parentId: "root",
     shared: false,
@@ -141,7 +153,7 @@ module.exports.newFolderValidMockData = {
     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
 }
 
-module.exports.newFolderInvalidMockData = {
+export const newFolderInvalidMockData = {
     name: "newFolder",
     parentId: "nonExistentFolderId",
     shared: false,
@@ -153,7 +165,7 @@ module.exports.newFolderInvalidMockData = {
     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
 }
 
-module.exports.newFileValidMockData = {
+export const newFileValidMockData = {
     name: "newFile",
     parentId: "root",
     shared: false,
@@ -165,7 +177,7 @@ module.exports.newFileValidMockData = {
     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
 }
 
-module.exports.newFileInvalidMockData = {
+export const newFileInvalidMockData = {
     name: "newFile",
     parentId: "nonExistentFolderId",
     shared: false,
@@ -177,9 +189,9 @@ module.exports.newFileInvalidMockData = {
     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
 }
 
-module.exports.lockedVaultMockData = { "/users/test/vault/status": { locked: true } }
+export const lockedVaultMockData = { "/users/test/vault/status": { locked: true } }
 
-module.exports.unlockedVaultMockData = { "/users/test/vault/status": { locked: false } }
+export const unlockedVaultMockData = { "/users/test/vault/status": { locked: false } }
 
 expect.extend({
     async toAllow(x)

@@ -1,8 +1,9 @@
-const { setup, teardown } = require("../helpers");
+import { setup, teardown } from "../helpers";
 
 describe("Non-existent collection read/write", () =>
 {
-    let db, ref;
+    let db: firebase.firestore.Firestore;
+    let ref: firebase.firestore.CollectionReference;
 
     beforeAll(async () =>
     {

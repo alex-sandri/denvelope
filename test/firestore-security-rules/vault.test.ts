@@ -1,4 +1,4 @@
-const { setup, teardown } = require("../helpers");
+import { setup, teardown } from "../helpers";
 
 describe("Vault rules", () =>
 {
