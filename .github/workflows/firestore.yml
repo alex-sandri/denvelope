@@ -15,10 +15,16 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 12.x
+      - name: install
+        run: npm ci
+      - name: lint
+        run: npm run lint:test
       - name: test
-        run: |
-          npm ci
-          npm run test
+        uses: w9jds/firebase-action@master
+        with:
+          args: emulators:exec --only firestore
+        env:
+          FIRESTORE_EMULATOR_HOST: localhost:5002
       - name: deploy
         uses: w9jds/firebase-action@master
         with:
