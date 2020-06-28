@@ -24,6 +24,8 @@ export namespace Config
 		second: "numeric",
 		timeZoneName: "short",
 	};
+
+	export const Locales: readonly Config.Locale[] = [ "en-us", "en", "it-it", "it" ];
 }
 
 interface PlanObject
