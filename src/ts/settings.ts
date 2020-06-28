@@ -272,7 +272,7 @@ window.addEventListener("userready", () =>
 	});
 
 	resetBackground.addEventListener("click", () =>
-		db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: "" }, { merge: true }));
+		db.collection(`users/${Auth.UserId}/config`).doc("preferences").update({ backgroundImageUrl: firebase.firestore.FieldValue.delete() }));
 
 	changeDateFormat.addEventListener("click", async () =>
 	{
@@ -283,7 +283,7 @@ window.addEventListener("userready", () =>
 
 		const dateFormatOptions : HTMLDivElement = <HTMLDivElement>document.querySelector("#date-format .date-format-options").cloneNode(true);
 
-		if (userDateFormatOptions && userDateFormatOptions !== "default")
+		if (userDateFormatOptions)
 			Array.from(dateFormatOptions.children).forEach(dateFormatOption =>
 			{
 				const showOption: HTMLInputElement = dateFormatOption.querySelector("input[type=checkbox]");
@@ -312,9 +312,7 @@ window.addEventListener("userready", () =>
 			new Component("p", {
 				children: [
 					Translation.GetElement("generic->example"),
-					Translation.GetDateElement(new Date(), userDateFormatOptions !== "default"
-						? userDateFormatOptions
-						: null),
+					Translation.GetDateElement(new Date(), userDateFormatOptions),
 				],
 			}).element,
 			dateFormatOptions,
@@ -358,7 +356,7 @@ window.addEventListener("userready", () =>
 	});
 
 	resetDateFormat.addEventListener("click", () =>
-		db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: "default" }, { merge: true }));
+		db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: firebase.firestore.FieldValue.delete() }, { merge: true }));
 
 	[ changePlan, addPaymentMethod ].forEach(button => button.addEventListener("click", () =>
 	{
@@ -946,9 +944,7 @@ window.addEventListener("userready", () =>
 
 		userDateFormatOptions = dateFormatOptions;
 
-		if (userDateFormatOptions === "default") userDateFormatOptions = null;
-
-		resetDateFormat.disabled = !userDateFormatOptions || userDateFormatOptions === "default";
+		resetDateFormat.disabled = !userDateFormatOptions;
 	});
 
 	db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot(snapshot =>

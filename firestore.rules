@@ -32,11 +32,11 @@ service cloud.firestore {
           incomingData().backgroundImageUrl != null &&
           incomingData().backgroundImageUrl == incomingData().backgroundImageUrl.trim() &&
           incomingData().backgroundImageUrl.size() <= 1024 &&
-          (incomingData().backgroundImageUrl.matches("https://.+[.].{2,}/.*") || incomingData().backgroundImageUrl == "");
+          incomingData().backgroundImageUrl.matches("https://.+[.].{2,}/.*");
       }
 
       function validateDateFormatOptions() {
-        return (incomingData().dateFormatOptions.keys().hasOnly([ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ]) &&
+        return incomingData().dateFormatOptions.keys().hasOnly([ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ]) &&
           ((incomingData().dateFormatOptions.weekday is string &&
           [ incomingData().dateFormatOptions.weekday ].hasAny([ "long", "short", "narrow" ])) || !("weekday" in incomingData().dateFormatOptions)) &&
           ((incomingData().dateFormatOptions.era is string &&
@@ -54,9 +54,7 @@ service cloud.firestore {
           ((incomingData().dateFormatOptions.second is string &&
           [ incomingData().dateFormatOptions.second ].hasAny([ "numeric", "2-digit" ])) || !("second" in incomingData().dateFormatOptions)) &&
           ((incomingData().dateFormatOptions.timeZoneName is string &&
-          [ incomingData().dateFormatOptions.timeZoneName ].hasAny([ "long", "short", ])) || !("timeZoneName" in incomingData().dateFormatOptions))) ||
-          incomingData().dateFormatOptions is string &&
-          incomingData().dateFormatOptions == "default";
+          [ incomingData().dateFormatOptions.timeZoneName ].hasAny([ "long", "short", ])) || !("timeZoneName" in incomingData().dateFormatOptions));
       }
 
       match /folders/{folderId} {
