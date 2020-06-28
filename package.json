@@ -11,6 +11,7 @@
     "test": "set FIRESTORE_EMULATOR_HOST=localhost:5002 && firebase emulators:exec --only firestore \"jest --detectOpenHandles\"",
     "lint": "npx eslint src/ts/**/*.ts",
     "lint:fix": "npx eslint src/ts/**/*.ts --fix",
+    "lint:test": "npx eslint test/**/*.ts",
     "deploy:functions": "firebase deploy --only functions"
   },
   "author": "Alex Sandri <me@alexsandri.com> (https://alexsandri.com)",
