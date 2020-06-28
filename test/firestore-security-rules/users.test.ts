@@ -2,7 +2,7 @@ import { setup, teardown } from "../helpers";
 
 describe("User document read/write", () =>
 {
-	afterEach(async () => await teardown());
+	afterEach(async () => teardown());
 
 	test("Fail read/write when not the owner", async () =>
 	{

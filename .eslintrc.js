@@ -17,6 +17,9 @@ module.exports = {
   settings: {
     "import/resolver": "webpack"
   },
+  env: {
+    "jest/globals": true
+  },
   rules: {
     indent: [ "error", "tab", { SwitchCase: 1 } ],
     quotes: [ "error", "double" ],

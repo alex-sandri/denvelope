@@ -2,7 +2,7 @@ import { setup, teardown } from "../helpers";
 
 describe("Vault rules", () =>
 {
-	afterEach(async () => await teardown());
+	afterEach(async () => teardown());
 
 	test("Fail read/write to vault config when not the owner", async () =>
 	{

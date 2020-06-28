@@ -12,7 +12,7 @@ describe("Non-existent collection read/write", () =>
 		ref = db.collection("non-existent-collection");
 	});
 
-	afterAll(async () => await teardown());
+	afterAll(async () => teardown());
 
 	test("Fail when reading/writing a non-existent collection", async () =>
 	{

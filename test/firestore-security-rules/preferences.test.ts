@@ -16,21 +16,21 @@ const mockData = {
 				day: "numeric",
 				hour: "numeric",
 				minute: "numeric",
-			}
+			},
 		},
 	],
 	invalid: [
 		{
-			language: "" // Cannot be empty
+			language: "", // Cannot be empty
 		},
 		{
-			language: "en-US" // Must be in lower case
+			language: "en-US", // Must be in lower case
 		},
 		{
-			backgroundImageUrl: "http://example.com/image.jpg" // Must be HTTPS
+			backgroundImageUrl: "http://example.com/image.jpg", // Must be HTTPS
 		},
 		{
-			backgroundImageUrl: "file:///C:/image.jpg" // Protocol must be https
+			backgroundImageUrl: "file:///C:/image.jpg", // Protocol must be https
 		},
 		{
 			// Required fields are: [ year, month, day, hour, minute ]
@@ -39,7 +39,7 @@ const mockData = {
 				month: "numeric",
 				day: "numeric",
 				hour: "numeric",
-			}
+			},
 		},
 		{
 			dateFormatOptions: {
@@ -48,14 +48,14 @@ const mockData = {
 				day: "numeric",
 				hour: "numeric",
 				minute: "other", // Valid values are: [ numeric, 2-digit ]
-			}
+			},
 		},
-	]
-}
+	],
+};
 
 describe("OWNER:TRUE", () =>
 {
-	afterEach(async () => await teardown());
+	afterEach(async () => teardown());
 
 	describe("READ", () =>
 	{

@@ -30,7 +30,7 @@ export const setup = async (auth?: any, data?: any) =>
 	await firebase.loadFirestoreRules({ projectId, rules: fs.readFileSync("firestore.rules", "utf8") });
 
 	return db;
-}
+};
 
 export const teardown = async () => Promise.all(firebase.apps().map(app => app.delete()));
 
@@ -44,7 +44,7 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/folders/anotherFolderId": {
 		name: "folder1",
@@ -55,7 +55,7 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/folders/trashedFolder": {
 		name: "trashedFolder",
@@ -66,7 +66,7 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/folders/inVaultFolder": {
 		name: "inVaultFolder",
@@ -77,7 +77,7 @@ export const mockData = {
 		inVault: true,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/files/fileId": {
 		name: "file",
@@ -89,7 +89,7 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/files/anotherFileId": {
 		name: "file1",
@@ -101,7 +101,7 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/files/trashedFile": {
 		name: "trashedFile",
@@ -113,7 +113,7 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/files/inVaultFile": {
 		name: "inVaultFile",
@@ -125,7 +125,7 @@ export const mockData = {
 		inVault: true,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 	},
 	"users/test/files/sharedFile": {
 		name: "sharedFile",
@@ -137,9 +137,9 @@ export const mockData = {
 		inVault: false,
 		created: firebase.firestore.FieldValue.serverTimestamp(),
 		updated: firebase.firestore.FieldValue.serverTimestamp(),
-		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-	}
-}
+		lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+	},
+};
 
 export const newFolderValidMockData = {
 	name: "newFolder",
@@ -150,8 +150,8 @@ export const newFolderValidMockData = {
 	inVault: false,
 	created: firebase.firestore.FieldValue.serverTimestamp(),
 	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-}
+	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+};
 
 export const newFolderInvalidMockData = {
 	name: "newFolder",
@@ -162,8 +162,8 @@ export const newFolderInvalidMockData = {
 	inVault: false,
 	created: firebase.firestore.FieldValue.serverTimestamp(),
 	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-}
+	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+};
 
 export const newFileValidMockData = {
 	name: "newFile",
@@ -174,8 +174,8 @@ export const newFileValidMockData = {
 	inVault: false,
 	created: firebase.firestore.FieldValue.serverTimestamp(),
 	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-}
+	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+};
 
 export const newFileInvalidMockData = {
 	name: "newFile",
@@ -186,41 +186,43 @@ export const newFileInvalidMockData = {
 	inVault: false,
 	created: firebase.firestore.FieldValue.serverTimestamp(),
 	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
-}
+	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+};
 
-export const lockedVaultMockData = { "/users/test/vault/status": { locked: true } }
+export const lockedVaultMockData = { "/users/test/vault/status": { locked: true } };
 
-export const unlockedVaultMockData = { "/users/test/vault/status": { locked: false } }
+export const unlockedVaultMockData = { "/users/test/vault/status": { locked: false } };
 
 expect.extend({
 	async toAllow(x)
 	{
-		let pass = false;
+		let pass: boolean;
 
 		try
 		{
 			await firebase.assertSucceeds(x);
 
 			pass = true;
-		} catch (err) {}
+		}
+		catch (err) { pass = false; }
 
 		return { pass, message: () => "Expected Firebase operation to be allowed, but it failed" };
-	}
+	},
 });
 
 expect.extend({
 	async toDeny(x)
 	{
-		let pass = false;
+		let pass: boolean;
 
 		try
 		{
 			await firebase.assertFails(x);
 
 			pass = true;
-		} catch (err) {}
+		}
+		catch (err) { pass = false; }
 
 		return { pass, message: () => "Expected Firebase operation to be denied, but it was allowed" };
-	}
+	},
 });
