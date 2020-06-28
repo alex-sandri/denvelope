@@ -139,18 +139,6 @@ export const GetFirestoreUpdateTimestamp = (): Object =>
 		lastClientUpdateTime: new firebase.firestore.Timestamp.now() as firebaseFirestore.Timestamp,
 	});
 
-export const EscapeHtml = (string: string): string =>
-	string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
-		.replace(/'/g, "&#039;")
-		.replace(/\//g, "&#x2F;");
-
-export const EscapeHtmlPolicy = (<any>window).trustedTypes?.createPolicy("escapePolicy", { createHTML: (string: string) => EscapeHtml(string) });
-
-export const UnescapeHtml = (string: string): string =>
-	string.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"")
-		.replace(/&#039;/g, "'")
-		.replace(/&#x2F;/g, "/");
-
 export const ClearFirestoreCache = () =>
 // Firebase Cloud Firestore DB to keep persisted data for offline usage
 	indexedDB.deleteDatabase("firestore/[DEFAULT]/denvelope-firebase/main");
