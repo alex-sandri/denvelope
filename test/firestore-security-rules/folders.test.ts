@@ -12,7 +12,7 @@ import {
 
 describe("OWNER:TRUE", () =>
 {
-	afterEach(async () => teardown());
+	afterEach(async () => await teardown());
 
 	describe("READ", () =>
 	{
@@ -24,7 +24,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
-				expect(ref.get()).toAllow();
+				await expect(ref.get()).toAllow();
 			});
 		});
 
@@ -36,7 +36,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
-				expect(ref.get()).toDeny();
+				await expect(ref.get()).toDeny();
 			});
 		});
 	});
@@ -51,7 +51,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders");
 
-				expect(ref.add(newFolderValidMockData)).toAllow();
+				await expect(ref.add(newFolderValidMockData)).toAllow();
 			});
 		});
 
@@ -63,7 +63,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders");
 
-				expect(ref.add(newFolderInvalidMockData)).toDeny();
+				await expect(ref.add(newFolderInvalidMockData)).toDeny();
 			});
 		});
 	});
@@ -78,13 +78,13 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
-				expect(ref.update({
+				await expect(ref.update({
 					name: "testName",
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 				})).toAllow();
 
-				expect(ref.update({
+				await expect(ref.update({
 					parentId: "anotherFolderId",
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
@@ -97,7 +97,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
-				expect(ref.update({
+				await expect(ref.update({
 					parentId: "vault",
 					inVault: true,
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -114,19 +114,19 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
-				expect(ref.update({
+				await expect(ref.update({
 					parentId: "folderId",
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 				})).toDeny();
 
-				expect(ref.update({
+				await expect(ref.update({
 					parentId: "nonExistentFolderId",
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 				})).toDeny();
 
-				expect(ref.update({
+				await expect(ref.update({
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.Timestamp.fromDate(new Date("1/1/1970")),
 				})).toDeny();
@@ -138,7 +138,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
-				expect(ref.update({
+				await expect(ref.update({
 					parentId: "vault",
 					inVault: true,
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -152,19 +152,19 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
-				expect(ref.update({
+				await expect(ref.update({
 					trashed: true,
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 				})).toDeny();
 
-				expect(ref.update({
+				await expect(ref.update({
 					parentId: "root",
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
 				})).toDeny();
 
-				expect(ref.update({
+				await expect(ref.update({
 					inVault: false,
 					updated: firebase.firestore.FieldValue.serverTimestamp(),
 					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
@@ -183,7 +183,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("trashedFolder");
 
-				expect(ref.delete()).toAllow();
+				await expect(ref.delete()).toAllow();
 			});
 
 			test("VAULT:UNLOCKED", async () =>
@@ -192,7 +192,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
-				expect(ref.delete()).toAllow();
+				await expect(ref.delete()).toAllow();
 			});
 		});
 
@@ -204,7 +204,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
-				expect(ref.delete()).toDeny();
+				await expect(ref.delete()).toDeny();
 			});
 
 			test("VAULT:LOCKED", async () =>
@@ -213,7 +213,7 @@ describe("OWNER:TRUE", () =>
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
-				expect(ref.delete()).toDeny();
+				await expect(ref.delete()).toDeny();
 			});
 		});
 	});

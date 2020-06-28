@@ -57,7 +57,7 @@ const mockData = {
 
 describe("OWNER:TRUE", () =>
 {
-	afterEach(async () => teardown());
+	afterEach(async () => await teardown());
 
 	describe("READ", () =>
 	{
@@ -65,7 +65,7 @@ describe("OWNER:TRUE", () =>
 		{
 			const db = await setup({ uid: "test" }, mockData.initial);
 
-			expect(db.doc(PREFERENCES_PATH).get()).toAllow();
+			await expect(db.doc(PREFERENCES_PATH).get()).toAllow();
 		});
 	});
 
@@ -75,14 +75,15 @@ describe("OWNER:TRUE", () =>
 		{
 			const db = await setup({ uid: "test" });
 
-			for (const data of mockData.valid) expect(db.doc(PREFERENCES_PATH).set(data)).toAllow();
+			for (const data of mockData.valid) await expect(db.doc(PREFERENCES_PATH).set(data)).toAllow();
 		});
 
 		test("DENY", async () =>
 		{
 			const db = await setup({ uid: "test" });
 
-			for (const data of mockData.invalid) expect(db.doc(PREFERENCES_PATH).set(data)).toDeny();
+			for (const data of mockData.invalid)
+				await expect(db.doc(PREFERENCES_PATH).set(data)).toDeny();
 		});
 	});
 
@@ -92,7 +93,7 @@ describe("OWNER:TRUE", () =>
 		{
 			const db = await setup({ uid: "test" }, mockData.initial);
 
-			expect(db.doc(PREFERENCES_PATH).delete()).toDeny();
+			await expect(db.doc(PREFERENCES_PATH).delete()).toDeny();
 		});
 	});
 });

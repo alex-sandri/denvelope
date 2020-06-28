@@ -196,7 +196,7 @@ export const unlockedVaultMockData = { "/users/test/vault/status": { locked: fal
 expect.extend({
 	async toAllow(x)
 	{
-		let pass: boolean;
+		let pass: boolean = false;
 
 		try
 		{
@@ -204,7 +204,7 @@ expect.extend({
 
 			pass = true;
 		}
-		catch (err) { pass = false; }
+		catch (err) {}
 
 		return { pass, message: () => "Expected Firebase operation to be allowed, but it failed" };
 	},
@@ -213,7 +213,7 @@ expect.extend({
 expect.extend({
 	async toDeny(x)
 	{
-		let pass: boolean;
+		let pass: boolean = false;
 
 		try
 		{
@@ -221,7 +221,7 @@ expect.extend({
 
 			pass = true;
 		}
-		catch (err) { pass = false; }
+		catch (err) {}
 
 		return { pass, message: () => "Expected Firebase operation to be denied, but it was allowed" };
 	},
