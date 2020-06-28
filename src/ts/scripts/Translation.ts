@@ -175,7 +175,8 @@ export default class Translation
 				registration.element !== element);
 	};
 
-	public static IsSupportedLanguage = (lang: string) => Config.Locales.includes(<Config.Locale>lang.toLowerCase());
+	public static IsSupportedLanguage = (lang: string) =>
+		Config.Locales.includes(<Config.Locale>lang.toLowerCase());
 
 	private static currency: Config.Currency;
 
