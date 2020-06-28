@@ -24,6 +24,7 @@ jobs:
         with:
           args: emulators:exec --only firestore
         env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIRESTORE_EMULATOR_HOST: localhost:5002
       - name: deploy
         uses: w9jds/firebase-action@master
