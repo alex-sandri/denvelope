@@ -9,6 +9,7 @@ const mockData = {
 	valid: [
 		{ language: Config.Locales[1] },
 		{ backgroundImageUrl: "https://example.com/image.jpg" },
+		{ backgroundImageUrl: "" },
 		{
 			dateFormatOptions: {
 				year: "numeric",
