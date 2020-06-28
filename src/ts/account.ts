@@ -501,11 +501,7 @@ window.addEventListener("userready", async () =>
 			let dateFormatOptions;
 
 			if (Auth.IsAuthenticated)
-			{
 				dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
-
-				if (dateFormatOptions === "default") dateFormatOptions = null;
-			}
 
 			modal.AppendContent([
 				new Component("p", {
