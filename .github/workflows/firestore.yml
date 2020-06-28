@@ -12,7 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: w9jds/firebase-action@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 12.x
+      - name: test
+        run: |
+          npm ci
+          npm run test
+      - name: deploy
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only firestore:rules
         env:
