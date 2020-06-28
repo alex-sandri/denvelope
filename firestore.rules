@@ -17,6 +17,7 @@ service cloud.firestore {
         allow write: if false;
       }
 
+      // TEST
       match /config/preferences {
         allow read: if isOwner();
 
