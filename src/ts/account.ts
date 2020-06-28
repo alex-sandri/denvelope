@@ -254,19 +254,18 @@ window.addEventListener("userready", async () =>
 	ContextMenuButtons.SaveToMyAccount.addEventListener("click", () =>
 	{
 		ContextMenu.Items.forEach(item =>
-			functions.httpsCallable("saveToMyAccount")({
-				userId: Auth.UserId,
-				id: item.id,
-				type: item.classList[0],
-			}));
+		{
+			const { id, type } = ContextMenu.GetItemInfo(item);
+
+			functions.httpsCallable("saveToMyAccount")({ userId: Auth.UserId, id, type });
+		});
 
 		preventWindowUnload.editor = false;
 	});
 
 	ContextMenuButtons.Share.addEventListener("click", () =>
 	{
-		const { id } = ContextMenu.Item;
-		const type = ContextMenu.Item.classList[0];
+		const { id, type } = ContextMenu.GetItemInfo(ContextMenu.Item);
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: true,
@@ -291,8 +290,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuButtons.Unshare.addEventListener("click", () =>
 	{
-		const { id } = ContextMenu.Item;
-		const type = ContextMenu.Item.classList[0];
+		const { id, type } = ContextMenu.GetItemInfo(ContextMenu.Item);
 
 		db.collection(`users/${Auth.UserId}/${type}s`).doc(id).update({
 			shared: false,
@@ -405,18 +403,21 @@ window.addEventListener("userready", async () =>
 		const batch = db.batch();
 
 		ContextMenu.Items.forEach(item =>
-			batch.update(db.collection(`users/${Auth.UserId}/${item.classList[0]}s`).doc(item.id), {
+		{
+			const { id, type } = ContextMenu.GetItemInfo(item);
+
+			batch.update(db.collection(`users/${Auth.UserId}/${type}s`).doc(id), {
 				starred: ContextMenuButtons.AddToStarred.contains(element),
 				...GetFirestoreUpdateTimestamp(),
-			}));
+			});
+		});
 
 		batch.commit();
 	}));
 
 	ContextMenuButtons.Rename.addEventListener("click", () =>
 	{
-		const { id } = ContextMenu.Item;
-		const type = ContextMenu.Item.classList[0];
+		const { id, type } = ContextMenu.GetItemInfo(ContextMenu.Item);
 
 		const modal = new Modal({ action: "update" });
 
@@ -474,8 +475,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuButtons.Info.addEventListener("click", () =>
 	{
-		const { id } = ContextMenu.Item;
-		const type = ContextMenu.Item.classList[0];
+		const { id, type } = ContextMenu.GetItemInfo(ContextMenu.Item);
 
 		const modal = new Modal();
 
@@ -609,8 +609,7 @@ window.addEventListener("userready", async () =>
 
 		tempArray.forEach(async item =>
 		{
-			const { id } = item;
-			const type = item.classList[0];
+			const { id, type } = ContextMenu.GetItemInfo(item);
 
 			let folderFormat : string;
 
@@ -660,8 +659,7 @@ window.addEventListener("userready", async () =>
 
 		tempArray.forEach(item =>
 		{
-			const { id } = item;
-			const type = item.classList[0];
+			const { id, type } = ContextMenu.GetItemInfo(item);
 
 			const trashed = document.getElementById(id).getAttribute("data-trashed") === "true";
 
@@ -678,10 +676,10 @@ window.addEventListener("userready", async () =>
 
 		batch.commit();
 
-		if (tempArray.length === 1) genericMessage.Show(Translation.Get(`api->messages->${tempArray[0].classList[0]}->${
+		if (tempArray.length === 1) genericMessage.Show(Translation.Get(`api->messages->${ContextMenu.GetItemInfo(tempArray[0]).type}->${
 			inVault
 				? "deleted"
-				: document.getElementById(tempArray[0].id).getAttribute("data-trashed") === "true"
+				: document.getElementById(ContextMenu.GetItemInfo(tempArray[0]).id).getAttribute("data-trashed") === "true"
 					? (ContextMenuButtons.Restore.contains(element) ? "restored" : "deleted")
 					: "moved_to_trash"
 		}`));

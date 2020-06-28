@@ -1,5 +1,11 @@
 import { Modal } from "./Modal";
 
+type ContextMenuItem =
+{
+	id: string,
+	type: "folder" | "file",
+}
+
 export default class ContextMenu
 {
 	private static modal: Modal;
@@ -19,6 +25,11 @@ export default class ContextMenu
 	public static get Item(): HTMLElement
 	{
 		return ContextMenu.Items[0];
+	}
+
+	public static GetItemInfo(item: HTMLElement): ContextMenuItem
+	{
+		return { id: item.id, type: <"folder" | "file">item.classList[0] };
 	}
 
 	public static Show(items: ContextMenuButton[])
