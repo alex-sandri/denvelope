@@ -18,6 +18,7 @@ const mockData = {
 				minute: "numeric",
 			},
 		},
+		{ dateFormatOptions: "default" },
 	],
 	invalid: [
 		{
