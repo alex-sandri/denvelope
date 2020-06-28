@@ -9,7 +9,6 @@ const mockData = {
 	valid: [
 		{ language: Config.Locales[1] },
 		{ backgroundImageUrl: "https://example.com/image.jpg" },
-		{ backgroundImageUrl: "" },
 		{
 			dateFormatOptions: {
 				year: "numeric",
@@ -19,7 +18,6 @@ const mockData = {
 				minute: "numeric",
 			},
 		},
-		{ dateFormatOptions: "default" },
 	],
 	invalid: [
 		{
@@ -28,6 +26,7 @@ const mockData = {
 		{
 			language: "en-US", // Must be in lower case
 		},
+		{ backgroundImageUrl: "" }, // Cannot be empty
 		{
 			backgroundImageUrl: "http://example.com/image.jpg", // Must be HTTPS
 		},
