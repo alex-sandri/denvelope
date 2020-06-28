@@ -25,7 +25,7 @@ jobs:
       - name: test
         uses: w9jds/firebase-action@master
         with:
-          args: emulators:exec --only firestore jest
+          args: emulators:exec --only firestore \"jest --detectOpenHandles\"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIRESTORE_EMULATOR_HOST: localhost:5002
