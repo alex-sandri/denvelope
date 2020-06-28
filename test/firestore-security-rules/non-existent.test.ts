@@ -16,6 +16,6 @@ describe("Non-existent collection read/write", () =>
 
     test("Fail when reading/writing a non-existent collection", async () =>
     {
-        await expect(ref.get()).toDeny();
+        expect(ref.get()).toDeny();
     });
 });

@@ -17,7 +17,7 @@ export const setup = async (auth?: any, data?: any) =>
 {
     const projectId = `rules-test-${Date.now()}`;
 
-    const app = await firebase.initializeTestApp({ projectId, auth });
+    const app = firebase.initializeTestApp({ projectId, auth });
 
     const db = app.firestore();
 

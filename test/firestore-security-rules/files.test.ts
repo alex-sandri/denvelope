@@ -16,7 +16,7 @@ describe("OWNER:TRUE", () =>
         
                 const ref = db.collection("users/test/files").doc("fileId");
         
-                await expect(ref.get()).toAllow();
+                expect(ref.get()).toAllow();
             });
         });
 
@@ -28,7 +28,7 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files").doc("inVaultFile");
 
-                await expect(ref.get()).toDeny();
+                expect(ref.get()).toDeny();
             });
         });
     });
@@ -43,7 +43,7 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files");
 
-                await expect(ref.add(newFileValidMockData)).toAllow();
+                expect(ref.add(newFileValidMockData)).toAllow();
             });
         });
 
@@ -55,7 +55,7 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files");
 
-                await expect(ref.add(newFileInvalidMockData)).toDeny();
+                expect(ref.add(newFileInvalidMockData)).toDeny();
             });
         });
     });
@@ -70,13 +70,13 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files").doc("fileId");
 
-                await expect(ref.update({
+                expect(ref.update({
                     name: "testName",
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
                 })).toAllow();
 
-                await expect(ref.update({
+                expect(ref.update({
                     parentId: "folderId",
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
@@ -89,7 +89,7 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files").doc("fileId");
 
-                await expect(ref.update({
+                expect(ref.update({
                     parentId: "vault",
                     inVault: true,
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -106,13 +106,13 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files").doc("fileId");
 
-                await expect(ref.update({
+                expect(ref.update({
                     parentId: "nonExistentFolderId",
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
                 })).toDeny();
 
-                await expect(ref.update({
+                expect(ref.update({
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.Timestamp.fromDate(new Date("1/1/1970"))
                 })).toDeny();
@@ -124,7 +124,7 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/files").doc("fileId");
 
-                await expect(ref.update({
+                expect(ref.update({
                     parentId: "vault",
                     inVault: true,
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -138,19 +138,19 @@ describe("OWNER:TRUE", () =>
 
                 const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
-                await expect(ref.update({
+                expect(ref.update({
                     trashed: true,
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
                 })).toDeny();
 
-                await expect(ref.update({
+                expect(ref.update({
                     parentId: "root",
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
                 })).toDeny();
 
-                await expect(ref.update({
+                expect(ref.update({
                     inVault: false,
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
                     lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
@@ -169,7 +169,7 @@ describe("OWNER:TRUE", () =>
     
                 const ref = db.collection("users/test/files").doc("trashedFile");
     
-                await expect(ref.delete()).toAllow();
+                expect(ref.delete()).toAllow();
             });
     
             test("VAULT:UNLOCKED", async () =>
@@ -178,7 +178,7 @@ describe("OWNER:TRUE", () =>
     
                 const ref = db.collection("users/test/files").doc("inVaultFile");
     
-                await expect(ref.delete()).toAllow();
+                expect(ref.delete()).toAllow();
             });
         });
 
@@ -190,7 +190,7 @@ describe("OWNER:TRUE", () =>
         
                 const ref = db.collection("users/test/files").doc("fileId");
         
-                await expect(ref.delete()).toDeny();
+                expect(ref.delete()).toDeny();
             });
 
             test("VAULT:LOCKED", async () =>
@@ -199,7 +199,7 @@ describe("OWNER:TRUE", () =>
     
                 const ref = db.collection("users/test/files").doc("inVaultFile");
     
-                await expect(ref.delete()).toDeny();
+                expect(ref.delete()).toDeny();
             });
         });
     });
@@ -219,7 +219,7 @@ describe("OWNER:FALSE", () =>
                 {
                     const db = await setup({ uid: "test1" }, mockData);
 
-                    await expect(db.collection("users/test/files").add(newFileValidMockData)).toDeny();
+                    expect(db.collection("users/test/files").add(newFileValidMockData)).toDeny();
                 });
             });
         });
@@ -234,7 +234,7 @@ describe("OWNER:FALSE", () =>
             
                     const file = db.collection("users/test/files").doc("fileId");
 
-                    await expect(file.update({
+                    expect(file.update({
                         name: "aNewFileName",
                         updated: firebase.firestore.FieldValue.serverTimestamp(),
                         lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp()
@@ -253,7 +253,7 @@ describe("OWNER:FALSE", () =>
             
                     const file = db.collection("users/test/files").doc("fileId");
 
-                    await expect(file.delete()).toDeny();
+                    expect(file.delete()).toDeny();
                 });
             });
         });
@@ -271,7 +271,7 @@ describe("OWNER:FALSE", () =>
             
                     const ref = db.collection("users/test/files").doc("sharedFile");
             
-                    await expect(ref.get()).toAllow();
+                    expect(ref.get()).toAllow();
                 });
             });
 
