@@ -1,7 +1,0 @@
-User-agent: *
-Disallow: /account
-Disallow: /settings
-Disallow: /folder
-Disallow: /file
-
-Sitemap: https://denvelope.com/sitemap.txt
