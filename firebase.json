@@ -22,7 +22,7 @@
         "headers": [
           {
             "key": "Content-Security-Policy",
-            "value": "trusted-types escapePolicy default; require-trusted-types-for 'script'"
+            "value": "trusted-types default; require-trusted-types-for 'script'"
           }
         ]
       },
