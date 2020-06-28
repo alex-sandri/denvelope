@@ -20,19 +20,11 @@ const mockData = {
 		},
 	],
 	invalid: [
-		{
-			language: "", // Cannot be empty
-		},
-		{
-			language: "en-US", // Must be in lower case
-		},
+		{ language: "" }, // Cannot be empty
+		{ language: "en-US" }, // Must be in lower case
 		{ backgroundImageUrl: "" }, // Cannot be empty
-		{
-			backgroundImageUrl: "http://example.com/image.jpg", // Must be HTTPS
-		},
-		{
-			backgroundImageUrl: "file:///C:/image.jpg", // Protocol must be https
-		},
+		{ backgroundImageUrl: "http://example.com/image.jpg" }, // Must be HTTPS
+		{ backgroundImageUrl: "file:///C:/image.jpg" }, // Protocol must be https
 		{
 			// Required fields are: [ year, month, day, hour, minute ]
 			dateFormatOptions: {
