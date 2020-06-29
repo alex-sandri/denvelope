@@ -195,7 +195,7 @@ export default {
 			},
 			share: {
 				title: "Need to share a piece of code or an entire project?",
-				description: "With Denvelope you can just click a button and the link to that file or project is copied and ready to be shared. You can even hide files or folders inside a project if you don't want to share them but still want to share it.",
+				description: "With Denvelope you can just click a button and the link to that file or project is copied and ready to be shared. You can even hide files or folders inside a project if you don't want to share them but still want to share the project.",
 			},
 			vault: {
 				title: "Vault",
