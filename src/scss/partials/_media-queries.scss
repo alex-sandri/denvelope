@@ -41,26 +41,6 @@
 
 @media only all and (max-width: 800px)
 {
-    .home-features
-    {
-        .home-feature-container,
-        .home-feature-container:nth-child(2n)
-        {
-            flex-direction: column;
-
-            img
-            {
-                width: 50%;
-            }
-    
-            div
-            {
-                width: 100%;
-                margin-top: $default-spacing * 2;
-            }
-        }
-    }
-
     .account-main
     {
         .empty-folder
@@ -109,21 +89,6 @@
         &.aside
         {
             width: 65%;
-        }
-    }
-}
-
-@media only all and (max-width: 500px)
-{
-    .home-features
-    {
-        .home-feature-container,
-        .home-feature-container:nth-child(2n)
-        {
-            img
-            {
-                width: 90%;
-            }
         }
     }
 }
