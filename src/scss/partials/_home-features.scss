@@ -4,8 +4,9 @@
 
     .home-feature-container
     {
-        @include flex($justify-content: space-around);
-        
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
         padding: $default-spacing;
         border-radius: $border-radius;
         margin: $default-spacing 0;

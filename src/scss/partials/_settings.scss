@@ -110,8 +110,8 @@
 
                 & > div > div
                 {
-                    @include flex;
-
+                    display: flex;
+                    align-items: center;
                     margin-bottom: $default-spacing;
 
                     input[type=checkbox]

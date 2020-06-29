@@ -11,7 +11,9 @@ footer
 
     .links
     {
-        @include flex($justify-content: space-evenly, $flex-wrap: wrap);
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
 
         a
         {

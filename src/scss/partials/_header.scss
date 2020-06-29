@@ -1,7 +1,7 @@
 header
 {
-    @include flex($justify-content: space-between);
-
+    display: flex;
+    justify-content: space-between;
     position: fixed;
     top: 0;
     left: 0;
@@ -17,8 +17,7 @@ header
     {
         a
         {
-            @include flex;
-
+            display: flex;
             border-radius: $border-radius;
             transition: $transition-time;
 
@@ -52,8 +51,7 @@ header
 
     .waiting-user .spinner
     {
-        @include flex;
-
+        display: flex;
         font-size: #{$header-height - $default-spacing * 2};
         margin: 0;
         position: fixed;
@@ -70,8 +68,7 @@ header
     {
         button
         {
-            @include flex;
-
+            display: flex;
             border-radius: 50%;
             background-color: transparent;
             border: none;
@@ -98,8 +95,9 @@ header
 
     & + .menu-container
     {
-        @include flex;
-
+        display: none;
+        align-items: center;
+        justify-content: center;
         height: 100vh;
         width: 100%;
         background-color: rgba(0, 0, 0, 0.5);
@@ -107,7 +105,6 @@ header
         top: 0;
         left: 0;
         z-index: 999;
-        display: none;
 
         .menu
         {
@@ -266,8 +263,8 @@ header
 
                 .legal
                 {
-                    @include flex;
-
+                    display: flex;
+                    align-items: center;
                     margin-bottom: $default-spacing;
                 }
             }

@@ -1,7 +1,6 @@
 aside
 {
-    @include flex($align-items: unset);
-
+    display: flex;
     width: 100%;
     background-color: $primary-color;
     height: $bottom-menu-height;
