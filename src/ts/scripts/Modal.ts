@@ -335,7 +335,7 @@ export class DownloadModal extends Modal
 						children: [
 							this.TransferSize = new Component("span", {
 								class: "transfer-size",
-								innerText: 0,
+								innerText: "0",
 							}).element,
 							new Component("span", {
 								class: "tot-size",
