@@ -1006,13 +1006,12 @@ window.addEventListener("userready", async () =>
 	foldersContainer.parentElement.addEventListener("mousedown", e =>
 	{
 		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected"))
-			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ])
-				.forEach(element => RemoveClass(element, "selected"));
+			ContextMenu.ClearItems();
 
 		if (isUserContentElement(<HTMLElement>e.target)
 			|| contextMenuContainer.contains(<HTMLElement>e.target)) return;
 
-		(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ]).forEach(element => RemoveClass(element, "selected"));
+		ContextMenu.ClearItems();
 
 		if (e.button === 2) return;
 

@@ -10,7 +10,7 @@ export default class ContextMenu
 {
 	private static modal: Modal;
 
-	private static items: HTMLElement[];
+	private static items: HTMLElement[] = [];
 
 	public static set Items(items: HTMLElement[])
 	{
@@ -30,6 +30,13 @@ export default class ContextMenu
 	public static GetItemInfo(item: HTMLElement): ContextMenuItem
 	{
 		return { id: item.id, type: <"folder" | "file">item.classList[0] };
+	}
+
+	public static ClearItems()
+	{
+		ContextMenu.Items.forEach(item => item.classList.remove("selected"));
+
+		ContextMenu.Items = [];
 	}
 
 	public static Show(items: ContextMenuButton[])
