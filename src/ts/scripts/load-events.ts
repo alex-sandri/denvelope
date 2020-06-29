@@ -131,16 +131,18 @@ export default () : void =>
 		{
 			db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot(preferences =>
 			{
+				const data: Config.Data.Preferences = preferences.data();
+
 				if (location.pathname.startsWith("/account") || location.pathname.startsWith("/settings"))
 				{
-					const backgroundImageUrl = preferences.data()?.backgroundImageUrl;
+					const { backgroundImageUrl } = data;
 
 					document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
 
 					localStorage.setItem("background-image-url", backgroundImageUrl);
 				}
 
-				Translation.Init(preferences.data()?.language ?? Translation.Language);
+				Translation.Init(data?.language ?? Translation.Language);
 			});
 
 			db.collection("users").doc(Auth.UserId).onSnapshot(doc =>
@@ -148,8 +150,9 @@ export default () : void =>
 				// It could not exist if the user just signed up
 				if (!doc.exists) return;
 
-				const { usedStorage } = doc.data();
-				const { maxStorage } = doc.data();
+				const data: Config.Data.User = <Config.Data.User>doc.data();
+
+				const { maxStorage, usedStorage } = data;
 
 				const percent = `${+((usedStorage / maxStorage) * 100).toFixed(2)}%`;
 
@@ -157,10 +160,10 @@ export default () : void =>
 				const maxStorageElement = document.querySelector("[data-update-field=max-storage]");
 
 				usedStorageElement.innerHTML = FormatStorage(usedStorage);
-				usedStorageElement.setAttribute("data-bytes", usedStorage);
+				usedStorageElement.setAttribute("data-bytes", usedStorage.toString());
 
 				maxStorageElement.innerHTML = FormatStorage(maxStorage);
-				maxStorageElement.setAttribute("data-bytes", maxStorage);
+				maxStorageElement.setAttribute("data-bytes", maxStorage.toString());
 
 				document.querySelector("[data-update-field=used-storage-percent]").innerHTML = `(${percent})`;
 

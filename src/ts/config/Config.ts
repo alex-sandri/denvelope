@@ -26,6 +26,73 @@ export namespace Config
 	};
 
 	export const Locales: readonly Config.Locale[] = [ "en-us", "en", "it-it", "it" ];
+
+	export namespace Data
+	{
+		export interface User
+		{
+			created: firebase.firestore.Timestamp,
+			usedStorage: number,
+			maxStorage: number,
+			stripe?: {
+				customerId: string,
+				defaultPaymentMethod?: string,
+				paymentMethods?: {
+					id: string,
+					brand: string,
+					expirationMonth: number,
+					expirationYear: number,
+					last4: string,
+				}[],
+				subscriptionId?: string,
+                nextRenewal?: number,
+                cancelAtPeriodEnd?: boolean,
+                nextPeriodMaxStorage?: number,
+                invoiceUrl?: string,
+                billingPeriod?: Config.BillingPeriod,
+				nextBillingPeriod?: Config.BillingPeriod,
+				currency?: Config.Currency,
+			},
+		}
+
+		export interface Folder
+		{
+			created: firebase.firestore.Timestamp,
+			updated: firebase.firestore.Timestamp,
+			lastClientUpdateTime: firebase.firestore.Timestamp,
+			name: string,
+			parentId: string,
+			shared: boolean,
+			starred: boolean,
+			trashed: boolean,
+			inVault: boolean,
+		}
+
+		export interface File extends Config.Data.Folder
+		{
+			size: number,
+		}
+
+		export interface Preferences
+		{
+			backgroundImageUrl?: string,
+			dateFormatOptions?: Intl.DateTimeFormatOptions,
+			language?: Config.Locale,
+		}
+
+		export namespace Vault
+		{
+			export interface Config
+			{
+				pin?: string
+			}
+
+			export interface Status
+			{
+				locked?: boolean
+			}
+		}
+	}
 }
 
 interface PlanObject
