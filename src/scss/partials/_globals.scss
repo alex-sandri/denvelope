@@ -66,6 +66,7 @@ select
     padding: 9px; // Same height as a button
     border: $border-width solid $primary-color;
     border-radius: $border-radius;
+    -webkit-appearance: none;
 
     &:focus
     {
