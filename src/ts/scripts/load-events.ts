@@ -47,7 +47,7 @@ export default () : void =>
 					.format(Config.Pricing.Plan(<Config.PlanName>plan.getAttribute("data-max-storage")).Price(Translation.Currency, billingPeriod))
 					.replace(/\s/, "");
 
-				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = ` / ${Translation.Get(`generic->${billingPeriod}`).toLowerCase()}`;
+				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = `/ ${Translation.Get(`generic->${billingPeriod}`).toLowerCase()}`;
 
 				(<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage");
 			});
