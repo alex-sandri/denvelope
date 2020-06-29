@@ -38,7 +38,8 @@
 
         .transfer-info
         {
-            @include flex($justify-content: space-between);
+            display: flex;
+            justify-content: space-between;
 
             margin-bottom: $default-spacing;
 
@@ -67,7 +68,8 @@
 
         .upload-controls
         {
-            @include flex($justify-content: flex-end);
+            display: flex;
+            justify-content: flex-end;
 
             .upload-control
             {
@@ -237,7 +239,7 @@
 {
     .options div
     {
-        @include flex($align-items: unset);
+        display: flex;
 
         span
         {
@@ -262,9 +264,8 @@
 
 .generic-message
 {
-    @include flex;
-
     display: none;
+    align-items: center;
     max-width: calc(100% - #{$default-spacing * 2});
     position: fixed;
     bottom: $default-spacing;
@@ -324,22 +325,21 @@
 
     .tabs
     {
-        @include flex($justify-content: start);
-
+        display: flex;
         overflow: auto;
         background-color: #2d2d2d;
 
         .tab
         {
-            @include flex;
-
+            display: flex;
+            align-items: center;
             padding: $default-spacing;
             cursor: pointer;
             max-width: 100%;
 
             .icon
             {
-                @include flex;
+                display: flex;
 
                 i
                 {
@@ -405,8 +405,9 @@
 
     .editor
     {
-        @include flex;
-
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         height: 100%;
 
@@ -430,16 +431,17 @@
 
     .menu
     {
-        @include flex($justify-content: flex-end);
-
+        display: flex;
+        justify-content: flex-end;
         position: relative;
         z-index: inherit;
     }
 
     .file-preview
     {
-        @include flex;
-
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin-top: $default-spacing;
         height: calc(100vh - #{$default-spacing * 3} - 49px);
 
@@ -462,15 +464,15 @@
 
 .hide-vault-content
 {
-    @include flex;
-
+    display: none;
+    align-items: center;
+    justify-content: center;
     width: 100vw;
     height: 100vh;
     background-color: $primary-color;
     position: absolute;
     top: 0;
     left: 0;
-    display: none;
     font-size: 50px;
 }
 
@@ -485,7 +487,7 @@
 
     .billing-periods
     {
-        @include flex;
+        display: flex;
 
         button
         {
@@ -527,18 +529,11 @@
 
         div
         {
-            @include flex($align-items: baseline, $justify-content: unset);
-
             .price
             {
                 font-weight: $black;
                 font-size: xx-large;
                 font-size: xxx-large;
-            }
-
-            .billing-period
-            {
-                white-space: pre;
             }
         }
 
@@ -589,7 +584,8 @@
         {
             form
             {
-                @include flex($flex-direction: column);
+                display: flex;
+                justify-content: center;
 
                 .firebaseui-idp-list
                 {
@@ -602,8 +598,8 @@
 
                         .firebaseui-idp-button
                         {
-                            @include flex($justify-content: unset);
-                            
+                            display: flex;
+                            align-items: center;
                             border-radius: $border-radius;
                             color: #fff;
                             font-size: 15px;
@@ -613,7 +609,7 @@
 
                             .firebaseui-idp-icon-wrapper
                             {
-                                @include flex;
+                                display: flex;
 
                                 .firebaseui-idp-icon
                                 {
@@ -705,8 +701,9 @@ main.plans
 
 main.error
 {
-    @include flex($flex-direction: column);
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
 
     h2
@@ -730,8 +727,9 @@ main.accessibility
 
 .info
 {
-    @include flex($justify-content: space-between);
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: $secondary-color;
     color: $primary-color;
     padding: $default-spacing;
