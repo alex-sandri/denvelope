@@ -63,7 +63,7 @@ select
     font-size: 20px;
     cursor: pointer;
     transition: $transition-time;
-    padding: 9px; // Same height as a button
+    padding: 10px;
     border: $border-width solid $primary-color;
     border-radius: $border-radius;
     -webkit-appearance: none;
