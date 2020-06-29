@@ -1,7 +1,7 @@
 .home-features
 {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: $default-spacing;
     margin: $default-spacing;
 
@@ -11,8 +11,7 @@
         flex-direction: column;
         padding: $default-spacing;
         border-radius: $border-radius;
-        background-color: $secondary-color;
-        color: $primary-color;
+        background-color: rgba($secondary-color, 0.1);
 
         img
         {
@@ -33,12 +32,6 @@
                     margin-bottom: $default-spacing;
                 }
             }
-        }
-
-        &:nth-child(2n)
-        {
-            background-color: $primary-color;
-            color: $secondary-color;
         }
     }
 }
