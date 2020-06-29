@@ -1464,7 +1464,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 					lockVaultButton,
 				]);
 
-				if (Auth.IsAuthenticated) ShowElement(navigationBackButton, "flex");
+				if (Auth.IsAuthenticated) ShowElement(navigationBackButton);
 				else
 				{
 					const { parentId } = data;
@@ -1473,7 +1473,7 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 					// only one folder (GET operation) is allowed just to get the name
 					if (parentId === "root") HideElement(navigationBackButton);
 					else db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get()
-						.then(() => ShowElement(navigationBackButton, "flex")) // If the query succeeds the folder is shared
+						.then(() => ShowElement(navigationBackButton)) // If the query succeeds the folder is shared
 						.catch(() => HideElement(navigationBackButton)); // Otherwise hide the navigation
 				}
 			});
@@ -1483,13 +1483,9 @@ const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir 
 
 		if (await vaultOnly())
 		{
-			ShowElements([
-				folderNavigation,
-				navigationBackButton,
-				vaultInfo,
-			], "flex");
+			ShowElements([ folderNavigation, vaultInfo ], "flex");
 
-			ShowElement(lockVaultButton);
+			ShowElements([ lockVaultButton, navigationBackButton ]);
 
 			HideElement(emptyTrashButton);
 		}
