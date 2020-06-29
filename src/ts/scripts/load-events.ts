@@ -133,7 +133,7 @@ export default () : void =>
 			{
 				const data: Config.Data.Preferences = preferences.data();
 
-				if (location.pathname.startsWith("/account") || location.pathname.startsWith("/settings"))
+				if (document.body.classList.contains("account") || document.body.classList.contains("settings"))
 				{
 					const { backgroundImageUrl } = data;
 
