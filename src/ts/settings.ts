@@ -311,22 +311,13 @@ window.addEventListener("userready", () =>
 		{
 			modal.HideAndRemove();
 
-			stripe.redirectToCheckout(<any>{
-				lineItems: [
-					{
-						price: Config.Pricing.Plan(
-							<Config.PlanName>plans.querySelector(".selected").getAttribute("data-max-storage"),
-							Translation.Currency,
-							<Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0],
-						).StripePriceId,
-						quantity: 1,
-					},
-				],
-				mode: "subscription",
-				locale: Translation.ShortLanguage,
-				successUrl: location.href,
-				cancelUrl: location.href,
+			const result = await functions.httpsCallable("createCheckoutSession")({
+				maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
+				currency: Translation.Currency,
+				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 			});
+
+			stripe.redirectToCheckout({ sessionId: result.data.sessionId });
 		};
 
 		modal.Show(true);
