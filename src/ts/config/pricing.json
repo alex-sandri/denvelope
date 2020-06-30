@@ -2,36 +2,36 @@
     "100MB": {
         "price": {
             "USD": {
-                "month": 0,
-                "year": 0
+                "month": { "amount": 0, "stripePriceId": "" },
+                "year": { "amount": 0, "stripePriceId": "" }
             },
             "EUR": {
-                "month": 0,
-                "year": 0
+                "month": { "amount": 0, "stripePriceId": "" },
+                "year": { "amount": 0, "stripePriceId": "" }
             }
         }
     },
     "1GB": {
         "price": {
             "USD": {
-                "month": 2,
-                "year": 20
+                "month": { "amount": 2, "stripePriceId": "price_HNAYCgztn4lNRy" },
+                "year": { "amount": 20, "stripePriceId": "price_1GuxGkEG9Je5IkssfggDObO3" }
             },
             "EUR": {
-                "month": 2,
-                "year": 20
+                "month": { "amount": 2, "stripePriceId": "price_HNAYubjD3l2adD" },
+                "year": { "amount": 20, "stripePriceId": "price_1GuxHBEG9Je5IkssrgygSkra" }
             }
         }
     },
     "10GB": {
         "price": {
             "USD": {
-                "month": 10,
-                "year": 100
+                "month": { "amount": 10, "stripePriceId": "price_HNAzSbDQBxhsri" },
+                "year": { "amount": 100, "stripePriceId": "price_1GuxM4EG9Je5IkssnKVcpYjb" }
             },
             "EUR": {
-                "month": 10,
-                "year": 100
+                "month": { "amount": 10, "stripePriceId": "price_HNAzAVDolqJcv6" },
+                "year": { "amount": 100, "stripePriceId": "price_1GuxMAEG9Je5Ikss5sVWkTLi" }
             }
         }
     }

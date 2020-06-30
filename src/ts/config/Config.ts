@@ -9,9 +9,13 @@ export namespace Config
 
 	export class Pricing
 	{
-		public static Plan(name: Config.PlanName): Plan
+		public static Plan(
+			name: Config.PlanName,
+			currency: Config.Currency,
+			billingPeriod: Config.BillingPeriod,
+		): Plan
 		{
-			return new Plan(pricing[name]);
+			return new Plan(name, currency, billingPeriod);
 		}
 	}
 
@@ -95,29 +99,22 @@ export namespace Config
 	}
 }
 
-interface PlanObject
-{
-	price: {
-		USD:
-		{
-			month: number,
-			year: number,
-		},
-		EUR:
-		{
-			month: number,
-			year: number,
-		}
-	}
-}
-
 class Plan
 {
-	constructor(private plan: PlanObject)
+	constructor(
+		private name: Config.PlanName,
+		private currency: Config.Currency,
+		private billingPeriod: Config.BillingPeriod,
+	)
 	{}
 
-	public Price(currency: Config.Currency, billingPeriod: Config.BillingPeriod)
+	public get Amount()
 	{
-		return this.plan.price[currency][billingPeriod];
+		return pricing[this.name].price[this.currency][this.billingPeriod].amount;
+	}
+
+	public get StripePriceId()
+	{
+		return pricing[this.name].price[this.currency][this.billingPeriod].stripePriceId;
 	}
 }

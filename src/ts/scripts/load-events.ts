@@ -44,7 +44,7 @@ export default () : void =>
 				const billingPeriod: Config.BillingPeriod = <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0];
 
 				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.CurrencyLocale, { style: "currency", currency: Translation.Currency, minimumFractionDigits: 0 })
-					.format(Config.Pricing.Plan(<Config.PlanName>plan.getAttribute("data-max-storage")).Price(Translation.Currency, billingPeriod))
+					.format(Config.Pricing.Plan(<Config.PlanName>plan.getAttribute("data-max-storage"), Translation.Currency, billingPeriod).Amount)
 					.replace(/\s/, "");
 
 				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = `/ ${Translation.Get(`generic->${billingPeriod}`).toLowerCase()}`;
