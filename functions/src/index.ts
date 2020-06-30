@@ -695,7 +695,7 @@ export const createCheckoutSession = functions.region(FUNCTIONS_REGION).https.on
         payment_method_types: [ "card" ],
         line_items: [
             {
-                price: GetStripePriceId(data.maxStorage, data.currency, data.billingPeriod),
+                price: GetStripePriceId(GetPlanMaxStorageBytes(data.maxStorage), data.currency, data.billingPeriod),
                 quantity: 1,
             },
         ],
