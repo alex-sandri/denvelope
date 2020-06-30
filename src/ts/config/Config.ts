@@ -5,7 +5,9 @@ export namespace Config
 	export type PlanName = "100MB" | "1GB" | "10GB";
 	export type Currency = "USD" | "EUR";
 	export type BillingPeriod = "month" | "year";
-	export type Locale = "en-us" | "en" | "it-it" | "it";
+
+	export type Locale = "en-us" | "it-it" | Config.ShortLocale;
+	export type ShortLocale = "en" | "it";
 
 	export class Pricing
 	{

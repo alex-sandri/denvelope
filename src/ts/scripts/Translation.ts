@@ -29,6 +29,11 @@ export default class Translation
 {
 	public static get Language(): Config.Locale { return <Config.Locale>localStorage.getItem("lang").toLowerCase(); }
 
+	public static get ShortLanguage(): Config.ShortLocale
+	{
+		return <Config.ShortLocale>Translation.Language.substr(0, 2);
+	}
+
 	public static Init = (language ?: Config.Locale, allowPreferenceUpdate?: boolean) : void =>
 	{
 		let translationLanguage : string = language;

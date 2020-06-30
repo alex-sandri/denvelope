@@ -323,7 +323,7 @@ window.addEventListener("userready", () =>
 					},
 				],
 				mode: "subscription",
-				locale: Translation.Language,
+				locale: Translation.ShortLanguage,
 				successUrl: location.href,
 				cancelUrl: location.href,
 			});
