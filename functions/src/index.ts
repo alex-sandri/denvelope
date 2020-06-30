@@ -539,7 +539,6 @@ export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCal
 
             await user.ref.update({
                 "stripe.subscriptionId": subscription.id,
-                "stripe.invoiceUrl": admin.firestore.FieldValue.delete() // Delete it because if the user has an incomplete subscription because of 3D Secure verification a new one is created
             });
         }
 
@@ -606,22 +605,6 @@ const IsPlanUpgrade = (currentMaxStorage : number, newMaxStorage : number) : boo
 
     return GetPlanIndex(newMaxStorage) > GetPlanIndex(currentMaxStorage);
 }
-
-export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
-{
-    if (!context.auth) return;
-
-    await CancelSubscription(context.auth.uid);
-});
-
-export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
-{
-    if (!context.auth) return;
-
-    const user = await db.collection("users").doc(context.auth.uid).get();
-
-    await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: false });
-});
 
 export const createBillingPortalSession = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
@@ -705,7 +688,6 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 "stripe.nextRenewal": admin.firestore.FieldValue.delete(),
                 "stripe.cancelAtPeriodEnd": admin.firestore.FieldValue.delete(),
                 "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
-                "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                 "stripe.billingPeriod": admin.firestore.FieldValue.delete(),
                 "stripe.nextBillingPeriod": admin.firestore.FieldValue.delete(),
                 maxStorage: FREE_STORAGE
@@ -724,7 +706,6 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
             {
                 if (userCurrentSubscriptionId === subscription.id) // Only if the updated subscription is the current one
                     await user.ref.update({
-                        "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                         "stripe.subscriptionId": admin.firestore.FieldValue.delete(),
                     });
 
@@ -751,7 +732,6 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await (await GetUserByCustomerId(<string>subscription.customer))?.ref.update({
                 "stripe.nextRenewal": subscription.current_period_end,
-                "stripe.invoiceUrl": admin.firestore.FieldValue.delete(),
                 "stripe.nextPeriodMaxStorage": admin.firestore.FieldValue.delete(),
                 "stripe.nextBillingPeriod": admin.firestore.FieldValue.delete(),
                 "stripe.billingPeriod": (<Stripe.Price.Recurring>subscription.items.data[0].price.recurring).interval,
@@ -771,8 +751,6 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             // If the payment fails on a subscription cycle reset the user to free space level
             if (invoice.billing_reason === "subscription_cycle") await user?.ref.update("maxStorage", FREE_STORAGE);
-
-            await user?.ref.update("stripe.invoiceUrl", invoice.hosted_invoice_url);
         break;
         case "checkout.session.completed": break;
         default:

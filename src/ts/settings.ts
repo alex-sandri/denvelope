@@ -44,17 +44,13 @@ const changeDateFormat : HTMLButtonElement = document.querySelector("#date-forma
 const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
 
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
-const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
 const manageSubscription: HTMLButtonElement = document.querySelector("#change-plan .manage-subscription");
-const cancelDowngrade : HTMLButtonElement = document.querySelector("#change-plan .cancel-downgrade");
-const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
 const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
 const currentBillingPeriod : HTMLElement = document.querySelector("#change-plan .current-billing-period .value");
 const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
 const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-period-plan .value");
 const nextBillingPeriod : HTMLElement = document.querySelector("#change-plan .next-billing-period .value");
-const completePayment : HTMLAnchorElement = document.querySelector("#change-plan .complete-payment");
 
 (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan =>
 {
@@ -317,62 +313,12 @@ window.addEventListener("userready", () =>
 		modal.Show(true);
 	});
 
-	deletePlan.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: deletePlan.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: deletePlan.getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		modal.AppendContent([ new Component("p", {
-			children: [ Translation.GetElement("settings->plan->delete_plan->message") ],
-		}).element ]);
-
-		modal.OnConfirm = () =>
-		{
-			functions.httpsCallable("cancelSubscription")({});
-
-			modal.HideAndRemove();
-		};
-
-		modal.Show(true);
-	});
-
 	manageSubscription.addEventListener("click", async () =>
 	{
 		const { data } = await functions.httpsCallable("createBillingPortalSession")();
 
 		open(data.session.url);
 	});
-
-	[ cancelDowngrade, reactivateSubscription ].forEach(button => button.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: button.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: button.getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		modal.OnConfirm = () =>
-		{
-			let params = {};
-
-			if (button === cancelDowngrade) params = {
-				maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
-				currency: Translation.Currency,
-				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
-			};
-
-			functions.httpsCallable(button === cancelDowngrade ? "createSubscription" : "reactivateSubscription")(params);
-
-			modal.HideAndRemove();
-		};
-
-		modal.Show(true);
-	}));
 
 	signOutFromAllDevices.addEventListener("click", () =>
 	{
@@ -654,23 +600,14 @@ window.addEventListener("userready", () =>
 		const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
 		const subscriptionNextRenewalOrEndDate : number = user.data().stripe?.nextRenewal;
 
-		const invoiceUrl : string = user.data().stripe?.invoiceUrl;
-
 		UpdatePlan(maxStorage, billingPeriod);
 
-		deletePlan.disabled = IsFreePlan(maxStorage) || userCanceledSubscription;
-
 		HideElements([
-			reactivateSubscription,
 			nextRenewal.parentElement,
 			nextPeriodPlan.parentElement,
 			nextBillingPeriod.parentElement,
-			completePayment,
-			cancelDowngrade,
 			manageSubscription,
 		]);
-
-		if (userCanceledSubscription) ShowElement(reactivateSubscription);
 
 		if (!IsFreePlan(maxStorage))
 		{
@@ -688,7 +625,7 @@ window.addEventListener("userready", () =>
 				{
 					nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
-					ShowElements([ nextPeriodPlan.parentElement, cancelDowngrade ]);
+					ShowElement(nextPeriodPlan.parentElement);
 				}
 
 				if (userNextBillingPeriod && userNextBillingPeriod !== billingPeriod)
@@ -698,13 +635,6 @@ window.addEventListener("userready", () =>
 					ShowElement(nextBillingPeriod.parentElement);
 				}
 			}
-		}
-
-		if (invoiceUrl)
-		{
-			ShowElement(completePayment);
-
-			completePayment.href = invoiceUrl;
 		}
 	});
 
