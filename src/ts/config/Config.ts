@@ -42,14 +42,6 @@ export namespace Config
 			maxStorage: number,
 			stripe?: {
 				customerId: string,
-				defaultPaymentMethod?: string,
-				paymentMethods?: {
-					id: string,
-					brand: string,
-					expirationMonth: number,
-					expirationYear: number,
-					last4: string,
-				}[],
 				subscriptionId?: string,
                 nextRenewal?: number,
                 cancelAtPeriodEnd?: boolean,

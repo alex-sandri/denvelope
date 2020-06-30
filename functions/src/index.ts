@@ -614,38 +614,6 @@ export const cancelSubscription = functions.region(FUNCTIONS_REGION).https.onCal
     await CancelSubscription(context.auth.uid);
 });
 
-export const addPaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
-{
-    if (!context.auth || !data.paymentMethod) return;
-
-    const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
-
-    await AddPaymentMethod(context.auth.uid, <string>context.auth.token.email, paymentMethod);
-});
-
-export const deletePaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
-{
-    if (!context.auth || !data.paymentMethod) return;
-
-    const user = await db.collection("users").doc(context.auth.uid).get();
-
-    const customer : Stripe.Customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
-
-    // Cannot delete the default payment method if a subscription is active
-    if ((customer.subscriptions?.data || []).length > 0 && customer.invoice_settings.default_payment_method === data.paymentMethod) return;
-
-    await stripe.paymentMethods.detach(data.paymentMethod);
-});
-
-export const setDefaultPaymentMethod = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
-{
-    if (!context.auth || !data.paymentMethod) return;
-
-    const user = await db.collection("users").doc(context.auth.uid).get();
-
-    await stripe.customers.update((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId, { invoice_settings: { default_payment_method: data.paymentMethod } });
-});
-
 export const reactivateSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
@@ -723,7 +691,6 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
     let customer : Stripe.Customer | Stripe.DeletedCustomer;
     let subscription : Stripe.Subscription;
     let invoice : Stripe.Invoice;
-    let paymentMethod : Stripe.PaymentMethod;
     let product : Stripe.Product;
 
     switch (event.type)
@@ -790,61 +757,6 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
                 "stripe.billingPeriod": (<Stripe.Price.Recurring>subscription.items.data[0].price.recurring).interval,
                 maxStorage
             });
-        break;
-        case "payment_method.attached":
-            paymentMethod = <Stripe.PaymentMethod>event.data.object;
-
-            await (await GetUserByCustomerId(<string>paymentMethod.customer))?.ref.update({
-                "stripe.paymentMethods": admin.firestore.FieldValue.arrayUnion({
-                    id: paymentMethod.id,
-                    last4: paymentMethod.card?.last4,
-                    brand: paymentMethod.card?.brand,
-                    expirationMonth: paymentMethod.card?.exp_month,
-                    expirationYear: paymentMethod.card?.exp_year,
-                }),
-            });
-        break;
-        case "payment_method.detached":
-            paymentMethod = <Stripe.PaymentMethod>event.data.object;
-
-            // The payment method is no longer attached to the customer so the customer id is in the previous_attributes object
-            await (await GetUserByCustomerId(<string>(<any>event.data.previous_attributes)?.customer))?.ref.update({
-                "stripe.paymentMethods": admin.firestore.FieldValue.arrayRemove({
-                    id: paymentMethod.id,
-                    last4: paymentMethod.card?.last4,
-                    brand: paymentMethod.card?.brand,
-                    expirationMonth: paymentMethod.card?.exp_month,
-                    expirationYear: paymentMethod.card?.exp_year,
-                }),
-            });
-        break;
-        case "payment_method.card_automatically_updated":
-            paymentMethod = <Stripe.PaymentMethod>event.data.object;
-
-            user = await GetUserByCustomerId(<string>paymentMethod.customer);
-
-            if (!user) break;
-
-            const paymentMethods : { id: string, last4: string, brand: string, expirationMonth: number, expirationYear: number }[] =
-                await (<FirebaseFirestore.DocumentData>user.data()).stripe?.paymentMethods;
-
-            if (!paymentMethods) break;
-
-            const paymentMethodToUpdate = paymentMethods.find(method => method.id === paymentMethod.id);
-
-            if (!paymentMethodToUpdate) break;
-
-            await user.ref.update("stripe.paymentMethods", admin.firestore.FieldValue.arrayRemove(paymentMethodToUpdate));
-
-            paymentMethodToUpdate.expirationMonth = (<Stripe.PaymentMethod.Card>paymentMethod.card).exp_month;
-            paymentMethodToUpdate.expirationYear = (<Stripe.PaymentMethod.Card>paymentMethod.card).exp_year;
-
-            await user.ref.update("stripe.paymentMethods", admin.firestore.FieldValue.arrayUnion(paymentMethodToUpdate));
-        break;
-        case "customer.updated":
-            customer = <Stripe.Customer>event.data.object;
-
-            await (await GetUserByCustomerId(customer.id))?.ref.update("stripe.defaultPaymentMethod", <string>customer.invoice_settings.default_payment_method);
         break;
         case "customer.deleted":
             customer = <Stripe.DeletedCustomer>event.data.object;
