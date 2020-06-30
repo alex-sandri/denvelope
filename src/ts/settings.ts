@@ -311,7 +311,7 @@ window.addEventListener("userready", () =>
 			modal.HideAndRemove();
 
 			const result = await functions.httpsCallable("createCheckoutSession")({
-				maxStorage: plans.querySelector(".current").getAttribute("data-max-storage"),
+				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
 				currency: Translation.Currency,
 				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 			});
