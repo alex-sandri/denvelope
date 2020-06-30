@@ -114,9 +114,4 @@ class Plan
 	{
 		return pricing[this.name].price[this.currency][this.billingPeriod].amount;
 	}
-
-	public get StripePriceId()
-	{
-		return pricing[this.name].price[this.currency][this.billingPeriod].stripePriceId;
-	}
 }
