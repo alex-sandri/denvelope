@@ -19,6 +19,7 @@ import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
 import { Component, Input } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
+import { Config } from "./config/Config";
 
 Init();
 
@@ -313,7 +314,11 @@ window.addEventListener("userready", () =>
 			stripe.redirectToCheckout(<any>{
 				lineItems: [
 					{
-						price: "",
+						price: Config.Pricing.Plan(
+							<Config.PlanName>plans.querySelector(".selected").getAttribute("data-max-storage"),
+							Translation.Currency,
+							<Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0],
+						).StripePriceId,
 						quantity: 1,
 					},
 				],
