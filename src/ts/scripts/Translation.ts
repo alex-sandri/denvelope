@@ -183,22 +183,7 @@ export default class Translation
 	public static IsSupportedLanguage = (lang: string) =>
 		Config.Locales.includes(<Config.Locale>lang.toLowerCase());
 
-	private static currency: Config.Currency;
-
-	public static get Currency(): Config.Currency { return Translation.currency ?? <Config.Currency>Translation.Get("settings->plan->currency"); }
-
-	public static get CurrencyLocale(): Config.Locale
-	{
-		let locale: Config.Locale;
-
-		switch (Translation.Currency)
-		{
-			case "EUR": locale = "it-it"; break;
-			default: locale = "en-us"; break;
-		}
-
-		return locale;
-	}
+	public static get Currency(): Config.Currency { return <Config.Currency>Translation.Get("settings->plan->currency"); }
 
 	public static GetDateElement(date: Date, options: Intl.DateTimeFormatOptions)
 	{
