@@ -864,6 +864,7 @@ export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest
 
             await user?.ref.update("stripe.invoiceUrl", invoice.hosted_invoice_url);
         break;
+        case "checkout.session.completed": break;
         default:
             response.status(400).end();
 
