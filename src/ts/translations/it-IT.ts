@@ -195,7 +195,7 @@ export default {
 			},
 			share: {
 				title: "Hai bisogno di condividere un pezzo di codice o un intero progetto?",
-				description: "Con Denvelope puoi semplicemente cliccare un bottone e il link a quel file o progetto è copiato e pronto per essere condiviso. Puoi inoltre nascondere file o cartelle all'interno di un progetto se non vuoi che siano visibili ma vuoi comunque condividerlo.",
+				description: "Con Denvelope puoi semplicemente cliccare un bottone e il link a quel file o progetto è copiato e pronto per essere condiviso. Puoi inoltre nascondere file o cartelle all'interno di un progetto se non vuoi che siano visibili ma vuoi comunque condividere il progetto.",
 			},
 			vault: {
 				title: "Cassaforte",

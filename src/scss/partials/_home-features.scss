@@ -1,27 +1,27 @@
 .home-features
 {
-    margin: 0 $default-spacing;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: $default-spacing;
+    margin: $default-spacing;
 
     .home-feature-container
     {
         display: flex;
-        align-items: center;
-        justify-content: space-around;
+        flex-direction: column;
         padding: $default-spacing;
         border-radius: $border-radius;
-        margin: $default-spacing 0;
-        background-color: $secondary-color;
-        color: $primary-color;
+        background-color: rgba($secondary-color, 0.1);
+        max-width: calc(100vw - #{$default-spacing * 2});
 
         img
         {
-            max-width: 90%;
-            height: 30vh;
+            height: 250px;
         }
 
         div
         {
-            width: 30%;
+            margin-top: $default-spacing * 2;
 
             h1,
             p
@@ -33,13 +33,6 @@
                     margin-bottom: $default-spacing;
                 }
             }
-        }
-
-        &:nth-child(2n)
-        {
-            flex-direction: row-reverse;
-            background-color: $primary-color;
-            color: $secondary-color;
         }
     }
 }
