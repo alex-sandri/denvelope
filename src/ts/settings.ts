@@ -30,8 +30,6 @@ const functions: firebaseFunctions.Functions = firebase.app().functions("europe-
 
 const stripe = Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
 
-let userAlreadyHasCardInformation : boolean = false;
-
 let userDateFormatOptions : Intl.DateTimeFormatOptions;
 
 const settingsMenu : HTMLElement = document.querySelector("aside");
@@ -51,15 +49,12 @@ const manageSubscription: HTMLButtonElement = document.querySelector("#change-pl
 const cancelDowngrade : HTMLButtonElement = document.querySelector("#change-plan .cancel-downgrade");
 const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
-// const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
 const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
 const currentBillingPeriod : HTMLElement = document.querySelector("#change-plan .current-billing-period .value");
 const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
 const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-period-plan .value");
 const nextBillingPeriod : HTMLElement = document.querySelector("#change-plan .next-billing-period .value");
 const completePayment : HTMLAnchorElement = document.querySelector("#change-plan .complete-payment");
-const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
-const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
 
 (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan =>
 {
@@ -670,8 +665,6 @@ window.addEventListener("userready", () =>
 			nextRenewal.parentElement,
 			nextPeriodPlan.parentElement,
 			nextBillingPeriod.parentElement,
-			paymentMethodsContainer,
-			noPaymentMethod,
 			completePayment,
 			cancelDowngrade,
 			manageSubscription,
@@ -706,95 +699,6 @@ window.addEventListener("userready", () =>
 				}
 			}
 		}
-
-		const userPaymentMethods = user.data().stripe?.paymentMethods;
-
-		userAlreadyHasCardInformation = !!userPaymentMethods && userPaymentMethods?.length > 0;
-
-		if (userAlreadyHasCardInformation)
-		{
-			const userDefaultPaymentMethod = user.data().stripe?.defaultPaymentMethod;
-
-			paymentMethodsContainer.innerHTML = "";
-
-			ShowElement(paymentMethodsContainer);
-
-			const ShowUserPaymentMethods = (
-				paymentMethods : {
-					id : string,
-					brand : string,
-					last4 : string,
-					expirationMonth : string,
-					expirationYear : string,
-				}[],
-				defaultPaymentMethod : string,
-			) =>
-			{
-				paymentMethodsContainer.innerHTML = "";
-
-				paymentMethods.forEach(paymentMethod =>
-				{
-					const isDefaultPaymentMethod = paymentMethod.id === defaultPaymentMethod;
-
-					const setAsDefaultButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
-						class: "set-as-default transparent",
-						children: [ Translation.GetElement("settings->plan->payment_methods->set_as_default") ],
-					}).element;
-
-					const deleteButton : HTMLButtonElement = <HTMLButtonElement> new Component("button", {
-						class: "delete transparent",
-						children: [
-							new Component("i", { class: "fas fa-trash" }).element,
-							Translation.GetElement("generic->delete", { initialSpace: true }),
-						],
-					}).element;
-
-					paymentMethodsContainer.appendChild(new Component("div", {
-						class: `cc-info ${isDefaultPaymentMethod ? "default" : ""}`,
-						id: paymentMethod.id,
-						children: [
-							new Component("span", { children: [ new Component("i", { class: `fab fa-cc-${paymentMethod.brand}` }).element ] }).element,
-							new Component("span", { innerText: `••••${paymentMethod.last4}` }).element,
-							new Component("span", { innerText: `${paymentMethod.expirationMonth}/${paymentMethod.expirationYear}` }).element,
-							setAsDefaultButton,
-							deleteButton,
-						],
-					}).element);
-
-					[ setAsDefaultButton, deleteButton ].forEach(button => button.addEventListener("click", () =>
-					{
-						const modal = new Modal({
-							titleTranslationId: button.getAttribute("data-translation"),
-							action: "confirm",
-							loading: false,
-						});
-
-						modal.OnConfirm = () =>
-						{
-							functions.httpsCallable(button === setAsDefaultButton ? "setDefaultPaymentMethod" : "deletePaymentMethod")({ paymentMethod: paymentMethod.id });
-
-							modal.HideAndRemove();
-						};
-
-						modal.Show(true);
-					}));
-
-					if (isDefaultPaymentMethod)
-					{
-						if (!IsFreePlan(maxStorage)) deleteButton.disabled = true;
-
-						setAsDefaultButton.disabled = true;
-
-						paymentMethodsContainer
-							.querySelector(`#${paymentMethod.id} span:last-of-type`)
-							.insertAdjacentElement("afterend", Translation.GetElement("generic->default", { before: "(", after: ")" }));
-					}
-				});
-			};
-
-			ShowUserPaymentMethods(userPaymentMethods, userDefaultPaymentMethod);
-		}
-		else ShowElement(noPaymentMethod);
 
 		if (invoiceUrl)
 		{

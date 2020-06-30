@@ -82,25 +82,6 @@
                 display: none;
             }
 
-            .cc-info
-            {
-                background-color: rgba($primary-color, 0.5);
-                padding: $default-spacing;
-                border: $border-width solid $secondary-color;
-                border-radius: $border-radius;
-                margin-top: $default-spacing;
-
-                span:not(:last-of-type)
-                {
-                    margin-right: $default-spacing;
-                }
-
-                button
-                {
-                    margin-top: $default-spacing;
-                }
-            }
-
             @at-root .date-format-options
             {
                 label
