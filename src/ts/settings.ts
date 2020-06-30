@@ -10,7 +10,6 @@ import {
 	ClearFirestoreCache,
 	ShowElement,
 	ShowElements,
-	HideElement,
 	HideElements,
 	FormatStorage,
 	IsFreePlan,
@@ -20,7 +19,6 @@ import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
 import { Component, Input } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
-import { Config } from "./config/Config";
 
 Init();
 
@@ -37,46 +35,6 @@ const stripeElements = stripe.elements({
 		src: "url(/assets/font/SourceCodeVariable.woff2)",
 	} ],
 	locale: Translation.Language,
-});
-
-const paymentRequest = stripe.paymentRequest({
-	country: "IT",
-	currency: Translation.Currency.toLowerCase(),
-	total: { label: "Denvelope", amount: 0 },
-});
-
-const UpdatePaymentRequest = () =>
-{
-	const selectedPlanMaxStorage = plans.querySelector(".selected")?.getAttribute("data-max-storage");
-
-	if (!selectedPlanMaxStorage) return;
-
-	paymentRequest.update({
-		currency: Translation.Currency.toLowerCase(),
-		total: {
-			label: `Denvelope ${selectedPlanMaxStorage}`,
-			amount: Config
-				.Pricing
-				.Plan(<Config.PlanName>selectedPlanMaxStorage)
-				.Price(Translation.Currency, <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0]) * 100, // In cents
-		},
-	});
-};
-
-window.addEventListener("translationlanguagechange", UpdatePaymentRequest);
-
-paymentRequest.on("paymentmethod", async e =>
-{
-	const paymentMethod = e.paymentMethod.id;
-
-	await functions.httpsCallable("createSubscription")({
-		maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-		currency: Translation.Currency,
-		billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
-		paymentMethod,
-	});
-
-	e.complete("success");
 });
 
 let userAlreadyHasCardInformation : boolean = false;
@@ -110,28 +68,6 @@ const completePayment : HTMLAnchorElement = document.querySelector("#change-plan
 const paymentMethodsContainer : HTMLElement = document.querySelector("#payment-methods .payment-methods-container");
 const noPaymentMethod : HTMLParagraphElement = document.querySelector("#payment-methods .no-payment-method");
 
-const paymentRequestButton = stripeElements.create("paymentRequestButton", {
-	paymentRequest,
-	style: {
-		paymentRequestButton: {
-			type: "default",
-			theme: "dark",
-			height: "49px",
-		},
-	},
-});
-
-paymentRequestButton.on("click", e =>
-{
-	if (changePlan.disabled) e.preventDefault();
-});
-
-(async () =>
-{
-	if (await paymentRequest.canMakePayment()) paymentRequestButton.mount("#payment-request-button");
-	else HideElement(document.getElementById("payment-request-button"));
-})();
-
 (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan =>
 {
 	const SelectPlan = () =>
@@ -141,12 +77,7 @@ paymentRequestButton.on("click", e =>
 
 		previouslySelectedPlanElement?.classList.remove("selected");
 
-		if (previouslySelectedPlanElement !== plan)
-		{
-			AddClass(plan, "selected");
-
-			UpdatePaymentRequest();
-		}
+		if (previouslySelectedPlanElement !== plan) AddClass(plan, "selected");
 
 		// If the user is on the free plan and has changed the selected billing period
 		if ([ currentPlanElement, plans.querySelector(".selected") ].every(element => element?.matches(":first-child") ?? true))
@@ -778,8 +709,6 @@ window.addEventListener("userready", () =>
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
 		Translation.Currency = user.data().stripe?.currency;
-
-		UpdatePaymentRequest();
 
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
