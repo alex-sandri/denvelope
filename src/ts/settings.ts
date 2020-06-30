@@ -47,7 +47,7 @@ const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format
 
 const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
 const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .delete");
-// const manageSubscription: HTMLButtonElement = document.querySelector("#change-plan .manage-subscription");
+const manageSubscription: HTMLButtonElement = document.querySelector("#change-plan .manage-subscription");
 const cancelDowngrade : HTMLButtonElement = document.querySelector("#change-plan .cancel-downgrade");
 const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
@@ -345,7 +345,6 @@ window.addEventListener("userready", () =>
 		modal.Show(true);
 	});
 
-	/*
 	manageSubscription.addEventListener("click", async () =>
 	{
 		const { data } = await functions.httpsCallable("createBillingPortalSession")();
@@ -354,7 +353,6 @@ window.addEventListener("userready", () =>
 
 		open(data.session.url);
 	});
-	*/
 
 	[ cancelDowngrade, reactivateSubscription ].forEach(button => button.addEventListener("click", () =>
 	{
@@ -678,6 +676,7 @@ window.addEventListener("userready", () =>
 			noPaymentMethod,
 			completePayment,
 			cancelDowngrade,
+			manageSubscription,
 		]);
 
 		if (userCanceledSubscription) ShowElement(reactivateSubscription);
@@ -690,7 +689,7 @@ window.addEventListener("userready", () =>
 				userDateFormatOptions,
 			));
 
-			ShowElement(nextRenewal.parentElement);
+			ShowElements([ nextRenewal.parentElement, manageSubscription ]);
 
 			if (!userCanceledSubscription)
 			{
