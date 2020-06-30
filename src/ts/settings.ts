@@ -349,8 +349,6 @@ window.addEventListener("userready", () =>
 	{
 		const { data } = await functions.httpsCallable("createBillingPortalSession")();
 
-		console.log(data);
-
 		open(data.session.url);
 	});
 
