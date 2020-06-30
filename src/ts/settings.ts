@@ -51,7 +51,7 @@ const deletePlan : HTMLButtonElement = document.querySelector("#change-plan .del
 const cancelDowngrade : HTMLButtonElement = document.querySelector("#change-plan .cancel-downgrade");
 const reactivateSubscription : HTMLButtonElement = document.querySelector("#change-plan .reactivate");
 const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
-const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
+// const addPaymentMethod : HTMLButtonElement = document.querySelector("#payment-methods .add");
 const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
 const currentBillingPeriod : HTMLElement = document.querySelector("#change-plan .current-billing-period .value");
 const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
@@ -282,16 +282,16 @@ window.addEventListener("userready", () =>
 	resetDateFormat.addEventListener("click", () =>
 		db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: firebase.firestore.FieldValue.delete() }, { merge: true }));
 
-	[ changePlan, addPaymentMethod ].forEach(button => button.addEventListener("click", () =>
+	changePlan.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: button.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: button.getAttribute("data-translation"),
+			titleTranslationId: changePlan.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			subtitleTranslationId: changePlan.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
 
-		if (button === changePlan) modal.AppendContent([
+		modal.AppendContent([
 			new Component("p", {
 				children: [
 					Translation.GetElement("generic->from"),
@@ -310,15 +310,22 @@ window.addEventListener("userready", () =>
 		{
 			modal.HideAndRemove();
 
-			if (button === changePlan) functions.httpsCallable("createSubscription")({
-				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-				currency: Translation.Currency,
-				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
+			stripe.redirectToCheckout(<any>{
+				lineItems: [
+					{
+						price: "",
+						quantity: 1,
+					},
+				],
+				mode: "subscription",
+				locale: Translation.Language,
+				successUrl: location.href,
+				cancelUrl: location.href,
 			});
 		};
 
 		modal.Show(true);
-	}));
+	});
 
 	deletePlan.addEventListener("click", () =>
 	{
