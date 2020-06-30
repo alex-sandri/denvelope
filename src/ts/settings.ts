@@ -19,7 +19,6 @@ import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
 import { Component, Input } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
-import { Config } from "./config/Config";
 
 Init();
 
