@@ -673,6 +673,40 @@ export const createBillingPortalSession = functions.region(FUNCTIONS_REGION).htt
 });
 */
 
+export const createCheckoutSession = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
+{
+    if (!context.auth || !data.maxStorage || !data.currency || !data.billingPeriod) return;
+
+    if (!plansMaxStorage.includes(data.maxStorage)) return;
+
+    if (![ "USD", "EUR" ].includes(data.currency)) return;
+
+    if (![ "month", "year" ].includes(data.billingPeriod)) return;
+
+    const userId = context.auth.uid;
+
+    const user = await db.collection("users").doc(userId).get();
+    const userData: FirebaseFirestore.DocumentData = <FirebaseFirestore.DocumentData>user.data();
+
+    if (!userData.stripe?.customerId) await CreateCustomer(userId, <string>context.auth.token.email);
+
+    const session = await stripe.checkout.sessions.create({
+        customer: userData.stripe.customerId,
+        payment_method_types: [ "card" ],
+        line_items: [
+            {
+                price: GetStripePriceId(data.maxStorage, data.currency, data.billingPeriod),
+                quantity: 1,
+            },
+        ],
+        mode: "subscription",
+        success_url: "https://denvelope.com/settings/plan",
+        cancel_url: "https://denvelope.com/settings/plan",
+    });
+
+    return { sessionId: session.id };
+});
+
 export const stripeWebhooks = functions.region(FUNCTIONS_REGION).https.onRequest(async (request, response) =>
 {
     let event;
