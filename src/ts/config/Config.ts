@@ -46,7 +46,6 @@ export namespace Config
                 nextRenewal?: number,
                 cancelAtPeriodEnd?: boolean,
                 nextPeriodMaxStorage?: number,
-                invoiceUrl?: string,
                 billingPeriod?: Config.BillingPeriod,
 				nextBillingPeriod?: Config.BillingPeriod,
 				currency?: Config.Currency,
