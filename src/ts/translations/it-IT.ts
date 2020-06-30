@@ -222,7 +222,6 @@ export default {
 		},
 		plan: {
 			title: "Piano",
-			info: "Una volta sottoscritto un piano la valuta selezionata diventa quella predefinita e non sarà possibile cambiarla.",
 			change_plan: {
 				title: "Cambia piano",
 				change: "Cambia",

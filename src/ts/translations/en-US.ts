@@ -222,7 +222,6 @@ export default {
 		},
 		plan: {
 			title: "Plan",
-			info: "Once you subscribe to a plan the selected currency becomes the default one and it won't be possible to change it.",
 			change_plan: {
 				title: "Change plan",
 				change: "Change",
