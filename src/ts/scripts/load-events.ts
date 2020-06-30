@@ -155,16 +155,16 @@ export default () : void =>
 
 				const percent = `${+((usedStorage / maxStorage) * 100).toFixed(2)}%`;
 
-				const usedStorageElement = document.querySelector("[data-update-field=used-storage]");
-				const maxStorageElement = document.querySelector("[data-update-field=max-storage]");
+				const usedStorageElement: HTMLElement = document.querySelector("[data-update-field=used-storage]");
+				const maxStorageElement: HTMLElement = document.querySelector("[data-update-field=max-storage]");
 
-				usedStorageElement.innerHTML = FormatStorage(usedStorage);
+				usedStorageElement.innerText = FormatStorage(usedStorage);
 				usedStorageElement.setAttribute("data-bytes", usedStorage.toString());
 
-				maxStorageElement.innerHTML = FormatStorage(maxStorage);
+				maxStorageElement.innerText = FormatStorage(maxStorage);
 				maxStorageElement.setAttribute("data-bytes", maxStorage.toString());
 
-				document.querySelector("[data-update-field=used-storage-percent]").innerHTML = `(${percent})`;
+				(<HTMLElement>document.querySelector("[data-update-field=used-storage-percent]")).innerText = `(${percent})`;
 
 				(<HTMLElement>document.querySelector(".storage .used")).style.width = percent;
 
