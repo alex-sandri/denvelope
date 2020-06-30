@@ -589,8 +589,6 @@ window.addEventListener("userready", () =>
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
-		Translation.Currency = user.data().stripe?.currency;
-
 		const { maxStorage } = user.data();
 		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
 
@@ -607,6 +605,7 @@ window.addEventListener("userready", () =>
 			nextPeriodPlan.parentElement,
 			nextBillingPeriod.parentElement,
 			manageSubscription,
+			plans,
 		]);
 
 		if (!IsFreePlan(maxStorage))
@@ -636,6 +635,7 @@ window.addEventListener("userready", () =>
 				}
 			}
 		}
+		else ShowElement(plans);
 	});
 
 	db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot(preferences =>

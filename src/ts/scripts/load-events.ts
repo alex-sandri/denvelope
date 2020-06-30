@@ -53,7 +53,6 @@ export default () : void =>
 			});
 
 	window.addEventListener("translationlanguagechange", updatePlans);
-	window.addEventListener("currencychange", updatePlans);
 
 	(<HTMLElement[]>Array.from(document.querySelector(".billing-periods")?.children ?? [])).forEach(billingPeriod =>
 		billingPeriod.addEventListener("click", () =>
