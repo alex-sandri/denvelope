@@ -29,13 +29,6 @@ const db: firebaseFirestore.Firestore = firebase.firestore();
 const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
 
 const stripe = Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
-const stripeElements = stripe.elements({
-	fonts: [ {
-		family: "Source Code Variable",
-		src: "url(/assets/font/SourceCodeVariable.woff2)",
-	} ],
-	locale: Translation.Language,
-});
 
 let userAlreadyHasCardInformation : boolean = false;
 
@@ -298,11 +291,6 @@ window.addEventListener("userready", () =>
 			loading: false,
 		});
 
-		let cardElement: stripe.elements.Element;
-
-		const showCreditCardInput : boolean = !userAlreadyHasCardInformation
-			|| button === addPaymentMethod;
-
 		if (button === changePlan) modal.AppendContent([
 			new Component("p", {
 				children: [
@@ -318,61 +306,15 @@ window.addEventListener("userready", () =>
 			}).element,
 		]);
 
-		if (showCreditCardInput)
-		{
-			modal.ConfirmButton.disabled = true;
-
-			cardElement = stripeElements.create("card", {
-				style: {
-					base: {
-						iconColor: "#efcb68",
-						color: "#efcb68",
-						fontFamily: "Source Code Variable, monospace",
-						fontSize: "16px",
-						"::placeholder": {
-							color: "#efcb68",
-						},
-					},
-					invalid: {
-						iconColor: "red",
-						color: "red",
-					},
-				},
-				hidePostalCode: false,
-			});
-
-			cardElement.on("change", e =>
-			{
-				modal.ConfirmButton.disabled = !e.complete;
-
-				modal.Content.querySelector(".input-error")?.remove();
-
-				if (e.error) modal.Content.insertAdjacentHTML("afterbegin", `<p class="input-error">${e.error.message}</p>`);
-			});
-
-			cardElement.on("ready", () => cardElement.focus());
-
-			modal.AppendContent([ document.createElement("div") ]);
-
-			cardElement.mount(modal.Content.querySelector("div"));
-		}
-
 		modal.OnConfirm = async () =>
 		{
-			let result : stripe.PaymentMethodResponse;
-
 			modal.HideAndRemove();
-
-			if (showCreditCardInput) result = await stripe.createPaymentMethod({ type: "card", card: cardElement });
 
 			if (button === changePlan) functions.httpsCallable("createSubscription")({
 				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
 				currency: Translation.Currency,
 				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
-				// Not needed if the user already has a default payment method
-				paymentMethod: result?.paymentMethod.id,
 			});
-			else functions.httpsCallable("addPaymentMethod")({ paymentMethod: result.paymentMethod.id });
 		};
 
 		modal.Show(true);
