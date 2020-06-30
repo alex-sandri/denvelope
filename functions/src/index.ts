@@ -488,124 +488,6 @@ export const generateVaultRecoveryCode = functions.region(FUNCTIONS_REGION).runW
     return { success, recoveryCode };
 });
 
-export const createSubscription = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
-{
-    if (!context.auth || !data.maxStorage || !data.currency || !data.billingPeriod) return;
-
-    if (!plansMaxStorage.includes(data.maxStorage)) return;
-
-    if (![ "USD", "EUR" ].includes(data.currency)) return;
-
-    if (![ "month", "year" ].includes(data.billingPeriod)) return;
-
-    const userId : string = context.auth.uid;
-
-    const maxStorage : number = GetPlanMaxStorageBytes(data.maxStorage);
-
-    const user = await db.collection("users").doc(userId).get();
-
-    let customer : Stripe.Customer;
-
-    if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.customerId)
-    {
-        if (!data.paymentMethod) return;
-
-        customer = await CreateCustomer(userId, <string>context.auth.token.email);
-    }
-    else customer = <Stripe.Customer>await stripe.customers.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.customerId);
-
-    if (!customer.invoice_settings.default_payment_method && !data.paymentMethod) return;
-
-    if (data.paymentMethod)
-    {
-        const paymentMethod = await stripe.paymentMethods.retrieve(data.paymentMethod);
-
-        await AddPaymentMethod(userId, <string>context.auth.token.email, paymentMethod);
-    }
-
-    if (customer.currency)
-        data.currency = customer.currency.toUpperCase();
-
-    const priceId : string = GetStripePriceId(maxStorage, data.currency, data.billingPeriod);
-
-    if (maxStorage !== FREE_STORAGE)
-    {
-        const CreateSubscription = async () =>
-        {
-            const subscription = await stripe.subscriptions.create({
-                customer: customer.id,
-                items: [ { price: priceId } ]
-            });
-
-            await user.ref.update({
-                "stripe.subscriptionId": subscription.id,
-            });
-        }
-
-        // The user currently does not have a subscription
-        if (!(<FirebaseFirestore.DocumentData>user.data()).stripe?.subscriptionId) await CreateSubscription();
-        else
-        {
-            const subscription = await stripe.subscriptions.retrieve((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId);
-
-            // Delete useless subscriptions
-            for (const customerSubscription of (customer.subscriptions?.data || []))
-                if (subscription.status === "incomplete" || customerSubscription.id !== subscription.id)
-                    await stripe.subscriptions.del(customerSubscription.id);
-
-            if (subscription.status === "incomplete") await CreateSubscription();
-            else
-            {
-                const isUpgrade = IsPlanUpgrade((<FirebaseFirestore.DocumentData>user.data()).maxStorage, maxStorage);
-
-                if (subscription.status === "past_due") // Reset to previous plan before updating again to avoid the customer not being charged
-                    await stripe.subscriptions.update(subscription.id, {
-                        billing_cycle_anchor: "unchanged",
-                        proration_behavior: "none",
-                        items: [
-                            {
-                                id: subscription.items.data[0].id,
-                                price: GetStripePriceId(
-                                    (<FirebaseFirestore.DocumentData>user.data()).maxStorage,
-                                    (<FirebaseFirestore.DocumentData>user.data()).stripe.currency,
-                                    (<FirebaseFirestore.DocumentData>user.data()).stripe.billingPeriod,
-                                )
-                            }
-                        ]
-                    });
-
-                await stripe.subscriptions.update(subscription.id, {
-                    // Upgrade the plan immediately if this is an upgrade, otherwise downgrade or change billing period at the current period end
-                    billing_cycle_anchor: isUpgrade ? "now" : "unchanged",
-                    proration_behavior: isUpgrade ? "always_invoice" : "none",
-                    cancel_at_period_end: false,
-                    items: [ { id: subscription.items.data[0].id, price: priceId } ] // Setting the id prevents the new plan from being added to the subscription (the new plan replaces the old one)
-                });
-            }
-        }
-
-        await user.ref.update("stripe.cancelAtPeriodEnd", false);
-    }
-    else await CancelSubscription(userId); // The new selected plan is the free one
-
-    await user.ref.update("stripe.currency", data.currency);
-});
-
-const IsPlanUpgrade = (currentMaxStorage : number, newMaxStorage : number) : boolean =>
-{
-    const GetPlanIndex = (maxStorage : number) : number =>
-    {
-        switch (maxStorage)
-        {
-            case 1 * GB: return 1;
-            case 10 * GB: return 2;
-            default: return 0; // free plan
-        }
-    }
-
-    return GetPlanIndex(newMaxStorage) > GetPlanIndex(currentMaxStorage);
-}
-
 export const createBillingPortalSession = functions.region(FUNCTIONS_REGION).https.onCall(async (data, context) =>
 {
     if (!context.auth) return;
@@ -865,13 +747,6 @@ const CreateCustomer = async (userId : string, userEmail : string, paymentMethod
     if (paymentMethod) await AddPaymentMethod(userId, userEmail, paymentMethod);
 
     return customer;
-}
-
-const CancelSubscription = async (userId : string) =>
-{
-    const user = await db.collection("users").doc(userId).get();
-
-    await stripe.subscriptions.update((<FirebaseFirestore.DocumentData>user.data()).stripe.subscriptionId, { cancel_at_period_end: true });
 }
 
 const IsValidVaultPin = (pin : string) => typeof(pin) === "string" && pin?.length >= 4;

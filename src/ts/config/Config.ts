@@ -48,7 +48,6 @@ export namespace Config
                 nextPeriodMaxStorage?: number,
                 billingPeriod?: Config.BillingPeriod,
 				nextBillingPeriod?: Config.BillingPeriod,
-				currency?: Config.Currency,
 			},
 		}
 
