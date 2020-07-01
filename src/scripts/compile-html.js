@@ -37,77 +37,81 @@ const sortByFileCreationTime = (a, b) =>
     return bStats.ctime - aStats.ctime;
 }
 
-const cssFileName = glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css")).sort(sortByFileCreationTime)[0].split("/").pop();
+const css = {
+    bundle: glob.sync(path.join(ASSETS_PATH, "css", "bundle.*.css")).sort(sortByFileCreationTime)[0].split("/").pop(),
+};
 
-const indexJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "index.*.js")).sort(sortByFileCreationTime)[0].split("/").pop();
-const accountJsFileName =  glob.sync(path.join(ASSETS_PATH, "js", "account.*.js")).sort(sortByFileCreationTime)[0].split("/").pop();
-const settingsJsFileName = glob.sync(path.join(ASSETS_PATH, "js", "settings.*.js")).sort(sortByFileCreationTime)[0].split("/").pop();
+const js = {
+    index: glob.sync(path.join(ASSETS_PATH, "js", "index.*.js")).sort(sortByFileCreationTime)[0].split("/").pop(),
+    account: glob.sync(path.join(ASSETS_PATH, "js", "account.*.js")).sort(sortByFileCreationTime)[0].split("/").pop(),
+    settings: glob.sync(path.join(ASSETS_PATH, "js", "settings.*.js")).sort(sortByFileCreationTime)[0].split("/").pop(),
+};
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "index.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "index.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.index,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "account.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "account.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: accountJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.account,
     logoRedirectPath: "/account",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "settings.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "settings.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: settingsJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.settings,
     logoRedirectPath: "/account",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "plans.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "plans.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.index,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "terms.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "terms.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.index,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "privacy.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "privacy.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.index,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "accessibility.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "accessibility.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.index,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 fs.writeFileSync(path.join(PUBLIC_PATH, "404.html"), handlebars.compile(fs.readFileSync(path.join(VIEWS_PATH, "404.hbs"), "utf8"))({
-    cssversion: cssFileName,
-    jsversion: indexJsFileName,
+    cssversion: css.bundle,
+    jsversion: js.index,
     year: new Date().getFullYear(),
     logoRedirectPath: "/",
 }));
 
 const updatedAssets = assets;
 
-if (assets.dynamic.css.bundle !== cssFileName
-    || assets.dynamic.js.index !== indexJsFileName
-    || assets.dynamic.js.account !== accountJsFileName
-    || assets.dynamic.js.settings !== settingsJsFileName)
+if (assets.dynamic.css.bundle !== css.bundle
+    || assets.dynamic.js.index !== js.index
+    || assets.dynamic.js.account !== js.account
+    || assets.dynamic.js.settings !== js.settings)
     updatedAssets.version++;
 
-updatedAssets.dynamic.css.bundle = cssFileName;
-updatedAssets.dynamic.js.index = indexJsFileName;
-updatedAssets.dynamic.js.account = accountJsFileName;
-updatedAssets.dynamic.js.settings = settingsJsFileName;
+updatedAssets.dynamic.css.bundle = css.bundle;
+updatedAssets.dynamic.js.index = js.index;
+updatedAssets.dynamic.js.account = js.account;
+updatedAssets.dynamic.js.settings = js.settings;
 
 fs.writeFileSync(path.join(__dirname, "..", "ts", "config", "assets.json"), JSON.stringify(updatedAssets, null, 4));
