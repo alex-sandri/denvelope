@@ -71,3 +71,4 @@ public/assets/css
 public/assets/js
 public/sw.js
 public/*.html
+src/scripts/*.js
