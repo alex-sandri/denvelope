@@ -52,7 +52,7 @@ const mockData = {
 		created: GetFirestoreServerTimestamp(),
 		...GetFirestoreUpdateTimestamp(),
 	},
-}
+};
 
 describe("OWNER:TRUE", () =>
 {
