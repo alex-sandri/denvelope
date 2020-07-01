@@ -273,44 +273,15 @@ window.addEventListener("userready", () =>
 	resetDateFormat.addEventListener("click", () =>
 		db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: firebase.firestore.FieldValue.delete() }, { merge: true }));
 
-	changePlan.addEventListener("click", () =>
+	changePlan.addEventListener("click", async () =>
 	{
-		const modal = new Modal({
-			titleTranslationId: changePlan.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: changePlan.getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
+		const { data } = await functions.httpsCallable("createCheckoutSession")({
+			maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
+			currency: Translation.Currency,
+			billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
 		});
 
-		modal.AppendContent([
-			new Component("p", {
-				children: [
-					Translation.GetElement("generic->from"),
-					new Component("span", { innerText: (<HTMLElement>plans.querySelector(".current > .storage")).innerText }).element,
-				],
-			}).element,
-			new Component("p", {
-				children: [
-					Translation.GetElement("generic->to"),
-					new Component("span", { innerText: (<HTMLElement>plans.querySelector(".selected > .storage")).innerText }).element,
-				],
-			}).element,
-		]);
-
-		modal.OnConfirm = async () =>
-		{
-			modal.HideAndRemove();
-
-			const result = await functions.httpsCallable("createCheckoutSession")({
-				maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
-				currency: Translation.Currency,
-				billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
-			});
-
-			stripe.redirectToCheckout({ sessionId: result.data.sessionId });
-		};
-
-		modal.Show(true);
+		stripe.redirectToCheckout({ sessionId: data.sessionId });
 	});
 
 	manageSubscription.addEventListener("click", async () =>
