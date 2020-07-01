@@ -1,0 +1,16 @@
+{
+    "include": [
+        "src/scripts/*.ts",
+    ],
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "ESNext",
+        "removeComments": true,
+        "strict": true,
+        "strictNullChecks": false,
+        "alwaysStrict": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true
+    }
+}
