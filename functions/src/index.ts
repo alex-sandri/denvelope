@@ -524,6 +524,7 @@ export const createCheckoutSession = functions.region(FUNCTIONS_REGION).https.on
     const session = await stripe.checkout.sessions.create({
         customer: userData.stripe.customerId,
         payment_method_types: [ "card" ],
+        billing_address_collection: "required",
         line_items: [
             {
                 price: GetStripePriceId(GetPlanMaxStorageBytes(data.maxStorage), data.currency, data.billingPeriod),
