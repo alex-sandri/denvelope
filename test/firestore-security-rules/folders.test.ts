@@ -9,66 +9,72 @@ import {
 	getFirestoreUpdateTimestamps,
 } from "../helpers";
 
-const newFolderValidMockData = {
-	name: "newFolder",
-	parentId: "root",
-	shared: false,
-	starred: false,
-	trashed: false,
-	inVault: false,
-	...getFirestoreCreationTimestamps(),
-};
-
-const newFolderInvalidMockData = {
-	name: "newFolder",
-	parentId: "nonExistentFolderId",
-	shared: false,
-	starred: false,
-	trashed: false,
-	inVault: false,
-	...getFirestoreCreationTimestamps(),
-};
-
 const mockData = {
-	"users/test/folders/folderId": {
-		name: "folder",
-		parentId: "root",
-		shared: false,
-		starred: false,
-		trashed: false,
-		inVault: false,
-		...getFirestoreCreationTimestamps(),
+	initial: {
+		"users/test/folders/folderId": {
+			name: "folder",
+			parentId: "root",
+			shared: false,
+			starred: false,
+			trashed: false,
+			inVault: false,
+			...getFirestoreCreationTimestamps(),
+		},
+		"users/test/folders/anotherFolderId": {
+			name: "folder1",
+			parentId: "root",
+			shared: false,
+			starred: false,
+			trashed: false,
+			inVault: false,
+			...getFirestoreCreationTimestamps(),
+		},
+		"users/test/folders/trashedFolder": {
+			name: "trashedFolder",
+			parentId: "root",
+			shared: false,
+			starred: false,
+			trashed: true,
+			inVault: false,
+			...getFirestoreCreationTimestamps(),
+		},
+		"users/test/folders/inVaultFolder": {
+			name: "inVaultFolder",
+			parentId: "vault",
+			shared: false,
+			starred: false,
+			trashed: false,
+			inVault: true,
+			...getFirestoreCreationTimestamps(),
+		},
 	},
-	"users/test/folders/anotherFolderId": {
-		name: "folder1",
-		parentId: "root",
-		shared: false,
-		starred: false,
-		trashed: false,
-		inVault: false,
-		...getFirestoreCreationTimestamps(),
-	},
-	"users/test/folders/trashedFolder": {
-		name: "trashedFolder",
-		parentId: "root",
-		shared: false,
-		starred: false,
-		trashed: true,
-		inVault: false,
-		...getFirestoreCreationTimestamps(),
-	},
-	"users/test/folders/inVaultFolder": {
-		name: "inVaultFolder",
-		parentId: "vault",
-		shared: false,
-		starred: false,
-		trashed: false,
-		inVault: true,
-		...getFirestoreCreationTimestamps(),
-	},
+	valid: [
+		{
+			name: "newFolder",
+			parentId: "root",
+			shared: false,
+			starred: false,
+			trashed: false,
+			inVault: false,
+			...getFirestoreCreationTimestamps(),
+		},
+	],
+	invalid: [
+		{
+			name: "newFolder",
+			parentId: "nonExistentFolderId",
+			shared: false,
+			starred: false,
+			trashed: false,
+			inVault: false,
+			...getFirestoreCreationTimestamps(),
+		},
+	],
 };
 
-export default mockData;
+export default mockData.initial;
+
+const FOLDERS_COLLECTION = "users/test/folders";
 
 describe("OWNER:TRUE", () =>
 {
@@ -80,7 +86,7 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
@@ -92,7 +98,7 @@ describe("OWNER:TRUE", () =>
 		{
 			test("VAULT:LOCKED", async () =>
 			{
-				const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData });
+				const db = await setup({ uid: "test" }, { ...mockData.initial, ...lockedVaultMockData });
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
@@ -107,11 +113,10 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
-				const ref = db.collection("users/test/folders");
-
-				await expect(ref.add(newFolderValidMockData)).toAllow();
+				for (const data of mockData.valid)
+					await expect(db.collection(FOLDERS_COLLECTION).add(data)).toAllow();
 			});
 		});
 
@@ -119,11 +124,10 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
-				const ref = db.collection("users/test/folders");
-
-				await expect(ref.add(newFolderInvalidMockData)).toDeny();
+				for (const data of mockData.invalid)
+					await expect(db.collection(FOLDERS_COLLECTION).add(data)).toDeny();
 			});
 		});
 	});
@@ -134,7 +138,7 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
@@ -151,7 +155,7 @@ describe("OWNER:TRUE", () =>
 
 			test("VAULT:UNLOCKED", async () =>
 			{
-				const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData });
+				const db = await setup({ uid: "test" }, { ...mockData.initial, ...unlockedVaultMockData });
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
@@ -167,7 +171,7 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
@@ -189,7 +193,7 @@ describe("OWNER:TRUE", () =>
 
 			test("VAULT:LOCKED", async () =>
 			{
-				const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData });
+				const db = await setup({ uid: "test" }, { ...mockData.initial, ...lockedVaultMockData });
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
@@ -202,7 +206,7 @@ describe("OWNER:TRUE", () =>
 
 			test("VAULT:UNLOCKED", async () =>
 			{
-				const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData });
+				const db = await setup({ uid: "test" }, { ...mockData.initial, ...unlockedVaultMockData });
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
@@ -230,7 +234,7 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
 				const ref = db.collection("users/test/folders").doc("trashedFolder");
 
@@ -239,7 +243,7 @@ describe("OWNER:TRUE", () =>
 
 			test("VAULT:UNLOCKED", async () =>
 			{
-				const db = await setup({ uid: "test" }, { ...mockData, ...unlockedVaultMockData });
+				const db = await setup({ uid: "test" }, { ...mockData.initial, ...unlockedVaultMockData });
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
@@ -251,7 +255,7 @@ describe("OWNER:TRUE", () =>
 		{
 			test("GENERIC", async () =>
 			{
-				const db = await setup({ uid: "test" }, mockData);
+				const db = await setup({ uid: "test" }, mockData.initial);
 
 				const ref = db.collection("users/test/folders").doc("folderId");
 
@@ -260,7 +264,7 @@ describe("OWNER:TRUE", () =>
 
 			test("VAULT:LOCKED", async () =>
 			{
-				const db = await setup({ uid: "test" }, { ...mockData, ...lockedVaultMockData });
+				const db = await setup({ uid: "test" }, { ...mockData.initial, ...lockedVaultMockData });
 
 				const ref = db.collection("users/test/folders").doc("inVaultFolder");
 
