@@ -3,12 +3,71 @@ import * as firebase from "@firebase/testing";
 import {
 	setup,
 	teardown,
-	mockData,
 	newFileValidMockData,
 	newFileInvalidMockData,
 	unlockedVaultMockData,
 	lockedVaultMockData,
 } from "../helpers";
+
+import { GetFirestoreServerTimestamp, GetFirestoreUpdateTimestamp } from "../../src/ts/scripts/Utilities";
+
+const mockData = {
+	"users/test/files/fileId": {
+		name: "file",
+		parentId: "root",
+		size: 42,
+		shared: false,
+		starred: false,
+		trashed: false,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/files/anotherFileId": {
+		name: "file1",
+		parentId: "root",
+		size: 0,
+		shared: false,
+		starred: false,
+		trashed: false,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/files/trashedFile": {
+		name: "trashedFile",
+		parentId: "root",
+		size: 0,
+		shared: false,
+		starred: false,
+		trashed: true,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/files/inVaultFile": {
+		name: "inVaultFile",
+		parentId: "vault",
+		size: 0,
+		shared: false,
+		starred: false,
+		trashed: false,
+		inVault: true,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/files/sharedFile": {
+		name: "sharedFile",
+		parentId: "root",
+		size: 0,
+		shared: true,
+		starred: false,
+		trashed: false,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+};
 
 describe("OWNER:TRUE", () =>
 {

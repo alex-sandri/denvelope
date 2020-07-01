@@ -3,12 +3,56 @@ import * as firebase from "@firebase/testing";
 import {
 	setup,
 	teardown,
-	mockData,
 	newFolderValidMockData,
 	newFolderInvalidMockData,
 	unlockedVaultMockData,
 	lockedVaultMockData,
 } from "../helpers";
+
+import { GetFirestoreServerTimestamp, GetFirestoreUpdateTimestamp } from "../../src/ts/scripts/Utilities";
+
+const mockData = {
+	"users/test/folders/folderId": {
+		name: "folder",
+		parentId: "root",
+		shared: false,
+		starred: false,
+		trashed: false,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/folders/anotherFolderId": {
+		name: "folder1",
+		parentId: "root",
+		shared: false,
+		starred: false,
+		trashed: false,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/folders/trashedFolder": {
+		name: "trashedFolder",
+		parentId: "root",
+		shared: false,
+		starred: false,
+		trashed: true,
+		inVault: false,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+	"users/test/folders/inVaultFolder": {
+		name: "inVaultFolder",
+		parentId: "vault",
+		shared: false,
+		starred: false,
+		trashed: false,
+		inVault: true,
+		created: GetFirestoreServerTimestamp(),
+		...GetFirestoreUpdateTimestamp(),
+	},
+}
 
 describe("OWNER:TRUE", () =>
 {
