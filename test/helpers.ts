@@ -34,53 +34,17 @@ export const setup = async (auth?: any, data?: any) =>
 
 export const teardown = async () => Promise.all(firebase.apps().map(app => app.delete()));
 
-export const newFolderValidMockData = {
-	name: "newFolder",
-	parentId: "root",
-	shared: false,
-	starred: false,
-	trashed: false,
-	inVault: false,
-	created: firebase.firestore.FieldValue.serverTimestamp(),
-	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
-};
+export const getFirestoreServerTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
 
-export const newFolderInvalidMockData = {
-	name: "newFolder",
-	parentId: "nonExistentFolderId",
-	shared: false,
-	starred: false,
-	trashed: false,
-	inVault: false,
-	created: firebase.firestore.FieldValue.serverTimestamp(),
-	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
-};
+export const getFirestoreUpdateTimestamps = () => ({
+	updated: getFirestoreServerTimestamp(),
+	lastClientUpdateTime: firebase.firestore.Timestamp.now(),
+});
 
-export const newFileValidMockData = {
-	name: "newFile",
-	parentId: "root",
-	shared: false,
-	starred: false,
-	trashed: false,
-	inVault: false,
-	created: firebase.firestore.FieldValue.serverTimestamp(),
-	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
-};
-
-export const newFileInvalidMockData = {
-	name: "newFile",
-	parentId: "nonExistentFolderId",
-	shared: false,
-	starred: false,
-	trashed: false,
-	inVault: false,
-	created: firebase.firestore.FieldValue.serverTimestamp(),
-	updated: firebase.firestore.FieldValue.serverTimestamp(),
-	lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
-};
+export const getFirestoreCreationTimestamps = () => ({
+	created: getFirestoreServerTimestamp(),
+	...getFirestoreUpdateTimestamps(),
+});
 
 export const lockedVaultMockData = { "/users/test/vault/status": { locked: true } };
 

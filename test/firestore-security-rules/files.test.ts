@@ -3,15 +3,36 @@ import * as firebase from "@firebase/testing";
 import {
 	setup,
 	teardown,
-	newFileValidMockData,
-	newFileInvalidMockData,
 	unlockedVaultMockData,
 	lockedVaultMockData,
+	getFirestoreCreationTimestamps,
+	getFirestoreUpdateTimestamps,
 } from "../helpers";
 
-import { GetFirestoreServerTimestamp, GetFirestoreUpdateTimestamp } from "../../src/ts/scripts/Utilities";
+import foldersMockData from "./folders.test";
+
+const newFileValidMockData = {
+	name: "newFile",
+	parentId: "root",
+	shared: false,
+	starred: false,
+	trashed: false,
+	inVault: false,
+	...getFirestoreCreationTimestamps(),
+};
+
+const newFileInvalidMockData = {
+	name: "newFile",
+	parentId: "nonExistentFolderId",
+	shared: false,
+	starred: false,
+	trashed: false,
+	inVault: false,
+	...getFirestoreCreationTimestamps(),
+};
 
 const mockData = {
+	...foldersMockData,
 	"users/test/files/fileId": {
 		name: "file",
 		parentId: "root",
@@ -20,8 +41,7 @@ const mockData = {
 		starred: false,
 		trashed: false,
 		inVault: false,
-		created: GetFirestoreServerTimestamp(),
-		...GetFirestoreUpdateTimestamp(),
+		...getFirestoreCreationTimestamps(),
 	},
 	"users/test/files/anotherFileId": {
 		name: "file1",
@@ -31,8 +51,7 @@ const mockData = {
 		starred: false,
 		trashed: false,
 		inVault: false,
-		created: GetFirestoreServerTimestamp(),
-		...GetFirestoreUpdateTimestamp(),
+		...getFirestoreCreationTimestamps(),
 	},
 	"users/test/files/trashedFile": {
 		name: "trashedFile",
@@ -42,8 +61,7 @@ const mockData = {
 		starred: false,
 		trashed: true,
 		inVault: false,
-		created: GetFirestoreServerTimestamp(),
-		...GetFirestoreUpdateTimestamp(),
+		...getFirestoreCreationTimestamps(),
 	},
 	"users/test/files/inVaultFile": {
 		name: "inVaultFile",
@@ -53,8 +71,7 @@ const mockData = {
 		starred: false,
 		trashed: false,
 		inVault: true,
-		created: GetFirestoreServerTimestamp(),
-		...GetFirestoreUpdateTimestamp(),
+		...getFirestoreCreationTimestamps(),
 	},
 	"users/test/files/sharedFile": {
 		name: "sharedFile",
@@ -64,8 +81,7 @@ const mockData = {
 		starred: false,
 		trashed: false,
 		inVault: false,
-		created: GetFirestoreServerTimestamp(),
-		...GetFirestoreUpdateTimestamp(),
+		...getFirestoreCreationTimestamps(),
 	},
 };
 
@@ -139,14 +155,12 @@ describe("OWNER:TRUE", () =>
 
 				await expect(ref.update({
 					name: "testName",
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toAllow();
 
 				await expect(ref.update({
 					parentId: "folderId",
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toAllow();
 			});
 
@@ -159,8 +173,7 @@ describe("OWNER:TRUE", () =>
 				await expect(ref.update({
 					parentId: "vault",
 					inVault: true,
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toAllow();
 			});
 		});
@@ -175,12 +188,11 @@ describe("OWNER:TRUE", () =>
 
 				await expect(ref.update({
 					parentId: "nonExistentFolderId",
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toDeny();
 
 				await expect(ref.update({
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 					lastClientUpdateTime: firebase.firestore.Timestamp.fromDate(new Date("1/1/1970")),
 				})).toDeny();
 			});
@@ -194,8 +206,7 @@ describe("OWNER:TRUE", () =>
 				await expect(ref.update({
 					parentId: "vault",
 					inVault: true,
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toDeny();
 			});
 
@@ -207,20 +218,17 @@ describe("OWNER:TRUE", () =>
 
 				await expect(ref.update({
 					trashed: true,
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toDeny();
 
 				await expect(ref.update({
 					parentId: "root",
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toDeny();
 
 				await expect(ref.update({
 					inVault: false,
-					updated: firebase.firestore.FieldValue.serverTimestamp(),
-					lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+					...getFirestoreUpdateTimestamps(),
 				})).toDeny();
 			});
 		});
@@ -303,8 +311,7 @@ describe("OWNER:FALSE", () =>
 
 					await expect(file.update({
 						name: "aNewFileName",
-						updated: firebase.firestore.FieldValue.serverTimestamp(),
-						lastClientUpdateTime: firebase.firestore.FieldValue.serverTimestamp(),
+						...getFirestoreUpdateTimestamps(),
 					})).toDeny();
 				});
 			});
