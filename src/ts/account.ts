@@ -57,6 +57,7 @@ const searchBar: HTMLInputElement = <HTMLInputElement>document.querySelector("#s
 const addContent: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#add-content");
 
 const folderNavigation: HTMLElement = <HTMLElement>document.querySelector(".folder-nav");
+const navigationBarFolderName: HTMLElement = <HTMLElement>folderNavigation.querySelector("[data-update-field=folder-name]");
 const navigationBackButton: HTMLButtonElement = <HTMLButtonElement>folderNavigation.querySelector(".back-button");
 const emptyTrashButton: HTMLButtonElement = <HTMLButtonElement>folderNavigation.querySelector(".empty-trash-button");
 const lockVaultButton: HTMLButtonElement = <HTMLButtonElement>folderNavigation.querySelector(".lock-vault-button");
@@ -243,7 +244,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuButtons.Save.addEventListener("click", () =>
 	{
-		const value = editor.getValue();
+		const value = (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
 		const id = editorTabs.querySelector(".active").id.split("-")[1];
 
 		UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
@@ -383,18 +384,18 @@ window.addEventListener("userready", async () =>
 
 		ContextMenuButtons.MoveSelector.querySelector(".back").addEventListener("click", async () =>
 		{
-			HideElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
+			HideElement(<HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".back"));
 
-			ShowElement(ContextMenuButtons.MoveSelector.querySelector(".spinner"));
+			ShowElement(<HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".spinner"));
 
 			ContextMenuButtons.MoveSelectorOptions.innerHTML = "";
 
-			currentId = (await db.collection(`users/${Auth.UserId}/folders`).doc(currentId).get()).data().parentId;
+			currentId = (<Config.Data.Folder>(await db.collection(`users/${Auth.UserId}/folders`).doc(currentId).get()).data()).parentId;
 
 			ShowAvailableFoldersIn(currentId);
 		});
 
-		ContextMenuButtons.MoveSelector.querySelector(".move-here").addEventListener("click", async () =>
+		(<HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".move-here")).addEventListener("click", async () =>
 		{
 			ContextMenu.Hide();
 
@@ -445,7 +446,7 @@ window.addEventListener("userready", async () =>
 
 			modal.Hide();
 
-			const { parentId } = (await db.collection(`users/${Auth.UserId}/${type}s`).doc(id).get()).data();
+			const { parentId } = <Config.Data.Folder | Config.Data.File>(await db.collection(`users/${Auth.UserId}/${type}s`).doc(id).get()).data();
 
 			const tempSnapshot = await db
 				.collection(`users/${Auth.UserId}/${type}s`)
@@ -489,7 +490,7 @@ window.addEventListener("userready", async () =>
 
 		const unsubscribe = db.collection(`users/${Auth.UserId}/${type}s`).doc(id).onSnapshot(async doc =>
 		{
-			if (!doc.exists || doc.data().trashed)
+			if (!doc.exists || doc.data()?.trashed)
 			{
 				modal.HideAndRemove();
 
@@ -500,14 +501,14 @@ window.addEventListener("userready", async () =>
 
 			modal.RemoveContent();
 
-			const data = doc.data();
+			const data = <Config.Data.Folder | Config.Data.File>doc.data();
 
-			const { name } = data;
+			const { name } = <Config.Data.Folder | Config.Data.File>data;
 
 			let dateFormatOptions;
 
 			if (Auth.IsAuthenticated)
-				dateFormatOptions = (await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data().dateFormatOptions;
+				dateFormatOptions = (<Config.Data.Preferences>(await db.collection(`users/${Auth.UserId}/config`).doc("preferences").get()).data()).dateFormatOptions;
 
 			modal.AppendContent([
 				new Component("p", {
@@ -544,7 +545,7 @@ window.addEventListener("userready", async () =>
 					? new Component("p", {
 						children: [
 							Translation.GetElement("generic->size"),
-							new Component("span", { innerText: FormatStorage(data.size || 0) }).element,
+							new Component("span", { innerText: FormatStorage((<Config.Data.File>data).size || 0) }).element,
 						],
 					}).element
 					: null,
@@ -563,13 +564,13 @@ window.addEventListener("userready", async () =>
 								? Translation.Get("account->title")
 								: (data.parentId === "vault"
 									? Translation.Get("generic->vault")
-									: (await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data().name
+									: (<Config.Data.Folder>(await db.collection(`users/${Auth.UserId}/folders`).doc(data.parentId).get()).data()).name
 								),
 						}).element,
 					],
 				}).element;
 
-				contentPosition.querySelector("a").addEventListener("click", e =>
+				(<HTMLAnchorElement>contentPosition.querySelector("a")).addEventListener("click", e =>
 				{
 					e.preventDefault();
 
@@ -613,7 +614,7 @@ window.addEventListener("userready", async () =>
 		{
 			const { id, type } = ContextMenu.GetItemInfo(item);
 
-			let folderFormat : string;
+			let folderFormat: string | undefined = undefined;
 
 			if (type === "folder" && tempArray.length === 1)
 			{
@@ -702,7 +703,7 @@ window.addEventListener("userready", async () =>
 
 		const canvas = document.createElement("canvas");
 
-		const ctx = canvas.getContext("2d");
+		const ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
 
 		img.onload = () =>
 		{
@@ -781,15 +782,15 @@ window.addEventListener("userready", async () =>
 			if (canvas.style.transform.indexOf("translate") === -1) canvas.style.transform += translateString;
 		};
 
-		let offsetX : number; let
-			offsetY : number;
+		let offsetX: number | undefined;
+		let offsetY: number | undefined;
 
 		const MoveImageWithMouse = (e : MouseEvent) =>
 		{
 			// If mousedown hasn't been fired on the image element
 			if (e.target !== canvas && e.type === "mousedown") return;
 
-			if (offsetX === undefined && offsetY === undefined)
+			if (!offsetX || !offsetY)
 			{
 				offsetX = e.offsetX + translateX;
 				offsetY = e.offsetY + translateY;
@@ -881,7 +882,7 @@ window.addEventListener("userready", async () =>
 
 	ContextMenuButtons.ValidateXml.addEventListener("click", () =>
 	{
-		const dom = new DOMParser().parseFromString(editor.getValue(), "text/xml");
+		const dom = new DOMParser().parseFromString((<monacoEditor.IStandaloneCodeEditor>editor).getValue(), "text/xml");
 
 		const message : string = dom.getElementsByTagName("parsererror").length > 0
 			? dom.getElementsByTagName("parsererror")[0].getElementsByTagName("div")[0].innerHTML
@@ -896,7 +897,7 @@ window.addEventListener("userready", async () =>
 
 		try
 		{
-			JSON.parse(editor.getValue());
+			JSON.parse((<monacoEditor.IStandaloneCodeEditor>editor).getValue());
 
 			message = Translation.Get("generic->no_errors_found");
 		}
@@ -920,8 +921,8 @@ window.addEventListener("userready", async () =>
 
 		EmptyUserContentContainers();
 
-		folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
-		folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
+		navigationBarFolderName.innerHTML = "";
+		navigationBarFolderName.insertAdjacentElement("afterbegin", new Spinner().element);
 
 		if (await vaultOnly(false))
 		{
@@ -932,7 +933,7 @@ window.addEventListener("userready", async () =>
 
 		db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get().then(doc =>
 		{
-			const { parentId } = doc.data();
+			const { parentId } = <Config.Data.Folder>doc.data();
 
 			if (parentId === "vault")
 			{
@@ -975,7 +976,7 @@ window.addEventListener("userready", async () =>
 
 		SetCurrentFolderId("root"); // Reset it to default
 
-		GetUserContent(null, "size", "desc", 20, true, false);
+		GetUserContent(undefined, "size", "desc", 20, true, false);
 
 		UpdateBottomSectionBar(viewMyAccount);
 	});
@@ -992,6 +993,8 @@ window.addEventListener("userready", async () =>
 
 	document.addEventListener("drop", e =>
 	{
+		if (!e.dataTransfer) return;
+
 		const { items } = e.dataTransfer;
 
 		Array.from(items).map(item => item.webkitGetAsEntry()).forEach((item : any) =>
@@ -1009,9 +1012,9 @@ window.addEventListener("userready", async () =>
 		});
 	});
 
-	foldersContainer.parentElement.addEventListener("mousedown", e =>
+	(<HTMLElement>foldersContainer.parentElement).addEventListener("mousedown", e =>
 	{
-		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(GetUserContentElement(<HTMLElement>e.target), "selected"))
+		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(<HTMLElement>GetUserContentElement(<HTMLElement>e.target), "selected"))
 			ContextMenu.ClearItems();
 
 		if (isUserContentElement(<HTMLElement>e.target)
@@ -1089,7 +1092,7 @@ window.addEventListener("userready", async () =>
 
 	vault.addEventListener("click", e =>
 	{
-		if (vault.querySelector(".menu-button button").contains(<HTMLElement>e.target)) return;
+		if ((<HTMLButtonElement>vault.querySelector(".menu-button button")).contains(<HTMLElement>e.target)) return;
 
 		db.collection(`users/${Auth.UserId}/vault`).doc("status").get().then(snapshot =>
 		{
@@ -1104,7 +1107,7 @@ window.addEventListener("userready", async () =>
 				Auth.RefreshToken();
 			};
 
-			if (snapshot.exists && !snapshot.data().locked)
+			if (snapshot.exists && !(<Config.Data.Vault.Status>snapshot.data()).locked)
 			{
 				LoadVault();
 
@@ -1131,7 +1134,7 @@ window.addEventListener("userready", async () =>
 			{
 				const pin = input.value;
 
-				if (HasClass(input, "error")) element.previousElementSibling.remove();
+				if (HasClass(input, "error")) element.previousElementSibling?.remove();
 
 				RemoveClass(input, "error");
 
@@ -1189,9 +1192,13 @@ window.addEventListener("userready", async () =>
 
 		await db.collection(`users/${Auth.UserId}/files`).doc(id).get().then(doc =>
 		{
-			SetCurrentFolderId(doc.data().parentId);
+			if (doc.exists)
+			{
+				SetCurrentFolderId((<Config.Data.File>doc.data()).parentId);
 
-			GetUserContent();
+				GetUserContent();
+			}
+			else viewMyAccount.click();
 		});
 	}
 
@@ -1205,14 +1212,14 @@ window.addEventListener("userready", async () =>
 	{
 		if (snapshot.exists)
 		{
-			const { locked } = snapshot.data();
+			const { locked } = <Config.Data.Vault.Status>snapshot.data();
 
 			const icon = document.createElement("i");
 			icon.className = `fas fa-lock${locked ? "" : "-open"}`;
 
 			vault.querySelector(".name p i")?.remove();
 
-			vault.querySelector(".name p").appendChild(icon);
+			(<HTMLParagraphElement>vault.querySelector(".name p")).appendChild(icon);
 
 			vault.setAttribute("data-locked", `${locked}`);
 
@@ -1286,7 +1293,7 @@ window.addEventListener("beforeunload", e =>
 	}
 });
 
-const hideVaultContent : HTMLElement = document.querySelector(".hide-vault-content");
+const hideVaultContent: HTMLElement = <HTMLElement>document.querySelector(".hide-vault-content");
 
 document.addEventListener("visibilitychange", async () =>
 {
@@ -1309,8 +1316,8 @@ const UploadFile = async (
 	fileId ?: string,
 ) : Promise<void> => new Promise(async (resolve, reject) =>
 {
-	const usedStorage = parseInt((<HTMLInputElement>document.querySelector("[data-update-field=used-storage]")).getAttribute("data-bytes"), 10);
-	const maxStorage = parseInt((<HTMLInputElement>document.querySelector("[data-update-field=max-storage]")).getAttribute("data-bytes"), 10);
+	const usedStorage = parseInt(<string>(<HTMLInputElement>document.querySelector("[data-update-field=used-storage]")).getAttribute("data-bytes"), 10);
+	const maxStorage = parseInt(<string>(<HTMLInputElement>document.querySelector("[data-update-field=max-storage]")).getAttribute("data-bytes"), 10);
 
 	if (usedStorage + size > maxStorage)
 	{
@@ -1448,12 +1455,12 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 	{
 		if (!await vaultOnly(false)) // If this isn't the vault root directory
 		{
-			folderNavigation.querySelector("[data-update-field=folder-name]").innerHTML = "";
-			folderNavigation.querySelector("[data-update-field=folder-name]").insertAdjacentElement("afterbegin", new Spinner().element);
+			navigationBarFolderName.innerHTML = "";
+			navigationBarFolderName.insertAdjacentElement("afterbegin", new Spinner().element);
 
 			await db.collection(`users/${Auth.UserId}/folders`).doc(parentId).get().then(doc =>
 			{
-				const data = doc.data();
+				const data = <Config.Data.Folder>doc.data();
 
 				document
 					.querySelectorAll("[data-update-field=folder-name]")
@@ -1463,7 +1470,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 
 				ShowElement(folderNavigation, "flex");
 
-				ShowElement(folderNavigation.querySelector("[data-update-field=folder-name]"));
+				ShowElement(navigationBarFolderName);
 
 				HideElements([
 					emptyTrashButton,
@@ -1506,7 +1513,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			HideElements([
 				navigationBackButton,
 				lockVaultButton,
-				folderNavigation.querySelector("[data-update-field=folder-name]"),
+				navigationBarFolderName,
 			]);
 		}
 		else HideElement(folderNavigation);
@@ -1531,7 +1538,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			Translation.Register(`api->messages->folder->${
 				!navigator.onLine
 					? "offline"
-					: (searchTerm?.length > 0
+					: ((searchTerm ?? "").length > 0
 						? "no_search_results"
 						: (recentsOnly()
 							? "no_recents"
@@ -1567,7 +1574,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			ShowElement(emptyFolder, "flex");
 		}
 
-		if (searchTerm?.length > 0)
+		if ((searchTerm ?? "").length > 0)
 			(<HTMLElement[]>[ ...foldersContainer.children, ...filesContainer.children ])
 				.filter(element => element.getAttribute("data-search-term") !== searchTerm)
 				.forEach(element => element.remove());
@@ -1599,7 +1606,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 		filesRef = filesRef.where("parentId", "==", parentId);
 	}
 
-	if (searchTerm?.length > 0)
+	if ((searchTerm ?? "").length > 0)
 	{
 		foldersRef = foldersRef.where("name", ">=", searchTerm).where("name", "<", end);
 		filesRef = filesRef.where("name", ">=", searchTerm).where("name", "<", end);
@@ -1701,7 +1708,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 	if ((isUserContentElement(contentTarget) || target.closest(editorMenuSelector) !== null)
 		&& ContextMenu.Items.length <= 1)
 	{
-		if (isUserContentElement(contentTarget)) ContextMenu.Items = [ contentTarget ];
+		if (isUserContentElement(contentTarget)) ContextMenu.Items = [ contentTarget as HTMLElement ];
 		else ContextMenu.Items = [ document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]) ];
 
 		if (Auth.IsAuthenticated && ContextMenu.Item.getAttribute("data-trashed") === "false")
@@ -1990,7 +1997,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 	}
 };
 
-const isUserContentElement = (element : HTMLElement) : boolean =>
+const isUserContentElement = (element?: HTMLElement | null) : boolean =>
 	IsSet(GetUserContentElement(element));
 
 const getUserContentURL = (element : HTMLElement, isShared : boolean) : string =>
@@ -2076,13 +2083,13 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
 	const model = monaco.editor.createModel(value, language);
 
-	if (isActive) editor.setModel(model);
+	if (isActive) (<monacoEditor.IStandaloneCodeEditor>editor).setModel(model);
 
 	editorModels.set(id, model);
 
-	editor.onDidChangeModelContent(() =>
+	(<monacoEditor.IStandaloneCodeEditor>editor).onDidChangeModelContent(() =>
 	{
-		preventWindowUnload.editor = editorSavedValue !== editor.getValue();
+		preventWindowUnload.editor = editorSavedValue !== (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
 
 		if (preventWindowUnload.editor) AddClass(editorTabs.querySelector(".active"), "modified");
 		else RemoveClass(editorTabs.querySelector(".active"), "modified");
@@ -2249,12 +2256,12 @@ const ShowFile = (
 			return;
 		}
 
-		if (forceDownload) editorElement.querySelector(".force-download").remove();
+		editorElement.querySelector(".force-download")?.remove();
 
 		fileRef.getDownloadURL().then((url : string) =>
 			fetch(url).then(async response =>
 			{
-				const downloadSize = parseInt(response.headers.get("Content-Length"), 10);
+				const downloadSize = parseInt(<string>response.headers.get("Content-Length"), 10);
 
 				let value = "";
 
@@ -2263,7 +2270,7 @@ const ShowFile = (
 					const modal = new DownloadModal(name, downloadSize);
 
 					value = new TextDecoder().decode(
-						await DownloadFromReadableStream(response.body, modal, downloadSize),
+						await DownloadFromReadableStream(<ReadableStream>response.body, modal, downloadSize),
 					);
 				}
 
@@ -2442,16 +2449,16 @@ const UpdateBottomSectionBar = (selectedItem : HTMLElement) : void =>
 	searchBar.value = "";
 };
 
-const GetUserContentElement = (target : HTMLElement): HTMLElement | null => target.closest(`${folderSelector}, ${fileSelector}`);
+const GetUserContentElement = (target?: HTMLElement): HTMLElement | null | undefined => target?.closest(`${folderSelector}, ${fileSelector}`);
 
 const DownloadContent = async (id : string, name : string, isFolder : boolean, format ?: string) =>
 {
-	let timestamp : number;
+	let timestamp: number | undefined = undefined;
 
 	let finalContentName = name;
 	let finalFolderFormat = format;
 
-	if (isFolder && (!IsSet(finalFolderFormat) || ![ "zip", "tar", "tar.gz" ].includes(finalFolderFormat)))
+	if (isFolder && (!finalFolderFormat || ![ "zip", "tar", "tar.gz" ].includes(finalFolderFormat)))
 		finalFolderFormat = "zip";
 
 	if (isFolder)
@@ -2479,13 +2486,13 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 	fileRef.getDownloadURL().then((url : string) =>
 		fetch(url).then(async response =>
 		{
-			const downloadSize = parseInt(response.headers.get("Content-Length"), 10);
+			const downloadSize = parseInt(<string>response.headers.get("Content-Length"), 10);
 
 			const modal = new DownloadModal(finalContentName, downloadSize);
 
 			preventWindowUnload.fileDownload = true;
 
-			return new Blob([ await DownloadFromReadableStream(response.body, modal, downloadSize) ]);
+			return new Blob([ await DownloadFromReadableStream(<ReadableStream>response.body, modal, downloadSize) ]);
 		}).then(blob =>
 		{
 			const blobUrl = URL.createObjectURL(blob);
@@ -2510,10 +2517,10 @@ const starredOnly = () : boolean => location.pathname === "/account/starred";
 const recentsOnly = () : boolean => location.pathname === "/account/recents";
 const trashedOnly = () : boolean => location.pathname === "/account/trash";
 const vaultOnly = async (checkCurrentFolder ?: boolean) : Promise<boolean> =>
-	(location.pathname === "/account/vault" && GetCurrentFolderId(true) === "vault")
+	location.pathname === "/account/vault"
 	|| (((!IsSet(checkCurrentFolder) || checkCurrentFolder)
 	&& await GetCurrentFolderIdAsync() !== "root"
-	&& (await db.collection(`users/${Auth.UserId}/folders`).doc(await GetCurrentFolderIdAsync()).get()).data().inVault));
+	&& (await db.collection(`users/${Auth.UserId}/folders`).doc(await GetCurrentFolderIdAsync()).get()).data()?.inVault));
 
 /**
  * @returns string The new name for the element
