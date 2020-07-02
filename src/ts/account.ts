@@ -620,7 +620,7 @@ window.addEventListener("userready", async () =>
 		{
 			const { id, type } = ContextMenu.GetItemInfo(item);
 
-			let folderFormat: string | undefined = undefined;
+			let folderFormat: string | undefined;
 
 			if (type === "folder" && tempArray.length === 1)
 			{
@@ -1874,7 +1874,10 @@ const HandlePageChangeAndLoadUserContent = (
 
 		HideContextMenu();
 
-		const url = getUserContentURL(<HTMLElement>GetUserContentElement(target), !Auth.IsAuthenticated);
+		const url = getUserContentURL(
+			<HTMLElement>GetUserContentElement(target),
+			!Auth.IsAuthenticated,
+		);
 
 		if (openInNewWindow) open(url);
 		else
@@ -2095,7 +2098,8 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
 	(<monacoEditor.IStandaloneCodeEditor>editor).onDidChangeModelContent(() =>
 	{
-		preventWindowUnload.editor = editorSavedValue !== (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
+		preventWindowUnload.editor
+			= editorSavedValue !== (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
 
 		if (preventWindowUnload.editor) AddClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
 		else RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
@@ -2458,7 +2462,7 @@ const GetUserContentElement = (target?: HTMLElement | null): HTMLElement | null 
 
 const DownloadContent = async (id : string, name : string, isFolder : boolean, format ?: string) =>
 {
-	let timestamp: number | undefined = undefined;
+	let timestamp: number | undefined;
 
 	let finalContentName = name;
 	let finalFolderFormat = format;
@@ -2497,7 +2501,9 @@ const DownloadContent = async (id : string, name : string, isFolder : boolean, f
 
 			preventWindowUnload.fileDownload = true;
 
-			return new Blob([ await DownloadFromReadableStream(<ReadableStream>response.body, modal, downloadSize) ]);
+			return new Blob([
+				await DownloadFromReadableStream(<ReadableStream>response.body, modal, downloadSize),
+			]);
 		}).then(blob =>
 		{
 			const blobUrl = URL.createObjectURL(blob);

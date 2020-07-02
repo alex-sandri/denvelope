@@ -64,7 +64,8 @@ export default class Auth
 		}
 
 		Auth.auth.signInWithPopup(provider)
-			.then(result => Auth.CurrentUser?.reauthenticateWithCredential(<firebaseAuth.AuthCredential>result.credential)
+			.then(result => Auth.CurrentUser
+				?.reauthenticateWithCredential(<firebaseAuth.AuthCredential>result.credential)
 				.then(() => Auth.CurrentUser?.delete()));
 	}
 
@@ -84,7 +85,10 @@ export default class Auth
 
 	public static get CurrentUser() : firebaseUser | null { return Auth.auth.currentUser; }
 
-	public static get UserId(): string { return Auth.sharedContentUserId || (<firebaseUser>Auth.CurrentUser).uid; }
+	public static get UserId(): string
+	{
+		return Auth.sharedContentUserId || (<firebaseUser>Auth.CurrentUser).uid;
+	}
 
 	private static AuthStateChanged = async (user : firebaseUser | null) : Promise<void> =>
 	{

@@ -30,7 +30,7 @@ export default class ServiceWorkerController
 				return;
 			}
 
-			reg.addEventListener("updatefound", () => ServiceWorkerController.TrackInstalling(reg.installing));
+			reg.addEventListener("updatefound", () => ServiceWorkerController.TrackInstalling(<ServiceWorker>reg.installing));
 		}));
 
 		// Ensure refresh is only called once.
@@ -48,8 +48,8 @@ export default class ServiceWorkerController
 
 		let deferredPrompt : any;
 
-		const installPwaButton : HTMLButtonElement = document.querySelector(".install-pwa");
-		const installPwaHr : HTMLHRElement = document.querySelector(".install-pwa + hr");
+		const installPwaButton: HTMLButtonElement = <HTMLButtonElement>document.querySelector(".install-pwa");
+		const installPwaHr: HTMLHRElement = <HTMLHRElement>document.querySelector(".install-pwa + hr");
 
 		window.addEventListener("beforeinstallprompt", e =>
 		{

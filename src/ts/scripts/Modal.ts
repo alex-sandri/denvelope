@@ -21,17 +21,17 @@ export class Modal
 {
 	private readonly container: HTMLDivElement = <HTMLDivElement>(<HTMLDivElement>document.querySelector(".modal-container")).cloneNode(true);
 
-	public readonly element: HTMLDivElement = <HTMLDivElement>this.container.querySelector(".modal");
+	public readonly element: HTMLDivElement = this.container.querySelector(".modal") as HTMLDivElement;
 
-	private readonly spinner: HTMLSpanElement = <HTMLSpanElement>this.element.querySelector(".spinner");
+	private readonly spinner: HTMLSpanElement = this.element.querySelector(".spinner") as HTMLSpanElement;
 
-	public readonly Content: HTMLDivElement = <HTMLDivElement>this.element.querySelector(".content");
+	public readonly Content: HTMLDivElement = this.element.querySelector(".content") as HTMLDivElement;
 
-	public readonly CloseButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".close");
+	public readonly CloseButton: HTMLButtonElement = this.element.querySelector(".close") as HTMLButtonElement;
 
-	public readonly ConfirmButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".confirm");
+	public readonly ConfirmButton: HTMLButtonElement = this.element.querySelector(".confirm") as HTMLButtonElement;
 
-	public readonly UpdateButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".update");
+	public readonly UpdateButton: HTMLButtonElement = this.element.querySelector(".update") as HTMLButtonElement;
 
 	public OnClose: () => void;
 
@@ -140,28 +140,28 @@ export class Modal
 
 	public set Title(title: string)
 	{
-		const titleElement: HTMLElement = <HTMLElement>this.element.querySelector(".title");
+		const titleElement: HTMLElement = this.element.querySelector(".title") as HTMLElement;
 
 		titleElement.innerText = title;
 	}
 
 	public set Subtitle(subtitle: string)
 	{
-		const subtitleElement: HTMLElement = <HTMLElement>this.element.querySelector(".subtitle");
+		const subtitleElement: HTMLElement = this.element.querySelector(".subtitle") as HTMLElement;
 
 		subtitleElement.innerText = subtitle;
 	}
 
 	public set TitleTranslationId(id: string)
 	{
-		const titleElement: HTMLElement = <HTMLElement>this.element.querySelector(".title");
+		const titleElement: HTMLElement = this.element.querySelector(".title") as HTMLElement;
 
 		titleElement.appendChild(Translation.GetElement(id));
 	}
 
 	public set SubtitleTranslationId(id: string)
 	{
-		const subtitleElement: HTMLElement = <HTMLElement>this.element.querySelector(".subtitle");
+		const subtitleElement: HTMLElement = this.element.querySelector(".subtitle") as HTMLElement;
 
 		subtitleElement.appendChild(Translation.GetElement(id));
 	}
@@ -279,9 +279,9 @@ export class UploadModal extends Modal
 
 		this.OnPause = this.OnResume = this.OnCancel = () => {};
 
-		const pauseButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".pause");
-		const resumeButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".resume");
-		const cancelButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".cancel");
+		const pauseButton: HTMLButtonElement = this.element.querySelector(".pause") as HTMLButtonElement;
+		const resumeButton: HTMLButtonElement = this.element.querySelector(".resume") as HTMLButtonElement;
+		const cancelButton: HTMLButtonElement = this.element.querySelector(".cancel") as HTMLButtonElement;
 
 		pauseButton.addEventListener("click", () =>
 		{
