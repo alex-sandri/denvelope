@@ -32,6 +32,7 @@ import Translation from "./scripts/Translation";
 import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
 import Shortcuts from "./scripts/Shortcuts";
 import ContextMenu, { ContextMenuButtons, ContextMenuButton } from "./scripts/ContextMenu";
+import { Config } from "./config/Config";
 
 Init();
 
@@ -42,51 +43,51 @@ const db: firebaseFirestore.Firestore = firebase.firestore();
 const storage: firebaseStorage.Storage = firebase.storage();
 const functions: firebaseFunctions.Functions = firebase.app().functions("europe-west1");
 
-const fileInput : HTMLInputElement = document.querySelector("#files");
-const folderInput : HTMLInputElement = document.querySelector("#folder");
+const fileInput: HTMLInputElement = <HTMLInputElement>document.querySelector("#files");
+const folderInput: HTMLInputElement = <HTMLInputElement>document.querySelector("#folder");
 
-const bottomMenu : HTMLElement = document.querySelector("aside");
-const viewMyAccount : HTMLButtonElement = bottomMenu.querySelector("#my-account");
-const viewSharedContent : HTMLButtonElement = bottomMenu.querySelector("#shared");
-const viewStarredContent : HTMLButtonElement = bottomMenu.querySelector("#starred");
-const viewRecentContent : HTMLButtonElement = bottomMenu.querySelector("#recents");
-const viewTrashedContent : HTMLButtonElement = bottomMenu.querySelector("#trash");
+const bottomMenu: HTMLElement = <HTMLElement>document.querySelector("aside");
+const viewMyAccount: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#my-account");
+const viewSharedContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#shared");
+const viewStarredContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#starred");
+const viewRecentContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#recents");
+const viewTrashedContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#trash");
 
-const searchBar : HTMLInputElement = document.querySelector("#search");
-const addContent : HTMLButtonElement = document.querySelector("#add-content");
+const searchBar: HTMLInputElement = <HTMLInputElement>document.querySelector("#search");
+const addContent: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#add-content");
 
-const folderNavigation : HTMLElement = document.querySelector(".folder-nav");
-const navigationBackButton : HTMLButtonElement = folderNavigation.querySelector(".back-button");
-const emptyTrashButton : HTMLButtonElement = folderNavigation.querySelector(".empty-trash-button");
-const lockVaultButton : HTMLButtonElement = folderNavigation.querySelector(".lock-vault-button");
+const folderNavigation: HTMLElement = <HTMLElement>document.querySelector(".folder-nav");
+const navigationBackButton: HTMLButtonElement = <HTMLButtonElement>folderNavigation.querySelector(".back-button");
+const emptyTrashButton: HTMLButtonElement = <HTMLButtonElement>folderNavigation.querySelector(".empty-trash-button");
+const lockVaultButton: HTMLButtonElement = <HTMLButtonElement>folderNavigation.querySelector(".lock-vault-button");
 
-const userContentLoadingSpinner : HTMLSpanElement = document.querySelector(".user-content > span");
+const userContentLoadingSpinner: HTMLSpanElement = <HTMLSpanElement>document.querySelector(".user-content > span");
 
-const vault : HTMLDivElement = document.querySelector(".vault");
-const vaultInfo : HTMLDivElement = document.querySelector(".vault-info");
+const vault: HTMLDivElement = <HTMLDivElement>document.querySelector(".vault");
+const vaultInfo: HTMLDivElement = <HTMLDivElement>document.querySelector(".vault-info");
 
-const foldersContainer : HTMLDivElement = document.querySelector(".folders-container");
-const folderSelector : string = "div.folder";
+const foldersContainer: HTMLDivElement = <HTMLDivElement>document.querySelector(".folders-container");
+const folderSelector: string = "div.folder";
 
-const filesContainer : HTMLDivElement = document.querySelector(".files-container");
-const fileSelector : string = "div.file";
+const filesContainer: HTMLDivElement = <HTMLDivElement>document.querySelector(".files-container");
+const fileSelector: string = "div.file";
 
-const showFile : HTMLDivElement = document.querySelector(".show-file");
-const editorMenuSelector : string = ".show-file .tabs .tab .menu";
-const editorTabs : HTMLElement = showFile.querySelector(".tabs");
-const editorElement : HTMLDivElement = document.querySelector("#editor");
+const showFile: HTMLDivElement = <HTMLDivElement>document.querySelector(".show-file");
+const editorMenuSelector: string = ".show-file .tabs .tab .menu";
+const editorTabs: HTMLElement = <HTMLElement>showFile.querySelector(".tabs");
+const editorElement: HTMLDivElement = <HTMLDivElement>document.querySelector("#editor");
 
-let editor : monacoEditor.IStandaloneCodeEditor;
-let editorSavedValue : string;
-const editorModels : Map<string, any> = new Map<string, any>();
+let editor: monacoEditor.IStandaloneCodeEditor | undefined;
+let editorSavedValue: string;
+const editorModels: Map<string, any> = new Map<string, any>();
 
-const contextMenuContainer : HTMLDivElement = document.querySelector(".context-menu-container");
+const contextMenuContainer: HTMLDivElement = <HTMLDivElement>document.querySelector(".context-menu-container");
 
-const emptyFolder : HTMLDivElement = document.querySelector(".empty-folder");
+const emptyFolder: HTMLDivElement = <HTMLDivElement>document.querySelector(".empty-folder");
 
-const filePreviewContainer : HTMLDivElement = document.querySelector(".file-preview-container");
-const filePreview : HTMLDivElement = filePreviewContainer.querySelector(".file-preview");
-const filePreviewSpinner : HTMLElement = filePreview.querySelector(".spinner");
+const filePreviewContainer: HTMLDivElement = <HTMLDivElement>document.querySelector(".file-preview-container");
+const filePreview: HTMLDivElement = <HTMLDivElement>filePreviewContainer.querySelector(".file-preview");
+const filePreviewSpinner: HTMLElement = <HTMLElement>filePreview.querySelector(".spinner");
 
 let unsubscribeFoldersListener : any = null;
 let unsubscribeFilesListener : any = null;
@@ -188,7 +189,7 @@ window.addEventListener("userready", async () =>
 
 		SetCurrentFolderId("root"); // Reset it to default
 
-		GetUserContent(null, "updated", "desc", 20, true, false);
+		GetUserContent(undefined, "updated", "desc", 20, true, false);
 
 		UpdateBottomSectionBar(viewRecentContent);
 	});
@@ -216,24 +217,29 @@ window.addEventListener("userready", async () =>
 	{
 		const { files } = <HTMLInputElement>e.target;
 
+		if (!files) return;
+
 		UploadFiles(Array.from(files), GetCurrentFolderId(true));
 
-		fileInput.value = null;
+		fileInput.value = "";
 	});
 
 	folderInput.addEventListener("change", e =>
 	{
 		const { files } = <HTMLInputElement>e.target;
+
+		if (!files) return;
+
 		const folderName : string = (<any>files[0]).webkitRelativePath.split("/")[0];
 
 		UploadFolder(Array.from(files), folderName, `${folderName}/`, GetCurrentFolderId(true), 0);
 
-		folderInput.value = null;
+		folderInput.value = "";
 	});
 
 	ContextMenuButtons.View.addEventListener("click", () =>
 		ContextMenu.Items.forEach((item, index, array) =>
-			HandlePageChangeAndLoadUserContent(null, item, array.length > 1)));
+			HandlePageChangeAndLoadUserContent(undefined, item, array.length > 1)));
 
 	ContextMenuButtons.Save.addEventListener("click", () =>
 	{
@@ -1409,7 +1415,7 @@ const ShowFileUploadModal = async (
 	else resolve();
 });
 
-const GetUserContent = async (searchTerm ?: string, orderBy ?: string, orderDir ?: "desc" | "asc", limit ?: number, globalSearch ?: boolean, includeFolders : boolean = true) =>
+const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: "desc" | "asc", limit?: number, globalSearch?: boolean, includeFolders: boolean = true) =>
 {
 	const parentId = GetCurrentFolderId(true);
 
@@ -1837,12 +1843,12 @@ const addUserContentEvents = () : void =>
  * @param targetElement Specified if an Event parameter is not available
  */
 const HandlePageChangeAndLoadUserContent = (
-	e : MouseEvent,
-	targetElement ?: HTMLElement,
-	isMultipleFileEditor ?: boolean,
+	e?: MouseEvent,
+	targetElement?: HTMLElement,
+	isMultipleFileEditor?: boolean,
 ) =>
 {
-	const target : HTMLElement = targetElement ?? <HTMLElement>e.target;
+	const target: HTMLElement = targetElement ?? <HTMLElement>(<MouseEvent>e).target;
 
 	if (target.closest(".menu-button") === null
 		&& GetUserContentElement(target)?.getAttribute("data-trashed") === "false"
@@ -1868,7 +1874,7 @@ const HandlePageChangeAndLoadUserContent = (
 
 				UpdateBottomSectionBar(viewMyAccount);
 			}
-			else ShowFile(closestFile.id, null, null, isMultipleFileEditor);
+			else ShowFile(closestFile.id, undefined, undefined, isMultipleFileEditor);
 
 			if (!isMultipleFileEditor && location.href !== url) history.pushState(null, "", url);
 		}
@@ -2436,7 +2442,7 @@ const UpdateBottomSectionBar = (selectedItem : HTMLElement) : void =>
 	searchBar.value = "";
 };
 
-const GetUserContentElement = (target : HTMLElement) : HTMLElement => target?.closest(`${folderSelector}, ${fileSelector}`);
+const GetUserContentElement = (target : HTMLElement): HTMLElement | null => target.closest(`${folderSelector}, ${fileSelector}`);
 
 const DownloadContent = async (id : string, name : string, isFolder : boolean, format ?: string) =>
 {
@@ -2565,7 +2571,7 @@ const MoveElements = async (elements: HTMLElement[], parentId : string) : Promis
 
 		const docRef = db.collection(`users/${Auth.UserId}/${type}s`).doc(id);
 
-		let { name } = (await docRef.get()).data();
+		let { name } = <Config.Data.Folder | Config.Data.File>(await docRef.get()).data();
 
 		name = await CheckElementNameValidity(name, type, parentId);
 
@@ -2596,7 +2602,7 @@ const CloseEditor = () =>
 
 	header.style.backgroundColor = "";
 
-	editor = null;
+	editor = undefined;
 
 	preventWindowUnload.editor = false;
 
