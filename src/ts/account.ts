@@ -90,14 +90,14 @@ const filePreviewContainer: HTMLDivElement = <HTMLDivElement>document.querySelec
 const filePreview: HTMLDivElement = <HTMLDivElement>filePreviewContainer.querySelector(".file-preview");
 const filePreviewSpinner: HTMLElement = <HTMLElement>filePreview.querySelector(".spinner");
 
-let unsubscribeFoldersListener : any = null;
-let unsubscribeFilesListener : any = null;
+let unsubscribeFoldersListener: any = null;
+let unsubscribeFilesListener: any = null;
 
-let folderShared : boolean = false;
+let folderShared: boolean = false;
 
-const preventWindowUnload : any = {};
+const preventWindowUnload: any = {};
 
-const IS_SHARED_FOLDER : boolean = location.pathname.startsWith("/folder/shared/");
+const IS_SHARED_FOLDER: boolean = location.pathname.startsWith("/folder/shared/");
 
 window.addEventListener("userready", async () =>
 {
