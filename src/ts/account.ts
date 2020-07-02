@@ -2132,7 +2132,7 @@ const ShowFile = (
 			],
 		}).element);
 
-		editorElement.querySelector(".force-download").addEventListener("click", () =>
+		(<HTMLButtonElement>editorElement.querySelector(".force-download")).addEventListener("click", () =>
 		{
 			(<HTMLElement>editorTabs.querySelector(".active")).setAttribute("data-force-download", "false");
 
@@ -2145,9 +2145,8 @@ const ShowFile = (
 
 	db.collection(`users/${Auth.UserId}/files`).doc(id).get().then(doc =>
 	{
-		const { name } = doc.data();
+		const { name, size } = <Config.Data.File>doc.data();
 		const language = <string>Linguist.Detect(name, true);
-		const { size } = doc.data();
 
 		// If forceDownload the file tab has already been appended
 		if (!forceDownload)
@@ -2178,13 +2177,13 @@ const ShowFile = (
 
 				if (target.closest(".close") !== null) return;
 
-				const { id } = target.closest(".tab");
+				const { id } = <HTMLElement>target.closest(".tab");
 
 				editor?.setModel(editorModels.get(id.split("-")[1]));
 
 				RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "active");
 
-				AddClass(editorTabs.querySelector(`#${id}`), "active");
+				AddClass(<HTMLElement>editorTabs.querySelector(`#${id}`), "active");
 
 				editorElement.querySelector(".force-download")?.remove();
 
@@ -2193,7 +2192,7 @@ const ShowFile = (
 
 			(<HTMLButtonElement>tab.querySelector(".menu")).addEventListener("click", showContextMenu);
 
-			tab.querySelector(".close").addEventListener("click", () =>
+			(<HTMLButtonElement>tab.querySelector(".close")).addEventListener("click", () =>
 			{
 				editorModels.get(id)?.dispose();
 
@@ -2219,7 +2218,7 @@ const ShowFile = (
 				if ((<HTMLElement>editorTabs.querySelector(".active")).getAttribute("data-force-download") === "true") ShowForceDownloadButton((<HTMLElement>editorTabs.querySelector(".active")).id.split("-")[1]);
 			});
 
-			if (!Auth.IsAuthenticated && !IS_SHARED_FOLDER) HideElement(tab.querySelector(".close"));
+			if (!Auth.IsAuthenticated && !IS_SHARED_FOLDER) HideElement(<HTMLElement>tab.querySelector(".close"));
 
 			editorTabs.appendChild(tab);
 
@@ -2245,7 +2244,7 @@ const ShowFile = (
 		{
 			const { contentType } = metadata;
 
-			editorTabs.querySelector(`#tab-${id}`).setAttribute("content-type", contentType);
+			(<HTMLElement>editorTabs.querySelector(`#tab-${id}`)).setAttribute("content-type", contentType);
 		});
 
 		// If the user enabled the Data Saving option do not allow downloading files bigger than 1MB
@@ -2257,7 +2256,7 @@ const ShowFile = (
 		{
 			ShowForceDownloadButton(id);
 
-			editorTabs.querySelector(`#tab-${id}`).setAttribute("data-force-download", "true");
+			(<HTMLElement>editorTabs.querySelector(`#tab-${id}`)).setAttribute("data-force-download", "true");
 
 			return;
 		}
