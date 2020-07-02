@@ -95,7 +95,11 @@ let unsubscribeFilesListener: any = null;
 
 let folderShared: boolean = false;
 
-const preventWindowUnload: any = {};
+const preventWindowUnload: {
+	editor?: boolean,
+	fileUpload?: boolean,
+	fileDownload?: boolean,
+} = {};
 
 const IS_SHARED_FOLDER: boolean = location.pathname.startsWith("/folder/shared/");
 
