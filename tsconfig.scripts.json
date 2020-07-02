@@ -7,7 +7,6 @@
         "module": "CommonJS",
         "removeComments": true,
         "strict": true,
-        "strictNullChecks": false,
         "alwaysStrict": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,

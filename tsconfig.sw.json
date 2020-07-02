@@ -6,6 +6,5 @@
     "compilerOptions": {
         "outDir": "public/",
         "rootDir": "src/ts/sw/",
-        "sourceMap": false,
     }
 }
