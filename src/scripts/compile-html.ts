@@ -109,9 +109,9 @@ if (assets.dynamic.css.bundle !== css.bundle
     || assets.dynamic.js.settings !== js.settings)
     updatedAssets.version++;
 
-updatedAssets.dynamic.css.bundle = css.bundle;
-updatedAssets.dynamic.js.index = js.index;
-updatedAssets.dynamic.js.account = js.account;
-updatedAssets.dynamic.js.settings = js.settings;
+updatedAssets.dynamic.css.bundle = <string>css.bundle;
+updatedAssets.dynamic.js.index = <string>js.index;
+updatedAssets.dynamic.js.account = <string>js.account;
+updatedAssets.dynamic.js.settings = <string>js.settings;
 
 fs.writeFileSync(path.join(__dirname, "..", "ts", "config", "assets.json"), JSON.stringify(updatedAssets, null, 4));
