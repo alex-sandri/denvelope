@@ -22,24 +22,24 @@ type TranslationRegistration =
 {
 	element: HTMLElement,
 	id: string,
-	options: TranslationElementOptions,
+	options?: TranslationElementOptions,
 }
 
 export default class Translation
 {
-	public static get Language(): Config.Locale { return <Config.Locale>localStorage.getItem("lang").toLowerCase(); }
+	public static get Language(): Config.Locale { return <Config.Locale>(<string>localStorage.getItem("lang")).toLowerCase(); }
 
 	public static get ShortLanguage(): Config.ShortLocale
 	{
 		return <Config.ShortLocale>Translation.Language.substr(0, 2);
 	}
 
-	public static Init = (language ?: Config.Locale, allowPreferenceUpdate?: boolean) : void =>
+	public static Init = (language?: Config.Locale, allowPreferenceUpdate?: boolean) : void =>
 	{
-		let translationLanguage : string = language;
+		let translationLanguage: string | undefined = language;
 
 		if (!translationLanguage) if ([ "/en", "/it" ].includes(location.pathname)) translationLanguage = location.pathname.substr(1);
-		else if (localStorage.getItem("lang")) translationLanguage = localStorage.getItem("lang");
+		else if (localStorage.getItem("lang")) translationLanguage = <string>localStorage.getItem("lang");
 		// Takes the first item, equivalent to: language = navigator.languages[0]
 		else if (navigator.languages) [ translationLanguage ] = navigator.languages;
 		else if (navigator.language) translationLanguage = navigator.language;
@@ -55,12 +55,12 @@ export default class Translation
 			Array
 				.from(document.querySelectorAll("[data-translation], [data-placeholder-translation], [data-content-translation], [data-aria-label-translation], [data-start-translation], [data-only-translation]"))
 				.map(element =>
-					element.getAttribute("data-translation")
+					<string>(element.getAttribute("data-translation")
 					|| element.getAttribute("data-placeholder-translation")
 					|| element.getAttribute("data-content-translation")
 					|| element.getAttribute("data-aria-label-translation")
 					|| element.getAttribute("data-start-translation")
-					|| element.getAttribute("data-only-translation")),
+					|| element.getAttribute("data-only-translation"))),
 		));
 
 		document.querySelectorAll("[data-use=translation]").forEach(element => element.remove());
@@ -109,7 +109,7 @@ export default class Translation
 			});
 	}
 
-	public static Get = (id : string) : string =>
+	public static Get = (id: string): string =>
 	{
 		const keys = id.split("->");
 		let array : any;
@@ -185,7 +185,7 @@ export default class Translation
 
 	public static get Currency(): Config.Currency { return <Config.Currency>Translation.Get("settings->plan->currency"); }
 
-	public static GetDateElement(date: Date, options: Intl.DateTimeFormatOptions)
+	public static GetDateElement(date: Date, options?: Intl.DateTimeFormatOptions)
 	{
 		const element = document.createElement("span");
 		element.setAttribute("data-use", "date");

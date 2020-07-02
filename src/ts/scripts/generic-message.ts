@@ -1,9 +1,9 @@
-import { IsSet, ShowElement, HideElement } from "./Utilities";
+import { ShowElement, HideElement } from "./Utilities";
 
-const genericMessage : HTMLDivElement = document.querySelector(".generic-message");
-const content : HTMLDivElement = genericMessage.querySelector("p");
-const actionButton : HTMLButtonElement = genericMessage.querySelector(".action");
-const dismiss : HTMLButtonElement = genericMessage.querySelector(".dismiss");
+const genericMessage: HTMLDivElement = <HTMLDivElement>document.querySelector(".generic-message");
+const content: HTMLDivElement = <HTMLDivElement>genericMessage.querySelector("p");
+const actionButton: HTMLButtonElement = <HTMLButtonElement>genericMessage.querySelector(".action");
+const dismiss: HTMLButtonElement = <HTMLButtonElement>genericMessage.querySelector(".dismiss");
 
 let timeout : NodeJS.Timeout;
 
@@ -16,7 +16,7 @@ export const Show = (
 	{
 		content.innerText = message;
 
-		if (IsSet(actionButtonText))
+		if (actionButtonText)
 		{
 			actionButton.innerText = actionButtonText;
 
@@ -47,11 +47,11 @@ export const Show = (
 
 export const ShowSpinner = () : void =>
 {
-	Show("", null, -1);
+	Show("", undefined, -1);
 
 	HideElement(dismiss);
 
-	ShowElement(genericMessage.querySelector(".spinner"), "block");
+	ShowElement(<HTMLElement>genericMessage.querySelector(".spinner"), "block");
 };
 
 const Hide = () : void => HideElement(genericMessage);

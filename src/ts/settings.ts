@@ -19,6 +19,7 @@ import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
 import { Component, Input } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
+import { Config } from "./config/Config";
 
 Init();
 
@@ -30,27 +31,27 @@ const functions: firebaseFunctions.Functions = firebase.app().functions("europe-
 
 const stripe = Stripe("pk_live_t7rK1HslRtmyqcEo0C3JfmLz00blc0Ik6P", { locale: Translation.Language });
 
-let userDateFormatOptions : Intl.DateTimeFormatOptions;
+let userDateFormatOptions: Intl.DateTimeFormatOptions | undefined;
 
-const settingsMenu : HTMLElement = document.querySelector("aside");
+const settingsMenu: HTMLElement = <HTMLElement>document.querySelector("aside");
 const settingsMenuButtons = settingsMenu.querySelectorAll("button");
 
-const settingsSections : NodeListOf<HTMLElement> = document.querySelectorAll(".settings-section");
+const settingsSections: NodeListOf<HTMLElement> = document.querySelectorAll(".settings-section");
 
-const changeBackground : HTMLButtonElement = document.querySelector("#change-background .edit");
-const resetBackground : HTMLButtonElement = document.querySelector("#change-background .reset");
+const changeBackground: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-background .edit");
+const resetBackground: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-background .reset");
 
-const changeDateFormat : HTMLButtonElement = document.querySelector("#date-format .edit");
-const resetDateFormat : HTMLButtonElement = document.querySelector("#date-format .reset");
+const changeDateFormat: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#date-format .edit");
+const resetDateFormat: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#date-format .reset");
 
-const changePlan : HTMLButtonElement = document.querySelector("#change-plan .change");
-const manageSubscription: HTMLButtonElement = document.querySelector("#change-plan .manage-subscription");
-const plans : HTMLDivElement = document.querySelector("#change-plan .plans");
-const currentPlan : HTMLElement = document.querySelector("#change-plan .current-plan .value");
-const currentBillingPeriod : HTMLElement = document.querySelector("#change-plan .current-billing-period .value");
-const nextRenewal : HTMLElement = document.querySelector("#change-plan .next-renewal .value");
-const nextPeriodPlan : HTMLElement = document.querySelector("#change-plan .next-period-plan .value");
-const nextBillingPeriod : HTMLElement = document.querySelector("#change-plan .next-billing-period .value");
+const changePlan: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-plan .change");
+const manageSubscription: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-plan .manage-subscription");
+const plans: HTMLDivElement = <HTMLDivElement>document.querySelector("#change-plan .plans");
+const currentPlan: HTMLElement = <HTMLElement>document.querySelector("#change-plan .current-plan .value");
+const currentBillingPeriod: HTMLElement = <HTMLElement>document.querySelector("#change-plan .current-billing-period .value");
+const nextRenewal: HTMLElement = <HTMLElement>document.querySelector("#change-plan .next-renewal .value");
+const nextPeriodPlan: HTMLElement = <HTMLElement>document.querySelector("#change-plan .next-period-plan .value");
+const nextBillingPeriod: HTMLElement = <HTMLElement>document.querySelector("#change-plan .next-billing-period .value");
 
 (<NodeListOf<HTMLElement>>plans.querySelectorAll(".plan")).forEach(plan =>
 {
@@ -83,21 +84,21 @@ const nextBillingPeriod : HTMLElement = document.querySelector("#change-plan .ne
 	});
 });
 
-Array.from(document.querySelector(".billing-periods").children).forEach(billingPeriod =>
+Array.from((<HTMLElement>document.querySelector(".billing-periods")).children).forEach(billingPeriod =>
 	billingPeriod.addEventListener("click", () => (<HTMLElement>plans.querySelector(".current")).click()));
 
-const signOutFromAllDevices : HTMLButtonElement = document.querySelector("#sign-out-from-all-devices .sign-out");
-const changeVaultPin : HTMLButtonElement = document.querySelector("#vault .change-pin");
-const deleteVault : HTMLButtonElement = document.querySelector("#vault .delete");
-const generateVaultRecoveryCode : HTMLButtonElement = document.querySelector("#vault .generate-recovery-code");
+const signOutFromAllDevices: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#sign-out-from-all-devices .sign-out");
+const changeVaultPin: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#vault .change-pin");
+const deleteVault: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#vault .delete");
+const generateVaultRecoveryCode: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#vault .generate-recovery-code");
 
-const changeCacheSize : HTMLButtonElement = document.querySelector("#cache-size .edit");
-const resetCacheSize : HTMLButtonElement = document.querySelector("#cache-size .reset");
-const currentCacheSize : HTMLElement = document.querySelector("#cache-size .current-cache-size .value");
+const changeCacheSize: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#cache-size .edit");
+const resetCacheSize: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#cache-size .reset");
+const currentCacheSize: HTMLElement = <HTMLElement>document.querySelector("#cache-size .current-cache-size .value");
 
-const deleteAccount : HTMLButtonElement = document.querySelector("#delete-account .delete");
+const deleteAccount: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#delete-account .delete");
 
-const clearCache : HTMLButtonElement = document.querySelector("#clear-cache .clear");
+const clearCache: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#clear-cache .clear");
 
 let section : string = "general";
 
@@ -133,7 +134,7 @@ settingsMenuButtons.forEach(element =>
 
 		const selectedSection = button.getAttribute("data-sect");
 
-		AddClass(document.querySelector(`#${selectedSection}`), "selected");
+		AddClass(<HTMLElement>document.querySelector(`#${selectedSection}`), "selected");
 
 		history.pushState(null, "", `${location.origin}/settings/${selectedSection}`);
 	});
@@ -144,7 +145,7 @@ window.addEventListener("userready", () =>
 	changeBackground.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: changeBackground.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeBackground.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
 			action: "confirm",
 		});
 
@@ -174,7 +175,7 @@ window.addEventListener("userready", () =>
 
 		modal.OnConfirm = () =>
 		{
-			if (HasClass(input, "error")) element.previousElementSibling.remove();
+			if (HasClass(input, "error")) element.previousElementSibling?.remove();
 
 			RemoveClass(input, "error");
 
@@ -192,17 +193,17 @@ window.addEventListener("userready", () =>
 	changeDateFormat.addEventListener("click", async () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: changeDateFormat.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeDateFormat.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
 			action: "confirm",
 		});
 
-		const dateFormatOptions : HTMLDivElement = <HTMLDivElement>document.querySelector("#date-format .date-format-options").cloneNode(true);
+		const dateFormatOptions : HTMLDivElement = <HTMLDivElement>(<HTMLDivElement>document.querySelector("#date-format .date-format-options")).cloneNode(true);
 
 		if (userDateFormatOptions)
 			Array.from(dateFormatOptions.children).forEach(dateFormatOption =>
 			{
-				const showOption: HTMLInputElement = dateFormatOption.querySelector("input[type=checkbox]");
-				const optionSelect: HTMLSelectElement = dateFormatOption.querySelector("select");
+				const showOption: HTMLInputElement = <HTMLInputElement>dateFormatOption.querySelector("input[type=checkbox]");
+				const optionSelect: HTMLSelectElement = <HTMLSelectElement>dateFormatOption.querySelector("select");
 
 				const dateFormatOptionName: string = optionSelect.id;
 
@@ -276,9 +277,9 @@ window.addEventListener("userready", () =>
 	changePlan.addEventListener("click", async () =>
 	{
 		const { data } = await functions.httpsCallable("createCheckoutSession")({
-			maxStorage: plans.querySelector(".selected").getAttribute("data-max-storage"),
+			maxStorage: (<HTMLElement>plans.querySelector(".selected")).getAttribute("data-max-storage"),
 			currency: Translation.Currency,
-			billingPeriod: document.querySelector(".billing-periods .selected").classList[0],
+			billingPeriod: (<HTMLElement>document.querySelector(".billing-periods .selected")).classList[0],
 		});
 
 		stripe.redirectToCheckout({ sessionId: data.sessionId });
@@ -294,7 +295,7 @@ window.addEventListener("userready", () =>
 	signOutFromAllDevices.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: signOutFromAllDevices.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>signOutFromAllDevices.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -314,8 +315,8 @@ window.addEventListener("userready", () =>
 	changeVaultPin.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: changeVaultPin.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: changeVaultPin.getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeVaultPin.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
+			subtitleTranslationId: <string>changeVaultPin.getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -349,8 +350,8 @@ window.addEventListener("userready", () =>
 			const currentPin = currentPinInput.value;
 			const newPin = newPinInput.value;
 
-			if (HasClass(currentPinInput, "error")) currentVaultPinInput.element.previousElementSibling.remove();
-			if (HasClass(newPinInput, "error")) newVaultPinInput.element.previousElementSibling.remove();
+			if (HasClass(currentPinInput, "error")) currentVaultPinInput.element.previousElementSibling?.remove();
+			if (HasClass(newPinInput, "error")) newVaultPinInput.element.previousElementSibling?.remove();
 
 			RemoveClass(currentPinInput, "error");
 			RemoveClass(newPinInput, "error");
@@ -381,8 +382,8 @@ window.addEventListener("userready", () =>
 	deleteVault.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: deleteVault.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: deleteVault.getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>deleteVault.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
+			subtitleTranslationId: <string>deleteVault.getAttribute("data-translation"),
 			action: "confirm",
 		});
 
@@ -401,7 +402,7 @@ window.addEventListener("userready", () =>
 		{
 			const pin = input.value;
 
-			if (HasClass(input, "error")) element.previousElementSibling.remove();
+			if (HasClass(input, "error")) element.previousElementSibling?.remove();
 
 			RemoveClass(input, "error");
 
@@ -431,8 +432,8 @@ window.addEventListener("userready", () =>
 	generateVaultRecoveryCode.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: generateVaultRecoveryCode.closest(".setting").querySelector("h1").getAttribute("data-translation"),
-			subtitleTranslationId: generateVaultRecoveryCode.getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>generateVaultRecoveryCode.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
+			subtitleTranslationId: <string>generateVaultRecoveryCode.getAttribute("data-translation"),
 			action: "confirm",
 		});
 
@@ -457,7 +458,7 @@ window.addEventListener("userready", () =>
 		{
 			const pin = input.value;
 
-			if (HasClass(input, "error")) element.previousElementSibling.remove();
+			if (HasClass(input, "error")) element.previousElementSibling?.remove();
 
 			RemoveClass(input, "error");
 
@@ -501,19 +502,19 @@ window.addEventListener("userready", () =>
 	changeCacheSize.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: changeCacheSize.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeCacheSize.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
 
-		const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>document.querySelector("#cache-size .cache-size-options").cloneNode(true);
+		const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>(<HTMLSelectElement>document.querySelector("#cache-size .cache-size-options")).cloneNode(true);
 
 		Translation.Register("generic->default", (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")), {
 			before: `${(<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText} (`,
 			after: ")",
 		});
 
-		const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
+		const cacheSizeBytes : number = parseInt(<string>localStorage.getItem("cache-size"), 10);
 
 		if (cacheSizeBytes) cacheSizeOptions.selectedIndex = (<HTMLOptionElement>cacheSizeOptions.querySelector(`[value="${cacheSizeBytes / 1000 / 1000}"]`)).index;
 
@@ -541,7 +542,7 @@ window.addEventListener("userready", () =>
 	deleteAccount.addEventListener("click", () =>
 	{
 		const modal = new Modal({
-			titleTranslationId: deleteAccount.closest(".setting").querySelector("h1").getAttribute("data-translation"),
+			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>deleteAccount.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
 			action: "confirm",
 			loading: false,
 		});
@@ -560,21 +561,23 @@ window.addEventListener("userready", () =>
 
 	db.collection("users").doc(Auth.UserId).onSnapshot(user =>
 	{
-		const { maxStorage } = user.data();
-		const userNextPeriodMaxStorage : number = user.data().stripe?.nextPeriodMaxStorage;
+		const data: Config.Data.User = <Config.Data.User>user.data();
 
-		const billingPeriod: "month" | "year" = user.data().stripe?.billingPeriod ?? "month";
-		const userNextBillingPeriod : "month" | "year" | undefined = user.data().stripe?.nextBillingPeriod;
+		const { maxStorage } = data;
+		const userNextPeriodMaxStorage: number | undefined = data.stripe?.nextPeriodMaxStorage;
 
-		const userCanceledSubscription : boolean = user.data().stripe?.cancelAtPeriodEnd;
-		const subscriptionNextRenewalOrEndDate : number = user.data().stripe?.nextRenewal;
+		const billingPeriod: "month" | "year" = data.stripe?.billingPeriod ?? "month";
+		const userNextBillingPeriod : "month" | "year" | undefined = data.stripe?.nextBillingPeriod;
+
+		const userCanceledSubscription: boolean | undefined = data.stripe?.cancelAtPeriodEnd;
+		const subscriptionNextRenewalOrEndDate: number | undefined = data.stripe?.nextRenewal;
 
 		UpdatePlan(maxStorage, billingPeriod);
 
 		HideElements([
-			nextRenewal.parentElement,
-			nextPeriodPlan.parentElement,
-			nextBillingPeriod.parentElement,
+			<HTMLElement>nextRenewal.parentElement,
+			<HTMLElement>nextPeriodPlan.parentElement,
+			<HTMLElement>nextBillingPeriod.parentElement,
 			manageSubscription,
 			plans,
 		]);
@@ -583,11 +586,11 @@ window.addEventListener("userready", () =>
 		{
 			nextRenewal.innerHTML = "";
 			nextRenewal.appendChild(Translation.GetDateElement(
-				new Date(subscriptionNextRenewalOrEndDate * 1000),
+				new Date(<number>subscriptionNextRenewalOrEndDate * 1000),
 				userDateFormatOptions,
 			));
 
-			ShowElements([ nextRenewal.parentElement, manageSubscription ]);
+			ShowElements([ <HTMLElement>nextRenewal.parentElement, manageSubscription ]);
 
 			if (!userCanceledSubscription)
 			{
@@ -595,14 +598,14 @@ window.addEventListener("userready", () =>
 				{
 					nextPeriodPlan.innerText = FormatStorage(userNextPeriodMaxStorage);
 
-					ShowElement(nextPeriodPlan.parentElement);
+					ShowElement(<HTMLElement>nextPeriodPlan.parentElement);
 				}
 
 				if (userNextBillingPeriod && userNextBillingPeriod !== billingPeriod)
 				{
 					Translation.Register(`generic->${userNextBillingPeriod}`, nextBillingPeriod);
 
-					ShowElement(nextBillingPeriod.parentElement);
+					ShowElement(<HTMLElement>nextBillingPeriod.parentElement);
 				}
 			}
 		}
@@ -613,7 +616,7 @@ window.addEventListener("userready", () =>
 	{
 		if (!preferences.data()) return;
 
-		const { backgroundImageUrl, dateFormatOptions } = preferences.data();
+		const { backgroundImageUrl, dateFormatOptions } = <Config.Data.Preferences>preferences.data();
 
 		resetBackground.disabled = !backgroundImageUrl;
 
@@ -644,7 +647,7 @@ window.addEventListener("popstate", () =>
 	(<HTMLButtonElement>document.querySelector(`button[data-sect=${section === "settings" ? "general" : section}]`)).click();
 });
 
-const UpdateCacheSize = (bytes : number) =>
+const UpdateCacheSize = (bytes: number) =>
 {
 	localStorage.setItem("cache-size", bytes.toString());
 
@@ -653,7 +656,7 @@ const UpdateCacheSize = (bytes : number) =>
 	resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 };
 
-const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void =>
+const UpdatePlan = (maxStorage: number, billingPeriod: "month" | "year") : void =>
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
 
@@ -661,7 +664,7 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void
 
 	plans.querySelector(".current")?.classList.remove("current");
 
-	AddClass(plans.querySelector(`[data-max-storage="${FormatStorage(maxStorage)}"]`), "current");
+	AddClass(<HTMLElement>plans.querySelector(`[data-max-storage="${FormatStorage(maxStorage)}"]`), "current");
 
 	plans.querySelector(".selected")?.classList.remove("selected");
 
@@ -670,4 +673,4 @@ const UpdatePlan = (maxStorage : number, billingPeriod: "month" | "year") : void
 	changePlan.disabled = true;
 };
 
-UpdateCacheSize(parseInt(localStorage.getItem("cache-size"), 10) || defaultCacheSize); // If cache-size is null parseInt returns NaN
+UpdateCacheSize(parseInt(localStorage.getItem("cache-size") ?? "0", 10) || defaultCacheSize);

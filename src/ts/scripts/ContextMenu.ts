@@ -8,7 +8,7 @@ type ContextMenuItem =
 
 export default class ContextMenu
 {
-	private static modal: Modal;
+	private static modal: Modal | null;
 
 	private static items: HTMLElement[] = [];
 
@@ -44,7 +44,7 @@ export default class ContextMenu
 		ContextMenu.modal = new Modal();
 
 		ContextMenu.modal.AppendContent(items.sort((a, b) =>
-			parseInt(a.getAttribute("data-index"), 10) - parseInt(b.getAttribute("data-index"), 10)));
+			parseInt(<string>a.getAttribute("data-index"), 10) - parseInt(<string>b.getAttribute("data-index"), 10)));
 
 		ContextMenu.modal.Show(true);
 

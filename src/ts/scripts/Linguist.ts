@@ -36,7 +36,7 @@ export default class Linguist
 	public static Detect = (name : string, isFile : boolean) : string | string[] =>
 	{
 		let language : any;
-		let languageSpecificity : number = -1;
+		let languageSpecificity: number = -1;
 
 		if (isFile)
 		{
@@ -44,16 +44,16 @@ export default class Linguist
 			[ language ] = FileIcons.icons.filter(lang => lang.fileNames?.includes(name));
 
 			if (!IsSet(language)) FileIcons.icons
-				.filter(lang => lang.fileExtensions?.filter(ext => name.endsWith(`.${ext}`)).length > 0)
+				.filter(lang => (lang.fileExtensions?.filter(ext => name.endsWith(`.${ext}`)) ?? []).length > 0)
 				.forEach(lang =>
 				{
 					if (!IsSet(language)) language = lang;
 
-					let maxExtensionSpecificity : number = -1;
+					let maxExtensionSpecificity: number = -1;
 
-					lang.fileExtensions.forEach(ext =>
+					lang.fileExtensions?.forEach(ext =>
 					{
-						const extensionSpecificity = ext.match(/\./g)?.length;
+						const extensionSpecificity = ext.match(/\./g)?.length ?? 0;
 
 						if (extensionSpecificity > maxExtensionSpecificity) maxExtensionSpecificity
 							= extensionSpecificity;
@@ -61,7 +61,7 @@ export default class Linguist
 
 					language.fileExtensions.forEach((ext : string) =>
 					{
-						const extensionSpecificity = ext.match(/\./g)?.length;
+						const extensionSpecificity = ext.match(/\./g)?.length ?? 0;
 
 						if (extensionSpecificity > maxExtensionSpecificity) maxExtensionSpecificity
 							= extensionSpecificity;

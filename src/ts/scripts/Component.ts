@@ -85,7 +85,7 @@ export class Input extends Component
 			],
 		});
 
-		this.input = this.element.querySelector("input");
+		this.input = <HTMLInputElement>this.element.querySelector("input");
 	}
 }
 

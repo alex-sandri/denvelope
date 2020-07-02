@@ -23,7 +23,7 @@ export default () : void =>
 {
 	const db: firebaseFirestore.Firestore = firebase.firestore();
 
-	const cacheSizeBytes : number = parseInt(localStorage.getItem("cache-size"), 10);
+	const cacheSizeBytes: number = parseInt(localStorage.getItem("cache-size") ?? "0", 10);
 
 	if (cacheSizeBytes) db.settings({ cacheSizeBytes, ignoreUndefinedProperties: true });
 
@@ -41,7 +41,7 @@ export default () : void =>
 			.querySelectorAll(".plans .plan")
 			.forEach(plan =>
 			{
-				const billingPeriod: Config.BillingPeriod = <Config.BillingPeriod>document.querySelector(".billing-periods .selected").classList[0];
+				const billingPeriod: Config.BillingPeriod = <Config.BillingPeriod>(<HTMLElement>document.querySelector(".billing-periods .selected")).classList[0];
 
 				(<HTMLSpanElement>plan.querySelector(".price")).innerText = Intl.NumberFormat(Translation.Language, { style: "currency", currency: Translation.Currency, minimumFractionDigits: 0 })
 					.format(Config.Pricing.Plan(<Config.PlanName>plan.getAttribute("data-max-storage"), Translation.Currency, billingPeriod).Amount)
@@ -49,7 +49,7 @@ export default () : void =>
 
 				(<HTMLSpanElement>plan.querySelector(".billing-period")).innerText = `/ ${Translation.Get(`generic->${billingPeriod}`).toLowerCase()}`;
 
-				(<HTMLElement>plan.querySelector(".storage")).innerText = plan.getAttribute("data-max-storage");
+				(<HTMLElement>plan.querySelector(".storage")).innerText = <string>plan.getAttribute("data-max-storage");
 			});
 
 	window.addEventListener("translationlanguagechange", updatePlans);
@@ -57,7 +57,7 @@ export default () : void =>
 	(<HTMLElement[]>Array.from(document.querySelector(".billing-periods")?.children ?? [])).forEach(billingPeriod =>
 		billingPeriod.addEventListener("click", () =>
 		{
-			billingPeriod.parentElement.querySelector(".selected")?.classList.remove("selected");
+			(<HTMLElement>billingPeriod.parentElement).querySelector(".selected")?.classList.remove("selected");
 
 			AddClass(billingPeriod, "selected");
 
@@ -68,8 +68,8 @@ export default () : void =>
 
 	Shortcuts.Init();
 
-	const changeLanguage : HTMLButtonElement = document.querySelector("#change-language .edit");
-	const languageSelect : HTMLSelectElement = document.querySelector("#language-select");
+	const changeLanguage: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-language .edit");
+	const languageSelect: HTMLSelectElement = <HTMLSelectElement>document.querySelector("#language-select");
 
 	changeLanguage?.addEventListener("click", () =>
 	{
@@ -105,7 +105,7 @@ export default () : void =>
 		if ((<HTMLElement>e.target).closest(".allow-context-menu") === null) e.preventDefault();
 	});
 
-	const firebaseUiAuthContainer : HTMLElement = document.querySelector(".firebaseui-auth-container");
+	const firebaseUiAuthContainer: HTMLElement = <HTMLElement>document.querySelector(".firebaseui-auth-container");
 
 	document.querySelectorAll(".sign-in").forEach(element => element.addEventListener("click", () =>
 	{
@@ -130,7 +130,11 @@ export default () : void =>
 		{
 			db.collection(`users/${Auth.UserId}/config`).doc("preferences").onSnapshot(preferences =>
 			{
-				const data: Config.Data.Preferences = preferences.data();
+				const data: Config.Data.Preferences | undefined = preferences.data();
+
+				Translation.Init(data?.language ?? Translation.Language);
+
+				if (!data) return;
 
 				if (document.body.classList.contains("account") || document.body.classList.contains("settings"))
 				{
@@ -138,10 +142,8 @@ export default () : void =>
 
 					document.body.style.backgroundImage = backgroundImageUrl ? `url(${backgroundImageUrl})` : "";
 
-					localStorage.setItem("background-image-url", backgroundImageUrl);
+					localStorage.setItem("background-image-url", backgroundImageUrl ?? "");
 				}
-
-				Translation.Init(data?.language ?? Translation.Language);
 			});
 
 			db.collection("users").doc(Auth.UserId).onSnapshot(doc =>
@@ -155,8 +157,8 @@ export default () : void =>
 
 				const percent = `${+((usedStorage / maxStorage) * 100).toFixed(2)}%`;
 
-				const usedStorageElement: HTMLElement = document.querySelector("[data-update-field=used-storage]");
-				const maxStorageElement: HTMLElement = document.querySelector("[data-update-field=max-storage]");
+				const usedStorageElement: HTMLElement = <HTMLElement>document.querySelector("[data-update-field=used-storage]");
+				const maxStorageElement: HTMLElement = <HTMLElement>document.querySelector("[data-update-field=max-storage]");
 
 				usedStorageElement.innerText = FormatStorage(usedStorage);
 				usedStorageElement.setAttribute("data-bytes", usedStorage.toString());

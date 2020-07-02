@@ -22,15 +22,14 @@ export default class Shortcuts
 			.forEach(element =>
 			{
 				element.title = `${Translation.Get("generic->keyboard_shortcut")}: ${
-					element
-						.getAttribute("data-keyboard-shortcut")
+					(<string>element.getAttribute("data-keyboard-shortcut"))
 						.replace("control", "ctrl")
 						.split("+")
 						.join(" + ")
 						.toUpperCase()
 				}`;
 
-				Shortcuts.Register(element.getAttribute("data-keyboard-shortcut"), () =>
+				Shortcuts.Register(<string>element.getAttribute("data-keyboard-shortcut"), () =>
 				{
 					if (element instanceof HTMLButtonElement
 						|| element instanceof HTMLAnchorElement) element.click();
@@ -48,7 +47,7 @@ export default class Shortcuts
 
 			Shortcuts.ShortcutRegistrations.forEach(registration =>
 			{
-				if (registration.options.ignoreInInput && [ "input", "textarea" ].includes(document.activeElement.tagName.toLowerCase())) return;
+				if (registration.options.ignoreInInput && [ "input", "textarea" ].includes((<HTMLElement>document.activeElement).tagName.toLowerCase())) return;
 
 				if (registration.shortcut !== keyCombination) return;
 

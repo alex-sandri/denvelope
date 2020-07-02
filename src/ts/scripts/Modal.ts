@@ -19,25 +19,25 @@ interface ModalOptions
 
 export class Modal
 {
-	private readonly container : HTMLDivElement = <HTMLDivElement>document.querySelector(".modal-container").cloneNode(true);
+	private readonly container: HTMLDivElement = <HTMLDivElement>(<HTMLDivElement>document.querySelector(".modal-container")).cloneNode(true);
 
-	public readonly element : HTMLDivElement = this.container.querySelector(".modal");
+	public readonly element: HTMLDivElement = <HTMLDivElement>this.container.querySelector(".modal");
 
-	private readonly spinner : HTMLSpanElement = this.element.querySelector(".spinner");
+	private readonly spinner: HTMLSpanElement = <HTMLSpanElement>this.element.querySelector(".spinner");
 
-	public readonly Content : HTMLDivElement = this.element.querySelector(".content");
+	public readonly Content: HTMLDivElement = <HTMLDivElement>this.element.querySelector(".content");
 
-	public readonly CloseButton : HTMLButtonElement = this.element.querySelector(".close");
+	public readonly CloseButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".close");
 
-	public readonly ConfirmButton : HTMLButtonElement = this.element.querySelector(".confirm");
+	public readonly ConfirmButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".confirm");
 
-	public readonly UpdateButton : HTMLButtonElement = this.element.querySelector(".update");
+	public readonly UpdateButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".update");
 
-	public OnClose : () => any;
+	public OnClose: () => void;
 
-	public OnConfirm : () => any;
+	public OnConfirm: () => void;
 
-	public OnUpdate : () => any;
+	public OnUpdate: () => void;
 
 	constructor(options ?: ModalOptions)
 	{
@@ -85,7 +85,7 @@ export class Modal
 		this.ConfirmButton.addEventListener("click", this.OnConfirm);
 		this.UpdateButton.addEventListener("click", this.OnUpdate);
 
-		if (unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => element.parentElement.remove()); // Remove also its container
+		if (unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => (<HTMLElement>element.parentElement).remove()); // Remove also its container
 		else AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
 
 		if (!HasClass(this.element, "show"))
@@ -140,28 +140,28 @@ export class Modal
 
 	public set Title(title: string)
 	{
-		const titleElement : HTMLElement = this.element.querySelector(".title");
+		const titleElement: HTMLElement = <HTMLElement>this.element.querySelector(".title");
 
 		titleElement.innerText = title;
 	}
 
 	public set Subtitle(subtitle: string)
 	{
-		const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
+		const subtitleElement: HTMLElement = <HTMLElement>this.element.querySelector(".subtitle");
 
 		subtitleElement.innerText = subtitle;
 	}
 
 	public set TitleTranslationId(id: string)
 	{
-		const titleElement : HTMLElement = this.element.querySelector(".title");
+		const titleElement: HTMLElement = <HTMLElement>this.element.querySelector(".title");
 
 		titleElement.appendChild(Translation.GetElement(id));
 	}
 
 	public set SubtitleTranslationId(id: string)
 	{
-		const subtitleElement : HTMLElement = this.element.querySelector(".subtitle");
+		const subtitleElement: HTMLElement = <HTMLElement>this.element.querySelector(".subtitle");
 
 		subtitleElement.appendChild(Translation.GetElement(id));
 	}
@@ -201,11 +201,11 @@ export class UploadModal extends Modal
 
 	public TransferSize : HTMLSpanElement;
 
-	public OnPause : () => any;
+	public OnPause: () => void;
 
-	public OnResume : () => any;
+	public OnResume: () => void;
 
-	public OnCancel : () => any;
+	public OnCancel: () => void;
 
 	constructor(name : string, size : number)
 	{
@@ -277,9 +277,11 @@ export class UploadModal extends Modal
 			}).element,
 		]);
 
-		const pauseButton : HTMLButtonElement = this.element.querySelector(".pause");
-		const resumeButton : HTMLButtonElement = this.element.querySelector(".resume");
-		const cancelButton : HTMLButtonElement = this.element.querySelector(".cancel");
+		this.OnPause = this.OnResume = this.OnCancel = () => {};
+
+		const pauseButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".pause");
+		const resumeButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".resume");
+		const cancelButton: HTMLButtonElement = <HTMLButtonElement>this.element.querySelector(".cancel");
 
 		pauseButton.addEventListener("click", () =>
 		{

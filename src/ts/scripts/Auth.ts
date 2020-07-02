@@ -14,7 +14,7 @@ export default class Auth
 {
 	private static readonly auth: firebaseAuth.Auth = firebase.auth();
 
-	private static sharedContentUserId : string = null;
+	private static sharedContentUserId: string | null = null;
 
 	/**
 	 * @public
@@ -41,7 +41,7 @@ export default class Auth
 	{
 		let provider;
 
-		switch (Auth.auth.currentUser.providerData[0].providerId)
+		switch (Auth.CurrentUser?.providerData?.[0]?.providerId)
 		{
 			case firebase.auth.GoogleAuthProvider.PROVIDER_ID:
 				provider = new firebase.auth.GoogleAuthProvider();
@@ -64,8 +64,8 @@ export default class Auth
 		}
 
 		Auth.auth.signInWithPopup(provider)
-			.then(result => Auth.auth.currentUser.reauthenticateWithCredential(result.credential)
-				.then(() => Auth.auth.currentUser.delete()));
+			.then(result => Auth.CurrentUser?.reauthenticateWithCredential(<firebaseAuth.AuthCredential>result.credential)
+				.then(() => Auth.CurrentUser?.delete()));
 	}
 
 	public static Init = () : void =>
@@ -79,14 +79,14 @@ export default class Auth
 
 	public static RefreshToken = async () : Promise<void> =>
 	{
-		await Auth.auth.currentUser.getIdToken(true);
+		await (<firebaseUser>Auth.CurrentUser).getIdToken(true);
 	}
 
-	public static get CurrentUser() : firebaseUser { return Auth.auth.currentUser; }
+	public static get CurrentUser() : firebaseUser | null { return Auth.auth.currentUser; }
 
-	public static get UserId() : string { return Auth.sharedContentUserId || Auth.CurrentUser.uid; }
+	public static get UserId(): string { return Auth.sharedContentUserId || (<firebaseUser>Auth.CurrentUser).uid; }
 
-	private static AuthStateChanged = async (user : firebaseUser) : Promise<void> =>
+	private static AuthStateChanged = async (user : firebaseUser | null) : Promise<void> =>
 	{
 		document.querySelector(".waiting-user")?.remove();
 
@@ -104,14 +104,14 @@ export default class Auth
 
 			Auth.IsSignedIn = true;
 
-			userEmail.innerText = user.email;
+			userEmail.innerText = <string>user.email;
 
 			userPhoto.forEach(element => { element.src = "/assets/img/icons/user.svg"; });
 
 			if (user.displayName) userName.innerText = user.displayName;
 
 			if (user.photoURL) await fetch(user.photoURL)
-				.then(() => userPhoto.forEach(element => { element.src = user.photoURL; }))
+				.then(() => userPhoto.forEach(element => { element.src = <string>user.photoURL; }))
 				.catch(err => err);
 		}
 		else
