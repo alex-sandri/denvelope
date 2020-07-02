@@ -321,22 +321,24 @@ window.addEventListener("userready", async () =>
 
 		ContextMenu.Show([ ContextMenuButtons.MoveSelector ]);
 
+		const spinner: HTMLElement = <HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".spinner");
+
 		const ShowAvailableFoldersIn = async (id : string) =>
 		{
-			if (id === "root") HideElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
-			else ShowElement(ContextMenuButtons.MoveSelector.querySelector(".back"));
+			if (id === "root") HideElement(ContextMenuButtons.MoveSelectorBack);
+			else ShowElement(ContextMenuButtons.MoveSelectorBack);
 
-			if (currentId === initialFolderId) HideElement(ContextMenuButtons.MoveSelector.querySelector(".move-here"));
-			else ShowElement(ContextMenuButtons.MoveSelector.querySelector(".move-here"));
+			if (currentId === initialFolderId) HideElement(ContextMenuButtons.MoveSelectorMoveHere);
+			else ShowElement(ContextMenuButtons.MoveSelectorMoveHere);
 
-			ShowElement(ContextMenuButtons.MoveSelector.querySelector(".spinner"));
+			ShowElement(spinner);
 
 			ContextMenuButtons.MoveSelectorOptions.innerHTML = "";
 
 			db.collection(`users/${Auth.UserId}/folders`).where("inVault", "==", await vaultOnly()).where("parentId", "==", id).get()
 				.then(docs =>
 				{
-					HideElement(ContextMenuButtons.MoveSelector.querySelector(".spinner"));
+					HideElement(spinner);
 
 					ContextMenuButtons.MoveSelectorOptions.innerHTML = "";
 
@@ -363,14 +365,14 @@ window.addEventListener("userready", async () =>
 
 							ContextMenuButtons.MoveSelectorOptions.appendChild(element);
 
-							element.querySelector(".select").addEventListener("click", async () =>
+							(<HTMLButtonElement>element.querySelector(".select")).addEventListener("click", async () =>
 							{
 								ContextMenu.Hide();
 
 								MoveElements(tempArray, element.id);
 							});
 
-							element.querySelector(".goto").addEventListener("click", () =>
+							(<HTMLButtonElement>element.querySelector(".goto")).addEventListener("click", () =>
 							{
 								currentId = doc.id;
 
@@ -386,11 +388,11 @@ window.addEventListener("userready", async () =>
 				});
 		};
 
-		ContextMenuButtons.MoveSelector.querySelector(".back").addEventListener("click", async () =>
+		ContextMenuButtons.MoveSelectorBack.addEventListener("click", async () =>
 		{
-			HideElement(<HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".back"));
+			HideElement(ContextMenuButtons.MoveSelectorBack);
 
-			ShowElement(<HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".spinner"));
+			ShowElement(spinner);
 
 			ContextMenuButtons.MoveSelectorOptions.innerHTML = "";
 
@@ -399,7 +401,7 @@ window.addEventListener("userready", async () =>
 			ShowAvailableFoldersIn(currentId);
 		});
 
-		(<HTMLElement>ContextMenuButtons.MoveSelector.querySelector(".move-here")).addEventListener("click", async () =>
+		ContextMenuButtons.MoveSelectorMoveHere.addEventListener("click", async () =>
 		{
 			ContextMenu.Hide();
 
@@ -668,7 +670,7 @@ window.addEventListener("userready", async () =>
 		{
 			const { id, type } = ContextMenu.GetItemInfo(item);
 
-			const trashed = document.getElementById(id).getAttribute("data-trashed") === "true";
+			const trashed = (<HTMLButtonElement>document.getElementById(id)).getAttribute("data-trashed") === "true";
 
 			const docRef = db.collection(`users/${Auth.UserId}/${type}s`).doc(id);
 
@@ -686,7 +688,7 @@ window.addEventListener("userready", async () =>
 		if (tempArray.length === 1) genericMessage.Show(Translation.Get(`api->messages->${ContextMenu.GetItemInfo(tempArray[0]).type}->${
 			inVault
 				? "deleted"
-				: document.getElementById(ContextMenu.GetItemInfo(tempArray[0]).id).getAttribute("data-trashed") === "true"
+				: (<HTMLButtonElement>document.getElementById(ContextMenu.GetItemInfo(tempArray[0]).id)).getAttribute("data-trashed") === "true"
 					? (ContextMenuButtons.Restore.contains(element) ? "restored" : "deleted")
 					: "moved_to_trash"
 		}`));
@@ -1813,7 +1815,7 @@ const addUserContentEvents = () : void =>
 
 	[ ...userContentMenuButtons, <HTMLButtonElement>vault.querySelector(".menu-button button") ].forEach(element => element.addEventListener("click", e =>
 	{
-		if (!vault.contains(element)) AddClass(GetUserContentElement(<HTMLElement>e.target), "selected");
+		if (!vault.contains(element)) AddClass(<HTMLButtonElement>GetUserContentElement(<HTMLElement>e.target), "selected");
 
 		showContextMenu(e);
 	}));
@@ -1824,8 +1826,8 @@ const addUserContentEvents = () : void =>
 	{
 		const HandleTargetElement = (e : MouseEvent) : void =>
 		{
-			if (e.type === "mouseenter" && IsSet(document.querySelector(".dragging"))
-				&& (element.id) !== document.querySelector(".dragging").id
+			if (e.type === "mouseenter" && document.querySelector(".dragging")
+				&& element.id !== (<HTMLElement>document.querySelector(".dragging")).id
 				&& !HasClass(element, "placeholder")) AddClass(element, "target");
 			else RemoveClass(element, "target");
 		};
@@ -1863,8 +1865,8 @@ const HandlePageChangeAndLoadUserContent = (
 
 	if (target.closest(".menu-button") === null
 		&& GetUserContentElement(target)?.getAttribute("data-trashed") === "false"
-		&& !HasClass(GetUserContentElement(target), "placeholder")
-		&& !HasClass(GetUserContentElement(target), "dragging"))
+		&& !HasClass(<HTMLElement>GetUserContentElement(target), "placeholder")
+		&& !HasClass(<HTMLElement>GetUserContentElement(target), "dragging"))
 	{
 		const closestFile = target.closest(fileSelector);
 
@@ -1872,14 +1874,14 @@ const HandlePageChangeAndLoadUserContent = (
 
 		HideContextMenu();
 
-		const url = getUserContentURL(GetUserContentElement(target), !Auth.IsAuthenticated);
+		const url = getUserContentURL(<HTMLElement>GetUserContentElement(target), !Auth.IsAuthenticated);
 
 		if (openInNewWindow) open(url);
 		else
 		{
 			if (closestFile === null)
 			{
-				SetCurrentFolderId(target.closest(folderSelector).id);
+				SetCurrentFolderId((<HTMLElement>target.closest(folderSelector)).id);
 
 				GetUserContent();
 
@@ -1894,8 +1896,8 @@ const HandlePageChangeAndLoadUserContent = (
 
 const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void =>
 {
-	const placeholderElement : HTMLElement = GetUserContentElement(<HTMLElement>e.target);
-	let element : HTMLElement = <HTMLElement>placeholderElement?.cloneNode(true);
+	const placeholderElement = GetUserContentElement(<HTMLElement>e.target);
+	let element : HTMLElement | null = <HTMLElement>placeholderElement?.cloneNode(true);
 
 	let moved : boolean = false;
 
@@ -1917,7 +1919,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 				// Set moved=true only if the mouse moved by at least 5px
 				if (Math.abs(left - e.pageX) > 5 || Math.abs(top - e.pageY) > 5) moved = true;
 
-				if (moved) ShowElement(element, "flex");
+				if (moved) ShowElement(<HTMLElement>element, "flex");
 			}
 
 			if (moved)
@@ -1926,14 +1928,14 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 					(<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
 						AddClasses(element, [ "no-hover", HasClass(element, "file") ? "disabled" : "" ])));
 
-				Object.assign(element.style, {
+				Object.assign((<HTMLElement>element).style, {
 					top: `${top}px`,
 					left: `${left}px`,
 				});
 
-				AddClass(element, "dragging");
+				AddClass(<HTMLElement>element, "dragging");
 
-				AddClass(placeholderElement, "placeholder");
+				AddClass(<HTMLElement>placeholderElement, "placeholder");
 
 				AddClass(document.documentElement, "grabbing");
 			}
@@ -1942,9 +1944,9 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 
 	const ResetElement = async (ev : MouseEvent) =>
 	{
-		const target : HTMLElement = foldersContainer.querySelector(".target");
+		const target = <HTMLElement | null>foldersContainer.querySelector(".target");
 
-		let parentId = null;
+		let parentId: string | null = null;
 
 		[ foldersContainer, filesContainer ].forEach(element =>
 			(<NodeListOf<HTMLDivElement>>element.querySelectorAll(`${folderSelector}, ${fileSelector}`)).forEach(element =>
@@ -1954,14 +1956,14 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 				if (HasClass(element, "file")) RemoveClass(element, "disabled");
 			}));
 
-		RemoveClass(placeholderElement, "placeholder");
+		RemoveClass(<HTMLElement>placeholderElement, "placeholder");
 
 		RemoveClass(document.documentElement, "grabbing");
 
-		element.remove();
+		element?.remove();
 		element = null;
 
-		if (IsSet(target))
+		if (target)
 		{
 			parentId = target.id;
 
@@ -1969,7 +1971,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 		}
 		else if (HasClass(navigationBackButton, "target"))
 		{
-			parentId = await vaultOnly() ? "root" : (await db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get()).data().parentId;
+			parentId = await vaultOnly() ? "root" : (<Config.Data.Folder>(await db.collection(`users/${Auth.UserId}/folders`).doc(GetCurrentFolderId()).get()).data()).parentId;
 
 			RemoveClass(navigationBackButton, "target");
 		}
@@ -1981,13 +1983,13 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 		}
 
 		if (!moved) HandlePageChangeAndLoadUserContent(ev);
-		else if (IsSet(parentId) && Auth.IsAuthenticated) MoveElements(tempArray, parentId);
+		else if (parentId && Auth.IsAuthenticated) MoveElements(tempArray, parentId);
 
 		document.removeEventListener("mousemove", MoveElement);
 		document.removeEventListener("mouseup", ResetElement);
 	};
 
-	if (IsSet(element) && e.which !== 3 && !ignoreMovement) // Not on right click
+	if (element && e.which !== 3 && !ignoreMovement) // Not on right click
 	{
 		HideElement(element);
 
@@ -2453,7 +2455,7 @@ const UpdateBottomSectionBar = (selectedItem : HTMLElement) : void =>
 	searchBar.value = "";
 };
 
-const GetUserContentElement = (target?: HTMLElement): HTMLElement | null | undefined => target?.closest(`${folderSelector}, ${fileSelector}`);
+const GetUserContentElement = (target?: HTMLElement | null): HTMLElement | null | undefined => target?.closest(`${folderSelector}, ${fileSelector}`);
 
 const DownloadContent = async (id : string, name : string, isFolder : boolean, format ?: string) =>
 {

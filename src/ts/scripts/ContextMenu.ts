@@ -96,6 +96,10 @@ export class ContextMenuButtons
 
 	public static MoveSelectorOptions: ContextMenuButton = <HTMLDivElement>ContextMenuButtons.MoveSelector.querySelector(".options");
 
+	public static MoveSelectorBack: ContextMenuButton = <HTMLButtonElement>ContextMenuButtons.MoveSelector.querySelector(".back");
+
+	public static MoveSelectorMoveHere: ContextMenuButton = <HTMLButtonElement>ContextMenuButtons.MoveSelector.querySelector(".move-here")
+
 	public static AddToStarred: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-add-to-starred");
 
 	public static RemoveFromStarred: ContextMenuButton = <HTMLButtonElement>document.querySelector("#cm-remove-from-starred");
