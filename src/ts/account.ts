@@ -249,9 +249,9 @@ window.addEventListener("userready", async () =>
 	ContextMenuButtons.Save.addEventListener("click", () =>
 	{
 		const value = (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
-		const id = editorTabs.querySelector(".active").id.split("-")[1];
+		const id = (<HTMLElement>editorTabs.querySelector(".active")).id.split("-")[1];
 
-		UploadFile(value, (<HTMLElement>editorTabs.querySelector(".active").querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
+		UploadFile(value, (<HTMLElement>(<HTMLElement>editorTabs.querySelector(".active")).querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
 
 		db.collection(`users/${Auth.UserId}/files`).doc(id).update({ ...GetFirestoreUpdateTimestamp() });
 
@@ -259,7 +259,7 @@ window.addEventListener("userready", async () =>
 
 		editorSavedValue = value;
 
-		RemoveClass(editorTabs.querySelector(".active"), "modified");
+		RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
 	});
 
 	ContextMenuButtons.SaveToMyAccount.addEventListener("click", () =>
@@ -1526,7 +1526,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			.forEach(element => Translation.Register("account->title", element));
 	}
 
-	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${document.querySelector(".top-section").clientHeight}px)`;
+	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${(<HTMLElement>document.querySelector(".top-section")).clientHeight}px)`;
 
 	let callCount = 0; // The number of times UserContentLoaded has been called
 
@@ -1552,9 +1552,9 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 							)
 						)
 					)
-			}`, emptyFolder.querySelector("h2"));
+			}`, <HTMLHeadingElement>emptyFolder.querySelector("h2"));
 
-			emptyFolder.querySelector("img").src = `assets/img/miscellaneous/${
+			(<HTMLImageElement>emptyFolder.querySelector("img")).src = `assets/img/miscellaneous/${
 				!navigator.onLine
 					? "offline"
 					: (sharedOnly()
@@ -1713,7 +1713,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 		&& ContextMenu.Items.length <= 1)
 	{
 		if (isUserContentElement(contentTarget)) ContextMenu.Items = [ contentTarget as HTMLElement ];
-		else ContextMenu.Items = [ document.getElementById(editorTabs.querySelector(".active").id.split("-")[1]) ];
+		else ContextMenu.Items = [ document.getElementById((<HTMLElement>editorTabs.querySelector(".active")).id.split("-")[1]) as HTMLElement ];
 
 		if (Auth.IsAuthenticated && ContextMenu.Item.getAttribute("data-trashed") === "false")
 			contextMenuButtons.push(...[ ContextMenuButtons.Move, ContextMenuButtons.Rename ]);
@@ -2095,8 +2095,8 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 	{
 		preventWindowUnload.editor = editorSavedValue !== (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
 
-		if (preventWindowUnload.editor) AddClass(editorTabs.querySelector(".active"), "modified");
-		else RemoveClass(editorTabs.querySelector(".active"), "modified");
+		if (preventWindowUnload.editor) AddClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
+		else RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
 	});
 };
 
@@ -2132,7 +2132,7 @@ const ShowFile = (
 
 		editorElement.querySelector(".force-download").addEventListener("click", () =>
 		{
-			editorTabs.querySelector(".active").setAttribute("data-force-download", "false");
+			(<HTMLElement>editorTabs.querySelector(".active")).setAttribute("data-force-download", "false");
 
 			ShowFile(id, false, true, isMultipleFileEditor);
 		});
@@ -2180,7 +2180,7 @@ const ShowFile = (
 
 				editor?.setModel(editorModels.get(id.split("-")[1]));
 
-				RemoveClass(editorTabs.querySelector(".active"), "active");
+				RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "active");
 
 				AddClass(editorTabs.querySelector(`#${id}`), "active");
 
@@ -2214,7 +2214,7 @@ const ShowFile = (
 
 				editorElement.querySelector(".force-download")?.remove();
 
-				if (editorTabs.querySelector(".active").getAttribute("data-force-download") === "true") ShowForceDownloadButton(editorTabs.querySelector(".active").id.split("-")[1]);
+				if ((<HTMLElement>editorTabs.querySelector(".active")).getAttribute("data-force-download") === "true") ShowForceDownloadButton((<HTMLElement>editorTabs.querySelector(".active")).id.split("-")[1]);
 			});
 
 			if (!Auth.IsAuthenticated && !IS_SHARED_FOLDER) HideElement(tab.querySelector(".close"));
@@ -2278,7 +2278,7 @@ const ShowFile = (
 					);
 				}
 
-				CreateEditor(id, value, language, forceDownload || editorTabs.querySelector(".active").id.split("-")[1] === id);
+				CreateEditor(id, value, language, forceDownload || (<HTMLElement>editorTabs.querySelector(".active")).id.split("-")[1] === id);
 			})).catch(err => err);
 	});
 };
