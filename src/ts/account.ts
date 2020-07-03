@@ -665,7 +665,7 @@ window.addEventListener("userready", async () =>
 
 	[ ContextMenuButtons.Delete, ContextMenuButtons.Restore ].forEach(element => element.addEventListener("click", async () =>
 	{
-		// Waiting for vaultOnly() caused ContextMenu.Item to become null on HideContextMenu()
+		// Waiting for vaultOnly() caused ContextMenu.Items to become null on ContextMenu.Hide()
 		const tempArray = ContextMenu.Items;
 
 		const batch = db.batch();
