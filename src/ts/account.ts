@@ -647,7 +647,7 @@ window.addEventListener("userready", async () =>
 					}).element,
 				]);
 
-				modal.Show();
+				modal.Show(true);
 
 				await new Promise(resolve => modal.Content.querySelectorAll("#zip, #tar, #tar-gz").forEach(element => element.addEventListener("click", async () =>
 				{
