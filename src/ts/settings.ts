@@ -656,7 +656,7 @@ const UpdateCacheSize = (bytes: number) =>
 	resetCacheSize.disabled = bytes === null || defaultCacheSize === bytes;
 };
 
-const UpdatePlan = (maxStorage: number, billingPeriod: "month" | "year") : void =>
+const UpdatePlan = (maxStorage: number, billingPeriod: "month" | "year") =>
 {
 	currentPlan.innerText = FormatStorage(maxStorage);
 

@@ -74,7 +74,7 @@ export class Modal
 		document.body.appendChild(this.container);
 	}
 
-	public Show = (unique ?: boolean) : void =>
+	public Show = (unique ?: boolean) =>
 	{
 		this.CloseButton.addEventListener("click", () =>
 		{
@@ -115,7 +115,7 @@ export class Modal
 		});
 	}
 
-	public Hide = () : void =>
+	public Hide = () =>
 	{
 		RemoveClass(this.element, "show");
 		AddClass(this.element, "hide");
@@ -123,7 +123,7 @@ export class Modal
 		setTimeout(() => HideElement(this.container), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
 	}
 
-	public Remove = () : void =>
+	public Remove = () =>
 	{
 		this.OnClose();
 
@@ -132,7 +132,7 @@ export class Modal
 		document.removeEventListener("mouseup", this.HideOnOuterClick);
 	}
 
-	public HideAndRemove = () : void =>
+	public HideAndRemove = () =>
 	{
 		this.Hide();
 		this.Remove();
@@ -166,7 +166,7 @@ export class Modal
 		subtitleElement.appendChild(Translation.GetElement(id));
 	}
 
-	public AppendContent = (data : any[]) : void =>
+	public AppendContent = (data : any[]) =>
 	{
 		HideElement(this.spinner);
 
@@ -182,14 +182,14 @@ export class Modal
 		}));
 	}
 
-	public RemoveContent = () : void =>
+	public RemoveContent = () =>
 	{
 		ShowElement(this.spinner, "block");
 
 		this.Content.innerHTML = "";
 	}
 
-	private HideOnOuterClick = (e : Event) : void =>
+	private HideOnOuterClick = (e : Event) =>
 	{
 		if (e.target === this.element.parentElement && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
 	}

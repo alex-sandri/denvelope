@@ -34,7 +34,7 @@ export default class Translation
 		return <Config.ShortLocale>Translation.Language.substr(0, 2);
 	}
 
-	public static Init = (language?: Config.Locale, allowPreferenceUpdate?: boolean) : void =>
+	public static Init = (language?: Config.Locale, allowPreferenceUpdate?: boolean) =>
 	{
 		let translationLanguage: string | undefined = language;
 

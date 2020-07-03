@@ -45,7 +45,7 @@ export const Show = (
 		});
 	});
 
-export const ShowSpinner = () : void =>
+export const ShowSpinner = () =>
 {
 	Show("", undefined, -1);
 
@@ -54,4 +54,4 @@ export const ShowSpinner = () : void =>
 	ShowElement(<HTMLElement>genericMessage.querySelector(".spinner"), "block");
 };
 
-const Hide = () : void => HideElement(genericMessage);
+const Hide = () => HideElement(genericMessage);

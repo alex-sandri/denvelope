@@ -14,7 +14,7 @@ type ShortcutRegistration =
 
 export default class Shortcuts
 {
-	public static Init = () : void =>
+	public static Init = () =>
 	{
 		const elementsWithShortcuts : HTMLElement[] = Array.from(document.querySelectorAll("[data-keyboard-shortcut]"));
 

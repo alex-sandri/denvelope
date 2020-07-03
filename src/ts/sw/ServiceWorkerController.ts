@@ -8,7 +8,7 @@ declare const firebase: any;
 
 export default class ServiceWorkerController
 {
-	public static Register = () : void =>
+	public static Register = () =>
 	{
 		if (!navigator.serviceWorker) return;
 
@@ -79,7 +79,7 @@ export default class ServiceWorkerController
 		});
 	}
 
-	private static TrackInstalling = (sw : ServiceWorker) : void =>
+	private static TrackInstalling = (sw : ServiceWorker) =>
 		sw.addEventListener("statechange", () =>
 		{
 			if (sw.state === "installed") ServiceWorkerController.UpdateReady(sw);

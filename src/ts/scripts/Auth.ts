@@ -28,7 +28,7 @@ export default class Auth
 	 */
 	public static IsSignedIn : boolean = false;
 
-	public static SignOut = () : void =>
+	public static SignOut = () =>
 	{
 		Auth.auth.signOut();
 
@@ -37,7 +37,7 @@ export default class Auth
 		location.href = "/";
 	}
 
-	public static DeleteUser = () : void =>
+	public static DeleteUser = () =>
 	{
 		let provider;
 
@@ -69,7 +69,7 @@ export default class Auth
 				.then(() => Auth.CurrentUser?.delete()));
 	}
 
-	public static Init = () : void =>
+	public static Init = () =>
 	{
 		(<any>Auth.auth.app.options).authDomain = "denvelope.com";
 

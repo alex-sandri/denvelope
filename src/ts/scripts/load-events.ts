@@ -19,7 +19,7 @@ import { Config } from "../config/Config";
 
 declare const firebase: any;
 
-export default () : void =>
+export default () =>
 {
 	const db: firebaseFirestore.Firestore = firebase.firestore();
 

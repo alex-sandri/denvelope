@@ -1705,7 +1705,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 	});
 };
 
-const showContextMenu = (e : MouseEvent) : void =>
+const showContextMenu = (e : MouseEvent) =>
 {
 	const target = <HTMLElement>e.target;
 	const contentTarget = GetUserContentElement(<HTMLElement>e.target);
@@ -1814,7 +1814,7 @@ const showContextMenu = (e : MouseEvent) : void =>
 
 const HideContextMenu = () => ContextMenu.Hide();
 
-const addUserContentEvents = () : void =>
+const addUserContentEvents = () =>
 {
 	const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(`${folderSelector} .menu-button button,${fileSelector} .menu-button button`));
 	const userContentElements = (<NodeListOf<HTMLDivElement>>document.querySelectorAll(`${folderSelector}, ${fileSelector}`));
@@ -1830,7 +1830,7 @@ const addUserContentEvents = () : void =>
 
 	[ ...userContentElements, navigationBackButton, vault ].forEach(element =>
 	{
-		const HandleTargetElement = (e : MouseEvent) : void =>
+		const HandleTargetElement = (e : MouseEvent) =>
 		{
 			if (e.type === "mouseenter" && document.querySelector(".dragging")
 				&& element.id !== (<HTMLElement>document.querySelector(".dragging")).id
@@ -1903,7 +1903,7 @@ const HandlePageChangeAndLoadUserContent = (
 	}
 };
 
-const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void =>
+const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) =>
 {
 	const placeholderElement = GetUserContentElement(<HTMLElement>e.target);
 	let element : HTMLElement | null = <HTMLElement>placeholderElement?.cloneNode(true);
@@ -1912,7 +1912,7 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) : void
 
 	const tempArray = <HTMLElement[]>[ ...(ContextMenu.Items || []), element ].filter(Boolean);
 
-	const MoveElement = (ev : MouseEvent, ignoreMovement ?: boolean) : void =>
+	const MoveElement = (ev : MouseEvent, ignoreMovement ?: boolean) =>
 	{
 		if (!IsSet(element)) return;
 
@@ -2080,7 +2080,7 @@ const CreateUserContent = (
 	return element;
 };
 
-const CreateEditor = (id : string, value : string, language : string, isActive ?: boolean) : void =>
+const CreateEditor = (id : string, value : string, language : string, isActive ?: boolean) =>
 {
 	RemoveClass(document.documentElement, "wait");
 	RemoveClass(document.documentElement, "file-loading");
@@ -2117,7 +2117,7 @@ const ShowFile = (
 	skipFileLoading ?: boolean,
 	forceDownload ?: boolean,
 	isMultipleFileEditor ?: boolean,
-) : void =>
+) =>
 {
 	AddClass(document.documentElement, "wait");
 	AddClass(document.documentElement, "file-open");
@@ -2447,11 +2447,11 @@ const GetFolderEntries = (folder : DataTransferItem, path : string, entries : Fi
 
 const AreUserContentContainersEmpty = () : boolean => foldersContainer.innerHTML.trim() === "" && filesContainer.innerHTML.trim() === "";
 
-const EmptyUserContentContainers = () : void => { foldersContainer.innerHTML = filesContainer.innerHTML = ""; };
+const EmptyUserContentContainers = () => { foldersContainer.innerHTML = filesContainer.innerHTML = ""; };
 
 const IsShared = () : boolean => !Auth.IsAuthenticated || location.pathname.indexOf("/shared") > -1;
 
-const UpdateBottomSectionBar = (selectedItem : HTMLElement) : void =>
+const UpdateBottomSectionBar = (selectedItem : HTMLElement) =>
 {
 	RemoveClass(viewMyAccount, "selected");
 	RemoveClass(viewSharedContent, "selected");
