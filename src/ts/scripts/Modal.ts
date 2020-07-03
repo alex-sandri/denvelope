@@ -76,11 +76,7 @@ export class Modal
 
 	public Show = (unique ?: boolean) =>
 	{
-		this.CloseButton.addEventListener("click", () =>
-		{
-			this.Hide();
-			this.Remove();
-		});
+		this.CloseButton.addEventListener("click", this.HideAndRemove);
 
 		this.ConfirmButton.addEventListener("click", this.OnConfirm);
 		this.UpdateButton.addEventListener("click", this.OnUpdate);
