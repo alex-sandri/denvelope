@@ -325,11 +325,14 @@ window.addEventListener("userready", async () =>
 
 		const ShowAvailableFoldersIn = async (id : string) =>
 		{
-			if (id === "root") HideElement(ContextMenuButtons.MoveSelectorBack);
-			else ShowElement(ContextMenuButtons.MoveSelectorBack);
+			HideElements([
+				ContextMenuButtons.MoveSelectorBack,
+				ContextMenuButtons.MoveSelectorMoveHere,
+			]);
 
-			if (currentId === initialFolderId) HideElement(ContextMenuButtons.MoveSelectorMoveHere);
-			else ShowElement(ContextMenuButtons.MoveSelectorMoveHere);
+			if (id !== "root") ShowElement(ContextMenuButtons.MoveSelectorBack);
+
+			if (currentId !== initialFolderId) ShowElement(ContextMenuButtons.MoveSelectorMoveHere);
 
 			ShowElement(spinner);
 
@@ -390,7 +393,10 @@ window.addEventListener("userready", async () =>
 
 		ContextMenuButtons.MoveSelectorBack.addEventListener("click", async () =>
 		{
-			HideElement(ContextMenuButtons.MoveSelectorBack);
+			HideElements([
+				ContextMenuButtons.MoveSelectorBack,
+				ContextMenuButtons.MoveSelectorMoveHere,
+			]);
 
 			ShowElement(spinner);
 
