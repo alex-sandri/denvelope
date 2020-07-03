@@ -993,15 +993,13 @@ window.addEventListener("userready", async () =>
 		UpdateBottomSectionBar(viewMyAccount);
 	});
 
-	document.addEventListener("scroll", () => HideContextMenu());
-
 	document.addEventListener("contextmenu", e =>
 		// Allow custom context menu only outside of any .allow-context-menu and inside .user-content
 		(((<HTMLElement>e.target).closest(".allow-context-menu") === null
 		&& (<HTMLElement>e.target).closest(".user-content") !== null
 		&& !contextMenuContainer.contains(<HTMLElement>e.target))
 			? showContextMenu(e)
-			: HideContextMenu()));
+			: ContextMenu.Hide()));
 
 	document.addEventListener("drop", e =>
 	{
@@ -1049,8 +1047,6 @@ window.addEventListener("userready", async () =>
 		const UpdateContentSelectorSize = (ev : MouseEvent) =>
 		{
 			ShowElement(multipleContentSelector);
-
-			HideContextMenu();
 
 			let width = e.pageX - ev.pageX;
 			let height = e.pageY - ev.pageY;
@@ -1812,8 +1808,6 @@ const showContextMenu = (e : MouseEvent) =>
 	ContextMenu.Show(contextMenuButtons);
 };
 
-const HideContextMenu = () => ContextMenu.Hide();
-
 const addUserContentEvents = () =>
 {
 	const userContentMenuButtons = (<NodeListOf<HTMLButtonElement>>document.querySelectorAll(`${folderSelector} .menu-button button,${fileSelector} .menu-button button`));
@@ -1878,8 +1872,6 @@ const HandlePageChangeAndLoadUserContent = (
 
 		const openInNewWindow = e?.button === 1; // Mouse wheel
 
-		HideContextMenu();
-
 		const url = getUserContentURL(
 			<HTMLElement>GetUserContentElement(target),
 			!Auth.IsAuthenticated,
@@ -1918,8 +1910,6 @@ const HandleUserContentMove = (e : MouseEvent, ignoreMovement ?: boolean) =>
 
 		const top : number = ev.pageY;
 		const left : number = ev.pageX;
-
-		HideContextMenu();
 
 		if (Auth.IsAuthenticated)
 		{
