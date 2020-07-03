@@ -99,7 +99,10 @@ export class Modal
 
 		(<HTMLInputElement | HTMLButtonElement | null> this.Content.querySelector("input, select, button"))?.focus();
 
-		document.addEventListener("mouseup", this.HideOnOuterClick);
+		this.container.addEventListener("click", e =>
+		{
+			if (e.target === this.container) this.HideAndRemove();
+		});
 
 		window.addEventListener("keydown", e =>
 		{
@@ -124,8 +127,6 @@ export class Modal
 		this.OnClose();
 
 		setTimeout(() => this.container.remove(), <number><unknown>getComputedStyle(this.element).getPropertyValue("animation-duration").replace(/[a-z]+/g, "") * 1000);
-
-		document.removeEventListener("mouseup", this.HideOnOuterClick);
 	}
 
 	public HideAndRemove = () =>
@@ -183,11 +184,6 @@ export class Modal
 		ShowElement(this.spinner, "block");
 
 		this.Content.innerHTML = "";
-	}
-
-	private HideOnOuterClick = (e : Event) =>
-	{
-		if (e.target === this.element.parentElement && !HasClass(this.element, "keep-alive")) this.HideAndRemove();
 	}
 }
 
