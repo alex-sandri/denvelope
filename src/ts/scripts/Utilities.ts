@@ -130,10 +130,10 @@ export const GetCurrentFolderIdAsync = async (allowFakeFolderIds?: boolean): Pro
 
 export const SetCurrentFolderId = (id: string): void => { (<HTMLInputElement>document.querySelector("input[name=folder-id]")).value = id; };
 
-export const GetFirestoreServerTimestamp = (): firebaseFirestore.FieldValue =>
-	<firebaseFirestore.FieldValue>firebase.firestore.FieldValue.serverTimestamp();
+export const GetFirestoreServerTimestamp = (): firebaseFirestore.Timestamp =>
+	<firebaseFirestore.Timestamp>firebase.firestore.FieldValue.serverTimestamp();
 
-export const GetFirestoreUpdateTimestamp = (): Object =>
+export const GetFirestoreUpdateTimestamp = () =>
 	({
 		updated: GetFirestoreServerTimestamp(),
 		lastClientUpdateTime: new firebase.firestore.Timestamp.now() as firebaseFirestore.Timestamp,

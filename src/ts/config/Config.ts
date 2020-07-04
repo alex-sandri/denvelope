@@ -64,10 +64,25 @@ export namespace Config
 			inVault: boolean,
 		}
 
+		export interface FolderUpdate
+		{
+			updated?: firebase.firestore.Timestamp,
+			lastClientUpdateTime?: firebase.firestore.Timestamp,
+			name?: string,
+			parentId?: string,
+			shared?: boolean,
+			starred?: boolean,
+			trashed?: boolean,
+			inVault?: boolean,
+		}
+
 		export interface File extends Config.Data.Folder
 		{
 			size: number,
 		}
+
+		export interface FileUpdate extends Config.Data.FolderUpdate
+		{}
 
 		export interface Preferences
 		{

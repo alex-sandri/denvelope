@@ -33,6 +33,7 @@ import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
 import Shortcuts from "./scripts/Shortcuts";
 import ContextMenu, { ContextMenuButtons, ContextMenuButton } from "./scripts/ContextMenu";
 import { Config } from "./config/Config";
+import Database from "./classes/Database";
 
 Init();
 
@@ -253,7 +254,7 @@ window.addEventListener("userready", async () =>
 
 		UploadFile(value, (<HTMLElement>(<HTMLElement>editorTabs.querySelector(".active")).querySelector(".name")).innerText, value.length, GetCurrentFolderId(true), id);
 
-		db.collection(`users/${Auth.UserId}/files`).doc(id).update({ ...GetFirestoreUpdateTimestamp() });
+		Database.Folder.Update(id, { ...GetFirestoreUpdateTimestamp() });
 
 		preventWindowUnload.editor = false;
 
@@ -2353,7 +2354,7 @@ const UploadFolder = async (
 		|| finalParentId === "starred"
 		|| finalParentId === "trash") finalParentId = "root";
 
-	db.collection(`users/${Auth.UserId}/folders`).add({
+	const id = await Database.Folder.Create({
 		name: finalName,
 		parentId: finalParentId,
 		shared: false,
@@ -2362,32 +2363,29 @@ const UploadFolder = async (
 		inVault: await vaultOnly(),
 		created: GetFirestoreServerTimestamp(),
 		...GetFirestoreUpdateTimestamp(),
-	}).then(ref =>
-	{
-		const { id } = ref;
-
-		const folders : Set<string> = new Set();
-
-		const nextDepth = depth + 1;
-
-		files.forEach((file : File) =>
-		{
-			if (nextDepth < (<any>file).webkitRelativePath.split("/").length - 1)
-				folders.add((<any>file).webkitRelativePath.split("/")[nextDepth]);
-		});
-
-		Array
-			.from(folders)
-			.filter(folder => folder.length > 0)
-			.forEach(folder => UploadFolder(files.filter((file : File) =>
-				(<any>file).webkitRelativePath.indexOf(`${path + folder}/`) === 0), folder, `${path + folder}/`, id, nextDepth));
-
-		UploadFiles(
-			files
-				.filter((file : File) => (<any>file).webkitRelativePath.substr(path.length) === file.name),
-			id,
-		);
 	});
+
+	const folders : Set<string> = new Set();
+
+	const nextDepth = depth + 1;
+
+	files.forEach((file : File) =>
+	{
+		if (nextDepth < (<any>file).webkitRelativePath.split("/").length - 1)
+			folders.add((<any>file).webkitRelativePath.split("/")[nextDepth]);
+	});
+
+	Array
+		.from(folders)
+		.filter(folder => folder.length > 0)
+		.forEach(folder => UploadFolder(files.filter((file : File) =>
+			(<any>file).webkitRelativePath.indexOf(`${path + folder}/`) === 0), folder, `${path + folder}/`, id, nextDepth));
+
+	UploadFiles(
+		files
+			.filter((file : File) => (<any>file).webkitRelativePath.substr(path.length) === file.name),
+		id,
+	);
 };
 
 const UploadFiles = async (files : File[], parentId : string) : Promise<void> =>
