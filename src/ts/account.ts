@@ -69,6 +69,8 @@ const userContentLoadingSpinner: HTMLSpanElement = <HTMLSpanElement>document.que
 const vault: HTMLDivElement = <HTMLDivElement>document.querySelector(".vault");
 const vaultInfo: HTMLDivElement = <HTMLDivElement>document.querySelector(".vault-info");
 
+const userContentContainer: HTMLElement = <HTMLElement>document.querySelector(".user-content");
+
 const foldersContainer: HTMLDivElement = <HTMLDivElement>document.querySelector(".folders-container");
 const folderSelector: string = "div.folder";
 
@@ -1024,7 +1026,7 @@ window.addEventListener("userready", async () =>
 		});
 	});
 
-	(<HTMLElement>foldersContainer.parentElement).addEventListener("mousedown", e =>
+	userContentContainer.addEventListener("mousedown", e =>
 	{
 		if (isUserContentElement(<HTMLElement>e.target) && e.button === 2 && !HasClass(<HTMLElement>GetUserContentElement(<HTMLElement>e.target), "selected"))
 			ContextMenu.ClearItems();
@@ -1438,8 +1440,18 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 
 	EmptyUserContentContainers();
 
-	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname)) HideElement(topSection);
-	else ShowElement(topSection);
+	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname))
+	{
+		HideElement(topSection);
+
+		userContentContainer.style.paddingTop = "0";
+	}
+	else
+	{
+		ShowElement(topSection);
+
+		userContentContainer.style.paddingTop = "15px";
+	}
 
 	if (globalSearch) HideElement(folderNavigation);
 
@@ -1460,7 +1472,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			break;
 		case "the answer to life, the universe and everything":
 		case "the answer to life the universe and everything":
-			(<HTMLElement>document.querySelector(".user-content")).insertAdjacentElement("afterbegin", new Component("p", {
+			userContentContainer.insertAdjacentElement("afterbegin", new Component("p", {
 				class: "easter-egg",
 				innerText: "42",
 				style: <CSSStyleDeclaration>{
@@ -1564,7 +1576,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			.forEach(element => Translation.Register("account->title", element));
 	}
 
-	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${topSection.clientHeight}px)`;
+	userContentContainer.style.height = `calc(100% - ${topSection.clientHeight}px)`;
 
 	let callCount = 0; // The number of times UserContentLoaded has been called
 
