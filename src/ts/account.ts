@@ -54,6 +54,7 @@ const viewStarredContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.quer
 const viewRecentContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#recents");
 const viewTrashedContent: HTMLButtonElement = <HTMLButtonElement>bottomMenu.querySelector("#trash");
 
+const topSection: HTMLElement = <HTMLElement>document.querySelector(".top-section");
 const searchBar: HTMLInputElement = <HTMLInputElement>document.querySelector("#search");
 const addContent: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#add-content");
 
@@ -1436,6 +1437,9 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 	const parentId = GetCurrentFolderId(true);
 
 	EmptyUserContentContainers();
+
+	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname)) HideElement(topSection);
+	else ShowElement(topSection);
 
 	if (globalSearch) HideElement(folderNavigation);
 
