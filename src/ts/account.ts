@@ -1452,6 +1452,12 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 
 	ShowElement(userContentLoadingSpinner);
 
+	switch (searchTerm)
+	{
+		case "do a barrel roll": document.body.style.animation = "rotate 4s"; break;
+		default: document.body.style.animation = ""; break;
+	}
+
 	// The user is probably loading a file, this function will be called
 	// later when the file parentId is received by the client
 	if (parentId === "") return;
