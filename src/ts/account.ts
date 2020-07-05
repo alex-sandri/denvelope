@@ -1535,7 +1535,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			.forEach(element => Translation.Register("account->title", element));
 	}
 
-	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${(<HTMLElement>document.querySelector(".top-section")).clientHeight}px)`;
+	(<HTMLDivElement>document.querySelector(".user-content")).style.height = `calc(100% - ${topSection.clientHeight}px)`;
 
 	let callCount = 0; // The number of times UserContentLoaded has been called
 
