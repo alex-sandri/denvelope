@@ -1452,10 +1452,33 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 
 	ShowElement(userContentLoadingSpinner);
 
-	switch (searchTerm)
+	switch (searchTerm?.toLowerCase())
 	{
-		case "do a barrel roll": document.body.style.animation = "rotate 4s"; break;
-		default: document.body.style.animation = ""; break;
+		case "do a barrel roll":
+			document.body.style.animation = "rotate 4s";
+
+			break;
+		case "the answer to life, the universe and everything":
+		case "the answer to life the universe and everything":
+			(<HTMLElement>document.querySelector(".user-content")).insertAdjacentElement("afterbegin", new Component("p", {
+				class: "easter-egg",
+				innerText: "42",
+				style: <CSSStyleDeclaration>{
+					fontSize: "50px",
+					fontWeight: "900",
+					textAlign: "center",
+					margin: "0",
+					marginBottom: "15px",
+				},
+			}).element);
+
+			break;
+		default:
+			document.body.style.animation = "";
+
+			document.querySelectorAll(".easter-egg").forEach(element => element.remove());
+
+			break;
 	}
 
 	// The user is probably loading a file, this function will be called
