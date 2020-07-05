@@ -2687,7 +2687,6 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
 		AddClass(viewStarredContent, "selected");
 	}
 	else if (location.pathname === "/account/recents") AddClass(viewRecentContent, "selected");
-
 	else if (location.pathname === "/account/trash")
 	{
 		currentFolderId = "trash";
@@ -2701,8 +2700,10 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
 		AddClass(viewMyAccount, "selected");
 	}
 	else if (location.pathname === "/account/storage/info") AddClass(viewMyAccount, "selected");
-
 	else AddClass(viewMyAccount, "selected");
+
+	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname)) HideElement(topSection);
+	else ShowElement(topSection);
 
 	SetCurrentFolderId(currentFolderId);
 }
