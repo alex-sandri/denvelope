@@ -1,6 +1,7 @@
 import path from "path";
+import * as webpack from 'webpack';
 
-module.exports = [
+const config: webpack.Configuration[] = [
     {
         entry: "./src/ts/sw/sw.ts",
         module: {
@@ -23,3 +24,5 @@ module.exports = [
         },
     }
 ];
+
+export default config;

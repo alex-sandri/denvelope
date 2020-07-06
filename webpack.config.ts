@@ -1,7 +1,8 @@
 import path from "path";
+import * as webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
-module.exports = [
+const config: webpack.Configuration[] = [
     {
         entry: {
             index: "./src/ts/index.ts",
@@ -75,3 +76,5 @@ module.exports = [
         },
     }
 ];
+
+export default config;
