@@ -11,6 +11,8 @@ button,
     font-size: 20px;
     cursor: pointer;
     transition: $transition-time;
+    text-align: center;
+    text-decoration: none;
 
     &.transparent
     {
@@ -25,6 +27,18 @@ button,
         &:disabled:hover
         {
             background-color: rgba($primary-color, 0.5);
+        }
+    }
+
+    &.inverted
+    {
+        color: $primary-color;
+        background-color: $secondary-color;
+
+        &:hover
+        {
+            color: $secondary-color;
+            background-color: $primary-color;
         }
     }
 

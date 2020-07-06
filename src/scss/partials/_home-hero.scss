@@ -39,23 +39,9 @@
         margin: 0 auto;
     }
 
-    .sign-in,
-    .go-to-account
+    button,
+    .button
     {
-        background-color: $secondary-color;
-        color: $primary-color;
         margin-top: $default-spacing;
-
-        &:hover
-        {
-            background-color: $primary-color;
-            color: $secondary-color;
-        }
-    }
-
-    .go-to-account
-    {
-        text-decoration: none;
-        text-align: center;
     }
 }
