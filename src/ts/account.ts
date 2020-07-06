@@ -357,14 +357,14 @@ window.addEventListener("userready", async () =>
 								id: doc.id,
 								children: [
 									new Component("button", {
-										class: "select",
+										class: "inverted select",
 										children: [
 											new Component("i", { class: "fas fa-folder" }).element,
 											new Component("span", { innerText: doc.data().name }).element,
 										],
 									}).element,
 									new Component("button", {
-										class: "goto",
+										class: "inverted goto",
 										children: [ new Component("i", { class: "fas fa-chevron-right" }).element ],
 									}).element,
 								],

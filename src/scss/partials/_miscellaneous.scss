@@ -139,36 +139,17 @@
 
     button
     {
+        width: 100%;
+        border-color: $primary-color;
+
         &:focus
         {
             box-shadow: 0 0 0 $border-width * 2 $primary-color;
         }
 
-        &:not(.close-button):not(.update-button):not(.confirm-button):not(.upload-control):not(.input-icon):not(.firebaseui-idp-button)
-        {
-            width: 100%;
-            background-color: $secondary-color;
-            color: $primary-color;
-            border-color: $primary-color;
-
-            &:hover
-            {
-                background-color: $primary-color;
-                color: $secondary-color;
-            }
-        }
-
         &:not(.close-button):not(.input-icon):not(.upload-control)
         {
             margin-bottom: $default-spacing;
-        }
-
-        &.close-button,
-        &.update-button,
-        &.confirm-button
-        {
-            width: 100%;
-            border-color: $primary-color;
         }
 
         &.update-button,
