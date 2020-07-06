@@ -6,7 +6,7 @@
   ],
   "compilerOptions": {
     "target": "ES2019",
-    "module": "CommonJS",
+    "module": "ESNext",
     "removeComments": true,
     "strict": true,
     "alwaysStrict": true,
