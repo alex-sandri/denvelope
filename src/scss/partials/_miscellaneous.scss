@@ -564,20 +564,6 @@
     }
 }
 
-.StripeElement:not(#payment-request-button)
-{
-    padding: $default-spacing;
-    border: $border-width solid $primary-color;
-    border-radius: $border-radius;
-    background-color: $primary-color;
-    margin-bottom: $default-spacing;
-
-    &--invalid
-    {
-        border-color: red;
-    }
-}
-
 .firebaseui-auth-container
 {
     display: none;
