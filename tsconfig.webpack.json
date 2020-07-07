@@ -1,4 +1,8 @@
 {
+  "include": [
+    "webpack.config.ts",
+    "*.webpack.config.ts"
+  ],
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
