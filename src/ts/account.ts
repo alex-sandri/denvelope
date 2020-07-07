@@ -1576,8 +1576,6 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 			.forEach(element => Translation.Register("account->title", element));
 	}
 
-	userContentContainer.style.height = `calc(100% - ${topSection.clientHeight}px)`;
-
 	let callCount = 0; // The number of times UserContentLoaded has been called
 
 	const UserContentLoaded = async (isUpdate : boolean) =>
