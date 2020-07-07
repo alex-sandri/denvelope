@@ -2,8 +2,6 @@ import path from "path";
 import * as webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
-delete process.env.TS_NODE_PROJECT;
-
 const config: webpack.Configuration[] = [
     {
         entry: {
