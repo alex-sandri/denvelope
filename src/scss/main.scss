@@ -98,7 +98,7 @@ body
     &.settings
     {
         display: grid;
-        grid-template-rows: $header-height auto $bottom-menu-height;
+        grid-template-rows: max-content auto max-content;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
