@@ -1,5 +1,7 @@
 .account-main
 {
+    display: grid;
+    grid-template-rows: max-content auto;
     padding: 0 $default-spacing;
     background-color: rgba($primary-color, 0.5);
 
