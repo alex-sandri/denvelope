@@ -133,7 +133,6 @@
     div.#{$element}
     {
         display: flex;
-        justify-content: space-between;
         background-color: $secondary-color;
         color: $primary-color;
         border: $border-width solid $secondary-color;
