@@ -72,3 +72,5 @@ public/assets/js
 public/sw.js
 public/*.html
 src/scripts/*.js
+webpack.config.js
+*.webpack.config.js
