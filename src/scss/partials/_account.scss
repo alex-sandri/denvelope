@@ -113,6 +113,9 @@
     .user-content
     {
         overflow: auto;
+        padding: $default-spacing;
+        padding-bottom: 0;
+        margin: 0 #{-$default-spacing};
 
         .folders-container,
         .files-container
