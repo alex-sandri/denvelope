@@ -93,15 +93,11 @@ body
         overflow: hidden;
     }
 
-    &.account
-    {
-        display: grid;
-        grid-template-rows: $header-height auto $bottom-menu-height;
-    }
-
     &.account,
     &.settings
     {
+        display: grid;
+        grid-template-rows: $header-height auto $bottom-menu-height;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;

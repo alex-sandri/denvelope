@@ -1,6 +1,5 @@
 .settings main
 {
-    height: calc(100% - #{$header-height + $bottom-menu-height});
     padding: $default-spacing;
     padding-top: 0;
     background-color: rgba($primary-color, 0.5);
