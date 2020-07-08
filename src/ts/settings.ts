@@ -286,15 +286,18 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	changePlan.addEventListener("click", async () =>
-	{
-		const { data } = await functions.httpsCallable("createCheckoutSession")({
-			maxStorage: (<HTMLElement>plans.querySelector(".selected")).getAttribute("data-max-storage"),
-			currency: Translation.Currency,
-			billingPeriod: (<HTMLElement>document.querySelector(".billing-periods .selected")).classList[0],
-		});
-
-		stripe.redirectToCheckout({ sessionId: data.sessionId });
+	Settings.Register({
+		button: changePlan,
+		callback: async () =>
+		{
+			const { data } = await functions.httpsCallable("createCheckoutSession")({
+				maxStorage: (<HTMLElement>plans.querySelector(".selected")).getAttribute("data-max-storage"),
+				currency: Translation.Currency,
+				billingPeriod: (<HTMLElement>document.querySelector(".billing-periods .selected")).classList[0],
+			});
+	
+			stripe.redirectToCheckout({ sessionId: data.sessionId });
+		},
 	});
 
 	manageSubscription.addEventListener("click", async () =>
