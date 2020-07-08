@@ -72,35 +72,36 @@ export default () =>
 	const changeLanguage: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-language .edit");
 	const languageSelect: HTMLSelectElement = <HTMLSelectElement>document.querySelector("#language-select");
 
-	Settings.Register({
-		button: changeLanguage,
-		callback: () =>
-		{
-			Translation.Init(<Config.Locale>languageSelect.selectedOptions[0].value, true);
-		},
-		options: {
-			modal: {
-				action: "confirm",
-				content: () =>
-				{
-					const selectCurrentLanguage = () =>
+	if (changeLanguage)
+		Settings.Register({
+			button: changeLanguage,
+			callback: () =>
+			{
+				Translation.Init(<Config.Locale>languageSelect.selectedOptions[0].value, true);
+			},
+			options: {
+				modal: {
+					action: "confirm",
+					content: () =>
 					{
-						languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
-					};
+						const selectCurrentLanguage = () =>
+						{
+							languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
+						};
 
-					selectCurrentLanguage();
+						selectCurrentLanguage();
 
-					window.addEventListener("translationlanguagechange", selectCurrentLanguage);
+						window.addEventListener("translationlanguagechange", selectCurrentLanguage);
 
-					return [ languageSelect ];
-				},
-				override: {
-					titleTranslationId: "generic->language",
-					subtitleTranslationId: "generic->edit",
+						return [ languageSelect ];
+					},
+					override: {
+						titleTranslationId: "generic->language",
+						subtitleTranslationId: "generic->edit",
+					},
 				},
 			},
-		},
-	});
+		});
 
 	Auth.Init();
 
