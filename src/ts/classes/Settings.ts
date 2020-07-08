@@ -9,7 +9,7 @@ type SettingRegistration =
 	/**
 	 * @returns The success status
 	 */
-	callback: (content: HTMLElement) => Promise<{
+	callback: (content?: HTMLElement) => Promise<{
 		valid: boolean,
 		errors?: {
 			element: HTMLElement,
@@ -107,5 +107,6 @@ export default class Settings
 
 			modal.Show(true);
 		}
+		else reg.callback();
 	}
 }
