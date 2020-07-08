@@ -25,12 +25,15 @@ type SettingRegistrationOptions =
         required: boolean,
         action: "confirm" | "update",
         content?: HTMLElement[],
-        validator?: {
-            on: string,
-            targets: HTMLElement[],
-            callback: () => boolean,
-        },
+        validator?: SettingRegistrationModalValidator,
     },
+}
+
+type SettingRegistrationModalValidator =
+{
+    on: string,
+    targets: HTMLElement[],
+    callback: () => boolean,
 }
 
 export default class Settings
@@ -40,8 +43,8 @@ export default class Settings
         if (reg.options.modal.required)
         {
             const modal = new Modal({
-                titleTranslationId: (<HTMLElement>(<HTMLElement>reg.button.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-                subtitleTranslationId: reg.button.getAttribute("data-translation"),
+                titleTranslationId: <string>(<HTMLElement>(<HTMLElement>reg.button.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
+                subtitleTranslationId: <string>reg.button.getAttribute("data-translation"),
                 action: reg.options.modal.action
             });
 
@@ -53,9 +56,9 @@ export default class Settings
 
                 actionButton.disabled = true;
 
-                reg.options.modal.validator.targets.forEach(target => target.addEventListener(reg.options.modal.validator.on, () =>
+                reg.options.modal.validator.targets.forEach(target => target.addEventListener((<SettingRegistrationModalValidator>reg.options.modal.validator).on, () =>
                 {
-                    actionButton.disabled = !reg.options.modal.validator.callback();
+                    actionButton.disabled = !(<SettingRegistrationModalValidator>reg.options.modal.validator).callback();
                 }));
             }
 
