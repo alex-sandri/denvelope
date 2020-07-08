@@ -57,9 +57,10 @@ export default class Settings
 			if (reg.options?.modal)
 			{
 				const modal = new Modal({
-					titleTranslationId: <string>(<HTMLElement>(<HTMLElement>reg.button.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-					subtitleTranslationId: <string>reg.button.getAttribute("data-translation"),
+					titleTranslationId: reg.button.closest(".setting")?.querySelector("h1")?.getAttribute("data-translation") ?? undefined,
+					subtitleTranslationId: reg.button.getAttribute("data-translation") ?? undefined, // undefined is accepted but not null
 					action: reg.options.modal.action,
+					...reg.options.modal.override,
 				});
 
 				const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
