@@ -36,11 +36,9 @@ service cloud.firestore {
       }
 
       function validateDateFormatOptions() {
-        return incomingData().dateFormatOptions.keys().hasOnly([ "weekday", "era", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ]) &&
+        return incomingData().dateFormatOptions.keys().hasOnly([ "weekday", "year", "month", "day", "hour", "minute", "second", "timeZoneName" ]) &&
           ((incomingData().dateFormatOptions.weekday is string &&
           [ incomingData().dateFormatOptions.weekday ].hasAny([ "long", "short", "narrow" ])) || !("weekday" in incomingData().dateFormatOptions)) &&
-          ((incomingData().dateFormatOptions.era is string &&
-          [ incomingData().dateFormatOptions.era ].hasAny([ "long", "short", "narrow" ]) || !("era" in incomingData().dateFormatOptions))) &&
           incomingData().dateFormatOptions.year is string &&
           [ incomingData().dateFormatOptions.year ].hasAny([ "numeric", "2-digit" ]) &&
           incomingData().dateFormatOptions.month is string &&

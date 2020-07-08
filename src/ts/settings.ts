@@ -204,9 +204,6 @@ window.addEventListener("userready", () =>
 			weekday: (<HTMLInputElement>dateFormatOptionsElement.querySelector("#show-weekday")).checked
 				? (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#weekday")).selectedOptions[0].value
 				: undefined,
-			era: (<HTMLInputElement>dateFormatOptionsElement.querySelector("#show-era")).checked
-				? (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#era")).selectedOptions[0].value
-				: undefined,
 			year: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#year")).selectedOptions[0].value,
 			month: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#month")).selectedOptions[0].value,
 			day: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#day")).selectedOptions[0].value,
