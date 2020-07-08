@@ -143,49 +143,48 @@ settingsMenuButtons.forEach(element =>
 
 window.addEventListener("userready", () =>
 {
-	changeBackground.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeBackground.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			action: "confirm",
-		});
-
-		const { element, input } = new Input({
-			labelTranslationId: "account->image_address",
-			attributes: { type: "url" },
-		});
-
-		input.addEventListener("input", () =>
+	Settings.Register({
+		button: changeBackground,
+		callback: async content =>
 		{
-			let valid : boolean = true;
+			const backgroundImageUrlInput = <HTMLInputElement>content.querySelector("input");
 
-			try
-			{
-				const url = new URL(input.value);
+			await db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: backgroundImageUrlInput.value }, { merge: true });
 
-				valid = url.protocol === "https:";
-			}
-			catch (err) { valid = false; }
+			return { valid: true };
+		},
+		options: {
+			modal: {
+				required: true,
+				action: "confirm",
+				content: [
+					new Input({
+						labelTranslationId: "account->image_address",
+						attributes: { type: "url" },
+					}).element,
+				],
+				validators: [
+					{
+						on: "input",
+						target: "input",
+						callback: input =>
+						{
+							let valid = true;
 
-			modal.ConfirmButton.disabled = !valid;
-		});
+							try
+							{
+								const url = new URL((<HTMLInputElement>input).value);
 
-		modal.ConfirmButton.disabled = true;
+								valid = url.protocol === "https:";
+							}
+							catch (err) { valid = false; }
 
-		modal.AppendContent([ element ]);
-
-		modal.OnConfirm = () =>
-		{
-			if (HasClass(input, "error")) element.previousElementSibling?.remove();
-
-			RemoveClass(input, "error");
-
-			modal.HideAndRemove();
-
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: input.value }, { merge: true });
-		};
-
-		modal.Show(true);
+							return valid;
+						},
+					},
+				],
+			},
+		},
 	});
 
 	resetBackground.addEventListener("click", () =>
