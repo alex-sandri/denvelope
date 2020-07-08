@@ -186,9 +186,6 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	resetBackground.addEventListener("click", () =>
-		db.collection(`users/${Auth.UserId}/config`).doc("preferences").update({ backgroundImageUrl: firebase.firestore.FieldValue.delete() }));
-
 	Settings.Register({
 		button: resetBackground,
 		callback: async () =>
