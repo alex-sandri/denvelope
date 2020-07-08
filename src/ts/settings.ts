@@ -157,12 +157,12 @@ window.addEventListener("userready", () =>
 			modal: {
 				required: true,
 				action: "confirm",
-				content: [
+				content: () => ([
 					new Input({
 						labelTranslationId: "account->image_address",
 						attributes: { type: "url" },
 					}).element,
-				],
+				]),
 				validators: [
 					{
 						on: "input",

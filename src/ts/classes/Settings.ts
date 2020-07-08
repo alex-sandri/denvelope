@@ -24,7 +24,7 @@ type SettingRegistrationOptions =
 	modal: {
 		required: boolean,
 		action: "confirm" | "update",
-		content?: HTMLElement[],
+		content?: () => HTMLElement[],
 		validators?: SettingRegistrationModalValidator[],
 	},
 }
@@ -53,7 +53,7 @@ export default class Settings
 					action: reg.options.modal.action,
 				});
 
-				if (reg.options.modal.content) modal.AppendContent(reg.options.modal.content);
+				if (reg.options.modal.content) modal.AppendContent(reg.options.modal.content());
 
 				if (reg.options.modal.validators)
 				{
