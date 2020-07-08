@@ -1,5 +1,11 @@
 import { Modal } from "../scripts/Modal";
-import { HasClass, RemoveClass, AddClass } from "../scripts/Utilities";
+import {
+	HasClass,
+	RemoveClass,
+	AddClass,
+	HideElements,
+	ShowElements,
+} from "../scripts/Utilities";
 import { Component } from "../scripts/Component";
 import Translation from "../scripts/Translation";
 
@@ -53,12 +59,12 @@ export default class Settings
 					action: reg.options.modal.action,
 				});
 
+				const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
+
 				if (reg.options.modal.content) modal.AppendContent(reg.options.modal.content());
 
 				if (reg.options.modal.validators)
 				{
-					const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
-
 					actionButton.disabled = true;
 
 					reg.options.modal.validators.forEach(validator =>
@@ -85,11 +91,13 @@ export default class Settings
 						RemoveClass(target, "error");
 					});
 
-					modal.Hide();
+					HideElements([ modal.Content, actionButton ]);
+
+					modal.ShowSpinner();
 
 					const result = await reg.callback(modal.Content);
 
-					if (result.valid) modal.Remove();
+					if (result.valid) modal.HideAndRemove();
 					else if (result.errors)
 					{
 						result.errors.forEach(error =>
@@ -103,7 +111,9 @@ export default class Settings
 							error.element.insertAdjacentElement("beforebegin", errorParagraph);
 						});
 
-						modal.Show(true);
+						modal.HideSpinner();
+
+						ShowElements([ modal.Content, actionButton ]);
 					}
 				};
 

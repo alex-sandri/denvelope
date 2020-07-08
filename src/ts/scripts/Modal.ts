@@ -185,6 +185,10 @@ export class Modal
 
 		this.Content.innerHTML = "";
 	}
+
+	public ShowSpinner = () => ShowElement(this.spinner);
+
+	public HideSpinner = () => HideElement(this.spinner);
 }
 
 export class UploadModal extends Modal
