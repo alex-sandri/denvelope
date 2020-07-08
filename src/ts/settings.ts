@@ -295,7 +295,7 @@ window.addEventListener("userready", () =>
 				currency: Translation.Currency,
 				billingPeriod: (<HTMLElement>document.querySelector(".billing-periods .selected")).classList[0],
 			});
-	
+
 			stripe.redirectToCheckout({ sessionId: data.sessionId });
 		},
 	});
