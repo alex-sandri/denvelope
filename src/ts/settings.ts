@@ -197,85 +197,91 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	changeDateFormat.addEventListener("click", async () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeDateFormat.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			action: "confirm",
+	const GetDateTimeFormatOptions = (
+		dateFormatOptionsElement: HTMLElement,
+	): Intl.DateTimeFormatOptions =>
+		({
+			weekday: (<HTMLInputElement>dateFormatOptionsElement.querySelector("#show-weekday")).checked
+				? (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#weekday")).selectedOptions[0].value
+				: undefined,
+			era: (<HTMLInputElement>dateFormatOptionsElement.querySelector("#show-era")).checked
+				? (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#era")).selectedOptions[0].value
+				: undefined,
+			year: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#year")).selectedOptions[0].value,
+			month: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#month")).selectedOptions[0].value,
+			day: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#day")).selectedOptions[0].value,
+			hour: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#hour")).selectedOptions[0].value,
+			minute: (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#minute")).selectedOptions[0].value,
+			second: (<HTMLInputElement>dateFormatOptionsElement.querySelector("#show-second")).checked
+				? (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#second")).selectedOptions[0].value
+				: undefined,
+			timeZoneName: (<HTMLInputElement>dateFormatOptionsElement.querySelector("#show-timeZoneName")).checked
+				? (<HTMLSelectElement>dateFormatOptionsElement.querySelector("#timeZoneName")).selectedOptions[0].value
+				: undefined,
 		});
 
-		const dateFormatOptions : HTMLDivElement = <HTMLDivElement>(<HTMLDivElement>document.querySelector("#date-format .date-format-options")).cloneNode(true);
-
-		if (userDateFormatOptions)
-			Array.from(dateFormatOptions.children).forEach(dateFormatOption =>
-			{
-				const showOption: HTMLInputElement = <HTMLInputElement>dateFormatOption.querySelector("input[type=checkbox]");
-				const optionSelect: HTMLSelectElement = <HTMLSelectElement>dateFormatOption.querySelector("select");
-
-				const dateFormatOptionName: string = optionSelect.id;
-
-				if (showOption) showOption.checked = !!(<any>userDateFormatOptions)[dateFormatOptionName];
-
-				if ((<any>userDateFormatOptions)[dateFormatOptionName])
-					(<HTMLSelectElement>dateFormatOptions.querySelector(`#${dateFormatOptionName}`)).selectedIndex
-						= (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${(<any>userDateFormatOptions)[dateFormatOptionName]}"]`)).index;
-			});
-
-		modal.AppendContent([
-			new Component("p", {
-				children: [
-					Translation.GetElement("generic->reference"),
-					new Component("a", {
-						innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
-						href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
-						target: "_blank",
-					}).element,
-				],
-			}).element,
-			new Component("p", {
-				children: [
-					Translation.GetElement("generic->example"),
-					Translation.GetDateElement(new Date(), userDateFormatOptions),
-				],
-			}).element,
-			dateFormatOptions,
-		]);
-
-		const GetDateTimeFormatOptions = () : Intl.DateTimeFormatOptions =>
-			({
-				weekday: (<HTMLInputElement>dateFormatOptions.querySelector("#show-weekday")).checked
-					? (<HTMLSelectElement>dateFormatOptions.querySelector("#weekday")).selectedOptions[0].value
-					: undefined,
-				era: (<HTMLInputElement>dateFormatOptions.querySelector("#show-era")).checked
-					? (<HTMLSelectElement>dateFormatOptions.querySelector("#era")).selectedOptions[0].value
-					: undefined,
-				year: (<HTMLSelectElement>dateFormatOptions.querySelector("#year")).selectedOptions[0].value,
-				month: (<HTMLSelectElement>dateFormatOptions.querySelector("#month")).selectedOptions[0].value,
-				day: (<HTMLSelectElement>dateFormatOptions.querySelector("#day")).selectedOptions[0].value,
-				hour: (<HTMLSelectElement>dateFormatOptions.querySelector("#hour")).selectedOptions[0].value,
-				minute: (<HTMLSelectElement>dateFormatOptions.querySelector("#minute")).selectedOptions[0].value,
-				second: (<HTMLInputElement>dateFormatOptions.querySelector("#show-second")).checked
-					? (<HTMLSelectElement>dateFormatOptions.querySelector("#second")).selectedOptions[0].value
-					: undefined,
-				timeZoneName: (<HTMLInputElement>dateFormatOptions.querySelector("#show-timeZoneName")).checked
-					? (<HTMLSelectElement>dateFormatOptions.querySelector("#timeZoneName")).selectedOptions[0].value
-					: undefined,
-			});
-
-		[ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
-			.forEach(element => element.addEventListener("change", () =>
-			{
-				(<HTMLSpanElement>modal.Content.querySelector("[data-use=date]")).innerText = FormatDate(Date.now(), GetDateTimeFormatOptions());
-			}));
-
-		modal.OnConfirm = () =>
+	Settings.Register({
+		button: changeDateFormat,
+		callback: async content =>
 		{
-			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: GetDateTimeFormatOptions() }, { merge: true });
+			db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({
+				dateFormatOptions: GetDateTimeFormatOptions(<HTMLElement>(<HTMLElement>content).querySelector(".date-format-options")),
+			}, { merge: true });
+		},
+		options: {
+			modal: {
+				action: "confirm",
+				content: () =>
+				{
+					const dateFormatOptions: HTMLDivElement = <HTMLDivElement>(<HTMLDivElement>document.querySelector("#date-format .date-format-options")).cloneNode(true);
 
-			modal.HideAndRemove();
-		};
+					if (userDateFormatOptions)
+						Array.from(dateFormatOptions.children).forEach(dateFormatOption =>
+						{
+							const showOption: HTMLInputElement = <HTMLInputElement>dateFormatOption.querySelector("input[type=checkbox]");
+							const optionSelect: HTMLSelectElement = <HTMLSelectElement>dateFormatOption.querySelector("select");
 
-		modal.Show(true);
+							const dateFormatOptionName: string = optionSelect.id;
+
+							if (showOption)
+								showOption.checked = !!(<any>userDateFormatOptions)[dateFormatOptionName];
+
+							if ((<any>userDateFormatOptions)[dateFormatOptionName])
+								(<HTMLSelectElement>dateFormatOptions.querySelector(`#${dateFormatOptionName}`)).selectedIndex
+									= (<HTMLOptionElement>dateFormatOptions.querySelector(`[value="${(<any>userDateFormatOptions)[dateFormatOptionName]}"]`)).index;
+						});
+
+					const exampleDateElement = Translation.GetDateElement(new Date(), userDateFormatOptions);
+
+					[ ...dateFormatOptions.querySelectorAll("select"), ...dateFormatOptions.querySelectorAll("input[type=checkbox]") ]
+						.forEach(element => element.addEventListener("change", () =>
+						{
+							exampleDateElement.innerText
+								= FormatDate(Date.now(), GetDateTimeFormatOptions(dateFormatOptions));
+						}));
+
+					return [
+						new Component("p", {
+							children: [
+								Translation.GetElement("generic->reference"),
+								new Component("a", {
+									innerText: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
+									href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/DateTimeFormat",
+									target: "_blank",
+								}).element,
+							],
+						}).element,
+						new Component("p", {
+							children: [
+								Translation.GetElement("generic->example"),
+								exampleDateElement,
+							],
+						}).element,
+						dateFormatOptions,
+					];
+				},
+			},
+		},
 	});
 
 	resetDateFormat.addEventListener("click", () =>
