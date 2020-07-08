@@ -278,8 +278,13 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	resetDateFormat.addEventListener("click", () =>
-		db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: firebase.firestore.FieldValue.delete() }, { merge: true }));
+	Settings.Register({
+		button: resetDateFormat,
+		callback: async () =>
+		{
+			await db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ dateFormatOptions: firebase.firestore.FieldValue.delete() }, { merge: true });
+		},
+	});
 
 	changePlan.addEventListener("click", async () =>
 	{
