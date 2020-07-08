@@ -16,6 +16,7 @@ import Translation from "./Translation";
 import { Modal } from "./Modal";
 import Shortcuts from "./Shortcuts";
 import { Config } from "../config/Config";
+import Settings from "../classes/Settings";
 
 declare const firebase: any;
 
@@ -71,29 +72,34 @@ export default () =>
 	const changeLanguage: HTMLButtonElement = <HTMLButtonElement>document.querySelector("#change-language .edit");
 	const languageSelect: HTMLSelectElement = <HTMLSelectElement>document.querySelector("#language-select");
 
-	changeLanguage?.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: "generic->language",
-			action: "confirm",
-		});
-
-		modal.AppendContent([ languageSelect ]);
-
-		const SelectCurrentLanguage = () => { languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index; };
-
-		SelectCurrentLanguage();
-
-		window.addEventListener("translationlanguagechange", SelectCurrentLanguage);
-
-		modal.OnConfirm = async () =>
+	Settings.Register({
+		button: changeLanguage,
+		callback: () =>
 		{
 			Translation.Init(<Config.Locale>languageSelect.selectedOptions[0].value, true);
+		},
+		options: {
+			modal: {
+				action: "confirm",
+				content: () =>
+				{
+					const selectCurrentLanguage = () =>
+					{
+						languageSelect.selectedIndex = (<HTMLOptionElement>languageSelect.querySelector(`[value^=${Translation.Language}]`)).index;
+					};
 
-			modal.HideAndRemove();
-		};
+					selectCurrentLanguage();
 
-		modal.Show(true);
+					window.addEventListener("translationlanguagechange", selectCurrentLanguage);
+
+					return [ languageSelect ];
+				},
+				override: {
+					titleTranslationId: "generic->language",
+					subtitleTranslationId: "generic->edit",
+				},
+			},
+		},
 	});
 
 	Auth.Init();

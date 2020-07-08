@@ -4,7 +4,7 @@ import {
 import { Component } from "./Component";
 import Translation from "./Translation";
 
-interface ModalOptions
+export interface ModalOptions
 {
 	title?: string,
 	titleTranslationId?: string,

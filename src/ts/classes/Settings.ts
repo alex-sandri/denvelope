@@ -1,4 +1,4 @@
-import { Modal } from "../scripts/Modal";
+import { Modal, ModalOptions } from "../scripts/Modal";
 import {
 	HasClass,
 	RemoveClass,
@@ -21,7 +21,7 @@ type SettingRegistration =
 			element: HTMLElement,
 			message: string,
 		}[],
-	} | void>,
+	} | void> | void,
 	options?: SettingRegistrationOptions,
 }
 
@@ -31,6 +31,10 @@ type SettingRegistrationOptions =
 		action: "confirm" | "update",
 		content?: () => HTMLElement[],
 		validators?: SettingRegistrationModalValidator[],
+		/**
+		 * Use only if you need to override some options
+		 */
+		override?: ModalOptions,
 	},
 }
 
