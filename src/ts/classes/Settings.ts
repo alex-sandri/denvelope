@@ -43,70 +43,73 @@ export default class Settings
 {
 	public static Register = (reg: SettingRegistration) =>
 	{
-		if (reg.options.modal.required)
+		reg.button.addEventListener("click", () =>
 		{
-			const modal = new Modal({
-				titleTranslationId: <string>(<HTMLElement>(<HTMLElement>reg.button.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-				subtitleTranslationId: <string>reg.button.getAttribute("data-translation"),
-				action: reg.options.modal.action,
-			});
-
-			if (reg.options.modal.content) modal.AppendContent(reg.options.modal.content);
-
-			if (reg.options.modal.validators)
+			if (reg.options.modal.required)
 			{
-				const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
-
-				actionButton.disabled = true;
-
-				reg.options.modal.validators.forEach(validator =>
-				{
-					const target = <HTMLElement | null>modal.Content.querySelector(validator.target);
-
-					target?.addEventListener(validator.on, () =>
-					{
-						actionButton.disabled = !validator.callback(target);
-					});
-				});
-			}
-
-			modal.OnConfirm = modal.OnUpdate = async () =>
-			{
-				reg.options.modal.validators?.forEach(validator =>
-				{
-					const target = <HTMLElement | null>modal.Content.querySelector(validator.target);
-
-					if (!target) return;
-
-					if (HasClass(target, "error")) target.previousElementSibling?.remove();
-
-					RemoveClass(target, "error");
+				const modal = new Modal({
+					titleTranslationId: <string>(<HTMLElement>(<HTMLElement>reg.button.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
+					subtitleTranslationId: <string>reg.button.getAttribute("data-translation"),
+					action: reg.options.modal.action,
 				});
 
-				modal.Hide();
+				if (reg.options.modal.content) modal.AppendContent(reg.options.modal.content);
 
-				const result = await reg.callback(modal.Content);
-
-				if (result.valid) modal.Remove();
-				else if (result.errors)
+				if (reg.options.modal.validators)
 				{
-					result.errors.forEach(error =>
+					const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
+
+					actionButton.disabled = true;
+
+					reg.options.modal.validators.forEach(validator =>
 					{
-						AddClass(error.element, "error");
+						const target = <HTMLElement | null>modal.Content.querySelector(validator.target);
 
-						const errorParagraph = new Component("p", { class: "input-error" }).element;
-
-						Translation.Register(error.message, errorParagraph);
-
-						error.element.insertAdjacentElement("beforebegin", errorParagraph);
+						target?.addEventListener(validator.on, () =>
+						{
+							actionButton.disabled = !validator.callback(target);
+						});
 					});
-
-					modal.Show(true);
 				}
-			};
 
-			modal.Show(true);
-		}
-		else reg.callback();
+				modal.OnConfirm = modal.OnUpdate = async () =>
+				{
+					reg.options.modal.validators?.forEach(validator =>
+					{
+						const target = <HTMLElement | null>modal.Content.querySelector(validator.target);
+
+						if (!target) return;
+
+						if (HasClass(target, "error")) target.previousElementSibling?.remove();
+
+						RemoveClass(target, "error");
+					});
+
+					modal.Hide();
+
+					const result = await reg.callback(modal.Content);
+
+					if (result.valid) modal.Remove();
+					else if (result.errors)
+					{
+						result.errors.forEach(error =>
+						{
+							AddClass(error.element, "error");
+
+							const errorParagraph = new Component("p", { class: "input-error" }).element;
+
+							Translation.Register(error.message, errorParagraph);
+
+							error.element.insertAdjacentElement("beforebegin", errorParagraph);
+						});
+
+						modal.Show(true);
+					}
+				};
+
+				modal.Show(true);
+			}
+			else reg.callback();
+		});
 	}
 }
