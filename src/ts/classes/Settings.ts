@@ -21,14 +21,13 @@ type SettingRegistration =
 			element: HTMLElement,
 			message: string,
 		}[],
-	}>,
-	options: SettingRegistrationOptions,
+	} | void>,
+	options?: SettingRegistrationOptions,
 }
 
 type SettingRegistrationOptions =
 {
-	modal: {
-		required: boolean,
+	modal?: {
 		action: "confirm" | "update",
 		content?: () => HTMLElement[],
 		validators?: SettingRegistrationModalValidator[],
@@ -51,7 +50,7 @@ export default class Settings
 	{
 		reg.button.addEventListener("click", () =>
 		{
-			if (reg.options.modal.required)
+			if (reg.options?.modal)
 			{
 				const modal = new Modal({
 					titleTranslationId: <string>(<HTMLElement>(<HTMLElement>reg.button.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
@@ -80,7 +79,7 @@ export default class Settings
 
 				modal.OnConfirm = modal.OnUpdate = async () =>
 				{
-					reg.options.modal.validators?.forEach(validator =>
+					reg.options?.modal?.validators?.forEach(validator =>
 					{
 						const target = <HTMLElement | null>modal.Content.querySelector(validator.target);
 
@@ -97,7 +96,7 @@ export default class Settings
 
 					const result = await reg.callback(modal.Content);
 
-					if (result.valid) modal.HideAndRemove();
+					if (!result || result.valid) modal.HideAndRemove();
 					else if (result.errors)
 					{
 						result.errors.forEach(error =>

@@ -155,7 +155,6 @@ window.addEventListener("userready", () =>
 		},
 		options: {
 			modal: {
-				required: true,
 				action: "confirm",
 				content: () => ([
 					new Input({
@@ -189,6 +188,14 @@ window.addEventListener("userready", () =>
 
 	resetBackground.addEventListener("click", () =>
 		db.collection(`users/${Auth.UserId}/config`).doc("preferences").update({ backgroundImageUrl: firebase.firestore.FieldValue.delete() }));
+
+	Settings.Register({
+		button: resetBackground,
+		callback: async () =>
+		{
+			await db.collection(`users/${Auth.UserId}/config`).doc("preferences").update({ backgroundImageUrl: firebase.firestore.FieldValue.delete() });
+		},
+	});
 
 	changeDateFormat.addEventListener("click", async () =>
 	{
