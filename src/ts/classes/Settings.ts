@@ -77,7 +77,7 @@ export default class Settings
 					});
 				}
 
-				modal.OnConfirm = modal.OnUpdate = async () =>
+				const actionButtonClickHandler = async () =>
 				{
 					reg.options?.modal?.validators?.forEach(validator =>
 					{
@@ -115,6 +115,9 @@ export default class Settings
 						ShowElements([ modal.Content, actionButton ]);
 					}
 				};
+
+				if (reg.options.modal.action === "confirm") modal.OnConfirm = actionButtonClickHandler;
+				else if (reg.options.modal.action === "update") modal.OnUpdate = actionButtonClickHandler;
 
 				modal.Show(true);
 			}
