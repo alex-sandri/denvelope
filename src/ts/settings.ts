@@ -300,11 +300,14 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	manageSubscription.addEventListener("click", async () =>
-	{
-		const { data } = await functions.httpsCallable("createBillingPortalSession")();
+	Settings.Register({
+		button: manageSubscription,
+		callback: async () =>
+		{
+			const { data } = await functions.httpsCallable("createBillingPortalSession")();
 
-		open(data.session.url);
+			open(data.session.url);
+		},
 	});
 
 	signOutFromAllDevices.addEventListener("click", () =>
