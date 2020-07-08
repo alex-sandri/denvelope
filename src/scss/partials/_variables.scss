@@ -14,6 +14,7 @@ $font-family: $font-family, ui-monospace, monospace;
 
 $primary-color: #160c28;
 $secondary-color: #efcb68;
+$tertiary-color: #2c202f; // equivalent to rgba($secondary-color, 0.1) with a $primary-color background
 
 $thin: 100;
 $extra-light: 200;
