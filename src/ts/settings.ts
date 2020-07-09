@@ -325,71 +325,60 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	changeVaultPin.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeVaultPin.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			subtitleTranslationId: <string>changeVaultPin.getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		const currentVaultPinInput = new Input({
-			labelTranslationId: "settings->security->change_vault_pin->current_or_recovery_code",
-			attributes: { type: "password" },
-		});
-
-		const newVaultPinInput = new Input({
-			labelTranslationId: "settings->security->change_vault_pin->new",
-			attributes: { type: "password" },
-		});
-
-		const currentPinInput = currentVaultPinInput.input;
-		const newPinInput = newVaultPinInput.input;
-
-		[ currentPinInput, newPinInput ].forEach(input =>
-			input.addEventListener("input", () =>
-			{
-				modal.ConfirmButton.disabled = currentPinInput.value.length < 4
-					|| newPinInput.value.length < 4;
-			}));
-
-		modal.ConfirmButton.disabled = true;
-
-		modal.AppendContent([ currentVaultPinInput.element, newVaultPinInput.element ]);
-
-		modal.OnConfirm = async () =>
+	Settings.Register({
+		button: changeVaultPin,
+		callback: async content =>
 		{
+			const currentPinInput = <HTMLInputElement>(<HTMLElement>content).querySelector("#current-pin");
+			const newPinInput = <HTMLInputElement>(<HTMLElement>content).querySelector("#new-pin");
+
 			const currentPin = currentPinInput.value;
 			const newPin = newPinInput.value;
 
-			if (HasClass(currentPinInput, "error")) currentVaultPinInput.element.previousElementSibling?.remove();
-			if (HasClass(newPinInput, "error")) newVaultPinInput.element.previousElementSibling?.remove();
+			const result = await functions.httpsCallable("changeVaultPin")({ currentPin, newPin });
 
-			RemoveClass(currentPinInput, "error");
-			RemoveClass(newPinInput, "error");
-
-			modal.Hide();
-
-			functions.httpsCallable("changeVaultPin")({ currentPin, newPin }).then(result =>
-			{
-				if (result.data.success) modal.Remove();
-				else
-				{
-					AddClass(currentPinInput, "error");
-
-					const errorParagraph = new Component("p", { class: "input-error" }).element;
-
-					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
-
-					currentVaultPinInput.element.insertAdjacentElement("beforebegin", errorParagraph);
-
-					modal.Show(true);
-				}
-			});
-		};
-
-		modal.Show(true);
+			return {
+				valid: result.data.success,
+				errors: [
+					{
+						element: currentPinInput,
+						message: "api->messages->vault->wrong_pin",
+					},
+				],
+			};
+		},
+		options: {
+			modal: {
+				content: () => ([
+					new Input({
+						labelTranslationId: "settings->security->change_vault_pin->current_or_recovery_code",
+						attributes: {
+							id: "current-pin",
+							type: "password",
+						},
+					}).element,
+					new Input({
+						labelTranslationId: "settings->security->change_vault_pin->new",
+						attributes: {
+							id: "new-pin",
+							type: "password",
+						},
+					}).element,
+				]),
+				validators: [
+					{
+						on: "input",
+						target: "#current-pin",
+						callback: input => (<HTMLInputElement>input).value.length >= 4,
+					},
+					{
+						on: "input",
+						target: "#new-pin",
+						callback: input => (<HTMLInputElement>input).value.length >= 4,
+					}
+				]
+			},
+		},
 	});
 
 	deleteVault.addEventListener("click", () =>
