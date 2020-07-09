@@ -65,7 +65,10 @@ export class Component
 interface InputComponentOptions
 {
 	labelTranslationId: string,
-	attributes?: { type?: string },
+	attributes?: {
+		id?: string,
+		type?: string,
+	},
 }
 
 export class Input extends Component
