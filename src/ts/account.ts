@@ -34,6 +34,7 @@ import Shortcuts from "./scripts/Shortcuts";
 import ContextMenu, { ContextMenuButtons, ContextMenuButton } from "./scripts/ContextMenu";
 import { Config } from "./config/Config";
 import Database from "./classes/Database";
+import Settings from "./classes/Settings";
 
 Init();
 
@@ -1126,55 +1127,50 @@ window.addEventListener("userready", async () =>
 				return;
 			}
 
-			const modal = new Modal({
-				titleTranslationId: `api->messages->vault->${snapshot.exists ? "unlock" : "set_pin"}`,
-				action: "confirm",
-			});
-
-			const { element, input } = new Input({
-				labelTranslationId: "api->messages->vault->pin_or_recovery_code",
-				attributes: { type: "password" },
-			});
-
-			input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
-
-			modal.ConfirmButton.disabled = true;
-
-			modal.AppendContent([ element ]);
-
-			modal.OnConfirm = async () =>
-			{
-				const pin = input.value;
-
-				if (HasClass(input, "error")) element.previousElementSibling?.remove();
-
-				RemoveClass(input, "error");
-
-				modal.Hide();
-
-				functions.httpsCallable(snapshot.exists ? "unlockVault" : "createVault")({ pin }).then(result =>
+			Settings.Register({
+				button: vault,
+				callback: async content =>
 				{
-					if (result.data.success)
-					{
-						modal.Remove();
+					const input = (<HTMLInputElement>(<HTMLElement>content).querySelector("input"));
+					const pin = input.value;
 
-						LoadVault();
-					}
-					else if (snapshot.exists)
-					{
-						AddClass(input, "error");
+					const result = await functions.httpsCallable(snapshot.exists ? "unlockVault" : "createVault")({ pin });
 
-						element.insertAdjacentElement("beforebegin", new Component("p", {
-							class: "input-error",
-							innerText: Translation.Get("api->messages->vault->wrong_pin"),
-						}).element);
+					if (result.data.success) LoadVault();
 
-						modal.Show(true);
-					}
-				});
-			};
-
-			modal.Show(true);
+					return {
+						valid: result.data.success,
+						errors: [
+							{
+								element: input,
+								message: "api->messages->vault->wrong_pin"
+							}
+						]
+					};
+				},
+				options: {
+					modal: {
+						action: "confirm",
+						content: () => ([
+							new Input({
+								labelTranslationId: "api->messages->vault->pin_or_recovery_code",
+								attributes: { type: "password" },
+							}).element,
+						]),
+						validators: [
+							{
+								on: "input",
+								target: "input",
+								callback: input => (<HTMLInputElement>input).value.length >= 4,
+							}
+						],
+						override: {
+							titleTranslationId: "generic->vault",
+							subtitleTranslationId: snapshot.exists ? "generic->unlock" : "api->messages->vault->set_pin",
+						},
+					},
+				},
+			});
 		});
 	});
 
