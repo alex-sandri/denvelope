@@ -10,7 +10,7 @@ export interface ModalOptions
 	titleTranslationId?: string,
 	subtitle?: string,
 	subtitleTranslationId?: string,
-	action?: "confirm" | "update",
+	action?: "confirm",
 	floating?: boolean,
 	animate?: boolean,
 	aside?: boolean,
@@ -31,8 +31,6 @@ export class Modal
 
 	public readonly ConfirmButton: HTMLButtonElement = this.element.querySelector(".confirm") as HTMLButtonElement;
 
-	public readonly UpdateButton: HTMLButtonElement = this.element.querySelector(".update") as HTMLButtonElement;
-
 	public OnClose: () => void;
 
 	public OnConfirm: () => void;
@@ -52,7 +50,6 @@ export class Modal
 		switch (options?.action)
 		{
 			case "confirm": ShowElement(this.ConfirmButton, "block"); break;
-			case "update": ShowElement(this.UpdateButton, "block"); break;
 		}
 
 		if (options?.floating)
@@ -79,7 +76,6 @@ export class Modal
 		this.CloseButton.addEventListener("click", this.HideAndRemove);
 
 		this.ConfirmButton.addEventListener("click", this.OnConfirm);
-		this.UpdateButton.addEventListener("click", this.OnUpdate);
 
 		if (unique) document.querySelectorAll(".modal.show:not(.keep-alive)").forEach(element => (<HTMLElement>element.parentElement).remove()); // Remove also its container
 		else AddClass(this.element, "keep-alive"); // Do not remove the modal, unless the user decides to
@@ -95,7 +91,6 @@ export class Modal
 		this.CloseButton.focus();
 
 		if (getComputedStyle(this.ConfirmButton).getPropertyValue("display") !== "none" && !this.ConfirmButton.disabled) this.ConfirmButton.focus();
-		else if (getComputedStyle(this.UpdateButton).getPropertyValue("display") !== "none" && !this.UpdateButton.disabled) this.UpdateButton.focus();
 
 		(<HTMLInputElement | HTMLButtonElement | null> this.Content.querySelector("input, select, button"))?.focus();
 
@@ -171,11 +166,7 @@ export class Modal
 
 		(<NodeListOf<HTMLInputElement>> this.Content.querySelectorAll("input:not([type=checkbox])")).forEach(element => element.addEventListener("keydown", e =>
 		{
-			if (e.key === "Enter")
-			{
-				this.ConfirmButton.click();
-				this.UpdateButton.click();
-			}
+			if (e.key === "Enter") this.ConfirmButton.click();
 		}));
 	}
 

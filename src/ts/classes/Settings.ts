@@ -29,7 +29,6 @@ type SettingRegistrationOptions =
 {
 	excludeTargets?: HTMLElement[],
 	modal?: {
-		action: "confirm" | "update",
 		content?: () => HTMLElement[],
 		validators?: SettingRegistrationModalValidator[],
 		/**
@@ -68,12 +67,12 @@ export default class Settings
 				const modal = new Modal({
 					titleTranslationId: reg.button.closest(".setting")?.querySelector("h1")?.getAttribute("data-translation") ?? undefined,
 					subtitleTranslationId: reg.button.getAttribute("data-translation") ?? undefined, // undefined is accepted but not null
-					action: reg.options.modal.action,
+					action: "confirm",
 					...reg.options.modal.override,
 					...reg.options.modal.overrideCallback?.(),
 				});
 
-				const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
+				const actionButton = modal.ConfirmButton;
 
 				if (reg.options.modal.content) modal.AppendContent(reg.options.modal.content());
 
@@ -131,8 +130,7 @@ export default class Settings
 					}
 				};
 
-				if (reg.options.modal.action === "confirm") modal.OnConfirm = actionButtonClickHandler;
-				else if (reg.options.modal.action === "update") modal.OnUpdate = actionButtonClickHandler;
+				modal.OnConfirm = actionButtonClickHandler;
 
 				modal.Show(true);
 			}

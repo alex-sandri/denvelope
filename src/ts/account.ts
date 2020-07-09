@@ -443,11 +443,11 @@ window.addEventListener("userready", async () =>
 	{
 		const { id, type } = ContextMenu.GetItemInfo(ContextMenu.Item);
 
-		const modal = new Modal({ action: "update" });
+		const modal = new Modal({ action: "confirm" });
 
 		const { element, input } = new Input({ labelTranslationId: "generic->name" });
 
-		input.addEventListener("input", () => { modal.UpdateButton.disabled = input.value.length === 0; });
+		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length === 0; });
 
 		modal.AppendContent([ element ]);
 
@@ -1148,7 +1148,6 @@ window.addEventListener("userready", async () =>
 		options: {
 			excludeTargets: [ <HTMLElement>vault.querySelector(".menu-button button") ],
 			modal: {
-				action: "confirm",
 				content: () => ([
 					new Input({
 						labelTranslationId: "api->messages->vault->pin_or_recovery_code",

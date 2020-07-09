@@ -81,7 +81,6 @@ export default () =>
 			},
 			options: {
 				modal: {
-					action: "confirm",
 					content: () =>
 					{
 						const selectCurrentLanguage = () =>

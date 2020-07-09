@@ -155,7 +155,6 @@ window.addEventListener("userready", () =>
 		},
 		options: {
 			modal: {
-				action: "confirm",
 				content: () => ([
 					new Input({
 						labelTranslationId: "account->image_address",
@@ -224,7 +223,6 @@ window.addEventListener("userready", () =>
 		},
 		options: {
 			modal: {
-				action: "confirm",
 				content: () =>
 				{
 					const dateFormatOptions: HTMLDivElement = <HTMLDivElement>(<HTMLDivElement>document.querySelector("#date-format .date-format-options")).cloneNode(true);
