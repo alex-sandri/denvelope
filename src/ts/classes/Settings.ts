@@ -96,7 +96,7 @@ export default class Settings
 
 						if (!target) return;
 
-						if (HasClass(target, "error")) target.previousElementSibling?.remove();
+						if (HasClass(target, "error")) target.nextElementSibling?.remove();
 
 						RemoveClass(target, "error");
 					});
@@ -118,7 +118,7 @@ export default class Settings
 
 							Translation.Register(error.message, errorParagraph);
 
-							error.element.insertAdjacentElement("beforebegin", errorParagraph);
+							error.element.insertAdjacentElement("afterend", errorParagraph);
 						});
 
 						modal.HideSpinner();

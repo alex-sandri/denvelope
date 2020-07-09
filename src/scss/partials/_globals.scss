@@ -128,18 +128,17 @@ select
             color: $secondary-color;
             background-color: $primary-color;
         }
+
+        & + .input-error
+        {
+            margin: 0;
+            margin-top: 5px;
+            font-weight: $black;
+        }
     }
 
     &:focus-within input
     {
         box-shadow: 0 0 0 $border-width * 2 $primary-color;
     }
-}
-
-.input-error
-{
-    margin: 0;
-    color: $primary-color;
-    margin-bottom: $default-spacing;
-    border-radius: $border-radius;
 }
