@@ -474,37 +474,35 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	changeCacheSize.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>changeCacheSize.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>(<HTMLSelectElement>document.querySelector("#cache-size .cache-size-options")).cloneNode(true);
-
-		Translation.Register("generic->default", (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")), {
-			before: `${(<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText} (`,
-			after: ")",
-		});
-
-		const cacheSizeBytes : number = parseInt(<string>localStorage.getItem("cache-size"), 10);
-
-		if (cacheSizeBytes) cacheSizeOptions.selectedIndex = (<HTMLOptionElement>cacheSizeOptions.querySelector(`[value="${cacheSizeBytes / 1000 / 1000}"]`)).index;
-
-		modal.AppendContent([ cacheSizeOptions ]);
-
-		modal.OnConfirm = () =>
+	Settings.Register({
+		button: changeCacheSize,
+		callback: content =>
 		{
-			modal.HideAndRemove();
+			const cacheSizeOptions = <HTMLSelectElement>(<HTMLElement>content).querySelector("select");
 
 			UpdateCacheSize(parseInt(cacheSizeOptions.selectedOptions[0].value, 10) * 1000 * 1000);
 
 			genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
-		};
+		},
+		options: {
+			modal: {
+				content: () =>
+				{
+					const cacheSizeOptions : HTMLSelectElement = <HTMLSelectElement>(<HTMLSelectElement>document.querySelector("#cache-size .cache-size-options")).cloneNode(true);
 
-		modal.Show(true);
+					Translation.Register("generic->default", (<HTMLOptionElement>cacheSizeOptions.querySelector(".default")), {
+						before: `${(<HTMLOptionElement>cacheSizeOptions.querySelector(".default")).innerText} (`,
+						after: ")",
+					});
+
+					const cacheSizeBytes : number = parseInt(<string>localStorage.getItem("cache-size"), 10);
+
+					if (cacheSizeBytes) cacheSizeOptions.selectedIndex = (<HTMLOptionElement>cacheSizeOptions.querySelector(`[value="${cacheSizeBytes / 1000 / 1000}"]`)).index;
+
+					return [ cacheSizeOptions ];
+				},
+			},
+		},
 	});
 
 	resetCacheSize.addEventListener("click", () =>
