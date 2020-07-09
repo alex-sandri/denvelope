@@ -65,6 +65,7 @@ export default {
 				not_enough_storage: "You do not have enough storage space for this file",
 			},
 			vault: {
+				pin: "PIN",
 				set_pin: "Set PIN",
 				wrong_pin: "The entered PIN is wrong",
 				pin_or_recovery_code: "PIN or Recovery Code",

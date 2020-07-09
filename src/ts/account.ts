@@ -1150,7 +1150,9 @@ window.addEventListener("userready", async () =>
 			modal: {
 				content: () => ([
 					new Input({
-						labelTranslationId: "api->messages->vault->pin_or_recovery_code",
+						labelTranslationId: vault.getAttribute("data-exists") === "true"
+							? "api->messages->vault->pin_or_recovery_code"
+							: "api->messages->vault->pin",
 						attributes: { type: "password" },
 					}).element,
 				]),
