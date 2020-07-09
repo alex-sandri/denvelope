@@ -13,7 +13,6 @@ import {
 	FormatStorage,
 	IsFreePlan,
 } from "./scripts/Utilities";
-import { Modal } from "./scripts/Modal";
 import Auth from "./scripts/Auth";
 import Translation from "./scripts/Translation";
 import { Component, Input } from "./scripts/Component";
@@ -512,22 +511,16 @@ window.addEventListener("userready", () =>
 		genericMessage.Show(Translation.Get("settings->changes_will_be_applied_at_the_next_page_load"));
 	});
 
-	deleteAccount.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>deleteAccount.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		modal.OnConfirm = () =>
-		{
-			Auth.DeleteUser();
-
-			modal.HideAndRemove();
-		};
-
-		modal.Show(true);
+	Settings.Register({
+		button: deleteAccount,
+		callback: () => Auth.DeleteUser(),
+		options: {
+			modal: {
+				override: {
+					loading: false,
+				},
+			},
+		},
 	});
 
 	clearCache.addEventListener("click", ClearFirestoreCache);
