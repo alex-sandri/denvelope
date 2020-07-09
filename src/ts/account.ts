@@ -1166,6 +1166,13 @@ window.addEventListener("userready", async () =>
 					titleTranslationId: "generic->vault",
 					subtitleTranslationId: vault.getAttribute("data-exists") === "true" ? "generic->unlock" : "api->messages->vault->set_pin",
 				}),
+				preventDefault: () =>
+				{
+					const exists = vault.getAttribute("data-exists") === "true";
+					const locked = vault.getAttribute("data-locked") === "true";
+
+					return exists && !locked;
+				},
 			},
 		},
 	});

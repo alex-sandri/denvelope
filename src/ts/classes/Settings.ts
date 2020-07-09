@@ -37,6 +37,10 @@ type SettingRegistrationOptions =
 		 */
 		override?: ModalOptions,
 		overrideCallback?: () => ModalOptions,
+		/**
+		 * If `true` the modal will not be displayed and `options.callback` will be invoked immediately
+		 */
+		preventDefault?: () => boolean,
 	},
 }
 
@@ -59,7 +63,7 @@ export default class Settings
 			if (reg.options?.excludeTargets?.some(target => target.contains(<HTMLElement>e.target)))
 				return;
 
-			if (reg.options?.modal)
+			if (reg.options?.modal && !reg.options.modal.preventDefault?.())
 			{
 				const modal = new Modal({
 					titleTranslationId: reg.button.closest(".setting")?.querySelector("h1")?.getAttribute("data-translation") ?? undefined,
