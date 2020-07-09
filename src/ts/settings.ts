@@ -381,54 +381,42 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	deleteVault.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>deleteVault.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			subtitleTranslationId: <string>deleteVault.getAttribute("data-translation"),
-			action: "confirm",
-		});
-
-		const { element, input } = new Input({
-			labelTranslationId: "api->messages->vault->pin_or_recovery_code",
-			attributes: { type: "password" },
-		});
-
-		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
-
-		modal.ConfirmButton.disabled = true;
-
-		modal.AppendContent([ element ]);
-
-		modal.OnConfirm = async () =>
+	Settings.Register({
+		button: deleteVault,
+		callback: async content =>
 		{
-			const pin = input.value;
+			const pinInput = <HTMLInputElement>(<HTMLElement>content).querySelector("input");
+			const pin = pinInput.value;
 
-			if (HasClass(input, "error")) element.previousElementSibling?.remove();
+			const result = await functions.httpsCallable("deleteVault")({ pin });
 
-			RemoveClass(input, "error");
-
-			modal.Hide();
-
-			functions.httpsCallable("deleteVault")({ pin }).then(result =>
-			{
-				if (result.data.success) modal.Remove();
-				else
-				{
-					AddClass(input, "error");
-
-					const errorParagraph = new Component("p", { class: "input-error" }).element;
-
-					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
-
-					element.insertAdjacentElement("beforebegin", errorParagraph);
-
-					modal.Show(true);
-				}
-			});
-		};
-
-		modal.Show(true);
+			return {
+				valid: result.data.success,
+				errors: [
+					{
+						element: pinInput,
+						message: "api->messages->vault->wrong_pin",
+					},
+				],
+			};
+		},
+		options: {
+			modal: {
+				content: () => ([
+					new Input({
+						labelTranslationId: "api->messages->vault->pin_or_recovery_code",
+						attributes: { type: "password" },
+					}).element,
+				]),
+				validators: [
+					{
+						on: "input",
+						target: "input",
+						callback: input => (<HTMLInputElement>input).value.length >= 4,
+					},
+				],
+			},
+		},
 	});
 
 	generateVaultRecoveryCode.addEventListener("click", () =>
