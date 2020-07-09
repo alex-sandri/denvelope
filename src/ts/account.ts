@@ -1162,10 +1162,10 @@ window.addEventListener("userready", async () =>
 						callback: input => (<HTMLInputElement>input).value.length >= 4,
 					},
 				],
-				override: {
+				overrideCallback: () => ({
 					titleTranslationId: "generic->vault",
 					subtitleTranslationId: vault.getAttribute("data-exists") === "true" ? "generic->unlock" : "api->messages->vault->set_pin",
-				},
+				}),
 			},
 		},
 	});

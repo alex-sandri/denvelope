@@ -36,6 +36,7 @@ type SettingRegistrationOptions =
 		 * Use only if you need to override some options
 		 */
 		override?: ModalOptions,
+		overrideCallback?: () => ModalOptions,
 	},
 }
 
@@ -65,6 +66,7 @@ export default class Settings
 					subtitleTranslationId: reg.button.getAttribute("data-translation") ?? undefined, // undefined is accepted but not null
 					action: reg.options.modal.action,
 					...reg.options.modal.override,
+					...reg.options.modal.overrideCallback?.(),
 				});
 
 				const actionButton = reg.options.modal.action === "confirm" ? modal.ConfirmButton : modal.UpdateButton;
