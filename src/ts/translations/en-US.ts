@@ -257,7 +257,6 @@ export default {
 		},
 		advanced: {
 			title: "Advanced",
-			delete_account: "Delete account",
 			cache_size: "Cache size",
 		},
 		privacy: {

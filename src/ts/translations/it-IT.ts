@@ -257,7 +257,6 @@ export default {
 		},
 		advanced: {
 			title: "Avanzate",
-			delete_account: "Elimina account",
 			cache_size: "Dimensioni cache",
 		},
 		privacy: {
