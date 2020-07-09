@@ -57,5 +57,6 @@ module.exports = {
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
     } ],
+    "consistent-return": [ "off" ],
   },
 };

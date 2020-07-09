@@ -27,6 +27,7 @@ type SettingRegistration =
 
 type SettingRegistrationOptions =
 {
+	excludeTargets?: HTMLElement[],
 	modal?: {
 		action: "confirm" | "update",
 		content?: () => HTMLElement[],
@@ -52,8 +53,11 @@ export default class Settings
 {
 	public static Register = (reg: SettingRegistration) =>
 	{
-		reg.button.addEventListener("click", () =>
+		reg.button.addEventListener("click", e =>
 		{
+			if (reg.options?.excludeTargets?.some(target => target.contains(<HTMLElement>e.target)))
+				return;
+
 			if (reg.options?.modal)
 			{
 				const modal = new Modal({

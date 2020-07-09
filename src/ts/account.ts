@@ -1107,8 +1107,6 @@ window.addEventListener("userready", async () =>
 		button: vault,
 		callback: async content =>
 		{
-			if ((<HTMLButtonElement>vault.querySelector(".menu-button button")).contains(<HTMLElement>e.target)) return;
-
 			const exists = vault.getAttribute("data-exists") === "true";
 			const locked = vault.getAttribute("data-locked") === "true";
 
@@ -1148,6 +1146,7 @@ window.addEventListener("userready", async () =>
 			};
 		},
 		options: {
+			excludeTargets: [ <HTMLElement>vault.querySelector(".menu-button button") ],
 			modal: {
 				action: "confirm",
 				content: () => ([
