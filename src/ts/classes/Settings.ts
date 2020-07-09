@@ -11,7 +11,7 @@ import Translation from "../scripts/Translation";
 
 type SettingRegistration =
 {
-	button: HTMLButtonElement,
+	button: HTMLElement,
 	/**
 	 * @returns The success status
 	 */
