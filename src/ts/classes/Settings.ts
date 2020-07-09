@@ -80,13 +80,21 @@ export default class Settings
 				{
 					actionButton.disabled = true;
 
+					const validationResults = new Map<SettingRegistrationModalValidator, boolean>();
+
 					reg.options.modal.validators.forEach(validator =>
 					{
+						validationResults.set(validator, false);
+
 						const target = <HTMLElement | null>modal.Content.querySelector(validator.target);
 
 						target?.addEventListener(validator.on, () =>
 						{
-							actionButton.disabled = !validator.callback(target);
+							validationResults.set(validator, validator.callback(target));
+
+							actionButton.disabled = !Array
+								.from(validationResults.values())
+								.every(result => result);
 						});
 					});
 				}
