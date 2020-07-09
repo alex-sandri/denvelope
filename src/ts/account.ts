@@ -1143,9 +1143,9 @@ window.addEventListener("userready", async () =>
 						errors: [
 							{
 								element: input,
-								message: "api->messages->vault->wrong_pin"
-							}
-						]
+								message: "api->messages->vault->wrong_pin",
+							},
+						],
 					};
 				},
 				options: {
@@ -1162,7 +1162,7 @@ window.addEventListener("userready", async () =>
 								on: "input",
 								target: "input",
 								callback: input => (<HTMLInputElement>input).value.length >= 4,
-							}
+							},
 						],
 						override: {
 							titleTranslationId: "generic->vault",
