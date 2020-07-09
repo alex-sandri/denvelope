@@ -1103,12 +1103,15 @@ window.addEventListener("userready", async () =>
 		});
 	});
 
-	vault.addEventListener("click", e =>
-	{
-		if ((<HTMLButtonElement>vault.querySelector(".menu-button button")).contains(<HTMLElement>e.target)) return;
-
-		db.collection(`users/${Auth.UserId}/vault`).doc("status").get().then(snapshot =>
+	Settings.Register({
+		button: vault,
+		callback: async content =>
 		{
+			if ((<HTMLButtonElement>vault.querySelector(".menu-button button")).contains(<HTMLElement>e.target)) return;
+
+			const exists = vault.getAttribute("data-exists") === "true";
+			const locked = vault.getAttribute("data-locked") === "true";
+
 			const LoadVault = () =>
 			{
 				if (location.pathname !== "/account/vault") history.pushState(null, "", "/account/vault");
@@ -1120,58 +1123,52 @@ window.addEventListener("userready", async () =>
 				Auth.RefreshToken();
 			};
 
-			if (snapshot.exists && !(<Config.Data.Vault.Status>snapshot.data()).locked)
+			if (exists && !locked)
 			{
 				LoadVault();
 
 				return;
 			}
 
-			Settings.Register({
-				button: vault,
-				callback: async content =>
-				{
-					const input = (<HTMLInputElement>(<HTMLElement>content).querySelector("input"));
-					const pin = input.value;
+			const input = (<HTMLInputElement>(<HTMLElement>content).querySelector("input"));
+			const pin = input.value;
 
-					const result = await functions.httpsCallable(snapshot.exists ? "unlockVault" : "createVault")({ pin });
+			const result = await functions.httpsCallable(exists ? "unlockVault" : "createVault")({ pin });
 
-					if (result.data.success) LoadVault();
+			if (result.data.success) LoadVault();
 
-					return {
-						valid: result.data.success,
-						errors: [
-							{
-								element: input,
-								message: "api->messages->vault->wrong_pin",
-							},
-						],
-					};
-				},
-				options: {
-					modal: {
-						action: "confirm",
-						content: () => ([
-							new Input({
-								labelTranslationId: "api->messages->vault->pin_or_recovery_code",
-								attributes: { type: "password" },
-							}).element,
-						]),
-						validators: [
-							{
-								on: "input",
-								target: "input",
-								callback: input => (<HTMLInputElement>input).value.length >= 4,
-							},
-						],
-						override: {
-							titleTranslationId: "generic->vault",
-							subtitleTranslationId: snapshot.exists ? "generic->unlock" : "api->messages->vault->set_pin",
-						},
+			return {
+				valid: result.data.success,
+				errors: [
+					{
+						element: input,
+						message: "api->messages->vault->wrong_pin",
 					},
+				],
+			};
+		},
+		options: {
+			modal: {
+				action: "confirm",
+				content: () => ([
+					new Input({
+						labelTranslationId: "api->messages->vault->pin_or_recovery_code",
+						attributes: { type: "password" },
+					}).element,
+				]),
+				validators: [
+					{
+						on: "input",
+						target: "input",
+						callback: input => (<HTMLInputElement>input).value.length >= 4,
+					},
+				],
+				override: {
+					titleTranslationId: "generic->vault",
+					subtitleTranslationId: vault.getAttribute("data-exists") === "true" ? "generic->unlock" : "api->messages->vault->set_pin",
 				},
-			});
-		});
+			},
+		},
 	});
 
 	navigator.serviceWorker?.addEventListener("message", e =>
@@ -1218,6 +1215,8 @@ window.addEventListener("userready", async () =>
 
 	if (Auth.IsAuthenticated) db.collection(`users/${Auth.UserId}/vault`).doc("status").onSnapshot(snapshot =>
 	{
+		vault.setAttribute("data-exists", `${snapshot.exists}`);
+
 		if (snapshot.exists)
 		{
 			const { locked } = <Config.Data.Vault.Status>snapshot.data();
