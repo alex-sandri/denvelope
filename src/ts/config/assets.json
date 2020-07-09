@@ -1,5 +1,5 @@
 {
-    "version": 3273,
+    "version": 3275,
     "static": [
         "/",
         "/account",
@@ -77,9 +77,9 @@
         },
         "js": {
             "rootDir": "/assets/js",
-            "index": "index.4c185bee8d0eaadcd0b8.js",
-            "account": "account.b656d1e1d01002aacf63.js",
-            "settings": "settings.69d63c9dd3bc0979a566.js"
+            "index": "index.e360f22226e77833bccf.js",
+            "account": "account.df67cf3943ca33794675.js",
+            "settings": "settings.5e8d5d973ac7fceb27ed.js"
         }
     }
 }

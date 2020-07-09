@@ -19,7 +19,7 @@ import Translation from "./scripts/Translation";
 import { Component, Input } from "./scripts/Component";
 import * as genericMessage from "./scripts/generic-message";
 import { Config } from "./config/Config";
-import Settings from "./classes/Settings";
+import Settings, { SettingsDefaultValidators } from "./classes/Settings";
 
 Init();
 
@@ -368,12 +368,12 @@ window.addEventListener("userready", () =>
 					{
 						on: "input",
 						target: "#current-pin",
-						callback: input => (<HTMLInputElement>input).value.length >= 4,
+						callback: SettingsDefaultValidators.VaultPin,
 					},
 					{
 						on: "input",
 						target: "#new-pin",
-						callback: input => (<HTMLInputElement>input).value.length >= 4,
+						callback: SettingsDefaultValidators.VaultPin,
 					},
 				],
 			},
@@ -411,7 +411,7 @@ window.addEventListener("userready", () =>
 					{
 						on: "input",
 						target: "input",
-						callback: input => (<HTMLInputElement>input).value.length >= 4,
+						callback: SettingsDefaultValidators.VaultPin,
 					},
 				],
 			},
@@ -467,7 +467,7 @@ window.addEventListener("userready", () =>
 					{
 						on: "input",
 						target: "input",
-						callback: input => (<HTMLInputElement>input).value.length >= 4,
+						callback: SettingsDefaultValidators.VaultPin,
 					},
 				],
 			},

@@ -34,7 +34,7 @@ import Shortcuts from "./scripts/Shortcuts";
 import ContextMenu, { ContextMenuButtons, ContextMenuButton } from "./scripts/ContextMenu";
 import { Config } from "./config/Config";
 import Database from "./classes/Database";
-import Settings from "./classes/Settings";
+import Settings, { SettingsDefaultValidators } from "./classes/Settings";
 
 Init();
 
@@ -1158,7 +1158,7 @@ window.addEventListener("userready", async () =>
 					{
 						on: "input",
 						target: "input",
-						callback: input => (<HTMLInputElement>input).value.length >= 4,
+						callback: SettingsDefaultValidators.VaultPin,
 					},
 				],
 				overrideCallback: () => ({

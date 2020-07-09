@@ -146,3 +146,8 @@ export default class Settings
 		});
 	}
 }
+
+export class SettingsDefaultValidators
+{
+	public static VaultPin = (input: HTMLElement) => (<HTMLInputElement>input).value.length >= 4;
+}
