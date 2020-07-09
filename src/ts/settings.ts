@@ -375,8 +375,8 @@ window.addEventListener("userready", () =>
 						on: "input",
 						target: "#new-pin",
 						callback: input => (<HTMLInputElement>input).value.length >= 4,
-					}
-				]
+					},
+				],
 			},
 		},
 	});
