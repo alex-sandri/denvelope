@@ -308,24 +308,21 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	signOutFromAllDevices.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>signOutFromAllDevices.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			action: "confirm",
-			loading: false,
-		});
-
-		modal.OnConfirm = () =>
+	Settings.Register({
+		button: signOutFromAllDevices,
+		callback: () =>
 		{
 			functions.httpsCallable("signOutUserFromAllDevices")({});
 
 			Auth.SignOut();
-
-			modal.HideAndRemove();
-		};
-
-		modal.Show(true);
+		},
+		options: {
+			modal: {
+				override: {
+					loading: false,
+				},
+			},
+		},
 	});
 
 	changeVaultPin.addEventListener("click", () =>
