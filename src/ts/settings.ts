@@ -5,7 +5,6 @@ import Init from "./scripts/load-events";
 import {
 	AddClass,
 	RemoveClass,
-	HasClass,
 	FormatDate,
 	ClearFirestoreCache,
 	ShowElement,
@@ -419,74 +418,60 @@ window.addEventListener("userready", () =>
 		},
 	});
 
-	generateVaultRecoveryCode.addEventListener("click", () =>
-	{
-		const modal = new Modal({
-			titleTranslationId: <string>(<HTMLElement>(<HTMLElement>generateVaultRecoveryCode.closest(".setting")).querySelector("h1")).getAttribute("data-translation"),
-			subtitleTranslationId: <string>generateVaultRecoveryCode.getAttribute("data-translation"),
-			action: "confirm",
-		});
-
-		const { element, input } = new Input({
-			labelTranslationId: "api->messages->vault->pin_or_recovery_code",
-			attributes: { type: "password" },
-		});
-
-		input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length < 4; });
-
-		modal.ConfirmButton.disabled = true;
-
-		modal.AppendContent([
-			new Component("p", {
-				class: "multiline",
-				children: [ Translation.GetElement("settings->security->vault->recovery_code_info") ],
-			}).element,
-			element,
-		]);
-
-		modal.OnConfirm = async () =>
+	Settings.Register({
+		button: generateVaultRecoveryCode,
+		callback: async content =>
 		{
-			const pin = input.value;
+			const pinInput = <HTMLInputElement>(<HTMLElement>content).querySelector("input");
+			const pin = pinInput.value;
 
-			if (HasClass(input, "error")) element.previousElementSibling?.remove();
+			const result = await functions.httpsCallable("generateVaultRecoveryCode")({ pin });
 
-			RemoveClass(input, "error");
-
-			modal.Hide();
-
-			functions.httpsCallable("generateVaultRecoveryCode")({ pin }).then(result =>
+			if (result.data.success)
 			{
-				if (result.data.success)
-				{
-					modal.Remove();
+				const blobUrl = URL.createObjectURL(new Blob([ result.data.recoveryCode ], { type: "text/plain" }));
+				const a = document.createElement("a");
 
-					const blobUrl = URL.createObjectURL(new Blob([ result.data.recoveryCode ], { type: "text/plain" }));
-					const a = document.createElement("a");
+				a.download = "denvelope-vault-recovery-code.txt";
+				a.href = blobUrl;
 
-					a.download = "denvelope-vault-recovery-code.txt";
-					a.href = blobUrl;
+				document.body.appendChild(a);
 
-					document.body.appendChild(a);
+				a.click();
+				a.remove();
+			}
 
-					a.click();
-					a.remove();
-				}
-				else
-				{
-					AddClass(input, "error");
-
-					const errorParagraph = new Component("p", { class: "input-error" }).element;
-
-					Translation.Register("api->messages->vault->wrong_pin", errorParagraph);
-
-					element.insertAdjacentElement("beforebegin", errorParagraph);
-
-					modal.Show(true);
-				}
-			});
-		};
-
-		modal.Show(true);
+			return {
+				valid: result.data.success,
+				errors: [
+					{
+						element: pinInput,
+						message: "api->messages->vault->wrong_pin",
+					},
+				],
+			};
+		},
+		options: {
+			modal: {
+				content: () => ([
+					new Component("p", {
+						class: "multiline",
+						children: [ Translation.GetElement("settings->security->vault->recovery_code_info") ],
+					}).element,
+					new Input({
+						labelTranslationId: "api->messages->vault->pin_or_recovery_code",
+						attributes: { type: "password" },
+					}).element,
+				]),
+				validators: [
+					{
+						on: "input",
+						target: "input",
+						callback: input => (<HTMLInputElement>input).value.length >= 4,
+					},
+				],
+			},
+		},
 	});
 
 	changeCacheSize.addEventListener("click", () =>
