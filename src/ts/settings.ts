@@ -148,8 +148,6 @@ window.addEventListener("userready", () =>
 			const backgroundImageUrlInput = <HTMLInputElement>(<HTMLElement>content).querySelector("input");
 
 			await db.collection(`users/${Auth.UserId}/config`).doc("preferences").set({ backgroundImageUrl: backgroundImageUrlInput.value }, { merge: true });
-
-			return { valid: true };
 		},
 		options: {
 			modal: {
