@@ -108,6 +108,12 @@ body
             position: unset;
             backdrop-filter: unset;
             -webkit-backdrop-filter: unset;
+            margin: 5px;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgba($primary-color, 0.8);
+            height: $header-height - 10px; // 10px = margin * 2
+            width: calc(100% - 10px);
         }
     }
 

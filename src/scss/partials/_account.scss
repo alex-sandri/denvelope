@@ -4,7 +4,6 @@
     grid-template-rows: max-content auto;
     grid-template-areas: "top-section" "content";
     padding: 0 $default-spacing;
-    background-color: rgba($primary-color, 0.5);
     overflow: auto;
 
     .top-section
