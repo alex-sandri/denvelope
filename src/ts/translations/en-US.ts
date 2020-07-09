@@ -66,7 +66,6 @@ export default {
 			},
 			vault: {
 				set_pin: "Set PIN",
-				unlock: "Unlock vault",
 				wrong_pin: "The entered PIN is wrong",
 				pin_or_recovery_code: "PIN or Recovery Code",
 			},

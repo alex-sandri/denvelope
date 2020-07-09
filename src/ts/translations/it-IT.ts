@@ -66,7 +66,6 @@ export default {
 			},
 			vault: {
 				set_pin: "Imposta PIN",
-				unlock: "Sblocca cassaforte",
 				wrong_pin: "Il PIN inserito non è corretto",
 				pin_or_recovery_code: "PIN o Codice di Recupero",
 			},
