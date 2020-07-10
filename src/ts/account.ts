@@ -1442,18 +1442,7 @@ const GetUserContent = async (searchTerm?: string, orderBy?: string, orderDir?: 
 
 	EmptyUserContentContainers();
 
-	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname))
-	{
-		HideElement(topSection);
-
-		userContentContainer.style.paddingTop = "0";
-	}
-	else
-	{
-		ShowElement(topSection);
-
-		userContentContainer.style.paddingTop = "15px";
-	}
+	updateTopSectionVisibility();
 
 	if (globalSearch) HideElement(folderNavigation);
 
@@ -2680,6 +2669,22 @@ const CloseEditor = () =>
 	else viewRecentContent.click();
 };
 
+const updateTopSectionVisibility = () =>
+{
+	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname))
+	{
+		HideElement(topSection);
+
+		RemoveClass(header, "top-section-visible");
+	}
+	else
+	{
+		ShowElement(topSection);
+
+		AddClass(header, "top-section-visible");
+	}
+};
+
 if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/folder/") > -1 || location.pathname.indexOf("/file/") > -1)
 {
 	let currentFolderId = "root";
@@ -2743,8 +2748,7 @@ if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/fo
 	else if (location.pathname === "/account/storage/info") AddClass(viewMyAccount, "selected");
 	else AddClass(viewMyAccount, "selected");
 
-	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname)) HideElement(topSection);
-	else ShowElement(topSection);
+	updateTopSectionVisibility();
 
 	SetCurrentFolderId(currentFolderId);
 }
