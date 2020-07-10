@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "firebase": "^7.15.5",
-    "firebaseui": "^4.5.1",
+    "firebaseui": "^4.5.2",
     "monaco-editor": "^0.20.0"
   }
 }
