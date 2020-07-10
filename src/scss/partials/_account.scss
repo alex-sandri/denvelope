@@ -10,6 +10,7 @@
         display: none;
         grid-area: top-section;
         padding: 0 $default-spacing;
+        width: 100vw;
 
         .toolbar
         {
@@ -55,6 +56,7 @@
             .back-button
             {
                 margin-right: $default-spacing;
+                white-space: pre;
 
                 &.target
                 {
