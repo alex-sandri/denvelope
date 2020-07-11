@@ -57,6 +57,16 @@ html
         }
     }
 
+    &:not(.file-open)
+    {
+        body.account header.top-section-visible
+        {
+            margin-bottom: 0px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+    }
+
     &:not(.file-open):not(.signed-out)
     {
         body.account,
@@ -92,13 +102,6 @@ body
     &.no-overflow
     {
         overflow: hidden;
-    }
-
-    &.account header.top-section-visible
-    {
-        margin-bottom: 0px;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
     }
 
     &.account,
