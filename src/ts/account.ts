@@ -2149,8 +2149,6 @@ const ShowFile = (
 
 	ShowElement(showFile);
 
-	header.style.backgroundColor = getComputedStyle(showFile).getPropertyValue("background-color");
-
 	// If the user is on a file URL but the Auth.UserId is not yet ready
 	if (skipFileLoading) return;
 
