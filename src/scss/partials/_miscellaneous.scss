@@ -650,9 +650,15 @@ main.error,
 main.accessibility,
 main.plans
 {
-    margin: $default-spacing;
+    margin: 0 auto;
     margin-top: $header-height;
-    min-height: calc(100% - #{$default-spacing});
+    min-height: 100%;
+    max-width: 65ch;
+
+    & > *
+    {
+        margin: $default-spacing;
+    }
 
     h1
     {
