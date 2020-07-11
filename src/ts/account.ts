@@ -2668,18 +2668,8 @@ const CloseEditor = () =>
 
 const updateTopSectionVisibility = () =>
 {
-	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname))
-	{
-		HideElement(topSection);
-
-		RemoveClass(header, "top-section-visible");
-	}
-	else
-	{
-		ShowElement(topSection);
-
-		AddClass(header, "top-section-visible");
-	}
+	if ([ "/account/recents", "/account/storage/info" ].includes(location.pathname)) HideElement(topSection);
+	else ShowElement(topSection);
 };
 
 if (location.pathname.indexOf("/account") > -1 || location.pathname.indexOf("/folder/") > -1 || location.pathname.indexOf("/file/") > -1)
