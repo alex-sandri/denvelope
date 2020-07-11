@@ -669,6 +669,7 @@ main.plans
     {
         color: $secondary-color;
 
+        &:focus,
         &:hover
         {
             text-decoration: none;
