@@ -166,6 +166,7 @@ export default {
 		enable: "Enable",
 		billing_period: "Billing period",
 		coming_soon: "Coming soon",
+		create: "Create",
 	},
 	header: {
 		storage: {

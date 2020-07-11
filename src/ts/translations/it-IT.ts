@@ -166,6 +166,7 @@ export default {
 		enable: "Abilita",
 		billing_period: "Periodo di fatturazione",
 		coming_soon: "In arrivo",
+		create: "Crea",
 	},
 	header: {
 		storage: {

@@ -115,49 +115,48 @@ window.addEventListener("userready", async () =>
 	ContextMenuButtons.AddFolder.addEventListener("click", () => folderInput.click());
 
 	[ ContextMenuButtons.CreateFile, ContextMenuButtons.CreateFolder ].forEach(button =>
-		button.addEventListener("click", () =>
-		{
-			const isFile = button.contains(ContextMenuButtons.CreateFile);
-
-			const modal = new Modal({
-				titleTranslationId: isFile ? "account->create_file" : "account->create_folder",
-				action: "confirm",
-			});
-
-			const { element, input } = new Input({ labelTranslationId: "generic->name" });
-
-			input.addEventListener("input", () => { modal.ConfirmButton.disabled = input.value.length === 0; });
-
-			modal.ConfirmButton.disabled = true;
-
-			modal.AppendContent([ element ]);
-
-			modal.OnConfirm = () =>
+		Settings.Register({
+			button,
+			callback: async content =>
 			{
-				const name = input.value;
+				const nameInput = <HTMLInputElement>(<HTMLElement>content).querySelector("input");
 
-				modal.element.querySelectorAll(".input-error").forEach(element => element.remove());
+				const name = nameInput.value;
 
-				RemoveClass(input, "error");
+				button.contains(ContextMenuButtons.CreateFile)
+					? await UploadFile("", name, 0, GetCurrentFolderId(true))
+					: await UploadFolder([], name, "/", GetCurrentFolderId(true), 0);
 
-				if (name.length > 0)
-				{
-					isFile ? UploadFile("", name, 0, GetCurrentFolderId(true)) : UploadFolder([], name, "/", GetCurrentFolderId(true), 0);
-
-					modal.HideAndRemove();
-				}
-				else
-				{
-					element.insertAdjacentElement("beforebegin", new Component("p", {
-						innerText: Translation.Get("errors->empty"),
-						class: "input-error",
-					}).element);
-
-					AddClass(input, "error");
-				}
-			};
-
-			modal.Show(true);
+				return {
+					valid: name.length > 0,
+					errors: [
+						{
+							element: nameInput,
+							message: "errors->empty",
+						},
+					],
+				};
+			},
+			options: {
+				modal: {
+					content: () => ([
+						new Input({ labelTranslationId: "generic->name" }).element,
+					]),
+					validators: [
+						{
+							on: "input",
+							target: "input",
+							callback: input => (<HTMLInputElement>input).value.length > 0,
+						},
+					],
+					override: {
+						titleTranslationId: button.contains(ContextMenuButtons.CreateFile)
+							? "generic->file"
+							: "generic->folder",
+						subtitleTranslationId: "generic->create",
+					},
+				},
+			},
 		}));
 
 	viewMyAccount.addEventListener("click", () =>
