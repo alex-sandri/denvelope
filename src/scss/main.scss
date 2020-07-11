@@ -94,6 +94,15 @@ body
         overflow: hidden;
     }
 
+    &.account
+    {
+        header
+        {
+            height: $header-height - ($default-spacing / 2);
+            padding-bottom: $default-spacing / 2;
+        }
+    }
+
     &.account,
     &.settings
     {
@@ -108,7 +117,7 @@ body
             position: unset;
             backdrop-filter: unset;
             -webkit-backdrop-filter: unset;
-            background-color: rgba($primary-color, 0.8);
+            background-color: unset;
         }
     }
 
