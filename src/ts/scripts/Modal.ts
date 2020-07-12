@@ -35,8 +35,6 @@ export class Modal
 
 	public OnConfirm: () => void;
 
-	public OnUpdate: () => void;
-
 	constructor(options ?: ModalOptions)
 	{
 		if (options?.titleTranslationId) this.TitleTranslationId = options.titleTranslationId;
@@ -66,7 +64,7 @@ export class Modal
 		if (options?.loading === false) HideElement(this.spinner);
 		else ShowElement(this.spinner, "block");
 
-		this.OnClose = this.OnConfirm = this.OnUpdate = () => {};
+		this.OnClose = this.OnConfirm = () => {};
 
 		document.body.appendChild(this.container);
 	}
