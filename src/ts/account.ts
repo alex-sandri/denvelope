@@ -442,7 +442,11 @@ window.addEventListener("userready", async () =>
 	{
 		const { id, type } = ContextMenu.GetItemInfo(ContextMenu.Item);
 
-		const modal = new Modal({ action: "confirm" });
+		const modal = new Modal({
+			titleTranslationId: `generic->${type}`,
+			subtitleTranslationId: "generic->rename",
+			action: "confirm",
+		});
 
 		const { element, input } = new Input({ labelTranslationId: "generic->name" });
 
