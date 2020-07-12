@@ -456,7 +456,7 @@ window.addEventListener("userready", async () =>
 
 		input.value = (<HTMLParagraphElement>ContextMenu.Item.querySelector(".name p")).innerText;
 
-		modal.OnUpdate = async () =>
+		modal.OnConfirm = async () =>
 		{
 			const name = input.value;
 
