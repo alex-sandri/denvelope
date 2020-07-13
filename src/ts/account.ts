@@ -642,14 +642,17 @@ window.addEventListener("userready", async () =>
 
 				modal.AppendContent([
 					new Component("button", {
+						class: "inverted",
 						id: "zip",
 						innerText: ".zip",
 					}).element,
 					new Component("button", {
+						class: "inverted",
 						id: "tar",
 						innerText: ".tar",
 					}).element,
 					new Component("button", {
+						class: "inverted",
 						id: "tar-gz",
 						innerText: ".tar.gz",
 					}).element,
