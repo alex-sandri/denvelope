@@ -638,7 +638,10 @@ window.addEventListener("userready", async () =>
 
 			if (type === "folder" && tempArray.length === 1)
 			{
-				const modal = new Modal({ titleTranslationId: "api->messages->folder->choose_download_format" });
+				const modal = new Modal({
+					titleTranslationId: "generic->download",
+					subtitleTranslationId: "api->messages->folder->choose_download_format",
+				});
 
 				modal.AppendContent([
 					new Component("button", {

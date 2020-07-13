@@ -56,7 +56,7 @@ export default {
 				empty: "This folder is empty",
 				no_search_results: "There are no elements matching this",
 				compressing: "Creating compressed folder",
-				choose_download_format: "Choose download format",
+				choose_download_format: "Choose format",
 				offline: "You are currently offline",
 				vault_empty: "The vault is empty",
 				no_recents: "There are no recent files",

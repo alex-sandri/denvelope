@@ -56,7 +56,7 @@ export default {
 				empty: "Questa cartella è vuota",
 				no_search_results: "Non ci sono elementi corrispondenti a questo",
 				compressing: "Creando cartella compressa",
-				choose_download_format: "Scegli formato download",
+				choose_download_format: "Scegli formato",
 				offline: "Sei attualmente offline",
 				vault_empty: "La cassaforte è vuota",
 				no_recents: "Non ci sono file recenti",
