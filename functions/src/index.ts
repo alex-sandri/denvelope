@@ -1,6 +1,5 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import * as firestore from "@google-cloud/firestore"; // Used to backup the db
 import * as os from "os";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -91,7 +90,7 @@ const ExecUpdateBatch = async (query : FirebaseFirestore.Query<FirebaseFirestore
 
 export const scheduledFirestoreExport = functions.region(FUNCTIONS_REGION).pubsub.schedule("every day 00:00").onRun(async () =>
 {
-    const client = new firestore.v1.FirestoreAdminClient();
+    const client = new admin.firestore.v1.FirestoreAdminClient();
 
     const databaseName = client.databasePath(PROJECT_ID, "(default)");
 
