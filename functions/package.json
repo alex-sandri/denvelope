@@ -14,7 +14,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@google-cloud/firestore": "^4.1.1",
     "archiver": "^4.0.2",
     "bcrypt": "^5.0.0",
     "firebase-admin": "^8.13.0",
