@@ -17,7 +17,7 @@
     "@google-cloud/firestore": "^3.8.6",
     "archiver": "^4.0.2",
     "bcrypt": "^5.0.0",
-    "firebase-admin": "^8.12.1",
+    "firebase-admin": "^8.13.0",
     "firebase-functions": "^3.8.0",
     "fs-extra": "^9.0.1",
     "stripe": "^8.70.0"
