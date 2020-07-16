@@ -148,7 +148,7 @@ export default class Auth
 	{
 		const script = document.createElement("script");
 
-		script.src = `https://www.gstatic.com/firebasejs/ui/4.5.2/firebase-ui-auth__${Translation.ShortLanguage}.js`;
+		script.src = `https://www.gstatic.com/firebasejs/ui/4.6.0/firebase-ui-auth__${Translation.ShortLanguage}.js`;
 
 		script.onload = () =>
 		{
