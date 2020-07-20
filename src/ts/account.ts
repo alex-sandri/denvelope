@@ -2236,6 +2236,8 @@ const ShowFile = (
 
 			(<HTMLButtonElement>tab.querySelector(".close")).addEventListener("click", () =>
 			{
+				if (HasClass(tab, "modified") && !confirm(Translation.Get("generic->are_you_sure"))) return;
+
 				editorModels.get(id)?.dispose();
 
 				editorModels.delete(id);
@@ -2643,8 +2645,6 @@ const IsShowFileVisible = () : boolean => getComputedStyle(showFile).getProperty
 
 const CloseEditor = () =>
 {
-	if (preventWindowUnload?.editor && !confirm(Translation.Get("generic->are_you_sure"))) return;
-
 	editorModels.forEach(model => model.dispose());
 
 	editorModels.clear();
