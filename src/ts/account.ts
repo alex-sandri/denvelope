@@ -29,7 +29,7 @@ import Auth from "./scripts/Auth";
 import Linguist from "./scripts/Linguist";
 import { Component, Input, Spinner } from "./scripts/Component";
 import Translation from "./scripts/Translation";
-import { HideHeaderMenu, header, whatIsTakingUpSpace } from "./scripts/header";
+import { HideHeaderMenu, whatIsTakingUpSpace } from "./scripts/header";
 import Shortcuts from "./scripts/Shortcuts";
 import ContextMenu, { ContextMenuButtons, ContextMenuButton } from "./scripts/ContextMenu";
 import { Config } from "./config/Config";
@@ -2652,8 +2652,6 @@ const CloseEditor = () =>
 	editorElement.innerHTML = "";
 
 	editorTabs.innerHTML = "";
-
-	header.style.backgroundColor = "";
 
 	editor = undefined;
 
