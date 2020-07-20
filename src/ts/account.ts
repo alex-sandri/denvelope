@@ -101,7 +101,6 @@ let unsubscribeFilesListener: any = null;
 let folderShared: boolean = false;
 
 const preventWindowUnload: {
-	editor?: boolean,
 	fileUpload?: boolean,
 	fileDownload?: boolean,
 } = {};
@@ -259,8 +258,6 @@ window.addEventListener("userready", async () =>
 
 		Database.Folder.Update(id, { ...GetFirestoreUpdateTimestamp() });
 
-		preventWindowUnload.editor = false;
-
 		editorSavedValue = value;
 
 		RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
@@ -274,8 +271,6 @@ window.addEventListener("userready", async () =>
 
 			functions.httpsCallable("saveToMyAccount")({ userId: Auth.UserId, id, type });
 		});
-
-		preventWindowUnload.editor = false;
 	});
 
 	ContextMenuButtons.Share.addEventListener("click", () =>
@@ -713,12 +708,7 @@ window.addEventListener("userready", async () =>
 					: "moved_to_trash"
 		}`));
 
-		if (IsShowFileVisible())
-		{
-			preventWindowUnload.editor = false;
-
-			CloseEditor();
-		}
+		if (IsShowFileVisible()) CloseEditor();
 	}));
 
 	ContextMenuButtons.DisplayImage.addEventListener("click", async () =>
@@ -2119,8 +2109,6 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 	RemoveClass(document.documentElement, "wait");
 	RemoveClass(document.documentElement, "file-loading");
 
-	preventWindowUnload.editor = false;
-
 	editorSavedValue = value;
 
 	if (!editor) editor = monaco.editor.create(editorElement, {
@@ -2138,10 +2126,8 @@ const CreateEditor = (id : string, value : string, language : string, isActive ?
 
 	(<monacoEditor.IStandaloneCodeEditor>editor).onDidChangeModelContent(() =>
 	{
-		preventWindowUnload.editor
-			= editorSavedValue !== (<monacoEditor.IStandaloneCodeEditor>editor).getValue();
-
-		if (preventWindowUnload.editor) AddClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
+		if (editorSavedValue !== (<monacoEditor.IStandaloneCodeEditor>editor).getValue())
+			AddClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
 		else RemoveClass(<HTMLElement>editorTabs.querySelector(".active"), "modified");
 	});
 };
@@ -2654,8 +2640,6 @@ const CloseEditor = () =>
 	editorTabs.innerHTML = "";
 
 	editor = undefined;
-
-	preventWindowUnload.editor = false;
 
 	const url = GetFolderUrl(GetCurrentFolderId(true), IsShared());
 
