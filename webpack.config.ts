@@ -58,7 +58,10 @@ const config: webpack.Configuration[] = [
                             loader: "extract-loader"
                         },
                         {
-                            loader: "css-loader"
+                            loader: "css-loader",
+                            options: {
+                                url: false,
+                            }
                         },
                         {
                             loader: "sass-loader",
