@@ -60,7 +60,7 @@
   "theme_color": "#160c28",
   "background_color": "#160c28",
   "display": "standalone",
-  "start_url": "/account/?utm_source=homescreen",
+  "start_url": "/account",
   "scope": "/",
   "orientation": "portrait",
   "share_target": {
