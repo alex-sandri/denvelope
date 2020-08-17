@@ -38,7 +38,7 @@
     "fork-ts-checker-webpack-plugin": "^5.0.14",
     "glob": "^7.1.6",
     "handlebars": "^4.7.6",
-    "jest": "^26.2.2",
+    "jest": "^26.4.0",
     "jest-environment-uint8array": "^1.0.0",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
