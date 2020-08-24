@@ -19,7 +19,7 @@
     "firebase-admin": "^8.13.0",
     "firebase-functions": "^3.11.0",
     "fs-extra": "^9.0.1",
-    "stripe": "^8.86.0"
+    "stripe": "^8.89.0"
   },
   "devDependencies": {
     "tslint": "^6.1.3",
