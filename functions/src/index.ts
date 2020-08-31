@@ -14,7 +14,10 @@ const bcrypt = require("bcrypt");
 const BCRYPT_SALT_ROUNDS = 15;
 const VAULT_RECOVERY_CODE_BYTE_NUM = 25;
 
-const stripe = new Stripe(functions.config().stripe.key, { apiVersion: "2020-03-02" });
+const stripe = new Stripe(functions.config().stripe.key, {
+    // @ts-ignore
+    apiVersion: "2020-03-02"
+});
 const STRIPE_WEBHOOK_SECRET = functions.config().stripe.webhook_secret;
 
 admin.initializeApp({
