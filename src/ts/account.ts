@@ -2649,6 +2649,8 @@ const CloseEditor = () =>
 	RemoveClass(document.documentElement, "file-loading");
 	RemoveClass(document.documentElement, "file-open");
 
+	if (location.pathname === "/account/storage/info") return;
+
 	if (!HasClass(viewRecentContent, "selected"))
 	{
 		if (location.href !== url) history.pushState(null, "", url);
