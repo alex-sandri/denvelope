@@ -1914,6 +1914,8 @@ const HandlePageChangeAndLoadUserContent = (
 		if (openInNewWindow) open(url);
 		else
 		{
+			if (!isMultipleFileEditor && location.href !== url) history.pushState(null, "", url);
+
 			if (closestFile === null)
 			{
 				SetCurrentFolderId((<HTMLElement>target.closest(folderSelector)).id);
@@ -1923,8 +1925,6 @@ const HandlePageChangeAndLoadUserContent = (
 				UpdateBottomSectionBar(viewMyAccount);
 			}
 			else ShowFile(closestFile.id, undefined, undefined, isMultipleFileEditor);
-
-			if (!isMultipleFileEditor && location.href !== url) history.pushState(null, "", url);
 		}
 	}
 };
