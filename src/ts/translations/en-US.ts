@@ -134,7 +134,6 @@ export default {
 		file: "File",
 		files: "Files",
 		install: "Install",
-		id: "ID",
 		created: "Created",
 		last_modified: "Last modified",
 		type: "Type",

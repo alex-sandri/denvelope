@@ -528,12 +528,6 @@ window.addEventListener("userready", async () =>
 			modal.AppendContent([
 				new Component("p", {
 					children: [
-						Translation.GetElement("generic->id"),
-						new Component("span", { innerText: doc.id }).element,
-					],
-				}).element,
-				new Component("p", {
-					children: [
 						Translation.GetElement("generic->name"),
 						new Component("span", { innerText: name }).element,
 					],
