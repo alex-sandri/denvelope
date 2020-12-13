@@ -39,6 +39,9 @@ export default class Auth
 
 	public static DeleteUser = () =>
 	{
+		const provider = new firebase.auth.GoogleAuthProvider();
+
+		/*
 		let provider;
 
 		switch (Auth.CurrentUser?.providerData?.[0]?.providerId)
@@ -62,6 +65,7 @@ export default class Auth
 				provider = new firebase.auth.OAuthProvider("microsoft.com");
 				break;
 		}
+		*/
 
 		Auth.auth.signInWithPopup(provider)
 			.then(result => Auth.CurrentUser
@@ -163,16 +167,16 @@ export default class Auth
 						authMethod: "https://accounts.google.com",
 						clientId: "1023448327269-h54u9u95f2cqs7m1bceqh9h0p1dskcmk.apps.googleusercontent.com",
 					},
-					firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-					firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-					firebase.auth.GithubAuthProvider.PROVIDER_ID,
-					"yahoo.com",
-					"microsoft.com",
+					// firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+					// firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+					// firebase.auth.GithubAuthProvider.PROVIDER_ID,
+					// "yahoo.com",
+					// "microsoft.com",
 					// "apple.com",
 				],
 				credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
 				tosUrl: "terms",
-				privacyPolicyUrl: () => window.location.assign("privacy"),
+				privacyPolicyUrl: "privacy",
 			};
 
 			const ui: firebaseuiType.auth.AuthUI = new firebaseui.auth.AuthUI(Auth.auth);
